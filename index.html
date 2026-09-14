@@ -803,6 +803,123 @@ body{
     background:#fafdff;
 }
 
+/* ========== 复活弹窗（崩溃时专用） ========== */
+.revive-popup-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.75);
+    z-index:99999;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    backdrop-filter:blur(5px);
+}
+.revive-popup-overlay.active{display:flex;}
+.revive-popup{
+    background:#fff;
+    border-radius:18px;
+    max-width:440px;
+    width:100%;
+    box-shadow:0 25px 70px rgba(0,0,0,0.5);
+    overflow:hidden;
+    animation:reviveIn 0.35s ease-out;
+    border:3px solid #f59e0b;
+}
+@keyframes reviveIn{
+    0%{opacity:0;transform:scale(0.8) translateY(30px);}
+    60%{transform:scale(1.02) translateY(-5px);}
+    100%{opacity:1;transform:scale(1) translateY(0);}
+}
+.revive-popup-header{
+    background:linear-gradient(135deg,#f59e0b,#d97706);
+    color:#fff;
+    padding:20px 22px 16px;
+    text-align:center;
+}
+.revive-popup-header .rp-icon{
+    font-size:40px;
+    margin-bottom:6px;
+    display:block;
+    animation:pulse 1.5s infinite;
+}
+.revive-popup-header h2{
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:4px;
+    letter-spacing:0.5px;
+}
+.revive-popup-header .rp-sub{
+    font-size:12px;
+    opacity:0.9;
+}
+.revive-popup-body{
+    padding:20px 22px;
+}
+.revive-popup-body .rp-info{
+    background:#fef3c7;
+    border:1px solid #fcd34d;
+    border-radius:10px;
+    padding:10px 12px;
+    font-size:12px;
+    color:#78350f;
+    line-height:1.7;
+    margin-bottom:14px;
+}
+.revive-popup-body .rp-info b{color:#92400e;}
+.revive-popup-body .rp-meta{
+    font-size:11px;
+    color:#8aa2c0;
+    text-align:center;
+    margin-bottom:14px;
+}
+.revive-popup-body .rp-warning{
+    background:#fee2e2;
+    border:1px solid #fecaca;
+    border-radius:10px;
+    padding:10px 12px;
+    font-size:11px;
+    color:#991b1b;
+    line-height:1.6;
+    margin-bottom:14px;
+}
+.revive-popup-actions{
+    display:flex;
+    gap:8px;
+    padding:0 22px 20px;
+}
+.revive-popup-actions button{
+    flex:1;
+    padding:12px 16px;
+    border-radius:12px;
+    border:none;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.15s;
+}
+.revive-popup-actions button:active{transform:scale(0.97);}
+.revive-popup-actions .rp-btn-primary{
+    background:linear-gradient(135deg,#f59e0b,#d97706);
+    color:#fff;
+    box-shadow:0 4px 14px rgba(245,158,11,0.4);
+}
+.revive-popup-actions .rp-btn-primary:hover{background:linear-gradient(135deg,#d97706,#b45309);}
+.revive-popup-actions .rp-btn-secondary{
+    background:#f1f5f9;
+    color:#475569;
+    border:1px solid #e2e8f0;
+}
+.revive-popup-actions .rp-btn-secondary:hover{background:#e2e8f0;}
+.revive-popup-actions .rp-btn-preview{
+    background:#dbeafe;
+    color:#1e40af;
+    border:1px solid #93c5fd;
+    flex:0 0 auto;
+    padding:12px 14px;
+}
+.revive-popup-actions .rp-btn-preview:hover{background:#bfdbfe;}
+
 /* 移动端适配 */
 @media (max-width: 600px) {
     body{padding:10px;}
@@ -830,6 +947,8 @@ body{
     .modal-body{padding:14px 16px;}
     .bank-list{max-height:260px;}
     .code-preview{font-size:10px;max-height:300px;}
+    .revive-popup-header .rp-icon{font-size:34px;}
+    .revive-popup-header h2{font-size:16px;}
 }
 </style>
 </head>
@@ -881,6 +1000,33 @@ body{
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- ========== 复活弹窗（崩溃时自动弹出） ========== -->
+<div class="revive-popup-overlay" id="revivePopup">
+    <div class="revive-popup">
+        <div class="revive-popup-header">
+            <span class="rp-icon">💊</span>
+            <h2>检测到页面异常</h2>
+            <div class="rp-sub">复活备份可用，是否立即恢复？</div>
+        </div>
+        <div class="revive-popup-body">
+            <div class="rp-info">
+                ⚠️ 页面可能已崩溃或代码错乱。<br>
+                检测到本地存在<b>复活备份</b>，可以一键恢复至 GitHub 仓库。<br>
+                恢复后请刷新页面以重新加载。
+            </div>
+            <div class="rp-meta" id="revivePopupMeta"></div>
+            <div class="rp-warning">
+                ⚠️ 恢复操作将覆盖 GitHub 仓库中的指定文件，请确认。
+            </div>
+        </div>
+        <div class="revive-popup-actions">
+            <button class="rp-btn-preview" id="rpPreview">👁</button>
+            <button class="rp-btn-secondary" id="rpLater">稍后</button>
+            <button class="rp-btn-primary" id="rpRestore">立即恢复</button>
+        </div>
+    </div>
+</div>
 
 <!-- ========== 登录弹窗 ========== -->
 <div class="modal-overlay" id="loginModal">
@@ -1267,8 +1413,10 @@ const defaultBank = [
 const STORAGE_KEY = 'zktest_bank_v1';
 const BACKUP_KEY  = 'zktest_backups_v1';
 const GH_CFG_KEY  = 'zktest_gh_cfg_v1';
-const REVIVE_KEY  = 'zktest_revive_v1';   // 复活备份（txt文件内容）
+const REVIVE_KEY  = 'zktest_revive_v1';
 const CONFIRM_CODE = 'qiuhua';
+// 崩溃检测标记：正常启动时写入时间戳，若5分钟内未更新则视为异常
+const HEALTH_KEY = 'zktest_health_v1';
 
 // ====================== 全局状态 ======================
 let questionBank = [];
@@ -1276,6 +1424,59 @@ let currentImageFile = null;
 let recognition = null;
 let isRecording = false;
 let isLoggedIn = false;
+let pageHealthy = false;   // 页面是否正常运行
+
+// ====================== 复活备份管理（最高优先级） ======================
+function loadReviveBackup(){
+    try{
+        const raw = localStorage.getItem(REVIVE_KEY);
+        if(raw){
+            const obj = JSON.parse(raw);
+            if(obj && obj.content) return obj;
+        }
+    }catch(e){}
+    return null;
+}
+function saveReviveBackup(content){
+    const now = new Date();
+    const timeStr = now.toLocaleString('zh-CN',{hour12:false});
+    const obj = { content, time: timeStr, size: content.length };
+    try{ localStorage.setItem(REVIVE_KEY, JSON.stringify(obj)); }catch(e){
+        console.warn('复活备份保存失败', e);
+        return false;
+    }
+    return true;
+}
+
+// ====================== 崩溃检测机制 ======================
+// 思路：
+// 1. 页面正常加载时，写入一个健康标记（时间戳）到 localStorage
+// 2. 页面运行期间，每5秒更新一次健康标记
+// 3. 下次打开页面时，检查上次健康标记：
+//    - 如果超过 15 秒未更新（说明上次页面异常关闭/崩溃），且存在复活备份，则弹出复活弹窗
+// 4. 在正常关闭/刷新时，清除健康标记（视为正常退出）
+function writeHealthTick(){
+    try{
+        localStorage.setItem(HEALTH_KEY, JSON.stringify({
+            ts: Date.now(),
+            url: location.href
+        }));
+    }catch(e){}
+}
+function clearHealthTick(){
+    try{ localStorage.removeItem(HEALTH_KEY); }catch(e){}
+}
+function checkPreviousCrash(){
+    try{
+        const raw = localStorage.getItem(HEALTH_KEY);
+        if(!raw) return false; // 首次访问或正常退出
+        const obj = JSON.parse(raw);
+        if(!obj || !obj.ts) return false;
+        const elapsed = Date.now() - obj.ts;
+        // 超过 15 秒未更新 → 视为异常关闭/崩溃
+        return elapsed > 15000;
+    }catch(e){ return false; }
+}
 
 // ====================== 通用工具 ======================
 function showToast(msg){
@@ -1347,42 +1548,7 @@ function persistBank(){
     catch(e){ console.warn('保存题库失败', e); }
 }
 
-// ====================== 复活备份管理（最高优先级，不可删除） ======================
-function loadReviveBackup(){
-    try{
-        const raw = localStorage.getItem(REVIVE_KEY);
-        if(raw){
-            const obj = JSON.parse(raw);
-            if(obj && obj.content) return obj;
-        }
-    }catch(e){}
-    return null; // {content:'...', time:'...', size:12345}
-}
-function saveReviveBackup(content){
-    const now = new Date();
-    const timeStr = now.toLocaleString('zh-CN',{hour12:false});
-    const obj = { content, time: timeStr, size: content.length };
-    try{ localStorage.setItem(REVIVE_KEY, JSON.stringify(obj)); }catch(e){
-        console.warn('复活备份保存失败', e);
-        return false;
-    }
-    return true;
-}
-function renderReviveStatus(){
-    const statusEl = document.getElementById('reviveStatus');
-    const textEl = document.getElementById('reviveStatusText');
-    const metaEl = document.getElementById('reviveStatusMeta');
-    const backup = loadReviveBackup();
-    if(backup){
-        textEl.innerHTML = '<span class="rs-ok">✅ 已存在复活备份</span>';
-        metaEl.textContent = `${backup.time} · ${(backup.size/1024).toFixed(1)} KB`;
-    }else{
-        textEl.innerHTML = '<span class="rs-no">⚠️ 未上传复活备份</span>';
-        metaEl.textContent = '';
-    }
-}
-
-// ====================== 备份管理（普通） ======================
+// ====================== 备份管理 ======================
 function loadBackups(){
     try{
         const raw = localStorage.getItem(BACKUP_KEY);
@@ -1450,22 +1616,7 @@ async function getFullPageHTML(){
     }
 }
 
-// ====================== GitHub 同步（全量代码） ======================
-async function syncFullPageToGitHub(silent = false){
-    const cfg = loadGhCfg();
-    if(!isGhConfigured(cfg)){
-        if(!silent) showToast('请先完整配置 GitHub 信息');
-        return false;
-    }
-    const html = await getFullPageHTML();
-    if(!html){
-        if(!silent) showToast('生成页面代码失败');
-        return false;
-    }
-    return await pushContentToGitHub(html, `更新完整页面 ${new Date().toLocaleString('zh-CN',{hour12:false})}`, silent);
-}
-
-// 直接推送指定内容到 GitHub
+// ====================== 推送内容到 GitHub ======================
 async function pushContentToGitHub(content, message, silent){
     const cfg = loadGhCfg();
     if(!isGhConfigured(cfg)){
@@ -1518,6 +1669,21 @@ async function pushContentToGitHub(content, message, silent){
         if(!silent) showToast('GitHub 同步异常：' + e.message);
         return false;
     }
+}
+
+// ====================== GitHub 同步（全量代码） ======================
+async function syncFullPageToGitHub(silent = false){
+    const cfg = loadGhCfg();
+    if(!isGhConfigured(cfg)){
+        if(!silent) showToast('请先完整配置 GitHub 信息');
+        return false;
+    }
+    const html = await getFullPageHTML();
+    if(!html){
+        if(!silent) showToast('生成页面代码失败');
+        return false;
+    }
+    return await pushContentToGitHub(html, `更新完整页面 ${new Date().toLocaleString('zh-CN',{hour12:false})}`, silent);
 }
 
 // 测试连接
@@ -1711,6 +1877,91 @@ function showPreviewModal(titleText, items, mode, htmlContent, readonly){
     return overlay;
 }
 
+// ====================== 复活弹窗逻辑 ======================
+function showRevivePopup(){
+    const popup = document.getElementById('revivePopup');
+    const metaEl = document.getElementById('revivePopupMeta');
+    const backup = loadReviveBackup();
+    if(!backup){
+        metaEl.textContent = '（无可用备份）';
+    }else{
+        metaEl.textContent = `备份时间：${backup.time} · 大小：${(backup.size/1024).toFixed(1)} KB`;
+    }
+    popup.classList.add('active');
+}
+
+function bindRevivePopup(){
+    const popup = document.getElementById('revivePopup');
+    const rpPreview = document.getElementById('rpPreview');
+    const rpLater = document.getElementById('rpLater');
+    const rpRestore = document.getElementById('rpRestore');
+
+    rpLater.addEventListener('click', ()=>{
+        popup.classList.remove('active');
+    });
+
+    rpPreview.addEventListener('click', ()=>{
+        const backup = loadReviveBackup();
+        if(!backup){
+            showToast('暂无复活备份');
+            return;
+        }
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay active';
+        overlay.style.zIndex = 20000;
+        overlay.innerHTML = `
+            <div class="modal" style="max-width:720px;">
+                <div class="modal-header">
+                    <h3>💊 复活备份预览（只读）</h3>
+                    <button class="modal-close" data-close="1">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div style="font-size:11px;color:#8aa2c0;margin-bottom:6px;">
+                        上传时间：${escapeHTML(backup.time)} · 大小：${(backup.size/1024).toFixed(1)} KB
+                    </div>
+                    <pre class="code-preview"><span class="code-hint">// 复活备份内容（完整页面代码）</span>${escapeHTML(backup.content)}</pre>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-close="1">关闭</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        overlay.querySelectorAll('[data-close]').forEach(b=>{
+            b.addEventListener('click', ()=> overlay.remove());
+        });
+        overlay.addEventListener('click', (e)=>{
+            if(e.target === overlay) overlay.remove();
+        });
+    });
+
+    rpRestore.addEventListener('click', async ()=>{
+        const backup = loadReviveBackup();
+        if(!backup){
+            showToast('暂无复活备份');
+            return;
+        }
+        const cfg = loadGhCfg();
+        if(!isGhConfigured(cfg)){
+            showToast('请先配置GitHub仓库信息（登录后进入题库管理配置）');
+            return;
+        }
+        const ok = await askConfirm('确认使用复活备份覆盖GitHub仓库？');
+        if(!ok) return;
+        popup.classList.remove('active');
+        showToast('正在推送复活备份至GitHub…');
+        const success = await pushContentToGitHub(
+            backup.content,
+            `💊 复活备份恢复 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,
+            false
+        );
+        if(success){
+            showToast('✅ 复活备份已推送至GitHub，正在刷新…');
+            setTimeout(()=>{ location.reload(); }, 1000);
+        }
+    });
+}
+
 // ====================== 主界面逻辑 ======================
 document.addEventListener('DOMContentLoaded', ()=>{
     loadBank();
@@ -1726,6 +1977,27 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const imgPreview    = document.getElementById('imgPreview');
     const previewImg    = document.getElementById('previewImg');
     const closeImg      = document.getElementById('closeImg');
+
+    // ===== 崩溃检测（在页面初始化早期执行） =====
+    // 检查上次是否异常退出
+    const crashed = checkPreviousCrash();
+    const reviveBackup = loadReviveBackup();
+    if(crashed && reviveBackup){
+        // 延迟500ms弹出，确保页面已渲染
+        setTimeout(()=>{ showRevivePopup(); }, 500);
+    }
+    // 写入健康标记
+    writeHealthTick();
+    // 每5秒更新一次健康标记
+    setInterval(()=>{
+        writeHealthTick();
+    }, 5000);
+    // 正常退出时清除标记（beforeunload）
+    window.addEventListener('beforeunload', ()=>{
+        clearHealthTick();
+    });
+
+    bindRevivePopup();
 
     // ===== 查询发送 =====
     function sendQuestion(){
@@ -1984,7 +2256,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         showPreviewModal('编辑预览', listItems, 'list', html || '（无法获取代码）', true);
     });
 
-    // 保存修改 → 二次确认 → 备份 → 保存 → 同步 → 刷新
+    // 保存修改
     editSave.addEventListener('click', async ()=>{
         if(selectedIdx < 0 || !questionBank[selectedIdx]) return;
         const newQ = editQ.value.trim();
@@ -2000,7 +2272,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         refreshPage();
     });
 
-    // 删除 → 二次确认 → 备份 → 删除 → 同步 → 刷新
+    // 删除
     editDelete.addEventListener('click', async ()=>{
         if(selectedIdx < 0) return;
         const ok = await askConfirm('确认删除该题目？（输入确认代码）');
@@ -2174,6 +2446,19 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const reviveSyncBtn = document.getElementById('reviveSyncBtn');
     const reviveFileInput = document.getElementById('reviveFileInput');
 
+    function renderReviveStatus(){
+        const textEl = document.getElementById('reviveStatusText');
+        const metaEl = document.getElementById('reviveStatusMeta');
+        const backup = loadReviveBackup();
+        if(backup){
+            textEl.innerHTML = '<span class="rs-ok">✅ 已存在复活备份</span>';
+            metaEl.textContent = `${backup.time} · ${(backup.size/1024).toFixed(1)} KB`;
+        }else{
+            textEl.innerHTML = '<span class="rs-no">⚠️ 未上传复活备份</span>';
+            metaEl.textContent = '';
+        }
+    }
+
     reviveUploadBtn.addEventListener('click', ()=>{
         reviveFileInput.value = '';
         reviveFileInput.click();
@@ -2192,7 +2477,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 showToast('文件内容过短，可能不是有效的备份');
                 return;
             }
-            // 覆盖保存（不可删除）
             if(saveReviveBackup(content)){
                 showToast('✅ 复活备份已上传/覆盖');
                 renderReviveStatus();
@@ -2209,7 +2493,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
             showToast('暂无复活备份，请先上传');
             return;
         }
-        // 展示为代码预览（只读）
         const overlay = document.createElement('div');
         overlay.className = 'modal-overlay active';
         overlay.style.zIndex = 1400;
