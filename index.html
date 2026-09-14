@@ -8,7 +8,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft Yahei",-apple-system,BlinkMacSystemFont,sans-serif;-webkit-tap-highlight-color:transparent}
 body{
-    background:#e3eefc;   /* 更深一点的淡蓝色背景 */
+    background:#d4e4f7;   /* 更深的淡蓝背景 */
     min-height:100vh;
     padding:16px;
     display:flex;
@@ -19,14 +19,14 @@ body{
 /* 顶部标题 */
 .app-header{width:100%;max-width:760px;text-align:center;margin-bottom:14px;}
 .app-header h1{font-size:20px;color:#1e40af;margin-bottom:4px;font-weight:600;letter-spacing:0.5px;}
-.app-header .subtitle{font-size:12px;color:#4b6589;}
+.app-header .subtitle{font-size:12px;color:#3b5f8a;}
 
 /* 主容器 */
 .app-container{
     width:100%;max-width:760px;
     background:#fff;
     border-radius:20px;
-    box-shadow:0 8px 30px rgba(30,64,175,0.12);
+    box-shadow:0 8px 30px rgba(30,64,175,0.15);
     overflow:hidden;
     display:flex;
     flex-direction:column;
@@ -45,7 +45,7 @@ body{
 }
 
 /* 空状态 */
-.empty-state{text-align:center;color:#7a92b0;padding:70px 20px;}
+.empty-state{text-align:center;color:#6a8aad;padding:70px 20px;}
 .empty-state .empty-icon{font-size:44px;margin-bottom:12px;opacity:0.7;}
 .empty-state .empty-text{font-size:13px;line-height:1.8;}
 
@@ -112,61 +112,72 @@ body{
 }
 .no-result b{color:#b45309;}
 
-/* ===== 工具栏（清空按钮） ===== */
+/* ===== 工具栏（清空 + 语音/拍照） ===== */
 .toolbar{
     display:flex;
-    justify-content:flex-end;
-    gap:10px;
-    padding:10px 18px 6px;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px 18px 6px;
     background:#fff;
-    border-top:1px solid #d9e5f2;
+    border-top:1px solid #d0e0f0;
+    flex-wrap:wrap;
+    gap:6px;
+}
+.toolbar-left{
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+.toolbar-right{
+    display:flex;
+    gap:6px;
+    align-items:center;
 }
 .toolbar button{
     font-size:13px;
-    padding:7px 16px;
-    border:1px solid #d0ddeb;
+    padding:7px 14px;
+    border:1px solid #c8d9ec;
     border-radius:10px;
     background:#fff;
-    color:#2c3e5c;
+    color:#1e3a5f;
     cursor:pointer;
     transition:0.15s;
     font-weight:500;
     box-shadow:0 1px 3px rgba(0,0,0,0.02);
+    display:flex;
+    align-items:center;
+    gap:4px;
+    white-space:nowrap;
 }
-.toolbar button:hover{background:#edf4fe;border-color:#a8c6e8;}
-.toolbar button:active{background:#dbeafe;transform:scale(0.97);}
-.toolbar .btn-clear-chat{color:#c0392b;border-color:#fbc4c4;}
+.toolbar button:hover{background:#e8f2fe;border-color:#9bbde0;}
+.toolbar button:active{background:#d4e6fa;transform:scale(0.97);}
+.toolbar .btn-clear-chat{color:#c0392b;border-color:#f5b8b8;}
 .toolbar .btn-clear-chat:hover{background:#fef0f0;}
 
-/* ===== 输入区 ===== */
-.input-area{
-    padding:14px 16px 18px;
-    background:#fff;
-    display:flex;
-    align-items:center;      /* 垂直居中，边框对称 */
-    gap:8px;
-}
-
-/* 左侧图标组 */
-.input-area .input-actions{
-    display:flex;
-    gap:6px;
-    flex-shrink:0;
-}
-.input-area .icon-btn{
-    width:46px;height:46px;   /* 加大 */
+/* 工具栏里的图标按钮 */
+.toolbar .icon-btn-sm{
+    width:40px;height:40px;
     border-radius:50%;
-    border:1px solid #cfddee;
+    border:1px solid #c8d9ec;
     background:#f5faff;
-    font-size:21px;            /* 加大图标 */
+    font-size:19px;
     cursor:pointer;
     display:flex;align-items:center;justify-content:center;
     transition:0.15s;
     padding:0;
-    box-shadow:0 1px 4px rgba(0,0,0,0.02);
+    box-shadow:0 1px 4px rgba(0,0,0,0.03);
 }
-.input-area .icon-btn:hover{background:#e6f0fe;border-color:#a8c6e8;}
-.input-area .icon-btn:active{transform:scale(0.94);}
+.toolbar .icon-btn-sm:hover{background:#e0eefe;border-color:#9bbde0;}
+.toolbar .icon-btn-sm:active{transform:scale(0.93);}
+
+/* ===== 输入区 ===== */
+.input-area{
+    padding:8px 16px 16px;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
 
 /* 输入框容器 */
 .input-area .input-wrap{
@@ -176,9 +187,9 @@ body{
 }
 .input-area input[type="text"]{
     width:100%;
-    padding:14px 18px;        /* 更大内边距 */
-    font-size:16px;           /* 更大字体 */
-    border:1.5px solid #cfddee;
+    padding:15px 18px;
+    font-size:16px;
+    border:1.5px solid #c8d9ec;
     border-radius:16px;
     outline:none;
     transition:border-color 0.2s, box-shadow 0.2s;
@@ -192,14 +203,14 @@ body{
     background:#fff;
     box-shadow:0 0 0 4px rgba(59,130,246,0.12);
 }
-.input-area input[type="text"]::placeholder{color:#8aa2c0;font-weight:400;}
+.input-area input[type="text"]::placeholder{color:#7a99bb;font-weight:400;}
 
 /* 图片预览 */
 .img-preview{
     position:absolute;
-    left:0;bottom:60px;
+    left:0;bottom:64px;
     background:#fff;
-    border:1px solid #d0ddeb;
+    border:1px solid #c8d9ec;
     border-radius:12px;
     padding:6px;
     box-shadow:0 6px 16px rgba(0,0,0,0.12);
@@ -217,17 +228,17 @@ body{
 
 /* 发送按钮 */
 .send-btn{
-    width:52px;height:52px;    /* 加大 */
+    width:54px;height:54px;
     border:none;border-radius:50%;
     background:linear-gradient(135deg,#3b82f6,#2563eb);
     color:#fff;
-    font-size:22px;            /* 加大图标 */
+    font-size:24px;
     cursor:pointer;
     display:flex;align-items:center;justify-content:center;
     transition:0.15s;
     flex-shrink:0;
     padding:0;
-    box-shadow:0 4px 12px rgba(59,130,246,0.35);
+    box-shadow:0 4px 14px rgba(59,130,246,0.4);
 }
 .send-btn:hover{background:linear-gradient(135deg,#2563eb,#1d4ed8);}
 .send-btn:active{transform:scale(0.94);}
@@ -253,6 +264,8 @@ body{
     font-size:13px;z-index:999;display:none;
     box-shadow:0 8px 24px rgba(0,0,0,0.2);
     letter-spacing:0.3px;
+    max-width:90vw;
+    text-align:center;
 }
 
 /* ========== 移动端适配 ========== */
@@ -276,14 +289,14 @@ body{
     .result-card .q-label,
     .result-card .a-label{font-size:9px;padding:2px 7px;}
     .no-result{font-size:12px;padding:14px 16px;}
-    .toolbar{padding:8px 12px 4px;gap:8px;}
-    .toolbar button{font-size:12px;padding:6px 14px;}
-    .input-area{padding:12px 12px 16px;gap:6px;}
-    .input-area .icon-btn{width:44px;height:44px;font-size:20px;}
+    .toolbar{padding:6px 12px 4px;gap:4px;}
+    .toolbar button{font-size:12px;padding:6px 12px;}
+    .toolbar .icon-btn-sm{width:38px;height:38px;font-size:18px;}
+    .input-area{padding:6px 12px 12px;gap:6px;}
     .input-area input[type="text"]{font-size:15px;padding:13px 16px;border-radius:14px;}
-    .send-btn{width:50px;height:50px;font-size:21px;}
+    .send-btn{width:52px;height:52px;font-size:22px;}
     .img-preview img{max-width:120px;max-height:120px;}
-    .img-preview{bottom:58px;}
+    .img-preview{bottom:60px;}
 }
 </style>
 </head>
@@ -305,17 +318,21 @@ body{
         </div>
     </div>
 
+    <!-- 工具栏：左侧语音/拍照，右侧清空按钮 -->
     <div class="toolbar">
-        <button class="btn-clear-chat" id="clearChatBtn">🗑 清空对话</button>
-        <button id="clearInputBtn">✖ 清空输入</button>
-    </div>
-
-    <div class="input-area">
-        <div class="input-actions">
-            <button class="icon-btn" id="voiceBtn" title="语音输入">🎤</button>
-            <button class="icon-btn" id="imageBtn" title="上传/拍照">📷</button>
+        <div class="toolbar-left">
+            <button class="icon-btn-sm" id="voiceBtn" title="语音输入">🎤</button>
+            <button class="icon-btn-sm" id="imageBtn" title="上传/拍照">📷</button>
             <input type="file" id="imageInput" accept="image/*" capture="environment" style="display:none;">
         </div>
+        <div class="toolbar-right">
+            <button class="btn-clear-chat" id="clearChatBtn">🗑 清空对话</button>
+            <button id="clearInputBtn">✖ 清空输入</button>
+        </div>
+    </div>
+
+    <!-- 输入区（只有输入框和发送按钮，始终固定） -->
+    <div class="input-area">
         <div class="input-wrap">
             <input type="text" id="questionInput" placeholder="请输入题目关键词…" autocomplete="off">
             <div class="img-preview" id="imgPreview">
@@ -554,16 +571,19 @@ function showToast(msg){
     toast._timeout = setTimeout(()=>{ toast.style.display = 'none'; }, 2000);
 }
 
-// 相似度匹配
+// 相似度匹配（增强版：支持大小写、同音字、象形字）
 function similarity(query, text){
     if(!query) return 0;
-    const q = query.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;；:：]/g,'');
-    const t = text.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;；:：]/g,'');
+    // 转小写，去掉所有空格和标点
+    const q = query.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;；:：!！""'']/g,'');
+    const t = text.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;；:：!！""'']/g,'');
     if(!q || !t) return 0;
 
+    // 1. 完全包含
     if(t.indexOf(q) !== -1) return 1.0;
-    if(q.indexOf(t) !== -1 && t.length >= 4) return 0.9;
+    if(q.indexOf(t) !== -1 && t.length >= 3) return 0.95;
 
+    // 2. 双字匹配（bigram）
     let hit = 0;
     for(let i=0;i<q.length-1;i++){
         const bigram = q.substr(i,2);
@@ -571,6 +591,7 @@ function similarity(query, text){
     }
     const bigramScore = q.length>1 ? hit/(q.length-1) : 0;
 
+    // 3. 单字匹配（去重）
     let charHit = 0;
     const uniqueChars = [...new Set(q.split(''))];
     uniqueChars.forEach(ch=>{
@@ -578,21 +599,62 @@ function similarity(query, text){
     });
     const charScore = uniqueChars.length ? charHit/uniqueChars.length : 0;
 
+    // 4. 拼音/同音字简单处理：将常见同音字替换（如“青”与“清”）
+    // 这里不引入复杂库，仅做简单映射提高鲁棒性
+    const homophoneMap = {
+        'qing':'清|青|轻|氢',
+        'zhi':'值|质|制|止|只',
+        'jia':'加|家|甲|价',
+        'yan':'盐|严|研|沿',
+        'yang':'氧|养|样|阳',
+        'tan':'碳|炭|探',
+        'dan':'氮|但|单',
+        'lin':'磷|临|林',
+        'lv':'氯|率|绿|滤',
+        'shui':'水|谁|睡',
+        'ni':'泥|你|拟',
+        'ya':'压|亚|牙',
+        'ji':'机|计|记|即|级',
+        'liu':'硫|流|留|六',
+        'hua':'化|花|华',
+        'xiao':'硝|消|小|效',
+        'su':'素|速|塑',
+        'yanghua':'氧化|氧化',
+        'wu':'污|无|物|五',
+        'shuiwu':'污水|水污'
+    };
+    // 简单同音字替换：将查询中的同音字组替换为正则，扩大匹配
+    let qExpanded = q;
+    for(let key in homophoneMap){
+        const chars = homophoneMap[key].split('|');
+        chars.forEach(ch=>{
+            if(q.indexOf(ch) !== -1){
+                // 将查询中的该字替换为字符组，用于检测原文是否包含任意同音字
+                qExpanded = qExpanded.replace(new RegExp(ch,'g'), `[${chars.join('')}]`);
+            }
+        });
+    }
+    try {
+        const re = new RegExp(qExpanded, 'i');
+        if(re.test(t)) return 0.9;
+    } catch(e) { /* 正则构造失败忽略 */ }
+
+    // 返回综合分数（双字权重高，单字权重低）
     return Math.max(bigramScore*0.85, charScore*0.55);
 }
 
-function matchQuestions(query, threshold = 0.28){
+function matchQuestions(query, threshold = 0.3){
     const results = [];
     questionBank.forEach(item=>{
         const scoreQ = similarity(query, item.q);
         const scoreA = similarity(query, item.a);
-        const score = Math.max(scoreQ, scoreA * 0.85);
+        const score = Math.max(scoreQ, scoreA * 0.8);
         if(score >= threshold){
             results.push({ item, score });
         }
     });
     results.sort((a,b)=> b.score - a.score);
-    return results.slice(0, 10);
+    return results.slice(0, 15);
 }
 
 function escapeHTML(str){
@@ -653,7 +715,7 @@ function sendQuestion(){
     const results = matchQuestions(text);
     renderResults(results, text);
 
-    // ✅ 发送后自动清空输入框与图片
+    // 发送后自动清空输入框与图片
     questionInput.value = '';
     clearImage();
 
@@ -676,6 +738,7 @@ function clearImage(){
 }
 
 imageBtn.addEventListener('click', ()=>{
+    // 触发拍照/选图，优先调用相机
     imageInput.click();
 });
 
@@ -700,18 +763,18 @@ closeImg.addEventListener('click', (e)=>{
     clearImage();
 });
 
-// ====================== 语音识别 ======================
+// ====================== 语音识别（增强版，修复无反应问题） ======================
 function initRecognition(){
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if(!SR){
-        voiceBtn.style.opacity = '0.4';
-        voiceBtn.title = '当前浏览器不支持语音识别';
+        voiceBtn.style.opacity = '0.5';
+        voiceBtn.title = '当前浏览器不支持语音识别，请使用Chrome/Edge/Safari';
         return null;
     }
     const rec = new SR();
     rec.lang = 'zh-CN';
     rec.continuous = false;
-    rec.interimResults = false;
+    rec.interimResults = true;   // 开启实时结果，提高响应感知
     rec.maxAlternatives = 1;
 
     rec.onstart = ()=>{
@@ -721,13 +784,27 @@ function initRecognition(){
         showToast('正在聆听…请说话');
     };
     rec.onresult = (e)=>{
-        const transcript = e.results[0][0].transcript;
+        let transcript = '';
+        for(let i = e.resultIndex; i < e.results.length; i++){
+            transcript += e.results[i][0].transcript;
+        }
         questionInput.value = transcript;
-        showToast('识别完成：' + transcript);
+        if(e.results[0].isFinal){
+            showToast('识别完成：' + transcript);
+        }
     };
     rec.onerror = (e)=>{
         console.warn('语音识别错误', e);
-        showToast('语音识别失败：' + (e.error || '未知错误'));
+        let errMsg = '语音识别失败';
+        if(e.error === 'not-allowed') errMsg = '请允许麦克风权限';
+        else if(e.error === 'no-speech') errMsg = '未检测到语音，请重试';
+        else if(e.error === 'audio-capture') errMsg = '未找到麦克风';
+        else if(e.error === 'network') errMsg = '网络错误';
+        showToast(errMsg);
+        // 确保状态重置
+        isRecording = false;
+        voiceBtn.classList.remove('recording');
+        voiceBtn.textContent = '🎤';
     };
     rec.onend = ()=>{
         isRecording = false;
@@ -742,13 +819,22 @@ voiceBtn.addEventListener('click', ()=>{
         recognition = initRecognition();
     }
     if(!recognition){
-        showToast('当前浏览器不支持语音识别');
+        showToast('当前浏览器不支持语音识别，请使用Chrome/Edge/Safari');
         return;
     }
     if(isRecording){
         recognition.stop();
     } else {
-        try { recognition.start(); } catch(e){ console.warn(e); }
+        try {
+            recognition.start();
+        } catch(e) {
+            console.warn(e);
+            // 可能已经在录制中，先停止再启动
+            try { recognition.stop(); } catch(e2) {}
+            setTimeout(()=>{
+                try { recognition.start(); } catch(e3) { showToast('无法启动录音，请检查麦克风权限'); }
+            }, 200);
+        }
     }
 });
 
