@@ -1490,6 +1490,7 @@ const GH_CFG_KEY  = 'zktest_gh_cfg_v1';
 const REVIVE_KEY  = 'zktest_revive_v1';
 const CONFIRM_CODE = 'qiuhua';
 const HEALTH_KEY = 'zktest_health_v1';
+const SESSION_KEY = 'zktest_session_id';
 const BAIDU_OCR_KEY = { apiKey: '', secretKey: '' };
 
 // ====================== 全局状态 ======================
@@ -1521,24 +1522,62 @@ function saveReviveBackup(content){
     return true;
 }
 
-// ====================== 崩溃检测 ======================
-function writeHealthTick(){
+// ====================== 崩溃检测（优化版：防止误报） ======================
+// 优化要点：
+// 1. 延长超时判定到 60 秒，避免息屏/切后台/短暂卡顿导致的误报
+// 2. 添加页面可见性判断，页面隐藏时不写入也不判定
+// 3. 使用 sessionStorage 记录会话ID，同一会话内的正常刷新不触发崩溃检测
+// 4. 降低写入频率到每 10 秒一次，减少无谓的IO
+const CRASH_TIMEOUT_MS = 60000; // 60秒无更新才视为异常
+
+function getSessionId(){
     try{
+        let sid = sessionStorage.getItem(SESSION_KEY);
+        if(!sid){
+            sid = 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+            sessionStorage.setItem(SESSION_KEY, sid);
+        }
+        return sid;
+    }catch(e){
+        return 'sess_fallback';
+    }
+}
+
+function writeHealthTick(){
+    // 页面隐藏时不写入（避免息屏/切后台误判）
+    if(document.hidden) return;
+    try{
+        const sid = getSessionId();
         localStorage.setItem(HEALTH_KEY, JSON.stringify({
-            ts: Date.now(), url: location.href
+            ts: Date.now(),
+            url: location.href,
+            sid: sid
         }));
     }catch(e){}
 }
+
 function clearHealthTick(){
     try{ localStorage.removeItem(HEALTH_KEY); }catch(e){}
 }
+
 function checkPreviousCrash(){
     try{
         const raw = localStorage.getItem(HEALTH_KEY);
         if(!raw) return false;
         const obj = JSON.parse(raw);
         if(!obj || !obj.ts) return false;
-        return (Date.now() - obj.ts) > 15000;
+        // 同一会话内的刷新不算崩溃（用户主动刷新 / 保存后自动刷新）
+        const currentSid = getSessionId();
+        if(obj.sid && obj.sid === currentSid){
+            // 同一会话，判断是否为正常刷新：时间间隔小于 5 秒视为正常刷新
+            const elapsed = Date.now() - obj.ts;
+            if(elapsed < 5000) return false;
+            // 超过 5 秒但同一会话，可能是长时间未操作，不算崩溃
+            return false;
+        }
+        // 不同会话（新打开的标签页 / 重新进入），才检查是否超时
+        const elapsed = Date.now() - obj.ts;
+        return elapsed > CRASH_TIMEOUT_MS;
     }catch(e){ return false; }
 }
 
@@ -2183,14 +2222,27 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const previewImg    = document.getElementById('previewImg');
     const closeImg      = document.getElementById('closeImg');
 
-    // ===== 崩溃检测 =====
+    // ===== 崩溃检测（优化版） =====
     const crashed = checkPreviousCrash();
     const reviveBackup = loadReviveBackup();
-    if(crashed && reviveBackup){
-        setTimeout(()=>{ showRevivePopup(); }, 500);
+    // 只在检测到崩溃 且 存在备份 且 页面可见时 才弹窗
+    if(crashed && reviveBackup && !document.hidden){
+        setTimeout(()=>{ 
+            // 再次确认页面可见，避免延迟期间被切后台
+            if(!document.hidden) showRevivePopup(); 
+        }, 800);
     }
+    // 页面可见时才写入标记
     writeHealthTick();
-    setInterval(()=>{ writeHealthTick(); }, 5000);
+    // 每10秒写入一次（降低频率，减少IO）
+    setInterval(()=>{ writeHealthTick(); }, 10000);
+    // 页面从后台切回前台时，立即写入一次标记
+    document.addEventListener('visibilitychange', ()=>{
+        if(!document.hidden){
+            writeHealthTick();
+        }
+    });
+    // 正常退出时清除标记
     window.addEventListener('beforeunload', ()=>{ clearHealthTick(); });
 
     bindRevivePopup();
