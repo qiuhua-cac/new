@@ -7,9 +7,9 @@
 <title>中控测验答题器</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft Yahei",-apple-system,BlinkMacSystemFont,sans-serif;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;}
 body{
-    background:#d4e4f7;   /* 更深的淡蓝背景 */
-    min-height:100vh;
+    background:#d4e4f7;
     padding:16px;
     display:flex;
     flex-direction:column;
@@ -17,11 +17,11 @@ body{
 }
 
 /* 顶部标题 */
-.app-header{width:100%;max-width:760px;text-align:center;margin-bottom:14px;}
+.app-header{width:100%;max-width:760px;text-align:center;margin-bottom:14px;flex-shrink:0;}
 .app-header h1{font-size:20px;color:#1e40af;margin-bottom:4px;font-weight:600;letter-spacing:0.5px;}
 .app-header .subtitle{font-size:12px;color:#3b5f8a;}
 
-/* 主容器 */
+/* 主容器：固定高度，内部滚动 */
 .app-container{
     width:100%;max-width:760px;
     background:#fff;
@@ -31,16 +31,16 @@ body{
     display:flex;
     flex-direction:column;
     flex:1;
-    min-height:calc(100vh - 110px);
+    min-height:0;  /* 关键：让flex子项可以收缩 */
 }
 
-/* 对话显示区 */
+/* 对话显示区：唯一滚动区域 */
 .chat-area{
     flex:1;
     padding:18px 16px;
     overflow-y:auto;
     background:#f8fcff;
-    min-height:300px;
+    min-height:0;  /* 关键 */
     -webkit-overflow-scrolling:touch;
 }
 
@@ -112,14 +112,20 @@ body{
 }
 .no-result b{color:#b45309;}
 
-/* ===== 工具栏（清空 + 语音/拍照） ===== */
+/* ===== 底部固定区域（工具栏 + 输入区） ===== */
+.bottom-fixed{
+    flex-shrink:0;
+    background:#fff;
+    border-top:1px solid #d0e0f0;
+    box-shadow:0 -4px 16px rgba(30,64,175,0.06);
+}
+
+/* 工具栏 */
 .toolbar{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:8px 18px 6px;
-    background:#fff;
-    border-top:1px solid #d0e0f0;
+    padding:8px 18px 4px;
     flex-wrap:wrap;
     gap:6px;
 }
@@ -154,7 +160,7 @@ body{
 .toolbar .btn-clear-chat{color:#c0392b;border-color:#f5b8b8;}
 .toolbar .btn-clear-chat:hover{background:#fef0f0;}
 
-/* 工具栏里的图标按钮 */
+/* 工具栏图标按钮 */
 .toolbar .icon-btn-sm{
     width:40px;height:40px;
     border-radius:50%;
@@ -172,14 +178,11 @@ body{
 
 /* ===== 输入区 ===== */
 .input-area{
-    padding:8px 16px 16px;
-    background:#fff;
+    padding:6px 16px 14px;
     display:flex;
     align-items:center;
     gap:8px;
 }
-
-/* 输入框容器 */
 .input-area .input-wrap{
     flex:1;
     position:relative;
@@ -274,10 +277,7 @@ body{
     .app-header{margin-bottom:10px;}
     .app-header h1{font-size:18px;}
     .app-header .subtitle{font-size:11px;}
-    .app-container{
-        border-radius:16px;
-        min-height:calc(100vh - 90px);
-    }
+    .app-container{border-radius:16px;}
     .chat-area{padding:14px 12px;}
     .result-card{
         padding:12px 14px;
@@ -289,10 +289,10 @@ body{
     .result-card .q-label,
     .result-card .a-label{font-size:9px;padding:2px 7px;}
     .no-result{font-size:12px;padding:14px 16px;}
-    .toolbar{padding:6px 12px 4px;gap:4px;}
+    .toolbar{padding:6px 12px 2px;gap:4px;}
     .toolbar button{font-size:12px;padding:6px 12px;}
     .toolbar .icon-btn-sm{width:38px;height:38px;font-size:18px;}
-    .input-area{padding:6px 12px 12px;gap:6px;}
+    .input-area{padding:4px 12px 12px;gap:6px;}
     .input-area input[type="text"]{font-size:15px;padding:13px 16px;border-radius:14px;}
     .send-btn{width:52px;height:52px;font-size:22px;}
     .img-preview img{max-width:120px;max-height:120px;}
@@ -308,6 +308,7 @@ body{
 </div>
 
 <div class="app-container">
+    <!-- 只有这个区域滚动 -->
     <div class="chat-area" id="chatArea">
         <div class="empty-state" id="emptyState">
             <div class="empty-icon">💬</div>
@@ -318,29 +319,30 @@ body{
         </div>
     </div>
 
-    <!-- 工具栏：左侧语音/拍照，右侧清空按钮 -->
-    <div class="toolbar">
-        <div class="toolbar-left">
-            <button class="icon-btn-sm" id="voiceBtn" title="语音输入">🎤</button>
-            <button class="icon-btn-sm" id="imageBtn" title="上传/拍照">📷</button>
-            <input type="file" id="imageInput" accept="image/*" capture="environment" style="display:none;">
-        </div>
-        <div class="toolbar-right">
-            <button class="btn-clear-chat" id="clearChatBtn">🗑 清空对话</button>
-            <button id="clearInputBtn">✖ 清空输入</button>
-        </div>
-    </div>
-
-    <!-- 输入区（只有输入框和发送按钮，始终固定） -->
-    <div class="input-area">
-        <div class="input-wrap">
-            <input type="text" id="questionInput" placeholder="请输入题目关键词…" autocomplete="off">
-            <div class="img-preview" id="imgPreview">
-                <span class="close-img" id="closeImg">✕</span>
-                <img id="previewImg" src="" alt="预览">
+    <!-- 底部固定区域：工具栏 + 输入区，永远固定在底部 -->
+    <div class="bottom-fixed">
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <button class="icon-btn-sm" id="voiceBtn" title="语音输入">🎤</button>
+                <button class="icon-btn-sm" id="imageBtn" title="上传/拍照">📷</button>
+                <input type="file" id="imageInput" accept="image/*" capture="environment" style="display:none;">
+            </div>
+            <div class="toolbar-right">
+                <button class="btn-clear-chat" id="clearChatBtn">🗑 清空对话</button>
+                <button id="clearInputBtn">✖ 清空输入</button>
             </div>
         </div>
-        <button class="send-btn" id="sendBtn" title="发送">➤</button>
+
+        <div class="input-area">
+            <div class="input-wrap">
+                <input type="text" id="questionInput" placeholder="请输入题目关键词…" autocomplete="off">
+                <div class="img-preview" id="imgPreview">
+                    <span class="close-img" id="closeImg">✕</span>
+                    <img id="previewImg" src="" alt="预览">
+                </div>
+            </div>
+            <button class="send-btn" id="sendBtn" title="发送">➤</button>
+        </div>
     </div>
 </div>
 
@@ -571,19 +573,16 @@ function showToast(msg){
     toast._timeout = setTimeout(()=>{ toast.style.display = 'none'; }, 2000);
 }
 
-// 相似度匹配（增强版：支持大小写、同音字、象形字）
+// 相似度匹配（仅匹配题目，支持大小写、模糊、同音字）
 function similarity(query, text){
     if(!query) return 0;
-    // 转小写，去掉所有空格和标点
     const q = query.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;；:：!！""'']/g,'');
     const t = text.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;；:：!！""'']/g,'');
     if(!q || !t) return 0;
 
-    // 1. 完全包含
     if(t.indexOf(q) !== -1) return 1.0;
     if(q.indexOf(t) !== -1 && t.length >= 3) return 0.95;
 
-    // 2. 双字匹配（bigram）
     let hit = 0;
     for(let i=0;i<q.length-1;i++){
         const bigram = q.substr(i,2);
@@ -591,7 +590,6 @@ function similarity(query, text){
     }
     const bigramScore = q.length>1 ? hit/(q.length-1) : 0;
 
-    // 3. 单字匹配（去重）
     let charHit = 0;
     const uniqueChars = [...new Set(q.split(''))];
     uniqueChars.forEach(ch=>{
@@ -599,8 +597,7 @@ function similarity(query, text){
     });
     const charScore = uniqueChars.length ? charHit/uniqueChars.length : 0;
 
-    // 4. 拼音/同音字简单处理：将常见同音字替换（如“青”与“清”）
-    // 这里不引入复杂库，仅做简单映射提高鲁棒性
+    // 简单同音字扩展
     const homophoneMap = {
         'qing':'清|青|轻|氢',
         'zhi':'值|质|制|止|只',
@@ -619,17 +616,13 @@ function similarity(query, text){
         'hua':'化|花|华',
         'xiao':'硝|消|小|效',
         'su':'素|速|塑',
-        'yanghua':'氧化|氧化',
-        'wu':'污|无|物|五',
-        'shuiwu':'污水|水污'
+        'wu':'污|无|物|五'
     };
-    // 简单同音字替换：将查询中的同音字组替换为正则，扩大匹配
     let qExpanded = q;
     for(let key in homophoneMap){
         const chars = homophoneMap[key].split('|');
         chars.forEach(ch=>{
             if(q.indexOf(ch) !== -1){
-                // 将查询中的该字替换为字符组，用于检测原文是否包含任意同音字
                 qExpanded = qExpanded.replace(new RegExp(ch,'g'), `[${chars.join('')}]`);
             }
         });
@@ -637,18 +630,16 @@ function similarity(query, text){
     try {
         const re = new RegExp(qExpanded, 'i');
         if(re.test(t)) return 0.9;
-    } catch(e) { /* 正则构造失败忽略 */ }
+    } catch(e) {}
 
-    // 返回综合分数（双字权重高，单字权重低）
     return Math.max(bigramScore*0.85, charScore*0.55);
 }
 
-function matchQuestions(query, threshold = 0.3){
+// 只匹配题目，不匹配答案
+function matchQuestions(query, threshold = 0.28){
     const results = [];
     questionBank.forEach(item=>{
-        const scoreQ = similarity(query, item.q);
-        const scoreA = similarity(query, item.a);
-        const score = Math.max(scoreQ, scoreA * 0.8);
+        const score = similarity(query, item.q);   // 只算题目相似度
         if(score >= threshold){
             results.push({ item, score });
         }
@@ -709,13 +700,11 @@ function sendQuestion(){
         return;
     }
 
-    // 清空对话并重新提取
     chatArea.innerHTML = '';
 
     const results = matchQuestions(text);
     renderResults(results, text);
 
-    // 发送后自动清空输入框与图片
     questionInput.value = '';
     clearImage();
 
@@ -725,7 +714,6 @@ function sendQuestion(){
         showToast(`找到 ${results.length} 条相关题目`);
     }
 
-    // 保持焦点，方便继续输入
     questionInput.focus();
 }
 
@@ -738,7 +726,6 @@ function clearImage(){
 }
 
 imageBtn.addEventListener('click', ()=>{
-    // 触发拍照/选图，优先调用相机
     imageInput.click();
 });
 
@@ -763,18 +750,18 @@ closeImg.addEventListener('click', (e)=>{
     clearImage();
 });
 
-// ====================== 语音识别（增强版，修复无反应问题） ======================
+// ====================== 语音识别 ======================
 function initRecognition(){
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if(!SR){
         voiceBtn.style.opacity = '0.5';
-        voiceBtn.title = '当前浏览器不支持语音识别，请使用Chrome/Edge/Safari';
+        voiceBtn.title = '当前浏览器不支持语音识别';
         return null;
     }
     const rec = new SR();
     rec.lang = 'zh-CN';
     rec.continuous = false;
-    rec.interimResults = true;   // 开启实时结果，提高响应感知
+    rec.interimResults = true;
     rec.maxAlternatives = 1;
 
     rec.onstart = ()=>{
@@ -801,7 +788,6 @@ function initRecognition(){
         else if(e.error === 'audio-capture') errMsg = '未找到麦克风';
         else if(e.error === 'network') errMsg = '网络错误';
         showToast(errMsg);
-        // 确保状态重置
         isRecording = false;
         voiceBtn.classList.remove('recording');
         voiceBtn.textContent = '🎤';
@@ -819,7 +805,7 @@ voiceBtn.addEventListener('click', ()=>{
         recognition = initRecognition();
     }
     if(!recognition){
-        showToast('当前浏览器不支持语音识别，请使用Chrome/Edge/Safari');
+        showToast('当前浏览器不支持语音识别');
         return;
     }
     if(isRecording){
@@ -829,7 +815,6 @@ voiceBtn.addEventListener('click', ()=>{
             recognition.start();
         } catch(e) {
             console.warn(e);
-            // 可能已经在录制中，先停止再启动
             try { recognition.stop(); } catch(e2) {}
             setTimeout(()=>{
                 try { recognition.start(); } catch(e3) { showToast('无法启动录音，请检查麦克风权限'); }
