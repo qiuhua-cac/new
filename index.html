@@ -127,22 +127,20 @@ body{
     font-weight:bold;
     word-break:break-word;
 }
+/* 多段答案分行显示 */
 .result-card .a-text .ans-line{
     display:block;
-    padding:2px 0;
+    padding:3px 0 3px 16px;
     position:relative;
-    padding-left:12px;
 }
 .result-card .a-text .ans-line::before{
-    content:'';
+    content:'▲';
     position:absolute;
     left:0;
-    top:0.85em;
-    width:5px;
-    height:5px;
-    border-radius:50%;
-    background:#f87171;
-    transform:translateY(-50%);
+    top:3px;
+    color:#ef4444;
+    font-size:11px;
+    font-weight:normal;
 }
 .result-card .a-text .ans-sep{
     display:inline-block;
@@ -562,24 +560,59 @@ body{
 .tab-content{display:none;}
 .tab-content.active{display:block;}
 
-/* GitHub 同步区 */
+/* GitHub 同步区（可折叠） */
 .github-section{
     background:#f0f7ff;
     border:1px solid #c8d9ec;
     border-radius:12px;
-    padding:12px 14px;
     margin-top:12px;
-    font-size:12px;
+    overflow:hidden;
 }
-.github-section .gh-title{
+.github-header{
+    padding:10px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    cursor:pointer;
+    background:#e8f2ff;
+    transition:0.15s;
+    user-select:none;
+}
+.github-header:hover{background:#dceaff;}
+.github-header .gh-title{
     font-weight:600;
     color:#1e40af;
-    margin-bottom:6px;
+    font-size:12px;
     display:flex;
     align-items:center;
     gap:6px;
 }
-.github-section .gh-hint{
+.github-header .gh-status{
+    font-size:11px;
+    padding:2px 8px;
+    border-radius:8px;
+    font-weight:500;
+}
+.gh-status.configured{background:#dcfce7;color:#166534;}
+.gh-status.unconfigured{background:#fee2e2;color:#991b1b;}
+.github-header .gh-arrow{
+    font-size:11px;
+    color:#5a7a9a;
+    transition:transform 0.2s;
+    margin-left:6px;
+}
+.github-section.expanded .gh-arrow{transform:rotate(90deg);}
+.github-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.28s ease;
+    padding:0 14px;
+}
+.github-section.expanded .github-body{
+    max-height:400px;
+    padding:12px 14px 14px;
+}
+.github-body .gh-hint{
     color:#5a7a9a;
     font-size:11px;
     line-height:1.6;
@@ -767,8 +800,8 @@ body{
                         <textarea id="editQ" placeholder="题目内容"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>答案（多段请用 ｜ 分隔）</label>
-                        <textarea id="editA" placeholder="答案内容，多个答案用 ｜ 分隔"></textarea>
+                        <label>答案（多段请用 ‖ 分隔）</label>
+                        <textarea id="editA" placeholder="答案内容，多个答案用 ‖ 分隔"></textarea>
                     </div>
                     <div style="display:flex;gap:8px;justify-content:flex-end;">
                         <button class="btn btn-sm" id="editCancel">取消</button>
@@ -792,8 +825,8 @@ body{
                     <textarea id="addQ" placeholder="输入题目内容"></textarea>
                 </div>
                 <div class="form-group">
-                    <label>答案（多段请用 ｜ 分隔）</label>
-                    <textarea id="addA" placeholder="输入答案内容，多个答案用 ｜ 分隔"></textarea>
+                    <label>答案（多段请用 ‖ 分隔）</label>
+                    <textarea id="addA" placeholder="输入答案内容，多个答案用 ‖ 分隔"></textarea>
                 </div>
                 <div style="display:flex;gap:8px;justify-content:flex-end;">
                     <button class="btn btn-sm" id="addClear">清空</button>
@@ -814,28 +847,37 @@ body{
                 </div>
             </div>
 
-            <!-- GitHub 同步 -->
-            <div class="github-section">
-                <div class="gh-title">🐙 GitHub 仓库同步</div>
-                <div class="gh-hint">
-                    配置好仓库信息后，每次保存题库修改将自动尝试同步到 GitHub。<br>
-                    需要 Personal Access Token（至少 repo 权限）。
+            <!-- GitHub 同步（可折叠） -->
+            <div class="github-section" id="githubSection">
+                <div class="github-header" id="githubHeader">
+                    <div class="gh-title">
+                        🐙 GitHub 仓库同步
+                        <span class="gh-status unconfigured" id="ghStatus">未配置</span>
+                    </div>
+                    <span class="gh-arrow">▶</span>
                 </div>
-                <div class="github-row">
-                    <input type="text" id="ghOwner" placeholder="用户名/组织 (owner)">
-                </div>
-                <div class="github-row">
-                    <input type="text" id="ghRepo" placeholder="仓库名 (repo)">
-                </div>
-                <div class="github-row">
-                    <input type="text" id="ghPath" placeholder="文件路径 (如 data/bank.json)">
-                </div>
-                <div class="github-row">
-                    <input type="password" id="ghToken" placeholder="Personal Access Token">
-                </div>
-                <div class="github-row" style="justify-content:flex-end;">
-                    <button class="btn btn-sm" id="ghSaveCfg">保存配置</button>
-                    <button class="btn btn-sm btn-primary" id="ghSyncNow">立即同步</button>
+                <div class="github-body">
+                    <div class="gh-hint">
+                        配置好仓库信息后，每次保存题库修改将自动尝试同步到 GitHub。<br>
+                        需要 Personal Access Token（至少 repo 权限）。仅同步题库数据，不影响其他代码。
+                    </div>
+                    <div class="github-row">
+                        <input type="text" id="ghOwner" placeholder="用户名/组织 (owner)">
+                    </div>
+                    <div class="github-row">
+                        <input type="text" id="ghRepo" placeholder="仓库名 (repo)">
+                    </div>
+                    <div class="github-row">
+                        <input type="text" id="ghPath" placeholder="文件路径 (如 data/bank.json)">
+                    </div>
+                    <div class="github-row">
+                        <input type="password" id="ghToken" placeholder="Personal Access Token">
+                    </div>
+                    <div class="github-row" style="justify-content:flex-end;flex-wrap:wrap;">
+                        <button class="btn btn-sm" id="ghTest">🔌 测试连接</button>
+                        <button class="btn btn-sm" id="ghSaveCfg">💾 保存配置</button>
+                        <button class="btn btn-sm btn-primary" id="ghSyncNow">☁ 立即同步</button>
+                    </div>
                 </div>
             </div>
 
@@ -862,66 +904,66 @@ body{
 // ====================== 题库数据（默认） ======================
 const defaultBank = [
 {q:"凡在高地面（）的地点进行的工作都应视作高处作业", a:"2米及以上"},
-{q:"有限空间作业时，气体检测应在作业前（）分钟内完成，作业中至少每（）分钟重复检测一次", a:"30｜30"},
+{q:"有限空间作业时，气体检测应在作业前（）分钟内完成，作业中至少每（）分钟重复检测一次", a:"30‖30"},
 {q:"粉末活性炭主要用于", a:"去除COD"},
 {q:"厌氧区溶解氧控制在", a:"0.2mg/L以下"},
-{q:"有机物去除的途径包括（）和（）", a:"活性污泥合成代谢（污泥增殖）｜活性污泥分解代谢（将有机物分解为二氧化碳和水）"},
-{q:"潜水泵的由上到下的结构是", a:"吊环｜电缆｜定子转子｜叶轮｜轴承｜泵壳｜底座"},
+{q:"有机物去除的途径包括（）和（）", a:"活性污泥合成代谢（污泥增殖）‖活性污泥分解代谢（将有机物分解为二氧化碳和水）"},
+{q:"潜水泵的由上到下的结构是", a:"吊环‖电缆‖定子转子‖叶轮‖轴承‖泵壳‖底座"},
 {q:"以下哪种化学品不属于污水处理厂的腐蚀性化学品", a:"乙醇"},
 {q:"发现有人硫化氢中毒晕倒在有限空间内，施救者应", a:"佩戴正压式空气呼吸器确认安全后进入施救，切勿盲目进入"},
-{q:"NaClO具有", a:"碱性｜强氧化性｜强腐蚀性｜不稳定性"},
-{q:"废气处理中氢氧化钠洗涤的作用是（）次氯酸钠的作用是（）活性炭吸附的作用是（）", a:"中和酸性气体如硫化氢等｜氧化分析有毒气体如硫化氢、胺类、硫醇类去除恶臭类物质｜去除有毒、有异味的气体挥发性的有机物（VOCS）"},
+{q:"NaClO具有", a:"碱性‖强氧化性‖强腐蚀性‖不稳定性"},
+{q:"废气处理中氢氧化钠洗涤的作用是（）次氯酸钠的作用是（）活性炭吸附的作用是（）", a:"中和酸性气体如硫化氢等‖氧化分析有毒气体如硫化氢、胺类、硫醇类去除恶臭类物质‖去除有毒、有异味的气体挥发性的有机物（VOCS）"},
 {q:"厌氧处理的主要产物是", a:"甲烷和二氧化碳"},
 {q:"下列哪种个体防护装备不能用于硫化氢环境作业", a:"半面罩防毒面具配A型滤盒"},
 {q:"污泥料仓发生“架桥”坍塌事故导致人员被埋，现场第一响应人首先应?", a:"停止进料、切断电源"},
-{q:"COD;NH3-N;TP;TN;氟化物的纳管标准分别是", a:"500mg/L｜45mg/L｜3mg/L｜50mg/L｜15mg/L"},
+{q:"COD;NH3-N;TP;TN;氟化物的纳管标准分别是", a:"500mg/L‖45mg/L‖3mg/L‖50mg/L‖15mg/L"},
 {q:"NaClO含量是指", a:"有效氯含量10%"},
-{q:"曝气池中需要消耗氧气的有（）三个过程", a:"氧化｜硝化｜内源呼吸"},
+{q:"曝气池中需要消耗氧气的有（）三个过程", a:"氧化‖硝化‖内源呼吸"},
 {q:"进入有限空间（如阀门井、污水井）作业，必须遵循的原则是（）", a:"先通风、再检测、后作业"},
 {q:"水泵的运行频率单位是", a:"Hz"},
 {q:"硫化氢浓度超过（）时，数秒内就可致人闪电型死亡。", a:"1000mg/m³"},
 {q:"机械设备（如细格栅、压滤机）卡阻或检修时，正确操作是（）", a:"切断电源并悬挂“禁止合闸 有人工作”标示牌（上锁挂牌）后清理"},
-{q:"影响活性污泥法处理效果的因素包括", a:"污泥负荷｜污泥泥龄｜溶解氧｜营养物质｜pH值｜水温｜有毒物质｜污泥回流比"},
+{q:"影响活性污泥法处理效果的因素包括", a:"污泥负荷‖污泥泥龄‖溶解氧‖营养物质‖pH值‖水温‖有毒物质‖污泥回流比"},
 {q:"次氯酸钠（漂白水/消毒液）储存时，下列做法错误的是（）", a:"用铁桶密封保存"},
-{q:"一期AAO生物反应池有效深度为（）m，二期生物反应池好氧区有效深度为（）", a:"6.2｜4"},
+{q:"一期AAO生物反应池有效深度为（）m，二期生物反应池好氧区有效深度为（）", a:"6.2‖4"},
 {q:"污水处理厂发生化学品紧急泄漏时，首选处置措施是?", a:"封堵泄漏点"},
 {q:"ORP表征的是", a:"来水中的氧化性物质和还原性物质的多少"},
-{q:"生化池上有那些仪表", a:"污泥浓度计｜氧化还原电位｜溶解氧｜硝氮仪"},
-{q:"厌氧池可能会产生的主要有毒有害的气体包括", a:"硫化氢｜甲烷｜一氧化碳"},
-{q:"在废气处理工艺中主要是包括", a:"氢氧化钠洗涤｜次氯酸钠洗涤｜活性炭吸附"},
-{q:"和次氯酸钠卸料等个人防护必须佩戴", a:"护目镜｜防酸碱手套｜防护服"},
-{q:"SRT是指（）HRT是指（）MLSS是指（）MLVSS是指（）DO是指（）", a:"泥龄｜停留时间｜污泥浓度｜挥发性活性污泥浓度｜溶解氧"},
+{q:"生化池上有那些仪表", a:"污泥浓度计‖氧化还原电位‖溶解氧‖硝氮仪"},
+{q:"厌氧池可能会产生的主要有毒有害的气体包括", a:"硫化氢‖甲烷‖一氧化碳"},
+{q:"在废气处理工艺中主要是包括", a:"氢氧化钠洗涤‖次氯酸钠洗涤‖活性炭吸附"},
+{q:"和次氯酸钠卸料等个人防护必须佩戴", a:"护目镜‖防酸碱手套‖防护服"},
+{q:"SRT是指（）HRT是指（）MLSS是指（）MLVSS是指（）DO是指（）", a:"泥龄‖停留时间‖污泥浓度‖挥发性活性污泥浓度‖溶解氧"},
 {q:"电压的单位是", a:"V"},
 {q:"污水处理厂中，污泥消化池的主要功能是?", a:"减少污泥体积"},
-{q:"二级处理中氮的转化过程包括", a:"氨化｜硝化｜异养反硝化｜同化反硝化"},
+{q:"二级处理中氮的转化过程包括", a:"氨化‖硝化‖异养反硝化‖同化反硝化"},
 {q:"废气处理主要使用（）作为吸附剂", a:"柱状活性炭"},
-{q:"化学需氧量衡量水中的（）和（）", a:"有机物｜无机还原性物质"},
+{q:"化学需氧量衡量水中的（）和（）", a:"有机物‖无机还原性物质"},
 {q:"出水执行的标准是", a:"GB18918-2002《城镇污水处理厂污染物排放标准》"},
 {q:"压力容器安全附件中压力表检定周期为", a:"半年"},
-{q:"次氯酸钠/PAC卸料过程，卸料操作人员及监护人必须规范穿戴", a:"安全帽｜护目镜｜耐酸碱手套｜防护鞋｜防护服"},
-{q:"厌氧池的作用是", a:"氨化，有机氮转变成氨氮｜生物除磷聚磷菌释磷场所｜水解酸化，产酸，产甲烷脱氮反硝化"},
+{q:"次氯酸钠/PAC卸料过程，卸料操作人员及监护人必须规范穿戴", a:"安全帽‖护目镜‖耐酸碱手套‖防护鞋‖防护服"},
+{q:"厌氧池的作用是", a:"氨化，有机氮转变成氨氮‖生物除磷聚磷菌释磷场所‖水解酸化，产酸，产甲烷脱氮反硝化"},
 {q:"NaAc作用是", a:"补充碳源"},
 {q:"活性污泥法中，微生物代谢有机物所需的氧主要来自（）", a:"水中溶解氧"},
-{q:"NaAc投加点位在", a:"厌氧区｜缺氧区"},
+{q:"NaAc投加点位在", a:"厌氧区‖缺氧区"},
 {q:"生物滤池单元冷干机的主要作用是", a:"干燥空气"},
 {q:"有限空间作业“三不进入”原则不包含以下哪项（）", a:"无培训不进入"},
-{q:"二沉池的作用是（）", a:"污泥浓缩｜污泥回流｜泥水分离"},
-{q:"活性炭按照原材料分类主要分为（）", a:"煤质｜木质"},
+{q:"二沉池的作用是（）", a:"污泥浓缩‖污泥回流‖泥水分离"},
+{q:"活性炭按照原材料分类主要分为（）", a:"煤质‖木质"},
 {q:"生物滤池的填料为", a:"陶粒"},
-{q:"额定起重量大于（）t 且提升高度大于（）m的各类起重机视为特种设备", a:"3｜2"},
-{q:"NaClO的作用（）", a:"强氧化｜消毒"},
+{q:"额定起重量大于（）t 且提升高度大于（）m的各类起重机视为特种设备", a:"3‖2"},
+{q:"NaClO的作用（）", a:"强氧化‖消毒"},
 {q:"活性炭罐采用（）作为吸附剂。", a:"颗粒活性炭"},
-{q:"公司内部活性炭主要用了（）三种", a:"粉末活性炭｜柱状活性炭｜颗粒活性炭"},
-{q:"滤池出水阀由（）组成。", a:"阀体｜执行器｜气缸"},
+{q:"公司内部活性炭主要用了（）三种", a:"粉末活性炭‖柱状活性炭‖颗粒活性炭"},
+{q:"滤池出水阀由（）组成。", a:"阀体‖执行器‖气缸"},
 {q:"压力单位是（）", a:"kpa"},
 {q:"AAO工艺中，混合液回流(内回流)的主要目的是（）", a:"将硝化液送回缺氧段"},
 {q:"操作人员应定期排放曝气系统空气管路中的存水，并应及时关闭放水阀，一般时间设定为（）", a:"一周一次"},
-{q:"调节池的的作用是（）", a:"调节水量｜调节水质"},
-{q:"鼓风机巡检过程中需要留意的参数包括（）", a:"电压｜风量｜电流｜温度"},
+{q:"调节池的的作用是（）", a:"调节水量‖调节水质"},
+{q:"鼓风机巡检过程中需要留意的参数包括（）", a:"电压‖风量‖电流‖温度"},
 {q:"活性污泥法中的“曝气”主要目的是什么?", a:"提供氧气供微生物代谢"},
-{q:"检维修的操作流程包括（）", a:"工单生产｜作业前准备｜作业前最后安全检查｜开始作业｜试机｜现场清理｜工单闭环"},
-{q:"废水中TN(总氮)包括（），mg/L", a:"有机氮｜氨氮｜硝酸盐氮｜亚硝酸盐氮"},
-{q:"二期滤池反洗风机采用的是（）品牌是（）", a:"罗茨风机｜百事德"},
+{q:"检维修的操作流程包括（）", a:"工单生产‖作业前准备‖作业前最后安全检查‖开始作业‖试机‖现场清理‖工单闭环"},
+{q:"废水中TN(总氮)包括（），mg/L", a:"有机氮‖氨氮‖硝酸盐氮‖亚硝酸盐氮"},
+{q:"二期滤池反洗风机采用的是（）品牌是（）", a:"罗茨风机‖百事德"},
 {q:"NaClO的中文学名是（）", a:"次氯酸钠"},
 {q:"PAC呈（）", a:"酸"},
 {q:"污水厂高空作业(>2m，如池上栏杆外作业)必须（）", a:"系好安全带(高挂低用)，设专人监护"},
@@ -930,54 +972,54 @@ const defaultBank = [
 {q:"高密池的设计进水水质是 COD（）", a:"60"},
 {q:"ORP越高说明（）", a:"氧化性越强"},
 {q:"传统 A2O 工艺中污泥回流主要目的（）", a:"维持厌氧池污泥浓度水平"},
-{q:"厌氧池可能会产生的主要有毒有害的气体包括（）", a:"硫化氢｜甲烷｜一氧化碳"},
+{q:"厌氧池可能会产生的主要有毒有害的气体包括（）", a:"硫化氢‖甲烷‖一氧化碳"},
 {q:"水泵的功率单位是（）", a:"kw"},
-{q:"在好氧脱碳工艺中，好氧微生物代谢营养比例是需求为C:N:P=（）其中C为（）", a:"100:5:1｜BOD5"},
+{q:"在好氧脱碳工艺中，好氧微生物代谢营养比例是需求为C:N:P=（）其中C为（）", a:"100:5:1‖BOD5"},
 {q:"高密池瞬时进水量为120 m3/h.8%含量PAC母液投加浓度为100mg/L,瞬时PAC母液投加量应为（）", a:"150L/h"},
 {q:"污水处理厂安全培训中，以下哪项不属于“三违”行为?", a:"遵守操作规程"},
 {q:"水泵的扬程单位是（）", a:"m"},
 {q:"PAC作用是", a:"混凝"},
-{q:"厂区流量计共计有（）三种", a:"电磁流量计｜超声波流量计｜浮子流量计"},
-{q:"职安健公正文化三要素（）", a:"事故事件报告｜优秀做法分享｜奖惩措施"},
+{q:"厂区流量计共计有（）三种", a:"电磁流量计‖超声波流量计‖浮子流量计"},
+{q:"职安健公正文化三要素（）", a:"事故事件报告‖优秀做法分享‖奖惩措施"},
 {q:"电量的单位是（）", a:"kwh"},
 {q:"污水厂配电室发生电气火灾，应首选的灭火器是（）", a:"二氧化碳(CO₂)灭火器"},
-{q:"好氧池COD去除率低的原因有以下哪几点（）", a:"好氧池污泥老化泥龄长｜好氧池溶解氧不足｜原水含有有毒物质污泥中毒｜好氧池冲击负荷大或者好氧池出现污泥膨胀"},
+{q:"好氧池COD去除率低的原因有以下哪几点（）", a:"好氧池污泥老化泥龄长‖好氧池溶解氧不足‖原水含有有毒物质污泥中毒‖好氧池冲击负荷大或者好氧池出现污泥膨胀"},
 {q:"水里的COD是指什么?（）", a:"水体中有机物和还原性无机物污染程度的综合指标"},
-{q:"公司上游来水主要包括（）", a:"生物制药废水｜纺织印染废水｜氟化工废水｜其他精细化工废水"},
+{q:"公司上游来水主要包括（）", a:"生物制药废水‖纺织印染废水‖氟化工废水‖其他精细化工废水"},
 {q:"进入有限空间作业时需要遵守的十大救命法则为（）", a:"进入可能存在有害气体的场所前，进行气体检测并在作业过程中持续监测"},
 {q:"当发现有人硫化氢中毒晕倒，施救者必须佩戴（）方可进入现场施救", a:"正压式SCBA"},
-{q:"1m³=（）dm3=（）L", a:"1000｜1000"},
+{q:"1m³=（）dm3=（）L", a:"1000‖1000"},
 {q:"发现污水厂内有人触电，以下哪种做法是正确的?（）", a:"切断电源"},
 {q:"二沉池出水氨氮升高的原因包括（）", a:"硝化反应不足"},
 {q:"缺氧池的作用是（）", a:"反硝化反应场所"},
 {q:"和下图相关的十大救命法则是?", a:"远离吊装作业和任何存在坠物风险的区域"},
 {q:"皮肤或眼睛不慎溅入次氯酸钠或酸碱药液，第一时间应（）", a:"立即用大量流动清水冲洗至少15分钟，并就医"},
 {q:"一般情况下，污水的可生化性取决于（）", a:"BOD5/COD的值"},
-{q:"新压力容器投用后（）年内应进行首次定期检验，后续检验周期根据安全状况等级确定，一般为每（）年一次", a:"3｜3-6"},
+{q:"新压力容器投用后（）年内应进行首次定期检验，后续检验周期根据安全状况等级确定，一般为每（）年一次", a:"3‖3-6"},
 {q:"NaAc的中文学名是", a:"乙酸钠"},
-{q:"反硝化脱氮过程中，C:N理论为（），实际生产过程中控制在（）其中C为", a:"2.865:1｜4:1｜BOD5"},
-{q:"活性炭罐的设计进水水质是COD（）SS（）", a:"80mg/L｜30mg/L"},
+{q:"反硝化脱氮过程中，C:N理论为（），实际生产过程中控制在（）其中C为", a:"2.865:1‖4:1‖BOD5"},
+{q:"活性炭罐的设计进水水质是COD（）SS（）", a:"80mg/L‖30mg/L"},
 {q:"避雷针及易燃易爆场所(如沼气柜)的防雷接地电阻应不大于（）", a:"4Ω"},
-{q:"臭氧接触氧化系统包括（）", a:"尾气破坏装置｜臭氧发生装置｜自动化控制系统｜氧气制备装置｜臭氧投加装置"},
-{q:"一期技改AAO生物反应池曝气风机采用的是（）品牌是（）", a:"磁悬浮风机｜亿昇"},
+{q:"臭氧接触氧化系统包括（）", a:"尾气破坏装置‖臭氧发生装置‖自动化控制系统‖氧气制备装置‖臭氧投加装置"},
+{q:"一期技改AAO生物反应池曝气风机采用的是（）品牌是（）", a:"磁悬浮风机‖亿昇"},
 {q:"ORP越低说明（）", a:"还原性越强"},
-{q:"活性炭在废水处理中可用于（）等", a:"去除异味｜脱色｜去除有机物"},
-{q:"臭氧的作用是（）", a:"将带有不饱和键的大分子有机物开环断链转化成小分子有机物提高可生化性｜将小分子有机物直接氧化成水和二氧化碳｜去除色度｜消毒"},
-{q:"溶解氧突然变低的可能有（）", a:"进水氨氮高｜进水COD高｜仪表故障｜设备故障"},
+{q:"活性炭在废水处理中可用于（）等", a:"去除异味‖脱色‖去除有机物"},
+{q:"臭氧的作用是（）", a:"将带有不饱和键的大分子有机物开环断链转化成小分子有机物提高可生化性‖将小分子有机物直接氧化成水和二氧化碳‖去除色度‖消毒"},
+{q:"溶解氧突然变低的可能有（）", a:"进水氨氮高‖进水COD高‖仪表故障‖设备故障"},
 {q:"缺氧区溶解氧控制在（）", a:"0.2-0.5 mg/L"},
 {q:"出水流量计采用的是（）", a:"巴氏计量槽"},
-{q:"公司内部涉及到的特种设备包括（）", a:"叉车｜压力容器｜起重机"},
-{q:"高密池堰口出水混浊的原因包括（）", a:"絮凝区比例过小｜絮凝区污泥浓度过高｜絮凝区发生故障｜混凝剂故障"},
+{q:"公司内部涉及到的特种设备包括（）", a:"叉车‖压力容器‖起重机"},
+{q:"高密池堰口出水混浊的原因包括（）", a:"絮凝区比例过小‖絮凝区污泥浓度过高‖絮凝区发生故障‖混凝剂故障"},
 {q:"活性炭罐采用的是（）设计", a:"下流式"},
 {q:"水泵的流量单位是（）", a:"m³/h"},
-{q:"COD;NH3-N;TP;TN;氟化物;悬浮物的排水标准分别是（）", a:"50｜5(8)｜0.5｜15｜6｜10"},
+{q:"COD;NH3-N;TP;TN;氟化物;悬浮物的排水标准分别是（）", a:"50‖5(8)‖0.5‖15‖6‖10"},
 {q:"厌氧池溶解氧一般控制在0.2 mg/L以下，其目的是（）", a:"反硝化反应顺利进行"},
 {q:"污水处理中，调节池的作用是（）", a:"调节水量和水质"},
 {q:"下列哪项不属于生化池内的推流器的功能（）", a:"硝化"},
 {q:"水里的COD是指什么?（）", a:"水体中有机物和还原性无机物污染程度的综合指标"},
-{q:"二沉池的作用是（）", a:"污泥浓缩｜污泥回流｜泥水分离"},
-{q:"污泥浓度计数据突然出现下降的原因有（）", a:"回流异常｜污泥浓度计故障"},
-{q:"在污水厂的日常运行中，运行人员需要对曝气池内的（）进行日常巡检", a:"曝气情况｜搅拌混合情况｜剩余污泥排放情况"},
+{q:"二沉池的作用是（）", a:"污泥浓缩‖污泥回流‖泥水分离"},
+{q:"污泥浓度计数据突然出现下降的原因有（）", a:"回流异常‖污泥浓度计故障"},
+{q:"在污水厂的日常运行中，运行人员需要对曝气池内的（）进行日常巡检", a:"曝气情况‖搅拌混合情况‖剩余污泥排放情况"},
 {q:"以下哪种物质是污水中的氮源（）", a:"以上都是"},
 {q:"压力容器安全附件中安全阀检定周期为（）", a:"一年"},
 {q:"消毒池两台提升泵的作用是（）", a:"将超标水回抽至事故池重新处理"},
@@ -987,25 +1029,25 @@ const defaultBank = [
 {q:"活性炭罐进水流量计采用的是（）", a:"电磁流量计"},
 {q:"特种设备投入使用之前30天内须办理（）", a:"使用登记证"},
 {q:"以下哪种行为属于污水处理厂的安全操作?（）", a:"正确佩戴绝缘手套"},
-{q:"生物滤池的作用是（）", a:"去除悬浮物｜去除cod"},
+{q:"生物滤池的作用是（）", a:"去除悬浮物‖去除cod"},
 {q:"污水厂防雷接地电阻值每年雨季前检测一次，要求不大于（）Ω", a:"4"},
 {q:"进入缺氧密闭空间作业必须使用（）", a:"空气呼吸器"},
 {q:"下列哪些装置不算污泥的来源（）", a:"二沉池"},
-{q:"高密池混凝区的投加的药剂英文缩写是（）中文名称是（）", a:"pac｜聚合氯化铝"},
-{q:"水泵的基本参数包括（）", a:"流量｜扬程｜转速｜功率｜效率｜汽蚀余量"},
+{q:"高密池混凝区的投加的药剂英文缩写是（）中文名称是（）", a:"pac‖聚合氯化铝"},
+{q:"水泵的基本参数包括（）", a:"流量‖扬程‖转速‖功率‖效率‖汽蚀余量"},
 {q:"二沉池巡检过程中需要遵守的十大救命法则为（）", a:"远离车辆和设备的行驶路径"},
-{q:"1 mg/L=（）kg/m³=（）g/m³", a:"0.001｜1"},
+{q:"1 mg/L=（）kg/m³=（）g/m³", a:"0.001‖1"},
 {q:"污水处理厂安全培训中，“三级安全教育”的内容包括（）", a:"以上都是"},
 {q:"污水厂中常见的危险因素不包括以哪项?（）", a:"良好的工作环境"},
 {q:"进入可能产生缺氧或高浓度硫化氢的污水井作业，必须使用的呼吸防护装备是（）", a:"自给式空气呼吸器(SCBA)或长管呼吸器"},
-{q:"化学需氧量衡量水中的（）和（）", a:"无机还原性物质｜有机物"},
-{q:"生化池上仪表的缩写（）", a:"DO｜ORP｜MLSS｜NT3"},
-{q:"活性污泥法处理系统主要由以下几个关键部分组成（）", a:"曝气池｜二沉池｜回流系统｜剩余污泥排放系统"},
+{q:"化学需氧量衡量水中的（）和（）", a:"无机还原性物质‖有机物"},
+{q:"生化池上仪表的缩写（）", a:"DO‖ORP‖MLSS‖NT3"},
+{q:"活性污泥法处理系统主要由以下几个关键部分组成（）", a:"曝气池‖二沉池‖回流系统‖剩余污泥排放系统"},
 {q:"压力容器操作人员必须持相应的（）方可独立操作。", a:"特种设备作业证"},
 {q:"化验室稀释浓硫酸的正确操作是（）", a:"将浓硫酸缓慢沿器壁倒入水中，并不断搅拌"},
-{q:"臭氧尾气处理的方式是（）和（）", a:"催化剂｜高温"},
-{q:"高密池的主要作用是（）", a:"去除SS｜总磷"},
-{q:"高密池絮凝区的投加的药剂英文缩写是（）中文名称是（）", a:"APAM｜阴离子聚丙烯酰胺"},
+{q:"臭氧尾气处理的方式是（）和（）", a:"催化剂‖高温"},
+{q:"高密池的主要作用是（）", a:"去除SS‖总磷"},
+{q:"高密池絮凝区的投加的药剂英文缩写是（）中文名称是（）", a:"APAM‖阴离子聚丙烯酰胺"},
 {q:"水泵的泵壳铭牌上简明列出了水泵在设计转速下运转，（）时的流量、扬程、轴功率及允许吸上真空高度或气蚀余量值。", a:"效率为最高"},
 {q:"好氧末端溶解氧控制在", a:"2-4 mg/L"},
 {q:"实际生产过程中，次氯酸钠的消毒作用主要体现在（）", a:"去除出水中的病毒、大肠杆菌等"},
@@ -1020,32 +1062,32 @@ const defaultBank = [
 {q:"实际生产过程中，次氯酸钠的强氧化性主要体现在（）", a:"用于降低出水氨氮"},
 {q:"在缺氧环境中作业时，必须佩戴的个人防护装备是（）", a:"氧气面罩"},
 {q:"鼓风机房噪声强度达98dB（），操作工每日暴露不得超过（）分钟", a:"30"},
-{q:"大气监测的指标主要包含（）", a:"臭气浓度｜氨｜硫化氢"},
+{q:"大气监测的指标主要包含（）", a:"臭气浓度‖氨‖硫化氢"},
 {q:"PAC的含量是指（）", a:"AI2O3含量[Al₂O₃]"},
 {q:"污水处理厂中，以下哪种气体浓度超标时，必须立即启动应急预案? （）", a:"硫化氢"},
 {q:"高密池瞬时进水量为150 m3/h,12%含量纯PAC投加浓度为30 mg/L,瞬时PAC母液投加量应为（）(PAC母液密度按照1.2kg/L计)", a:"31.25 L/h"},
 {q:"高密池瞬时进水量为100m3/h.8%含量PAC母液投加浓度为100mg/L,瞬时PAC母液投加量应为（）。(PAC母液密度按照1.2kg/L计)", a:"104.17 L/h（注：原题答案8.3 L/h疑似有误）"},
-{q:"好氧池的作用是（）", a:"硝化：反应将氨氮转化为硝酸盐氮｜碳化：将有机物转化成水和二氧化碳｜吸磷：聚磷菌在好氧环境下过量摄取磷并储存在体内｜氨化，有机氮转变成氨氮｜同化:合成细胞物质"},
-{q:"高密池的作用是（）", a:"去除SS｜总磷"},
-{q:"高密度沉淀池的组成包括（）", a:"混凝区｜絮凝区｜沉淀区"},
+{q:"好氧池的作用是（）", a:"硝化：反应将氨氮转化为硝酸盐氮‖碳化：将有机物转化成水和二氧化碳‖吸磷：聚磷菌在好氧环境下过量摄取磷并储存在体内‖氨化，有机氮转变成氨氮‖同化:合成细胞物质"},
+{q:"高密池的作用是（）", a:"去除SS‖总磷"},
+{q:"高密度沉淀池的组成包括（）", a:"混凝区‖絮凝区‖沉淀区"},
 {q:"《GBZ 2.1-2019工作场所有害因素职业接触限值 第1部分：化学有害因素》中规定臭氧的最高职业接触限值为（）/m³", a:"0.3"},
-{q:"NaClO的作用是（）", a:"消毒｜强氧化"},
-{q:"凯氏氮包括（）", a:"有机氮｜氨氮"},
-{q:"污泥回流比是指（）和（）之间的比值", a:"回流量｜进水量"},
+{q:"NaClO的作用是（）", a:"消毒‖强氧化"},
+{q:"凯氏氮包括（）", a:"有机氮‖氨氮"},
+{q:"污泥回流比是指（）和（）之间的比值", a:"回流量‖进水量"},
 {q:"ORP越低说明（）", a:"还原性越强"},
-{q:"滤池反洗主要过程分为（）", a:"汽洗｜水洗｜汽水洗"},
-{q:"二期生物反应池曝气风机采用的是（）品牌是（）", a:"空气悬浮风机｜海拓滨"},
-{q:"一期滤池反洗风机采用的是（）品牌是（）", a:"罗茨风机｜AERZEN"},
+{q:"滤池反洗主要过程分为（）", a:"汽洗‖水洗‖汽水洗"},
+{q:"二期生物反应池曝气风机采用的是（）品牌是（）", a:"空气悬浮风机‖海拓滨"},
+{q:"一期滤池反洗风机采用的是（）品牌是（）", a:"罗茨风机‖AERZEN"},
 {q:"二沉池出水总氮升高的原因包括（）", a:"反硝化反应不足"},
-{q:"二沉池巡检过程中，巡检内容包括（）", a:"设备运行情况｜出水情况｜污泥回流情况｜排渣情况"},
-{q:"活性炭罐的设计出水水水质是COD（）SS（）", a:"50mg/L｜10mg/L"},
+{q:"二沉池巡检过程中，巡检内容包括（）", a:"设备运行情况‖出水情况‖污泥回流情况‖排渣情况"},
+{q:"活性炭罐的设计出水水水质是COD（）SS（）", a:"50mg/L‖10mg/L"},
 {q:"磁悬浮风机出口流量计采用的是（）", a:"热式质量流量计"},
-{q:"臭氧具有（）遇到（）会发生剧烈反应，（）等甚至可能会发生爆炸", a:"强氧化性｜有机物｜易燃物｜静电｜明火｜撞击摩擦｜受热"},
+{q:"臭氧具有（）遇到（）会发生剧烈反应，（）等甚至可能会发生爆炸", a:"强氧化性‖有机物‖易燃物‖静电‖明火‖撞击摩擦‖受热"},
 {q:"BOD 表示的是（）", a:"生化需氧量"},
 {q:"有防护罩的运行设备应悬挂（）", a:"机械伤人，禁止接触"},
 {q:"传统 A2O 工艺中污泥回流主要目的（）", a:"维持厌氧池污泥浓度水平"},
-{q:"在A2O工艺中，沉淀池的作用包括（）", a:"泥水分离｜污泥浓缩｜回流控制｜减少污泥损失"},
-{q:"可能引起出水氨氮超标的原因（）", a:"曝气量不足导致溶解氧下降｜排泥未控制导致污泥浓度过低｜进水 COD、氨氮负荷变化，未及时调整工艺｜进水存在对硝化作用的有毒有害物质"},
+{q:"在A2O工艺中，沉淀池的作用包括（）", a:"泥水分离‖污泥浓缩‖回流控制‖减少污泥损失"},
+{q:"可能引起出水氨氮超标的原因（）", a:"曝气量不足导致溶解氧下降‖排泥未控制导致污泥浓度过低‖进水 COD、氨氮负荷变化，未及时调整工艺‖进水存在对硝化作用的有毒有害物质"},
 {q:"哪些参数是硝化反应的主要控制参数（）", a:"溶解氧、pH 值、水温"},
 {q:"污水厂调节池、格栅间等有限空间，进入前必须重点检测的有毒气体是（）", a:"硫化氢(H₂S)"},
 {q:"次氯酸钠与酸性清洗剂混合会产生什么有毒气体（）", a:"氯气"},
@@ -1060,7 +1102,7 @@ const defaultBank = [
 const STORAGE_KEY = 'zktest_bank_v1';
 const BACKUP_KEY  = 'zktest_backups_v1';
 const GH_CFG_KEY  = 'zktest_gh_cfg_v1';
-const CONFIRM_CODE = 'qiuhua'; // 二次确认代码
+const CONFIRM_CODE = 'qiuhua';
 
 // ====================== 全局状态 ======================
 let questionBank = [];
@@ -1116,7 +1158,6 @@ function askConfirm(title){
     });
 }
 
-// 页面刷新（确保数据落盘后）
 function refreshPage(delay = 350){
     setTimeout(()=>{ location.reload(); }, delay);
 }
@@ -1159,7 +1200,6 @@ function backupCurrentBank(){
     const now = new Date();
     const timeStr = now.toLocaleString('zh-CN',{hour12:false});
     const newEntry = { time: timeStr, data: JSON.parse(JSON.stringify(questionBank)), locked: false };
-
     let list = b.list.slice();
     if(list.length >= 3){
         let idx = list.findIndex(x=>!x.locked);
@@ -1185,11 +1225,46 @@ function loadGhCfg(){
 function saveGhCfg(cfg){
     try{ localStorage.setItem(GH_CFG_KEY, JSON.stringify(cfg)); }catch(e){}
 }
+function isGhConfigured(cfg){
+    return cfg && cfg.owner && cfg.repo && cfg.path && cfg.token;
+}
 
-// 通过 GitHub API 更新文件
+// 测试连接：获取文件信息（若不存在则返回 404，也算连通）
+async function testGitHubConnection(silent){
+    const cfg = loadGhCfg();
+    if(!isGhConfigured(cfg)){
+        if(!silent) showToast('请先完整填写并保存配置');
+        return false;
+    }
+    const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
+    try{
+        const resp = await fetch(apiBase, {
+            method: 'GET',
+            headers: {
+                'Authorization': `token ${cfg.token}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+        if(resp.ok){
+            if(!silent) showToast('✅ 连接成功，文件已存在');
+            return true;
+        }else if(resp.status === 404){
+            if(!silent) showToast('✅ 连接成功（文件暂不存在，首次同步将创建）');
+            return true;
+        }else{
+            if(!silent) showToast('连接失败：' + resp.status + ' ' + resp.statusText);
+            return false;
+        }
+    }catch(e){
+        if(!silent) showToast('连接异常：' + e.message);
+        return false;
+    }
+}
+
+// 同步题库到 GitHub（仅题库 JSON）
 async function syncToGitHub(silent = false){
     const cfg = loadGhCfg();
-    if(!cfg.owner || !cfg.repo || !cfg.path || !cfg.token){
+    if(!isGhConfigured(cfg)){
         if(!silent) showToast('请先完整配置 GitHub 信息');
         return false;
     }
@@ -1199,7 +1274,6 @@ async function syncToGitHub(silent = false){
     const contentB64 = btoa(unescape(encodeURIComponent(content)));
 
     try{
-        // 先获取当前文件 sha（如果存在）
         let sha = null;
         const getResp = await fetch(apiBase, {
             method: 'GET',
@@ -1212,7 +1286,6 @@ async function syncToGitHub(silent = false){
             const data = await getResp.json();
             sha = data.sha;
         }
-        // 提交
         const body = {
             message: `更新题库 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,
             content: contentB64,
@@ -1296,10 +1369,27 @@ function matchQuestions(query, threshold = 0.28){
     return results.slice(0, 15);
 }
 
-// 答案多段分行显示
+// ====================== 答案显示逻辑（核心优化） ======================
+// 判断是否应该分段显示：
+// - 分隔符为 ‖ (U+2016) 或 ｜ (全角竖线) 或 | (半角竖线)
+// - 如果各段都比较短（≤12个字符）且段数较多（≥3），则视为并列短项，不换行
+// - 否则分段显示，每段前加 ▲
 function formatAnswerHTML(ans){
-    const parts = String(ans).split(/[‖｜|]+/).map(s=>s.trim()).filter(Boolean);
-    if(parts.length <= 1) return escapeHTML(parts[0] || '');
+    const raw = String(ans || '');
+    // 统一分隔符为 ‖
+    const normalized = raw.replace(/[｜|‖]/g, '‖');
+    let parts = normalized.split('‖').map(s=>s.trim()).filter(Boolean);
+    if(parts.length <= 1){
+        return escapeHTML(parts[0] || raw);
+    }
+    // 判断是否为“并列短项”模式
+    const allShort = parts.every(p => p.length <= 12);
+    const manyParts = parts.length >= 3;
+    if(allShort && manyParts){
+        // 正常一行显示，用 ‖ 连接
+        return parts.map(p=>escapeHTML(p)).join(' <span class="ans-sep">‖</span> ');
+    }
+    // 否则分段显示，每段前加 ▲
     return parts.map(p=>`<span class="ans-line">${escapeHTML(p)}</span>`).join('');
 }
 
@@ -1406,7 +1496,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
     closeImg.addEventListener('click', (e)=>{ e.stopPropagation(); clearImage(); });
 
-    // ===== 语音识别（修复版） =====
+    // ===== 语音识别 =====
     function initRecognition(){
         const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
         if(!SR) return null;
@@ -1682,7 +1772,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
             el.appendChild(div);
         });
 
-        // 查阅（只读）
         el.querySelectorAll('[data-act="view"]').forEach(btn=>{
             btn.addEventListener('click', ()=>{
                 const idx = +btn.dataset.idx;
@@ -1692,7 +1781,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 showBackupViewer(item);
             });
         });
-        // 恢复（二次确认）
         el.querySelectorAll('[data-act="restore"]').forEach(btn=>{
             btn.addEventListener('click', async ()=>{
                 const idx = +btn.dataset.idx;
@@ -1708,7 +1796,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 refreshPage();
             });
         });
-        // 上锁
         el.querySelectorAll('[data-act="lock"]').forEach(ic=>{
             ic.addEventListener('click', ()=>{
                 const idx = +ic.dataset.idx;
@@ -1730,8 +1817,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     // 备份只读查阅弹窗
     function showBackupViewer(item){
-        // 构建一个可滚动的只读列表弹窗（复用bankModal的结构）
-        // 为了简单，直接在bankModal之上覆盖显示
         const overlay = document.createElement('div');
         overlay.className = 'modal-overlay active';
         overlay.style.zIndex = 1200;
@@ -1770,12 +1855,31 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
 
     // ===== GitHub 配置 =====
+    const githubSection = document.getElementById('githubSection');
+    const githubHeader  = document.getElementById('githubHeader');
+    const ghStatus      = document.getElementById('ghStatus');
+
+    githubHeader.addEventListener('click', ()=>{
+        githubSection.classList.toggle('expanded');
+    });
+
     function renderGhCfg(){
         const cfg = loadGhCfg();
         document.getElementById('ghOwner').value = cfg.owner || '';
         document.getElementById('ghRepo').value = cfg.repo || '';
         document.getElementById('ghPath').value = cfg.path || '';
         document.getElementById('ghToken').value = cfg.token || '';
+        updateGhStatus();
+    }
+    function updateGhStatus(){
+        const cfg = loadGhCfg();
+        if(isGhConfigured(cfg)){
+            ghStatus.textContent = '已配置';
+            ghStatus.className = 'gh-status configured';
+        }else{
+            ghStatus.textContent = '未配置';
+            ghStatus.className = 'gh-status unconfigured';
+        }
     }
     document.getElementById('ghSaveCfg').addEventListener('click', ()=>{
         const cfg = {
@@ -1785,7 +1889,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
             token: document.getElementById('ghToken').value.trim()
         };
         saveGhCfg(cfg);
+        updateGhStatus();
         showToast('GitHub 配置已保存');
+    });
+    document.getElementById('ghTest').addEventListener('click', ()=>{
+        testGitHubConnection(false);
     });
     document.getElementById('ghSyncNow').addEventListener('click', async ()=>{
         const ok = await syncToGitHub(false);
