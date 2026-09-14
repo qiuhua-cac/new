@@ -16,12 +16,41 @@ body{
     align-items:center;
 }
 
-/* 顶部标题 */
-.app-header{width:100%;max-width:760px;text-align:center;margin-bottom:14px;flex-shrink:0;}
+/* 顶部标题行 */
+.header-row{
+    width:100%;max-width:760px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    margin-bottom:14px;
+    flex-shrink:0;
+}
+.app-header{text-align:center;}
 .app-header h1{font-size:20px;color:#1e40af;margin-bottom:4px;font-weight:600;letter-spacing:0.5px;}
 .app-header .subtitle{font-size:12px;color:#3b5f8a;}
 
-/* 主容器：固定高度，内部滚动 */
+/* 登录按钮 */
+.login-btn{
+    position:absolute;
+    right:0;
+    top:0;
+    font-size:12px;
+    padding:6px 14px;
+    border:1px solid #c8d9ec;
+    border-radius:10px;
+    background:#fff;
+    color:#1e40af;
+    cursor:pointer;
+    font-weight:500;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+    transition:0.15s;
+}
+.login-btn:hover{background:#e8f2fe;border-color:#9bbde0;}
+.login-btn:active{transform:scale(0.97);}
+.login-btn.logged-in{background:#dbeafe;border-color:#93c5fd;color:#1d4ed8;}
+
+/* 主容器 */
 .app-container{
     width:100%;max-width:760px;
     background:#fff;
@@ -31,16 +60,16 @@ body{
     display:flex;
     flex-direction:column;
     flex:1;
-    min-height:0;  /* 关键：让flex子项可以收缩 */
+    min-height:0;
 }
 
-/* 对话显示区：唯一滚动区域 */
+/* 对话显示区 */
 .chat-area{
     flex:1;
     padding:18px 16px;
     overflow-y:auto;
     background:#f8fcff;
-    min-height:0;  /* 关键 */
+    min-height:0;
     -webkit-overflow-scrolling:touch;
 }
 
@@ -98,7 +127,30 @@ body{
     font-weight:bold;
     word-break:break-word;
 }
-.result-card .a-text .sep{color:#f87171;padding:0 2px;font-weight:normal;}
+/* 多段答案分行显示 */
+.result-card .a-text .ans-line{
+    display:block;
+    padding:2px 0;
+    position:relative;
+    padding-left:12px;
+}
+.result-card .a-text .ans-line::before{
+    content:'';
+    position:absolute;
+    left:0;
+    top:0.85em;
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:#f87171;
+    transform:translateY(-50%);
+}
+.result-card .a-text .ans-sep{
+    display:inline-block;
+    color:#f87171;
+    font-weight:normal;
+    padding:0 2px;
+}
 
 /* 无结果 */
 .no-result{
@@ -112,7 +164,7 @@ body{
 }
 .no-result b{color:#b45309;}
 
-/* ===== 底部固定区域（工具栏 + 输入区） ===== */
+/* ===== 底部固定区域 ===== */
 .bottom-fixed{
     flex-shrink:0;
     background:#fff;
@@ -129,16 +181,8 @@ body{
     flex-wrap:wrap;
     gap:6px;
 }
-.toolbar-left{
-    display:flex;
-    gap:8px;
-    align-items:center;
-}
-.toolbar-right{
-    display:flex;
-    gap:6px;
-    align-items:center;
-}
+.toolbar-left{display:flex;gap:8px;align-items:center;}
+.toolbar-right{display:flex;gap:6px;align-items:center;}
 .toolbar button{
     font-size:13px;
     padding:7px 14px;
@@ -160,7 +204,6 @@ body{
 .toolbar .btn-clear-chat{color:#c0392b;border-color:#f5b8b8;}
 .toolbar .btn-clear-chat:hover{background:#fef0f0;}
 
-/* 工具栏图标按钮 */
 .toolbar .icon-btn-sm{
     width:40px;height:40px;
     border-radius:50%;
@@ -245,7 +288,6 @@ body{
 }
 .send-btn:hover{background:linear-gradient(135deg,#2563eb,#1d4ed8);}
 .send-btn:active{transform:scale(0.94);}
-.send-btn:disabled{background:#cbd5e1;cursor:not-allowed;box-shadow:none;}
 
 /* 语音录制动画 */
 .recording{
@@ -271,19 +313,267 @@ body{
     text-align:center;
 }
 
-/* ========== 移动端适配 ========== */
+/* ========== 弹窗通用 ========== */
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(15,30,50,0.55);
+    z-index:1000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    backdrop-filter:blur(3px);
+}
+.modal-overlay.active{display:flex;}
+
+.modal{
+    background:#fff;
+    border-radius:18px;
+    width:100%;
+    max-width:560px;
+    max-height:90vh;
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 20px 50px rgba(0,0,0,0.3);
+    overflow:hidden;
+    animation:modalIn 0.25s ease-out;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(0.94);}to{opacity:1;transform:scale(1);}}
+
+.modal-header{
+    padding:16px 20px;
+    background:linear-gradient(135deg,#3b82f6,#2563eb);
+    color:#fff;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-shrink:0;
+}
+.modal-header h3{font-size:16px;font-weight:600;display:flex;align-items:center;gap:6px;}
+.modal-close{
+    background:rgba(255,255,255,0.2);
+    border:none;
+    color:#fff;
+    width:30px;height:30px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:16px;
+    display:flex;align-items:center;justify-content:center;
+    transition:0.15s;
+}
+.modal-close:hover{background:rgba(255,255,255,0.35);}
+
+.modal-body{
+    padding:18px 20px;
+    overflow-y:auto;
+    flex:1;
+    min-height:0;
+}
+
+.modal-footer{
+    padding:12px 20px 16px;
+    display:flex;
+    gap:8px;
+    justify-content:flex-end;
+    border-top:1px solid #eef2f8;
+    background:#fafcff;
+    flex-shrink:0;
+}
+
+.btn{
+    font-size:13px;
+    padding:9px 18px;
+    border-radius:10px;
+    border:1px solid #c8d9ec;
+    background:#fff;
+    color:#1e3a5f;
+    cursor:pointer;
+    font-weight:500;
+    transition:0.15s;
+}
+.btn:hover{background:#e8f2fe;border-color:#9bbde0;}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;}
+.btn-primary:hover{background:linear-gradient(135deg,#2563eb,#1d4ed8);}
+.btn-danger{background:#fff;color:#c0392b;border-color:#f5b8b8;}
+.btn-danger:hover{background:#fef0f0;}
+.btn-sm{font-size:12px;padding:6px 12px;border-radius:8px;}
+
+/* 登录表单 */
+.form-group{margin-bottom:14px;}
+.form-group label{display:block;font-size:12px;color:#4a6a8a;margin-bottom:5px;font-weight:500;}
+.form-group input{
+    width:100%;
+    padding:11px 14px;
+    font-size:14px;
+    border:1.5px solid #c8d9ec;
+    border-radius:10px;
+    outline:none;
+    background:#f9fcff;
+    transition:0.2s;
+}
+.form-group input:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
+.form-hint{font-size:11px;color:#8aa2c0;margin-top:4px;}
+
+/* 题库编辑 */
+.bank-toolbar{
+    display:flex;
+    gap:8px;
+    margin-bottom:12px;
+    flex-wrap:wrap;
+    align-items:center;
+}
+.bank-toolbar input{
+    flex:1;
+    min-width:120px;
+    padding:9px 12px;
+    font-size:13px;
+    border:1.5px solid #c8d9ec;
+    border-radius:10px;
+    outline:none;
+    background:#f9fcff;
+}
+.bank-toolbar input:focus{border-color:#3b82f6;background:#fff;}
+
+.bank-list{
+    max-height:340px;
+    overflow-y:auto;
+    border:1px solid #e2ecf7;
+    border-radius:12px;
+    background:#fafdff;
+}
+.bank-item{
+    padding:12px 14px;
+    border-bottom:1px solid #eef4fb;
+    cursor:pointer;
+    transition:0.12s;
+    position:relative;
+}
+.bank-item:last-child{border-bottom:none;}
+.bank-item:hover{background:#eef6ff;}
+.bank-item.selected{background:#dbeafe;border-left:3px solid #2563eb;padding-left:11px;}
+.bank-item .bi-q{font-size:13px;color:#1e40af;font-weight:600;line-height:1.5;margin-bottom:3px;word-break:break-word;}
+.bank-item .bi-a{font-size:12px;color:#b91c1c;line-height:1.5;word-break:break-word;}
+.bank-item .bi-idx{
+    position:absolute;
+    top:10px;right:12px;
+    font-size:10px;
+    color:#8aa2c0;
+    background:#eef4fb;
+    padding:1px 7px;
+    border-radius:8px;
+}
+.bank-item .bi-mod{position:absolute;bottom:10px;right:12px;font-size:10px;color:#8aa2c0;}
+
+/* 编辑表单 */
+.edit-form{
+    margin-top:14px;
+    border-top:1px solid #eef2f8;
+    padding-top:14px;
+}
+.edit-form .form-group textarea{
+    width:100%;
+    padding:11px 14px;
+    font-size:13px;
+    border:1.5px solid #c8d9ec;
+    border-radius:10px;
+    outline:none;
+    background:#f9fcff;
+    min-height:70px;
+    resize:vertical;
+    font-family:inherit;
+    line-height:1.5;
+    transition:0.2s;
+}
+.edit-form .form-group textarea:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
+
+/* 图片识别区 */
+.ocr-area{
+    background:#f0f7ff;
+    border:1.5px dashed #93c5fd;
+    border-radius:12px;
+    padding:14px;
+    text-align:center;
+    margin-bottom:12px;
+    cursor:pointer;
+    transition:0.15s;
+}
+.ocr-area:hover{background:#e6f2ff;border-color:#60a5fa;}
+.ocr-area .ocr-icon{font-size:28px;margin-bottom:6px;}
+.ocr-area .ocr-text{font-size:12px;color:#3b6ea5;}
+.ocr-area input[type="file"]{display:none;}
+.ocr-preview{margin-top:10px;text-align:center;}
+.ocr-preview img{max-width:100%;max-height:140px;border-radius:8px;}
+
+/* 备份区 */
+.backup-section{
+    background:#fafcff;
+    border:1px solid #e2ecf7;
+    border-radius:12px;
+    padding:12px 14px;
+    margin-top:14px;
+}
+.backup-title{
+    font-size:12px;
+    font-weight:600;
+    color:#4a6a8a;
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    justify-content:space-between;
+}
+.backup-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:8px 10px;
+    border-radius:8px;
+    background:#fff;
+    border:1px solid #eef2f8;
+    margin-bottom:6px;
+    font-size:12px;
+}
+.backup-item .bi-name{color:#1e3a5f;font-weight:500;}
+.backup-item .bi-time{color:#8aa2c0;font-size:10px;margin-left:8px;}
+.backup-item .bi-actions{display:flex;gap:5px;align-items:center;}
+.backup-item.locked{background:#fff8e6;border-color:#fde68a;}
+.lock-icon{font-size:12px;cursor:pointer;user-select:none;}
+
+/* 标签页 */
+.tabs{
+    display:flex;
+    gap:4px;
+    margin-bottom:14px;
+    border-bottom:1px solid #eef2f8;
+}
+.tab{
+    padding:8px 16px;
+    font-size:13px;
+    color:#6a8aad;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    margin-bottom:-1px;
+    font-weight:500;
+    transition:0.15s;
+}
+.tab:hover{color:#3b82f6;}
+.tab.active{color:#2563eb;border-bottom-color:#2563eb;font-weight:600;}
+
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* 移动端适配 */
 @media (max-width: 600px) {
     body{padding:10px;}
-    .app-header{margin-bottom:10px;}
+    .header-row{margin-bottom:10px;}
     .app-header h1{font-size:18px;}
     .app-header .subtitle{font-size:11px;}
+    .login-btn{font-size:11px;padding:5px 10px;}
     .app-container{border-radius:16px;}
     .chat-area{padding:14px 12px;}
-    .result-card{
-        padding:12px 14px;
-        margin-bottom:10px;
-        border-left-width:4px;
-    }
+    .result-card{padding:12px 14px;margin-bottom:10px;border-left-width:4px;}
     .result-card .q-text{font-size:13px;line-height:1.5;}
     .result-card .a-text{font-size:13px;line-height:1.6;}
     .result-card .q-label,
@@ -297,18 +587,23 @@ body{
     .send-btn{width:52px;height:52px;font-size:22px;}
     .img-preview img{max-width:120px;max-height:120px;}
     .img-preview{bottom:60px;}
+    .modal{max-height:94vh;border-radius:14px;}
+    .modal-body{padding:14px 16px;}
+    .bank-list{max-height:260px;}
 }
 </style>
 </head>
 <body>
 
-<div class="app-header">
-    <h1>🔍 中控测验答题器</h1>
-    <div class="subtitle">输入题目关键词，自动提取题目与答案</div>
+<div class="header-row">
+    <div class="app-header">
+        <h1>🔍 中控测验答题器</h1>
+        <div class="subtitle">输入题目关键词，自动提取题目与答案</div>
+    </div>
+    <button class="login-btn" id="loginBtn">🔑 登录</button>
 </div>
 
 <div class="app-container">
-    <!-- 只有这个区域滚动 -->
     <div class="chat-area" id="chatArea">
         <div class="empty-state" id="emptyState">
             <div class="empty-icon">💬</div>
@@ -319,7 +614,6 @@ body{
         </div>
     </div>
 
-    <!-- 底部固定区域：工具栏 + 输入区，永远固定在底部 -->
     <div class="bottom-fixed">
         <div class="toolbar">
             <div class="toolbar-left">
@@ -348,9 +642,114 @@ body{
 
 <div class="toast" id="toast"></div>
 
+<!-- ========== 登录弹窗 ========== -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal" style="max-width:380px;">
+        <div class="modal-header">
+            <h3>🔑 登录</h3>
+            <button class="modal-close" id="loginClose">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>账号</label>
+                <input type="text" id="loginUser" placeholder="请输入账号" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" id="loginPass" placeholder="请输入密码" autocomplete="off">
+            </div>
+            <div class="form-hint">默认账号：A　密码：A</div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" id="loginCancel">取消</button>
+            <button class="btn btn-primary" id="loginSubmit">登录</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========== 题库编辑弹窗 ========== -->
+<div class="modal-overlay" id="bankModal">
+    <div class="modal" style="max-width:640px;">
+        <div class="modal-header">
+            <h3>📚 题库管理</h3>
+            <button class="modal-close" id="bankClose">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="tabs">
+                <div class="tab active" data-tab="tab-search">🔍 搜索编辑</div>
+                <div class="tab" data-tab="tab-add">➕ 新增题目</div>
+                <div class="tab" data-tab="tab-backup">💾 备份档案</div>
+            </div>
+
+            <!-- 搜索编辑 -->
+            <div class="tab-content active" id="tab-search">
+                <div class="bank-toolbar">
+                    <input type="text" id="bankSearch" placeholder="输入关键词搜索题目…">
+                    <button class="btn btn-sm" id="bankClearSearch">清空</button>
+                </div>
+                <div class="bank-list" id="bankList"></div>
+
+                <div class="edit-form" id="editForm" style="display:none;">
+                    <div class="form-group">
+                        <label>题目</label>
+                        <textarea id="editQ" placeholder="题目内容"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>答案（多段请用 ｜ 分隔）</label>
+                        <textarea id="editA" placeholder="答案内容，多个答案用 ｜ 分隔"></textarea>
+                    </div>
+                    <div style="display:flex;gap:8px;justify-content:flex-end;">
+                        <button class="btn btn-sm" id="editCancel">取消</button>
+                        <button class="btn btn-sm btn-primary" id="editSave">保存修改</button>
+                        <button class="btn btn-sm btn-danger" id="editDelete">删除</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 新增题目 -->
+            <div class="tab-content" id="tab-add">
+                <div class="ocr-area" id="ocrArea">
+                    <div class="ocr-icon">📷</div>
+                    <div class="ocr-text">点击上传题目图片，自动识别题目与答案</div>
+                    <input type="file" id="ocrInput" accept="image/*">
+                </div>
+                <div class="ocr-preview" id="ocrPreview"></div>
+
+                <div class="form-group">
+                    <label>题目</label>
+                    <textarea id="addQ" placeholder="输入题目内容"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>答案（多段请用 ｜ 分隔）</label>
+                    <textarea id="addA" placeholder="输入答案内容，多个答案用 ｜ 分隔"></textarea>
+                </div>
+                <div style="display:flex;gap:8px;justify-content:flex-end;">
+                    <button class="btn btn-sm" id="addClear">清空</button>
+                    <button class="btn btn-sm btn-primary" id="addSave">保存新增</button>
+                </div>
+            </div>
+
+            <!-- 备份档案 -->
+            <div class="tab-content" id="tab-backup">
+                <div style="font-size:12px;color:#4a6a8a;margin-bottom:10px;line-height:1.6;">
+                    每次保存修改或新增前，系统会自动备份当前题库。<br>
+                    最多保留3个档案（A最新、B次之、C最旧），可对档案上锁（最多2个），锁定后不会被覆盖。
+                </div>
+                <div class="backup-section">
+                    <div class="backup-title">📁 备份档案</div>
+                    <div id="backupList"></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" id="bankCancel">关闭</button>
+        </div>
+    </div>
+</div>
+
 <script>
-// ====================== 题库数据 ======================
-const questionBank = [
+// ====================== 题库数据（默认） ======================
+const defaultBank = [
 {q:"凡在高地面（）的地点进行的工作都应视作高处作业", a:"2米及以上"},
 {q:"有限空间作业时，气体检测应在作业前（）分钟内完成，作业中至少每（）分钟重复检测一次", a:"30｜30"},
 {q:"粉末活性炭主要用于", a:"去除COD"},
@@ -547,33 +946,162 @@ const questionBank = [
 ];
 
 // ====================== 全局状态 ======================
+const STORAGE_KEY = 'zktest_bank_v1';
+const BACKUP_KEY  = 'zktest_backups_v1';
+let questionBank = [];       // 当前题库（运行时）
 let currentImageFile = null;
 let recognition = null;
 let isRecording = false;
+let isLoggedIn = false;
 
-// ====================== DOM ======================
-const chatArea      = document.getElementById('chatArea');
-const questionInput = document.getElementById('questionInput');
-const sendBtn       = document.getElementById('sendBtn');
-const clearChatBtn  = document.getElementById('clearChatBtn');
-const clearInputBtn = document.getElementById('clearInputBtn');
-const voiceBtn      = document.getElementById('voiceBtn');
-const imageBtn      = document.getElementById('imageBtn');
-const imageInput    = document.getElementById('imageInput');
-const imgPreview    = document.getElementById('imgPreview');
-const previewImg    = document.getElementById('previewImg');
-const closeImg      = document.getElementById('closeImg');
-const toast         = document.getElementById('toast');
+// ====================== 加载/保存题库 ======================
+function loadBank(){
+    try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(raw){
+            const arr = JSON.parse(raw);
+            if(Array.isArray(arr) && arr.length){
+                questionBank = arr;
+                return;
+            }
+        }
+    }catch(e){ console.warn('读取题库失败', e); }
+    questionBank = defaultBank.slice();
+}
+
+function persistBank(){
+    try{
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(questionBank));
+    }catch(e){ console.warn('保存题库失败', e); }
+}
+
+// ====================== 备份管理 ======================
+function loadBackups(){
+    try{
+        const raw = localStorage.getItem(BACKUP_KEY);
+        if(raw){
+            const obj = JSON.parse(raw);
+            if(obj && Array.isArray(obj.list)) return obj;
+        }
+    }catch(e){}
+    return { list: [] }; // {list:[{name:'A',time:...,data:[...],locked:false},...]}
+}
+function saveBackups(obj){
+    try{ localStorage.setItem(BACKUP_KEY, JSON.stringify(obj)); }catch(e){}
+}
+// 备份当前题库：返回是否成功
+function backupCurrentBank(){
+    const b = loadBackups();
+    const now = new Date();
+    const timeStr = now.toLocaleString('zh-CN',{hour12:false});
+    const newEntry = { time: timeStr, data: JSON.parse(JSON.stringify(questionBank)), locked: false };
+
+    // 未上锁的档案列表
+    const unlocked = b.list.filter(x=>!x.locked);
+    const locked   = b.list.filter(x=>x.locked);
+
+    // 如果未上锁数量 >= 3，需要移除最旧（列表按时间顺序，第一个为最旧）
+    // 实际上最多3个档案，包含上锁与未上锁总数=3
+    // 规则：最多3个，先考虑锁定最多2个
+    // 若已经有3个：找最旧的未锁定移除；如果全部锁定则移除最旧（但锁定最多2，所以不可能全部锁定）
+    let list = b.list.slice();
+    // 如果总数>=3，移除最旧的未锁定项
+    if(list.length >= 3){
+        // 找最旧的未锁定
+        let idx = list.findIndex(x=>!x.locked);
+        if(idx === -1) idx = 0; // 兜底
+        list.splice(idx,1);
+    }
+    // 新档案加入（最新在末尾，我们按时间顺序：索引0最旧，末尾最新）
+    list.push(newEntry);
+
+    // 重新分配 A/B/C 名称（按时间由新到旧：A最新 C最旧）
+    // 排序：按时间倒序（新->旧）
+    list.sort((a,b)=> new Date(b.time) - new Date(a.time));
+    // 重命名
+    list = list.map((item, i)=>({ ...item, name: ['A','B','C'][i] || ('D'+i) }));
+    // 保证最多3个
+    list = list.slice(0,3);
+
+    saveBackups({ list });
+    return true;
+}
+function renderBackups(){
+    const b = loadBackups();
+    const el = document.getElementById('backupList');
+    el.innerHTML = '';
+    if(!b.list.length){
+        el.innerHTML = '<div style="font-size:12px;color:#8aa2c0;text-align:center;padding:16px;">暂无备份档案</div>';
+        return;
+    }
+    b.list.forEach((item, idx)=>{
+        const div = document.createElement('div');
+        div.className = 'backup-item' + (item.locked ? ' locked':'');
+        div.innerHTML = `
+            <div>
+                <span class="bi-name">档案${item.name}</span>
+                <span class="bi-time">${escapeHTML(item.time)}</span>
+            </div>
+            <div class="bi-actions">
+                <button class="btn btn-sm" data-act="restore" data-idx="${idx}">恢复</button>
+                <span class="lock-icon" data-act="lock" data-idx="${idx}" title="${item.locked?'点击解锁':'点击上锁'}">${item.locked?'🔒':'🔓'}</span>
+            </div>
+        `;
+        el.appendChild(div);
+    });
+    // 事件
+    el.querySelectorAll('[data-act="restore"]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+            const idx = +btn.dataset.idx;
+            const bb = loadBackups();
+            const item = bb.list[idx];
+            if(!item) return;
+            if(!confirm(`确定恢复到档案${item.name}（${item.time}）？当前题库将被覆盖。`)) return;
+            questionBank = JSON.parse(JSON.stringify(item.data));
+            persistBank();
+            showToast('已恢复档案' + item.name);
+            renderBankList();
+            renderBackups();
+        });
+    });
+    el.querySelectorAll('[data-act="lock"]').forEach(ic=>{
+        ic.addEventListener('click', ()=>{
+            const idx = +ic.dataset.idx;
+            const bb = loadBackups();
+            const item = bb.list[idx];
+            if(!item) return;
+            if(!item.locked){
+                // 上锁：检查已锁定数量
+                const lockedCount = bb.list.filter(x=>x.locked).length;
+                if(lockedCount >= 2){
+                    showToast('最多上锁2个档案');
+                    return;
+                }
+                item.locked = true;
+            }else{
+                item.locked = false;
+            }
+            saveBackups(bb);
+            renderBackups();
+        });
+    });
+}
 
 // ====================== 工具函数 ======================
 function showToast(msg){
+    const toast = document.getElementById('toast');
     toast.textContent = msg;
     toast.style.display = 'block';
     clearTimeout(toast._timeout);
     toast._timeout = setTimeout(()=>{ toast.style.display = 'none'; }, 2000);
 }
+function escapeHTML(str){
+    return String(str).replace(/[&<>"']/g, m=>({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[m]));
+}
 
-// 相似度匹配（仅匹配题目，支持大小写、模糊、同音字）
+// 相似度匹配（仅匹配题目）
 function similarity(query, text){
     if(!query) return 0;
     const q = query.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;；:：!！""'']/g,'');
@@ -597,26 +1125,13 @@ function similarity(query, text){
     });
     const charScore = uniqueChars.length ? charHit/uniqueChars.length : 0;
 
-    // 简单同音字扩展
     const homophoneMap = {
-        'qing':'清|青|轻|氢',
-        'zhi':'值|质|制|止|只',
-        'jia':'加|家|甲|价',
-        'yan':'盐|严|研|沿',
-        'yang':'氧|养|样|阳',
-        'tan':'碳|炭|探',
-        'dan':'氮|但|单',
-        'lin':'磷|临|林',
-        'lv':'氯|率|绿|滤',
-        'shui':'水|谁|睡',
-        'ni':'泥|你|拟',
-        'ya':'压|亚|牙',
-        'ji':'机|计|记|即|级',
-        'liu':'硫|流|留|六',
-        'hua':'化|花|华',
-        'xiao':'硝|消|小|效',
-        'su':'素|速|塑',
-        'wu':'污|无|物|五'
+        'qing':'清|青|轻|氢','zhi':'值|质|制|止|只','jia':'加|家|甲|价',
+        'yan':'盐|严|研|沿','yang':'氧|养|样|阳','tan':'碳|炭|探',
+        'dan':'氮|但|单','lin':'磷|临|林','lv':'氯|率|绿|滤',
+        'shui':'水|谁|睡','ni':'泥|你|拟','ya':'压|亚|牙',
+        'ji':'机|计|记|即|级','liu':'硫|流|留|六','hua':'化|花|华',
+        'xiao':'硝|消|小|效','su':'素|速|塑','wu':'污|无|物|五'
     };
     let qExpanded = q;
     for(let key in homophoneMap){
@@ -627,40 +1142,38 @@ function similarity(query, text){
             }
         });
     }
-    try {
+    try{
         const re = new RegExp(qExpanded, 'i');
         if(re.test(t)) return 0.9;
-    } catch(e) {}
+    }catch(e){}
 
     return Math.max(bigramScore*0.85, charScore*0.55);
 }
 
-// 只匹配题目，不匹配答案
 function matchQuestions(query, threshold = 0.28){
     const results = [];
-    questionBank.forEach(item=>{
-        const score = similarity(query, item.q);   // 只算题目相似度
+    questionBank.forEach((item, idx)=>{
+        const score = similarity(query, item.q);
         if(score >= threshold){
-            results.push({ item, score });
+            results.push({ item, score, idx });
         }
     });
     results.sort((a,b)=> b.score - a.score);
     return results.slice(0, 15);
 }
 
-function escapeHTML(str){
-    return String(str).replace(/[&<>"']/g, m=>({
-        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    }[m]));
-}
-
-function formatAnswer(ans){
+// 格式答案：多段分行显示
+function formatAnswerHTML(ans){
     const parts = String(ans).split(/[‖｜|]+/).map(s=>s.trim()).filter(Boolean);
-    return parts.map(p=>escapeHTML(p)).join(' <span class="sep">｜</span> ');
+    if(parts.length <= 1){
+        return escapeHTML(parts[0] || '');
+    }
+    return parts.map(p=>`<span class="ans-line">${escapeHTML(p)}</span>`).join('');
 }
 
 // 渲染结果
 function renderResults(results, query){
+    const chatArea = document.getElementById('chatArea');
     chatArea.innerHTML = '';
 
     if(!results.length){
@@ -678,7 +1191,7 @@ function renderResults(results, query){
             <div class="q-label">题目 ${idx+1}</div>
             <div class="q-text">${escapeHTML(r.item.q)}</div>
             <div class="a-label">答案</div>
-            <div class="a-text">${formatAnswer(r.item.a)}</div>
+            <div class="a-text">${formatAnswerHTML(r.item.a)}</div>
         `;
         chatArea.appendChild(card);
     });
@@ -688,20 +1201,20 @@ function renderResults(results, query){
 
 // ====================== 发送问题 ======================
 function sendQuestion(){
+    const questionInput = document.getElementById('questionInput');
     const text = questionInput.value.trim();
+    const chatArea = document.getElementById('chatArea');
 
     if(!text && !currentImageFile){
         showToast('请输入问题，或上传图片');
         return;
     }
-
     if(!text && currentImageFile){
         showToast('图片已收到，但题库匹配需要文字，请补充关键词');
         return;
     }
 
     chatArea.innerHTML = '';
-
     const results = matchQuestions(text);
     renderResults(results, text);
 
@@ -713,56 +1226,35 @@ function sendQuestion(){
     } else {
         showToast(`找到 ${results.length} 条相关题目`);
     }
-
     questionInput.focus();
 }
 
-// ====================== 图片处理 ======================
+// ====================== 图片处理（主界面） ======================
 function clearImage(){
     currentImageFile = null;
+    const imageInput = document.getElementById('imageInput');
+    const previewImg = document.getElementById('previewImg');
+    const imgPreview = document.getElementById('imgPreview');
     imageInput.value = '';
     previewImg.src = '';
     imgPreview.style.display = 'none';
 }
 
-imageBtn.addEventListener('click', ()=>{
-    imageInput.click();
-});
-
-imageInput.addEventListener('change', (e)=>{
-    const file = e.target.files && e.target.files[0];
-    if(!file) return;
-    if(file.size > 10 * 1024 * 1024){
-        showToast('图片过大，请选择小于 10MB 的图片');
-        return;
-    }
-    currentImageFile = file;
-    const reader = new FileReader();
-    reader.onload = (ev)=>{
-        previewImg.src = ev.target.result;
-        imgPreview.style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-});
-
-closeImg.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    clearImage();
-});
-
-// ====================== 语音识别 ======================
+// ====================== 语音识别（修复版） ======================
 function initRecognition(){
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if(!SR){
-        voiceBtn.style.opacity = '0.5';
-        voiceBtn.title = '当前浏览器不支持语音识别';
-        return null;
-    }
+    if(!SR) return null;
     const rec = new SR();
     rec.lang = 'zh-CN';
     rec.continuous = false;
     rec.interimResults = true;
     rec.maxAlternatives = 1;
+    return rec;
+}
+
+function bindRecognition(rec){
+    const voiceBtn = document.getElementById('voiceBtn');
+    const questionInput = document.getElementById('questionInput');
 
     rec.onstart = ()=>{
         isRecording = true;
@@ -797,64 +1289,350 @@ function initRecognition(){
         voiceBtn.classList.remove('recording');
         voiceBtn.textContent = '🎤';
     };
-    return rec;
 }
 
-voiceBtn.addEventListener('click', ()=>{
-    if(!recognition){
-        recognition = initRecognition();
-    }
-    if(!recognition){
-        showToast('当前浏览器不支持语音识别');
-        return;
-    }
-    if(isRecording){
-        recognition.stop();
-    } else {
-        try {
-            recognition.start();
-        } catch(e) {
+// ====================== 主界面事件绑定 ======================
+document.addEventListener('DOMContentLoaded', ()=>{
+    loadBank();
+
+    const chatArea      = document.getElementById('chatArea');
+    const questionInput = document.getElementById('questionInput');
+    const sendBtn       = document.getElementById('sendBtn');
+    const clearChatBtn  = document.getElementById('clearChatBtn');
+    const clearInputBtn = document.getElementById('clearInputBtn');
+    const voiceBtn      = document.getElementById('voiceBtn');
+    const imageBtn      = document.getElementById('imageBtn');
+    const imageInput    = document.getElementById('imageInput');
+    const imgPreview    = document.getElementById('imgPreview');
+    const previewImg    = document.getElementById('previewImg');
+    const closeImg      = document.getElementById('closeImg');
+
+    // 语音识别：每次点击创建新实例，避免状态卡死
+    voiceBtn.addEventListener('click', ()=>{
+        if(isRecording){
+            // 正在录音则停止
+            if(recognition){ try{ recognition.stop(); }catch(e){} }
+            return;
+        }
+        const rec = initRecognition();
+        if(!rec){
+            showToast('当前浏览器不支持语音识别，请使用Chrome/Edge/Safari');
+            return;
+        }
+        recognition = rec;
+        bindRecognition(rec);
+        try{
+            rec.start();
+        }catch(e){
             console.warn(e);
-            try { recognition.stop(); } catch(e2) {}
+            // 重试机制
             setTimeout(()=>{
-                try { recognition.start(); } catch(e3) { showToast('无法启动录音，请检查麦克风权限'); }
+                try{ rec.start(); }catch(e2){ showToast('无法启动录音，请检查麦克风权限'); }
             }, 200);
         }
+    });
+
+    // 拍照/选图（修复版）
+    imageBtn.addEventListener('click', ()=>{
+        // 重置input value，确保同一文件可再次触发
+        imageInput.value = '';
+        imageInput.click();
+    });
+    imageInput.addEventListener('change', (e)=>{
+        const file = e.target.files && e.target.files[0];
+        if(!file) return;
+        if(file.size > 10 * 1024 * 1024){
+            showToast('图片过大，请选择小于 10MB 的图片');
+            return;
+        }
+        currentImageFile = file;
+        const reader = new FileReader();
+        reader.onload = (ev)=>{
+            previewImg.src = ev.target.result;
+            imgPreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    });
+    closeImg.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        clearImage();
+    });
+
+    // 发送
+    sendBtn.addEventListener('click', sendQuestion);
+    questionInput.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' && !e.shiftKey){
+            e.preventDefault();
+            sendQuestion();
+        }
+    });
+
+    // 清空输入
+    clearInputBtn.addEventListener('click', ()=>{
+        questionInput.value = '';
+        clearImage();
+        questionInput.focus();
+    });
+
+    // 清空对话
+    clearChatBtn.addEventListener('click', ()=>{
+        chatArea.innerHTML = '';
+        const empty = document.createElement('div');
+        empty.className = 'empty-state';
+        empty.id = 'emptyState';
+        empty.innerHTML = `
+            <div class="empty-icon">💬</div>
+            <div class="empty-text">输入题目关键词开始查询<br>支持文字、语音、图片</div>
+        `;
+        chatArea.appendChild(empty);
+        showToast('对话已清空');
+    });
+
+    // ====== 登录弹窗 ======
+    const loginBtn    = document.getElementById('loginBtn');
+    const loginModal  = document.getElementById('loginModal');
+    const loginClose  = document.getElementById('loginClose');
+    const loginCancel = document.getElementById('loginCancel');
+    const loginSubmit = document.getElementById('loginSubmit');
+    const loginUser   = document.getElementById('loginUser');
+    const loginPass   = document.getElementById('loginPass');
+    const bankModal   = document.getElementById('bankModal');
+    const bankClose   = document.getElementById('bankClose');
+    const bankCancel  = document.getElementById('bankCancel');
+
+    function openLogin(){
+        loginUser.value = '';
+        loginPass.value = '';
+        loginModal.classList.add('active');
+        setTimeout(()=>loginUser.focus(), 100);
     }
-});
-
-// ====================== 按钮事件 ======================
-sendBtn.addEventListener('click', sendQuestion);
-
-questionInput.addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter' && !e.shiftKey){
-        e.preventDefault();
-        sendQuestion();
+    function closeLogin(){ loginModal.classList.remove('active'); }
+    function openBank(){
+        bankModal.classList.add('active');
+        renderBankList();
+        renderBackups();
+        switchTab('tab-search');
     }
-});
+    function closeBank(){ bankModal.classList.remove('active'); }
 
-clearInputBtn.addEventListener('click', ()=>{
-    questionInput.value = '';
-    clearImage();
+    loginBtn.addEventListener('click', ()=>{
+        if(isLoggedIn){
+            // 已登录则直接进入题库管理
+            openBank();
+        }else{
+            openLogin();
+        }
+    });
+    loginClose.addEventListener('click', closeLogin);
+    loginCancel.addEventListener('click', closeLogin);
+    loginSubmit.addEventListener('click', doLogin);
+    loginPass.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') doLogin(); });
+    loginUser.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') loginPass.focus(); });
+
+    function doLogin(){
+        const u = loginUser.value.trim();
+        const p = loginPass.value.trim();
+        if(u === 'A' && p === 'A'){
+            isLoggedIn = true;
+            closeLogin();
+            loginBtn.textContent = '📚 题库';
+            loginBtn.classList.add('logged-in');
+            showToast('登录成功');
+            setTimeout(openBank, 200);
+        }else{
+            showToast('账号或密码错误');
+        }
+    }
+
+    bankClose.addEventListener('click', closeBank);
+    bankCancel.addEventListener('click', closeBank);
+
+    // ====== 标签页切换 ======
+    function switchTab(tabId){
+        document.querySelectorAll('.tab').forEach(t=>{
+            t.classList.toggle('active', t.dataset.tab === tabId);
+        });
+        document.querySelectorAll('.tab-content').forEach(c=>{
+            c.classList.toggle('active', c.id === tabId);
+        });
+    }
+    document.querySelectorAll('.tab').forEach(t=>{
+        t.addEventListener('click', ()=> switchTab(t.dataset.tab));
+    });
+
+    // ====== 题库列表渲染 ======
+    const bankSearch    = document.getElementById('bankSearch');
+    const bankList      = document.getElementById('bankList');
+    const bankClearSearch = document.getElementById('bankClearSearch');
+    const editForm      = document.getElementById('editForm');
+    const editQ         = document.getElementById('editQ');
+    const editA         = document.getElementById('editA');
+    const editCancel    = document.getElementById('editCancel');
+    const editSave      = document.getElementById('editSave');
+    const editDelete    = document.getElementById('editDelete');
+
+    let selectedIdx = -1;
+
+    function renderBankList(keyword){
+        const kw = (keyword || '').trim().toLowerCase();
+        bankList.innerHTML = '';
+        questionBank.forEach((item, idx)=>{
+            if(kw){
+                const hay = (item.q + ' ' + item.a).toLowerCase();
+                if(hay.indexOf(kw) === -1) return;
+            }
+            const div = document.createElement('div');
+            div.className = 'bank-item' + (idx === selectedIdx ? ' selected':'');
+            div.dataset.idx = idx;
+            div.innerHTML = `
+                <div class="bi-idx">#${idx+1}</div>
+                <div class="bi-q">${escapeHTML(item.q)}</div>
+                <div class="bi-a">答案：${escapeHTML(item.a.substring(0,80))}${item.a.length>80?'…':''}</div>
+            `;
+            div.addEventListener('click', ()=>{
+                selectedIdx = idx;
+                renderBankList(bankSearch.value);
+                showEditForm(idx);
+            });
+            bankList.appendChild(div);
+        });
+        if(!bankList.children.length){
+            bankList.innerHTML = '<div style="font-size:12px;color:#8aa2c0;text-align:center;padding:20px;">未找到匹配题目</div>';
+        }
+    }
+
+    function showEditForm(idx){
+        const item = questionBank[idx];
+        if(!item){ editForm.style.display = 'none'; return; }
+        editQ.value = item.q;
+        editA.value = item.a;
+        editForm.style.display = 'block';
+    }
+
+    bankSearch.addEventListener('input', ()=>{
+        selectedIdx = -1;
+        editForm.style.display = 'none';
+        renderBankList(bankSearch.value);
+    });
+    bankClearSearch.addEventListener('click', ()=>{
+        bankSearch.value = '';
+        selectedIdx = -1;
+        editForm.style.display = 'none';
+        renderBankList('');
+    });
+
+    editCancel.addEventListener('click', ()=>{
+        selectedIdx = -1;
+        editForm.style.display = 'none';
+        renderBankList(bankSearch.value);
+    });
+
+    editSave.addEventListener('click', ()=>{
+        if(selectedIdx < 0 || !questionBank[selectedIdx]) return;
+        const newQ = editQ.value.trim();
+        const newA = editA.value.trim();
+        if(!newQ || !newA){
+            showToast('题目和答案不能为空');
+            return;
+        }
+        // 备份
+        backupCurrentBank();
+        questionBank[selectedIdx] = { q: newQ, a: newA };
+        persistBank();
+        showToast('已保存修改');
+        renderBankList(bankSearch.value);
+        renderBackups();
+        // 保持选中
+        showEditForm(selectedIdx);
+    });
+
+    editDelete.addEventListener('click', ()=>{
+        if(selectedIdx < 0) return;
+        if(!confirm('确定删除该题目？')) return;
+        backupCurrentBank();
+        questionBank.splice(selectedIdx, 1);
+        persistBank();
+        selectedIdx = -1;
+        editForm.style.display = 'none';
+        renderBankList(bankSearch.value);
+        renderBackups();
+        showToast('已删除题目');
+    });
+
+    // ====== 新增题目 ======
+    const addQ       = document.getElementById('addQ');
+    const addA       = document.getElementById('addA');
+    const addSave    = document.getElementById('addSave');
+    const addClear   = document.getElementById('addClear');
+    const ocrArea    = document.getElementById('ocrArea');
+    const ocrInput   = document.getElementById('ocrInput');
+    const ocrPreview = document.getElementById('ocrPreview');
+
+    addClear.addEventListener('click', ()=>{
+        addQ.value = '';
+        addA.value = '';
+        ocrPreview.innerHTML = '';
+    });
+
+    addSave.addEventListener('click', ()=>{
+        const q = addQ.value.trim();
+        const a = addA.value.trim();
+        if(!q || !a){
+            showToast('请填写题目和答案');
+            return;
+        }
+        backupCurrentBank();
+        questionBank.push({ q, a });
+        persistBank();
+        showToast('已新增题目，共 ' + questionBank.length + ' 题');
+        addQ.value = '';
+        addA.value = '';
+        ocrPreview.innerHTML = '';
+        renderBankList(bankSearch.value);
+        renderBackups();
+    });
+
+    // ====== 图片识别（新增题目） ======
+    // 提供两种方式：手动录入；或点击区域上传图片，用模拟OCR识别。
+    // 由于无法真正调用OCR，这里使用一个简单的模拟：将图片文件名作为线索，或提示用户手动填写。
+    // 我们也可以让用户上传图片后弹出提示，引导手动填写。
+    ocrArea.addEventListener('click', ()=>{
+        ocrInput.value = '';
+        ocrInput.click();
+    });
+    ocrInput.addEventListener('change', (e)=>{
+        const file = e.target.files && e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev)=>{
+            ocrPreview.innerHTML = `<img src="${ev.target.result}" alt="预览">`;
+        };
+        reader.readAsDataURL(file);
+        // 模拟OCR：这里不做真实识别，提示用户手动补充
+        showToast('图片已上传，请手动输入题目和答案（识别功能需后台支持）');
+    });
+
+    // ====== 备份面板 ======
+    // 切换标签时刷新备份列表
+    document.querySelectorAll('.tab').forEach(t=>{
+        t.addEventListener('click', ()=>{
+            if(t.dataset.tab === 'tab-backup'){
+                renderBackups();
+            }
+        });
+    });
+
+    // ====== 初始化渲染 ======
+    renderBankList('');
+    renderBackups();
+
+    // 页面初始化
     questionInput.focus();
 });
 
-clearChatBtn.addEventListener('click', ()=>{
-    chatArea.innerHTML = '';
-    const empty = document.createElement('div');
-    empty.className = 'empty-state';
-    empty.id = 'emptyState';
-    empty.innerHTML = `
-        <div class="empty-icon">💬</div>
-        <div class="empty-text">输入题目关键词开始查询<br>支持文字、语音、图片</div>
-    `;
-    chatArea.appendChild(empty);
-    showToast('对话已清空');
-});
-
-// ====================== 页面初始化 ======================
+// ====================== 启动时加载题库并渲染 ======================
 window.addEventListener('load', ()=>{
-    questionInput.focus();
+    // 已在DOMContentLoaded处理
 });
 </script>
 </body>
