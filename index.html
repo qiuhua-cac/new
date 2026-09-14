@@ -127,7 +127,6 @@ body{
     font-weight:bold;
     word-break:break-word;
 }
-/* 多段答案分行显示 */
 .result-card .a-text .ans-line{
     display:block;
     padding:2px 0;
@@ -399,6 +398,7 @@ body{
 .btn-danger{background:#fff;color:#c0392b;border-color:#f5b8b8;}
 .btn-danger:hover{background:#fef0f0;}
 .btn-sm{font-size:12px;padding:6px 12px;border-radius:8px;}
+.btn:disabled{opacity:0.5;cursor:not-allowed;}
 
 /* 登录表单 */
 .form-group{margin-bottom:14px;}
@@ -414,7 +414,6 @@ body{
     transition:0.2s;
 }
 .form-group input:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
-.form-hint{font-size:11px;color:#8aa2c0;margin-top:4px;}
 
 /* 题库编辑 */
 .bank-toolbar{
@@ -464,7 +463,6 @@ body{
     padding:1px 7px;
     border-radius:8px;
 }
-.bank-item .bi-mod{position:absolute;bottom:10px;right:12px;font-size:10px;color:#8aa2c0;}
 
 /* 编辑表单 */
 .edit-form{
@@ -564,6 +562,81 @@ body{
 .tab-content{display:none;}
 .tab-content.active{display:block;}
 
+/* GitHub 同步区 */
+.github-section{
+    background:#f0f7ff;
+    border:1px solid #c8d9ec;
+    border-radius:12px;
+    padding:12px 14px;
+    margin-top:12px;
+    font-size:12px;
+}
+.github-section .gh-title{
+    font-weight:600;
+    color:#1e40af;
+    margin-bottom:6px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+.github-section .gh-hint{
+    color:#5a7a9a;
+    font-size:11px;
+    line-height:1.6;
+    margin-bottom:8px;
+}
+.github-row{
+    display:flex;
+    gap:6px;
+    align-items:center;
+    margin-top:6px;
+}
+.github-row input{
+    flex:1;
+    padding:8px 10px;
+    font-size:12px;
+    border:1.5px solid #c8d9ec;
+    border-radius:8px;
+    outline:none;
+    background:#fff;
+    font-family:inherit;
+}
+.github-row input:focus{border-color:#3b82f6;}
+
+/* 二次确认小弹窗 */
+.confirm-overlay{
+    position:fixed;inset:0;
+    background:rgba(15,30,50,0.55);
+    z-index:1100;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+}
+.confirm-overlay.active{display:flex;}
+.confirm-box{
+    background:#fff;
+    border-radius:14px;
+    padding:20px;
+    max-width:340px;
+    width:100%;
+    box-shadow:0 20px 50px rgba(0,0,0,0.3);
+    animation:modalIn 0.2s ease-out;
+}
+.confirm-box h4{font-size:15px;color:#1e3a5f;margin-bottom:12px;font-weight:600;}
+.confirm-box input{
+    width:100%;
+    padding:11px 14px;
+    font-size:14px;
+    border:1.5px solid #c8d9ec;
+    border-radius:10px;
+    outline:none;
+    background:#f9fcff;
+    margin-bottom:14px;
+}
+.confirm-box input:focus{border-color:#3b82f6;background:#fff;}
+.confirm-actions{display:flex;gap:8px;justify-content:flex-end;}
+
 /* 移动端适配 */
 @media (max-width: 600px) {
     body{padding:10px;}
@@ -652,13 +725,12 @@ body{
         <div class="modal-body">
             <div class="form-group">
                 <label>账号</label>
-                <input type="text" id="loginUser" placeholder="请输入账号" autocomplete="off">
+                <input type="text" id="loginUser" autocomplete="off">
             </div>
             <div class="form-group">
                 <label>密码</label>
-                <input type="password" id="loginPass" placeholder="请输入密码" autocomplete="off">
+                <input type="password" id="loginPass" autocomplete="off">
             </div>
-            <div class="form-hint">默认账号：A　密码：A</div>
         </div>
         <div class="modal-footer">
             <button class="btn" id="loginCancel">取消</button>
@@ -733,16 +805,55 @@ body{
             <div class="tab-content" id="tab-backup">
                 <div style="font-size:12px;color:#4a6a8a;margin-bottom:10px;line-height:1.6;">
                     每次保存修改或新增前，系统会自动备份当前题库。<br>
-                    最多保留3个档案（A最新、B次之、C最旧），可对档案上锁（最多2个），锁定后不会被覆盖。
+                    最多保留3个档案（A最新、B次之、C最旧），可对档案上锁（最多2个），锁定后不会被覆盖。<br>
+                    <span style="color:#c0392b;">备份档案为只读，仅供查阅，不可修改。</span>
                 </div>
                 <div class="backup-section">
                     <div class="backup-title">📁 备份档案</div>
                     <div id="backupList"></div>
                 </div>
             </div>
+
+            <!-- GitHub 同步 -->
+            <div class="github-section">
+                <div class="gh-title">🐙 GitHub 仓库同步</div>
+                <div class="gh-hint">
+                    配置好仓库信息后，每次保存题库修改将自动尝试同步到 GitHub。<br>
+                    需要 Personal Access Token（至少 repo 权限）。
+                </div>
+                <div class="github-row">
+                    <input type="text" id="ghOwner" placeholder="用户名/组织 (owner)">
+                </div>
+                <div class="github-row">
+                    <input type="text" id="ghRepo" placeholder="仓库名 (repo)">
+                </div>
+                <div class="github-row">
+                    <input type="text" id="ghPath" placeholder="文件路径 (如 data/bank.json)">
+                </div>
+                <div class="github-row">
+                    <input type="password" id="ghToken" placeholder="Personal Access Token">
+                </div>
+                <div class="github-row" style="justify-content:flex-end;">
+                    <button class="btn btn-sm" id="ghSaveCfg">保存配置</button>
+                    <button class="btn btn-sm btn-primary" id="ghSyncNow">立即同步</button>
+                </div>
+            </div>
+
         </div>
         <div class="modal-footer">
             <button class="btn" id="bankCancel">关闭</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========== 二次确认弹窗 ========== -->
+<div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-box">
+        <h4 id="confirmTitle">请输入确认代码</h4>
+        <input type="password" id="confirmInput" placeholder="确认代码" autocomplete="off">
+        <div class="confirm-actions">
+            <button class="btn btn-sm" id="confirmCancel">取消</button>
+            <button class="btn btn-sm btn-primary" id="confirmOk">确认</button>
         </div>
     </div>
 </div>
@@ -945,14 +1056,70 @@ const defaultBank = [
 {q:"带式脱水机紧急停机拉绳开关属于（）保护", a:"急停"}
 ];
 
-// ====================== 全局状态 ======================
+// ====================== 常量 ======================
 const STORAGE_KEY = 'zktest_bank_v1';
 const BACKUP_KEY  = 'zktest_backups_v1';
-let questionBank = [];       // 当前题库（运行时）
+const GH_CFG_KEY  = 'zktest_gh_cfg_v1';
+const CONFIRM_CODE = 'qiuhua'; // 二次确认代码
+
+// ====================== 全局状态 ======================
+let questionBank = [];
 let currentImageFile = null;
 let recognition = null;
 let isRecording = false;
 let isLoggedIn = false;
+
+// ====================== 通用工具 ======================
+function showToast(msg){
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(()=>{ toast.style.display = 'none'; }, 2000);
+}
+function escapeHTML(str){
+    return String(str).replace(/[&<>"']/g, m=>({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[m]));
+}
+
+// 二次确认弹窗（Promise）
+function askConfirm(title){
+    return new Promise((resolve)=>{
+        const overlay = document.getElementById('confirmOverlay');
+        const titleEl = document.getElementById('confirmTitle');
+        const input   = document.getElementById('confirmInput');
+        const okBtn   = document.getElementById('confirmOk');
+        const cancelBtn = document.getElementById('confirmCancel');
+        titleEl.textContent = title || '请输入确认代码';
+        input.value = '';
+        overlay.classList.add('active');
+        setTimeout(()=>input.focus(), 100);
+
+        function cleanup(){
+            overlay.classList.remove('active');
+            okBtn.removeEventListener('click', onOk);
+            cancelBtn.removeEventListener('click', onCancel);
+            input.removeEventListener('keydown', onKey);
+        }
+        function onOk(){
+            const v = input.value.trim();
+            cleanup();
+            if(v === CONFIRM_CODE) resolve(true);
+            else { showToast('确认代码错误'); resolve(false); }
+        }
+        function onCancel(){ cleanup(); resolve(false); }
+        function onKey(e){ if(e.key === 'Enter') onOk(); }
+        okBtn.addEventListener('click', onOk);
+        cancelBtn.addEventListener('click', onCancel);
+        input.addEventListener('keydown', onKey);
+    });
+}
+
+// 页面刷新（确保数据落盘后）
+function refreshPage(delay = 350){
+    setTimeout(()=>{ location.reload(); }, delay);
+}
 
 // ====================== 加载/保存题库 ======================
 function loadBank(){
@@ -968,11 +1135,9 @@ function loadBank(){
     }catch(e){ console.warn('读取题库失败', e); }
     questionBank = defaultBank.slice();
 }
-
 function persistBank(){
-    try{
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(questionBank));
-    }catch(e){ console.warn('保存题库失败', e); }
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(questionBank)); }
+    catch(e){ console.warn('保存题库失败', e); }
 }
 
 // ====================== 备份管理 ======================
@@ -984,147 +1149,120 @@ function loadBackups(){
             if(obj && Array.isArray(obj.list)) return obj;
         }
     }catch(e){}
-    return { list: [] }; // {list:[{name:'A',time:...,data:[...],locked:false},...]}
+    return { list: [] };
 }
 function saveBackups(obj){
     try{ localStorage.setItem(BACKUP_KEY, JSON.stringify(obj)); }catch(e){}
 }
-// 备份当前题库：返回是否成功
 function backupCurrentBank(){
     const b = loadBackups();
     const now = new Date();
     const timeStr = now.toLocaleString('zh-CN',{hour12:false});
     const newEntry = { time: timeStr, data: JSON.parse(JSON.stringify(questionBank)), locked: false };
 
-    // 未上锁的档案列表
-    const unlocked = b.list.filter(x=>!x.locked);
-    const locked   = b.list.filter(x=>x.locked);
-
-    // 如果未上锁数量 >= 3，需要移除最旧（列表按时间顺序，第一个为最旧）
-    // 实际上最多3个档案，包含上锁与未上锁总数=3
-    // 规则：最多3个，先考虑锁定最多2个
-    // 若已经有3个：找最旧的未锁定移除；如果全部锁定则移除最旧（但锁定最多2，所以不可能全部锁定）
     let list = b.list.slice();
-    // 如果总数>=3，移除最旧的未锁定项
     if(list.length >= 3){
-        // 找最旧的未锁定
         let idx = list.findIndex(x=>!x.locked);
-        if(idx === -1) idx = 0; // 兜底
+        if(idx === -1) idx = 0;
         list.splice(idx,1);
     }
-    // 新档案加入（最新在末尾，我们按时间顺序：索引0最旧，末尾最新）
     list.push(newEntry);
-
-    // 重新分配 A/B/C 名称（按时间由新到旧：A最新 C最旧）
-    // 排序：按时间倒序（新->旧）
     list.sort((a,b)=> new Date(b.time) - new Date(a.time));
-    // 重命名
     list = list.map((item, i)=>({ ...item, name: ['A','B','C'][i] || ('D'+i) }));
-    // 保证最多3个
     list = list.slice(0,3);
-
     saveBackups({ list });
     return true;
 }
-function renderBackups(){
-    const b = loadBackups();
-    const el = document.getElementById('backupList');
-    el.innerHTML = '';
-    if(!b.list.length){
-        el.innerHTML = '<div style="font-size:12px;color:#8aa2c0;text-align:center;padding:16px;">暂无备份档案</div>';
-        return;
+
+// ====================== GitHub 配置 ======================
+function loadGhCfg(){
+    try{
+        const raw = localStorage.getItem(GH_CFG_KEY);
+        if(raw) return JSON.parse(raw);
+    }catch(e){}
+    return { owner:'', repo:'', path:'', token:'' };
+}
+function saveGhCfg(cfg){
+    try{ localStorage.setItem(GH_CFG_KEY, JSON.stringify(cfg)); }catch(e){}
+}
+
+// 通过 GitHub API 更新文件
+async function syncToGitHub(silent = false){
+    const cfg = loadGhCfg();
+    if(!cfg.owner || !cfg.repo || !cfg.path || !cfg.token){
+        if(!silent) showToast('请先完整配置 GitHub 信息');
+        return false;
     }
-    b.list.forEach((item, idx)=>{
-        const div = document.createElement('div');
-        div.className = 'backup-item' + (item.locked ? ' locked':'');
-        div.innerHTML = `
-            <div>
-                <span class="bi-name">档案${item.name}</span>
-                <span class="bi-time">${escapeHTML(item.time)}</span>
-            </div>
-            <div class="bi-actions">
-                <button class="btn btn-sm" data-act="restore" data-idx="${idx}">恢复</button>
-                <span class="lock-icon" data-act="lock" data-idx="${idx}" title="${item.locked?'点击解锁':'点击上锁'}">${item.locked?'🔒':'🔓'}</span>
-            </div>
-        `;
-        el.appendChild(div);
-    });
-    // 事件
-    el.querySelectorAll('[data-act="restore"]').forEach(btn=>{
-        btn.addEventListener('click', ()=>{
-            const idx = +btn.dataset.idx;
-            const bb = loadBackups();
-            const item = bb.list[idx];
-            if(!item) return;
-            if(!confirm(`确定恢复到档案${item.name}（${item.time}）？当前题库将被覆盖。`)) return;
-            questionBank = JSON.parse(JSON.stringify(item.data));
-            persistBank();
-            showToast('已恢复档案' + item.name);
-            renderBankList();
-            renderBackups();
-        });
-    });
-    el.querySelectorAll('[data-act="lock"]').forEach(ic=>{
-        ic.addEventListener('click', ()=>{
-            const idx = +ic.dataset.idx;
-            const bb = loadBackups();
-            const item = bb.list[idx];
-            if(!item) return;
-            if(!item.locked){
-                // 上锁：检查已锁定数量
-                const lockedCount = bb.list.filter(x=>x.locked).length;
-                if(lockedCount >= 2){
-                    showToast('最多上锁2个档案');
-                    return;
-                }
-                item.locked = true;
-            }else{
-                item.locked = false;
+    const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
+    const content = JSON.stringify(questionBank, null, 2);
+    // base64 编码（支持中文）
+    const contentB64 = btoa(unescape(encodeURIComponent(content)));
+
+    try{
+        // 先获取当前文件 sha（如果存在）
+        let sha = null;
+        const getResp = await fetch(apiBase, {
+            method: 'GET',
+            headers: {
+                'Authorization': `token ${cfg.token}`,
+                'Accept': 'application/vnd.github.v3+json'
             }
-            saveBackups(bb);
-            renderBackups();
         });
-    });
+        if(getResp.ok){
+            const data = await getResp.json();
+            sha = data.sha;
+        }
+        // 提交
+        const body = {
+            message: `更新题库 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,
+            content: contentB64,
+            branch: 'main'
+        };
+        if(sha) body.sha = sha;
+
+        const putResp = await fetch(apiBase, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${cfg.token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+        if(putResp.ok){
+            if(!silent) showToast('已同步到 GitHub');
+            return true;
+        }else{
+            const errText = await putResp.text();
+            console.warn('GitHub 同步失败', errText);
+            if(!silent) showToast('GitHub 同步失败：' + putResp.status);
+            return false;
+        }
+    }catch(e){
+        console.warn('GitHub 同步异常', e);
+        if(!silent) showToast('GitHub 同步异常：' + e.message);
+        return false;
+    }
 }
 
-// ====================== 工具函数 ======================
-function showToast(msg){
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.style.display = 'block';
-    clearTimeout(toast._timeout);
-    toast._timeout = setTimeout(()=>{ toast.style.display = 'none'; }, 2000);
-}
-function escapeHTML(str){
-    return String(str).replace(/[&<>"']/g, m=>({
-        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    }[m]));
-}
-
-// 相似度匹配（仅匹配题目）
+// ====================== 相似度匹配 ======================
 function similarity(query, text){
     if(!query) return 0;
     const q = query.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;；:：!！""'']/g,'');
     const t = text.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;；:：!！""'']/g,'');
     if(!q || !t) return 0;
-
     if(t.indexOf(q) !== -1) return 1.0;
     if(q.indexOf(t) !== -1 && t.length >= 3) return 0.95;
-
     let hit = 0;
     for(let i=0;i<q.length-1;i++){
         const bigram = q.substr(i,2);
         if(t.indexOf(bigram) !== -1) hit++;
     }
     const bigramScore = q.length>1 ? hit/(q.length-1) : 0;
-
     let charHit = 0;
     const uniqueChars = [...new Set(q.split(''))];
-    uniqueChars.forEach(ch=>{
-        if(t.indexOf(ch) !== -1) charHit++;
-    });
+    uniqueChars.forEach(ch=>{ if(t.indexOf(ch) !== -1) charHit++; });
     const charScore = uniqueChars.length ? charHit/uniqueChars.length : 0;
-
     const homophoneMap = {
         'qing':'清|青|轻|氢','zhi':'值|质|制|止|只','jia':'加|家|甲|价',
         'yan':'盐|严|研|沿','yang':'氧|养|样|阳','tan':'碳|炭|探',
@@ -1146,36 +1284,28 @@ function similarity(query, text){
         const re = new RegExp(qExpanded, 'i');
         if(re.test(t)) return 0.9;
     }catch(e){}
-
     return Math.max(bigramScore*0.85, charScore*0.55);
 }
-
 function matchQuestions(query, threshold = 0.28){
     const results = [];
     questionBank.forEach((item, idx)=>{
         const score = similarity(query, item.q);
-        if(score >= threshold){
-            results.push({ item, score, idx });
-        }
+        if(score >= threshold) results.push({ item, score, idx });
     });
     results.sort((a,b)=> b.score - a.score);
     return results.slice(0, 15);
 }
 
-// 格式答案：多段分行显示
+// 答案多段分行显示
 function formatAnswerHTML(ans){
     const parts = String(ans).split(/[‖｜|]+/).map(s=>s.trim()).filter(Boolean);
-    if(parts.length <= 1){
-        return escapeHTML(parts[0] || '');
-    }
+    if(parts.length <= 1) return escapeHTML(parts[0] || '');
     return parts.map(p=>`<span class="ans-line">${escapeHTML(p)}</span>`).join('');
 }
 
-// 渲染结果
 function renderResults(results, query){
     const chatArea = document.getElementById('chatArea');
     chatArea.innerHTML = '';
-
     if(!results.length){
         const noRes = document.createElement('div');
         noRes.className = 'no-result';
@@ -1183,7 +1313,6 @@ function renderResults(results, query){
         chatArea.appendChild(noRes);
         return;
     }
-
     results.forEach((r, idx)=>{
         const card = document.createElement('div');
         card.className = 'result-card';
@@ -1195,103 +1324,10 @@ function renderResults(results, query){
         `;
         chatArea.appendChild(card);
     });
-
     chatArea.scrollTop = 0;
 }
 
-// ====================== 发送问题 ======================
-function sendQuestion(){
-    const questionInput = document.getElementById('questionInput');
-    const text = questionInput.value.trim();
-    const chatArea = document.getElementById('chatArea');
-
-    if(!text && !currentImageFile){
-        showToast('请输入问题，或上传图片');
-        return;
-    }
-    if(!text && currentImageFile){
-        showToast('图片已收到，但题库匹配需要文字，请补充关键词');
-        return;
-    }
-
-    chatArea.innerHTML = '';
-    const results = matchQuestions(text);
-    renderResults(results, text);
-
-    questionInput.value = '';
-    clearImage();
-
-    if(results.length === 0){
-        showToast('未找到匹配题目');
-    } else {
-        showToast(`找到 ${results.length} 条相关题目`);
-    }
-    questionInput.focus();
-}
-
-// ====================== 图片处理（主界面） ======================
-function clearImage(){
-    currentImageFile = null;
-    const imageInput = document.getElementById('imageInput');
-    const previewImg = document.getElementById('previewImg');
-    const imgPreview = document.getElementById('imgPreview');
-    imageInput.value = '';
-    previewImg.src = '';
-    imgPreview.style.display = 'none';
-}
-
-// ====================== 语音识别（修复版） ======================
-function initRecognition(){
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if(!SR) return null;
-    const rec = new SR();
-    rec.lang = 'zh-CN';
-    rec.continuous = false;
-    rec.interimResults = true;
-    rec.maxAlternatives = 1;
-    return rec;
-}
-
-function bindRecognition(rec){
-    const voiceBtn = document.getElementById('voiceBtn');
-    const questionInput = document.getElementById('questionInput');
-
-    rec.onstart = ()=>{
-        isRecording = true;
-        voiceBtn.classList.add('recording');
-        voiceBtn.textContent = '⏺';
-        showToast('正在聆听…请说话');
-    };
-    rec.onresult = (e)=>{
-        let transcript = '';
-        for(let i = e.resultIndex; i < e.results.length; i++){
-            transcript += e.results[i][0].transcript;
-        }
-        questionInput.value = transcript;
-        if(e.results[0].isFinal){
-            showToast('识别完成：' + transcript);
-        }
-    };
-    rec.onerror = (e)=>{
-        console.warn('语音识别错误', e);
-        let errMsg = '语音识别失败';
-        if(e.error === 'not-allowed') errMsg = '请允许麦克风权限';
-        else if(e.error === 'no-speech') errMsg = '未检测到语音，请重试';
-        else if(e.error === 'audio-capture') errMsg = '未找到麦克风';
-        else if(e.error === 'network') errMsg = '网络错误';
-        showToast(errMsg);
-        isRecording = false;
-        voiceBtn.classList.remove('recording');
-        voiceBtn.textContent = '🎤';
-    };
-    rec.onend = ()=>{
-        isRecording = false;
-        voiceBtn.classList.remove('recording');
-        voiceBtn.textContent = '🎤';
-    };
-}
-
-// ====================== 主界面事件绑定 ======================
+// ====================== 主界面逻辑 ======================
 document.addEventListener('DOMContentLoaded', ()=>{
     loadBank();
 
@@ -1307,74 +1343,31 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const previewImg    = document.getElementById('previewImg');
     const closeImg      = document.getElementById('closeImg');
 
-    // 语音识别：每次点击创建新实例，避免状态卡死
-    voiceBtn.addEventListener('click', ()=>{
-        if(isRecording){
-            // 正在录音则停止
-            if(recognition){ try{ recognition.stop(); }catch(e){} }
-            return;
-        }
-        const rec = initRecognition();
-        if(!rec){
-            showToast('当前浏览器不支持语音识别，请使用Chrome/Edge/Safari');
-            return;
-        }
-        recognition = rec;
-        bindRecognition(rec);
-        try{
-            rec.start();
-        }catch(e){
-            console.warn(e);
-            // 重试机制
-            setTimeout(()=>{
-                try{ rec.start(); }catch(e2){ showToast('无法启动录音，请检查麦克风权限'); }
-            }, 200);
-        }
-    });
-
-    // 拍照/选图（修复版）
-    imageBtn.addEventListener('click', ()=>{
-        // 重置input value，确保同一文件可再次触发
-        imageInput.value = '';
-        imageInput.click();
-    });
-    imageInput.addEventListener('change', (e)=>{
-        const file = e.target.files && e.target.files[0];
-        if(!file) return;
-        if(file.size > 10 * 1024 * 1024){
-            showToast('图片过大，请选择小于 10MB 的图片');
-            return;
-        }
-        currentImageFile = file;
-        const reader = new FileReader();
-        reader.onload = (ev)=>{
-            previewImg.src = ev.target.result;
-            imgPreview.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    });
-    closeImg.addEventListener('click', (e)=>{
-        e.stopPropagation();
+    // ===== 查询发送 =====
+    function sendQuestion(){
+        const text = questionInput.value.trim();
+        if(!text && !currentImageFile){ showToast('请输入问题，或上传图片'); return; }
+        if(!text && currentImageFile){ showToast('图片已收到，但题库匹配需要文字，请补充关键词'); return; }
+        chatArea.innerHTML = '';
+        const results = matchQuestions(text);
+        renderResults(results, text);
+        questionInput.value = '';
         clearImage();
-    });
-
-    // 发送
+        if(results.length === 0) showToast('未找到匹配题目');
+        else showToast(`找到 ${results.length} 条相关题目`);
+        questionInput.focus();
+    }
     sendBtn.addEventListener('click', sendQuestion);
     questionInput.addEventListener('keydown', (e)=>{
-        if(e.key === 'Enter' && !e.shiftKey){
-            e.preventDefault();
-            sendQuestion();
-        }
+        if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendQuestion(); }
     });
 
-    // 清空输入
+    // ===== 清空 =====
     clearInputBtn.addEventListener('click', ()=>{
         questionInput.value = '';
         clearImage();
         questionInput.focus();
     });
-
-    // 清空对话
     clearChatBtn.addEventListener('click', ()=>{
         chatArea.innerHTML = '';
         const empty = document.createElement('div');
@@ -1388,7 +1381,91 @@ document.addEventListener('DOMContentLoaded', ()=>{
         showToast('对话已清空');
     });
 
-    // ====== 登录弹窗 ======
+    // ===== 图片处理（主界面） =====
+    function clearImage(){
+        currentImageFile = null;
+        imageInput.value = '';
+        previewImg.src = '';
+        imgPreview.style.display = 'none';
+    }
+    imageBtn.addEventListener('click', ()=>{
+        imageInput.value = '';
+        imageInput.click();
+    });
+    imageInput.addEventListener('change', (e)=>{
+        const file = e.target.files && e.target.files[0];
+        if(!file) return;
+        if(file.size > 10 * 1024 * 1024){ showToast('图片过大，请选择小于 10MB 的图片'); return; }
+        currentImageFile = file;
+        const reader = new FileReader();
+        reader.onload = (ev)=>{
+            previewImg.src = ev.target.result;
+            imgPreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    });
+    closeImg.addEventListener('click', (e)=>{ e.stopPropagation(); clearImage(); });
+
+    // ===== 语音识别（修复版） =====
+    function initRecognition(){
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if(!SR) return null;
+        const rec = new SR();
+        rec.lang = 'zh-CN';
+        rec.continuous = false;
+        rec.interimResults = true;
+        rec.maxAlternatives = 1;
+        return rec;
+    }
+    function bindRecognition(rec){
+        rec.onstart = ()=>{
+            isRecording = true;
+            voiceBtn.classList.add('recording');
+            voiceBtn.textContent = '⏺';
+            showToast('正在聆听…请说话');
+        };
+        rec.onresult = (e)=>{
+            let transcript = '';
+            for(let i = e.resultIndex; i < e.results.length; i++){
+                transcript += e.results[i][0].transcript;
+            }
+            questionInput.value = transcript;
+            if(e.results[0].isFinal) showToast('识别完成：' + transcript);
+        };
+        rec.onerror = (e)=>{
+            console.warn('语音识别错误', e);
+            let errMsg = '语音识别失败';
+            if(e.error === 'not-allowed') errMsg = '请允许麦克风权限';
+            else if(e.error === 'no-speech') errMsg = '未检测到语音，请重试';
+            else if(e.error === 'audio-capture') errMsg = '未找到麦克风';
+            else if(e.error === 'network') errMsg = '网络错误';
+            showToast(errMsg);
+            isRecording = false;
+            voiceBtn.classList.remove('recording');
+            voiceBtn.textContent = '🎤';
+        };
+        rec.onend = ()=>{
+            isRecording = false;
+            voiceBtn.classList.remove('recording');
+            voiceBtn.textContent = '🎤';
+        };
+    }
+    voiceBtn.addEventListener('click', ()=>{
+        if(isRecording){
+            if(recognition){ try{ recognition.stop(); }catch(e){} }
+            return;
+        }
+        const rec = initRecognition();
+        if(!rec){ showToast('当前浏览器不支持语音识别'); return; }
+        recognition = rec;
+        bindRecognition(rec);
+        try{ rec.start(); }
+        catch(e){
+            setTimeout(()=>{ try{ rec.start(); }catch(e2){ showToast('无法启动录音'); } }, 200);
+        }
+    });
+
+    // ===== 登录 =====
     const loginBtn    = document.getElementById('loginBtn');
     const loginModal  = document.getElementById('loginModal');
     const loginClose  = document.getElementById('loginClose');
@@ -1400,41 +1477,25 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const bankClose   = document.getElementById('bankClose');
     const bankCancel  = document.getElementById('bankCancel');
 
-    function openLogin(){
-        loginUser.value = '';
-        loginPass.value = '';
-        loginModal.classList.add('active');
-        setTimeout(()=>loginUser.focus(), 100);
-    }
-    function closeLogin(){ loginModal.classList.remove('active'); }
-    function openBank(){
-        bankModal.classList.add('active');
-        renderBankList();
-        renderBackups();
-        switchTab('tab-search');
-    }
-    function closeBank(){ bankModal.classList.remove('active'); }
-
     loginBtn.addEventListener('click', ()=>{
-        if(isLoggedIn){
-            // 已登录则直接进入题库管理
-            openBank();
-        }else{
-            openLogin();
+        if(isLoggedIn) openBank();
+        else {
+            loginUser.value = '';
+            loginPass.value = '';
+            loginModal.classList.add('active');
+            setTimeout(()=>loginUser.focus(), 100);
         }
     });
-    loginClose.addEventListener('click', closeLogin);
-    loginCancel.addEventListener('click', closeLogin);
+    loginClose.addEventListener('click', ()=> loginModal.classList.remove('active'));
+    loginCancel.addEventListener('click', ()=> loginModal.classList.remove('active'));
     loginSubmit.addEventListener('click', doLogin);
     loginPass.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') doLogin(); });
-    loginUser.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') loginPass.focus(); });
-
     function doLogin(){
         const u = loginUser.value.trim();
         const p = loginPass.value.trim();
         if(u === 'A' && p === 'A'){
             isLoggedIn = true;
-            closeLogin();
+            loginModal.classList.remove('active');
             loginBtn.textContent = '📚 题库';
             loginBtn.classList.add('logged-in');
             showToast('登录成功');
@@ -1444,23 +1505,26 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }
     }
 
-    bankClose.addEventListener('click', closeBank);
-    bankCancel.addEventListener('click', closeBank);
+    function openBank(){
+        bankModal.classList.add('active');
+        renderBankList();
+        renderBackups();
+        renderGhCfg();
+        switchTab('tab-search');
+    }
+    bankClose.addEventListener('click', ()=> bankModal.classList.remove('active'));
+    bankCancel.addEventListener('click', ()=> bankModal.classList.remove('active'));
 
-    // ====== 标签页切换 ======
+    // ===== 标签页 =====
     function switchTab(tabId){
-        document.querySelectorAll('.tab').forEach(t=>{
-            t.classList.toggle('active', t.dataset.tab === tabId);
-        });
-        document.querySelectorAll('.tab-content').forEach(c=>{
-            c.classList.toggle('active', c.id === tabId);
-        });
+        document.querySelectorAll('.tab').forEach(t=> t.classList.toggle('active', t.dataset.tab === tabId));
+        document.querySelectorAll('.tab-content').forEach(c=> c.classList.toggle('active', c.id === tabId));
     }
     document.querySelectorAll('.tab').forEach(t=>{
         t.addEventListener('click', ()=> switchTab(t.dataset.tab));
     });
 
-    // ====== 题库列表渲染 ======
+    // ===== 题库列表渲染 =====
     const bankSearch    = document.getElementById('bankSearch');
     const bankList      = document.getElementById('bankList');
     const bankClearSearch = document.getElementById('bankClearSearch');
@@ -1470,7 +1534,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const editCancel    = document.getElementById('editCancel');
     const editSave      = document.getElementById('editSave');
     const editDelete    = document.getElementById('editDelete');
-
     let selectedIdx = -1;
 
     function renderBankList(keyword){
@@ -1500,7 +1563,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
             bankList.innerHTML = '<div style="font-size:12px;color:#8aa2c0;text-align:center;padding:20px;">未找到匹配题目</div>';
         }
     }
-
     function showEditForm(idx){
         const item = questionBank[idx];
         if(!item){ editForm.style.display = 'none'; return; }
@@ -1508,7 +1570,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
         editA.value = item.a;
         editForm.style.display = 'block';
     }
-
     bankSearch.addEventListener('input', ()=>{
         selectedIdx = -1;
         editForm.style.display = 'none';
@@ -1520,46 +1581,42 @@ document.addEventListener('DOMContentLoaded', ()=>{
         editForm.style.display = 'none';
         renderBankList('');
     });
-
     editCancel.addEventListener('click', ()=>{
         selectedIdx = -1;
         editForm.style.display = 'none';
         renderBankList(bankSearch.value);
     });
 
-    editSave.addEventListener('click', ()=>{
+    // 保存修改 → 二次确认 → 备份 → 保存 → 同步 → 刷新
+    editSave.addEventListener('click', async ()=>{
         if(selectedIdx < 0 || !questionBank[selectedIdx]) return;
         const newQ = editQ.value.trim();
         const newA = editA.value.trim();
-        if(!newQ || !newA){
-            showToast('题目和答案不能为空');
-            return;
-        }
-        // 备份
+        if(!newQ || !newA){ showToast('题目和答案不能为空'); return; }
+        const ok = await askConfirm('确认修改？（输入确认代码）');
+        if(!ok) return;
         backupCurrentBank();
         questionBank[selectedIdx] = { q: newQ, a: newA };
         persistBank();
-        showToast('已保存修改');
-        renderBankList(bankSearch.value);
-        renderBackups();
-        // 保持选中
-        showEditForm(selectedIdx);
+        showToast('已保存修改，正在同步…');
+        await syncToGitHub(true);
+        refreshPage();
     });
 
-    editDelete.addEventListener('click', ()=>{
+    // 删除 → 二次确认 → 备份 → 删除 → 同步 → 刷新
+    editDelete.addEventListener('click', async ()=>{
         if(selectedIdx < 0) return;
-        if(!confirm('确定删除该题目？')) return;
+        const ok = await askConfirm('确认删除该题目？（输入确认代码）');
+        if(!ok) return;
         backupCurrentBank();
         questionBank.splice(selectedIdx, 1);
         persistBank();
-        selectedIdx = -1;
-        editForm.style.display = 'none';
-        renderBankList(bankSearch.value);
-        renderBackups();
-        showToast('已删除题目');
+        showToast('已删除题目，正在同步…');
+        await syncToGitHub(true);
+        refreshPage();
     });
 
-    // ====== 新增题目 ======
+    // ===== 新增题目 =====
     const addQ       = document.getElementById('addQ');
     const addA       = document.getElementById('addA');
     const addSave    = document.getElementById('addSave');
@@ -1573,33 +1630,21 @@ document.addEventListener('DOMContentLoaded', ()=>{
         addA.value = '';
         ocrPreview.innerHTML = '';
     });
-
-    addSave.addEventListener('click', ()=>{
+    addSave.addEventListener('click', async ()=>{
         const q = addQ.value.trim();
         const a = addA.value.trim();
-        if(!q || !a){
-            showToast('请填写题目和答案');
-            return;
-        }
+        if(!q || !a){ showToast('请填写题目和答案'); return; }
+        const ok = await askConfirm('确认新增题目？（输入确认代码）');
+        if(!ok) return;
         backupCurrentBank();
         questionBank.push({ q, a });
         persistBank();
-        showToast('已新增题目，共 ' + questionBank.length + ' 题');
-        addQ.value = '';
-        addA.value = '';
-        ocrPreview.innerHTML = '';
-        renderBankList(bankSearch.value);
-        renderBackups();
+        showToast('已新增题目，正在同步…');
+        await syncToGitHub(true);
+        refreshPage();
     });
-
-    // ====== 图片识别（新增题目） ======
-    // 提供两种方式：手动录入；或点击区域上传图片，用模拟OCR识别。
-    // 由于无法真正调用OCR，这里使用一个简单的模拟：将图片文件名作为线索，或提示用户手动填写。
-    // 我们也可以让用户上传图片后弹出提示，引导手动填写。
-    ocrArea.addEventListener('click', ()=>{
-        ocrInput.value = '';
-        ocrInput.click();
-    });
+    // 图片识别（模拟）
+    ocrArea.addEventListener('click', ()=>{ ocrInput.value = ''; ocrInput.click(); });
     ocrInput.addEventListener('change', (e)=>{
         const file = e.target.files && e.target.files[0];
         if(!file) return;
@@ -1608,31 +1653,147 @@ document.addEventListener('DOMContentLoaded', ()=>{
             ocrPreview.innerHTML = `<img src="${ev.target.result}" alt="预览">`;
         };
         reader.readAsDataURL(file);
-        // 模拟OCR：这里不做真实识别，提示用户手动补充
-        showToast('图片已上传，请手动输入题目和答案（识别功能需后台支持）');
+        showToast('图片已上传，请手动输入题目和答案');
     });
 
-    // ====== 备份面板 ======
-    // 切换标签时刷新备份列表
-    document.querySelectorAll('.tab').forEach(t=>{
-        t.addEventListener('click', ()=>{
-            if(t.dataset.tab === 'tab-backup'){
-                renderBackups();
-            }
+    // ===== 备份面板 =====
+    function renderBackups(){
+        const b = loadBackups();
+        const el = document.getElementById('backupList');
+        el.innerHTML = '';
+        if(!b.list.length){
+            el.innerHTML = '<div style="font-size:12px;color:#8aa2c0;text-align:center;padding:16px;">暂无备份档案</div>';
+            return;
+        }
+        b.list.forEach((item, idx)=>{
+            const div = document.createElement('div');
+            div.className = 'backup-item' + (item.locked ? ' locked':'');
+            div.innerHTML = `
+                <div>
+                    <span class="bi-name">档案${item.name}</span>
+                    <span class="bi-time">${escapeHTML(item.time)}</span>
+                </div>
+                <div class="bi-actions">
+                    <button class="btn btn-sm" data-act="view" data-idx="${idx}">查阅</button>
+                    <button class="btn btn-sm" data-act="restore" data-idx="${idx}">恢复</button>
+                    <span class="lock-icon" data-act="lock" data-idx="${idx}" title="${item.locked?'点击解锁':'点击上锁'}">${item.locked?'🔒':'🔓'}</span>
+                </div>
+            `;
+            el.appendChild(div);
         });
-    });
 
-    // ====== 初始化渲染 ======
-    renderBankList('');
-    renderBackups();
+        // 查阅（只读）
+        el.querySelectorAll('[data-act="view"]').forEach(btn=>{
+            btn.addEventListener('click', ()=>{
+                const idx = +btn.dataset.idx;
+                const bb = loadBackups();
+                const item = bb.list[idx];
+                if(!item) return;
+                showBackupViewer(item);
+            });
+        });
+        // 恢复（二次确认）
+        el.querySelectorAll('[data-act="restore"]').forEach(btn=>{
+            btn.addEventListener('click', async ()=>{
+                const idx = +btn.dataset.idx;
+                const bb = loadBackups();
+                const item = bb.list[idx];
+                if(!item) return;
+                const ok = await askConfirm(`确认恢复到档案${item.name}？（输入确认代码）`);
+                if(!ok) return;
+                questionBank = JSON.parse(JSON.stringify(item.data));
+                persistBank();
+                showToast('已恢复，正在同步…');
+                await syncToGitHub(true);
+                refreshPage();
+            });
+        });
+        // 上锁
+        el.querySelectorAll('[data-act="lock"]').forEach(ic=>{
+            ic.addEventListener('click', ()=>{
+                const idx = +ic.dataset.idx;
+                const bb = loadBackups();
+                const item = bb.list[idx];
+                if(!item) return;
+                if(!item.locked){
+                    const lockedCount = bb.list.filter(x=>x.locked).length;
+                    if(lockedCount >= 2){ showToast('最多上锁2个档案'); return; }
+                    item.locked = true;
+                }else{
+                    item.locked = false;
+                }
+                saveBackups(bb);
+                renderBackups();
+            });
+        });
+    }
+
+    // 备份只读查阅弹窗
+    function showBackupViewer(item){
+        // 构建一个可滚动的只读列表弹窗（复用bankModal的结构）
+        // 为了简单，直接在bankModal之上覆盖显示
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay active';
+        overlay.style.zIndex = 1200;
+        overlay.innerHTML = `
+            <div class="modal" style="max-width:640px;">
+                <div class="modal-header">
+                    <h3>📄 档案${item.name}（只读） — ${escapeHTML(item.time)}</h3>
+                    <button class="modal-close" data-close="1">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div style="font-size:12px;color:#8aa2c0;margin-bottom:8px;">
+                        共 ${item.data.length} 题 · 只读模式，不可修改
+                    </div>
+                    <div class="bank-list" style="max-height:420px;">
+                        ${item.data.map((x,i)=>`
+                            <div class="bank-item" style="cursor:default;">
+                                <div class="bi-idx">#${i+1}</div>
+                                <div class="bi-q">${escapeHTML(x.q)}</div>
+                                <div class="bi-a">答案：${escapeHTML(x.a)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-close="1">关闭</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        overlay.querySelectorAll('[data-close]').forEach(b=>{
+            b.addEventListener('click', ()=> overlay.remove());
+        });
+        overlay.addEventListener('click', (e)=>{
+            if(e.target === overlay) overlay.remove();
+        });
+    }
+
+    // ===== GitHub 配置 =====
+    function renderGhCfg(){
+        const cfg = loadGhCfg();
+        document.getElementById('ghOwner').value = cfg.owner || '';
+        document.getElementById('ghRepo').value = cfg.repo || '';
+        document.getElementById('ghPath').value = cfg.path || '';
+        document.getElementById('ghToken').value = cfg.token || '';
+    }
+    document.getElementById('ghSaveCfg').addEventListener('click', ()=>{
+        const cfg = {
+            owner: document.getElementById('ghOwner').value.trim(),
+            repo:  document.getElementById('ghRepo').value.trim(),
+            path:  document.getElementById('ghPath').value.trim(),
+            token: document.getElementById('ghToken').value.trim()
+        };
+        saveGhCfg(cfg);
+        showToast('GitHub 配置已保存');
+    });
+    document.getElementById('ghSyncNow').addEventListener('click', async ()=>{
+        const ok = await syncToGitHub(false);
+        if(ok) showToast('同步成功');
+    });
 
     // 页面初始化
     questionInput.focus();
-});
-
-// ====================== 启动时加载题库并渲染 ======================
-window.addEventListener('load', ()=>{
-    // 已在DOMContentLoaded处理
 });
 </script>
 </body>
