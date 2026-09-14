@@ -298,16 +298,19 @@ body{
     100%{box-shadow:0 0 0 0 rgba(239,68,68,0);}
 }
 
-/* 提示气泡 */
+/* 提示气泡（置顶显示，z-index最高） */
 .toast{
     position:fixed;top:24px;left:50%;transform:translateX(-50%);
-    background:#1e293b;color:#fff;padding:10px 22px;border-radius:28px;
-    font-size:13px;z-index:999;display:none;
-    box-shadow:0 8px 24px rgba(0,0,0,0.2);
+    background:#1e293b;color:#fff;padding:12px 26px;border-radius:28px;
+    font-size:14px;z-index:999999;display:none;
+    box-shadow:0 8px 24px rgba(0,0,0,0.35);
     letter-spacing:0.3px;
     max-width:90vw;
     text-align:center;
+    font-weight:500;
+    animation:toastIn 0.2s ease-out;
 }
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-10px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
 
 /* ========== 弹窗通用 ========== */
 .modal-overlay{
@@ -760,6 +763,8 @@ body{
 .revive-row button.danger:hover{background:#b91c1c;}
 .revive-row button.download{background:#0ea5e9;color:#fff;border-color:#0284c7;}
 .revive-row button.download:hover{background:#0284c7;}
+.revive-row button.import{background:#8b5cf6;color:#fff;border-color:#7c3aed;}
+.revive-row button.import:hover{background:#7c3aed;}
 
 /* 二次确认小弹窗 */
 .confirm-overlay{
@@ -1000,6 +1005,7 @@ body{
     .code-preview{font-size:10px;max-height:300px;}
     .revive-popup-header .rp-icon{font-size:34px;}
     .revive-popup-header h2{font-size:16px;}
+    .toast{font-size:13px;padding:10px 20px;}
 }
 </style>
 </head>
@@ -1209,6 +1215,7 @@ body{
                         <span id="reviveStatusMeta"></span>
                     </div>
                     <div class="revive-row">
+                        <button class="import" id="reviveImportCurrentBtn">💾 导入当前代码</button>
                         <button id="reviveUploadBtn">📤 上传/覆盖</button>
                         <button class="download" id="reviveDownloadBtn">📥 下载备份</button>
                         <button id="revivePreviewBtn">👁 预览</button>
@@ -1217,7 +1224,8 @@ body{
                     <input type="file" id="reviveFileInput" accept=".txt,text/plain" style="display:none;">
                 </div>
                 <div style="font-size:11px;color:#78350f;margin-top:10px;line-height:1.6;background:#fffbeb;border-radius:8px;padding:8px 10px;">
-                    ⚠️ 提示：复活备份仅保存完整页面代码（HTML+题库）。恢复时会将 txt 内容直接覆盖到 GitHub 仓库指定路径，请谨慎操作。
+                    ⚠️ 提示：复活备份仅保存完整页面代码（HTML+题库）。恢复时会将 txt 内容直接覆盖到 GitHub 仓库指定路径，请谨慎操作。<br>
+                    💾 <b>"导入当前代码"</b> 功能会将当前页面的实际代码（含所有题库修改）覆盖替换到复活备份文件中。
                 </div>
             </div>
 
@@ -1482,7 +1490,6 @@ const GH_CFG_KEY  = 'zktest_gh_cfg_v1';
 const REVIVE_KEY  = 'zktest_revive_v1';
 const CONFIRM_CODE = 'qiuhua';
 const HEALTH_KEY = 'zktest_health_v1';
-// 百度OCR配置（如需使用，请填写自己的密钥）
 const BAIDU_OCR_KEY = { apiKey: '', secretKey: '' };
 
 // ====================== 全局状态 ======================
@@ -1541,7 +1548,7 @@ function showToast(msg){
     toast.textContent = msg;
     toast.style.display = 'block';
     clearTimeout(toast._timeout);
-    toast._timeout = setTimeout(()=>{ toast.style.display = 'none'; }, 2200);
+    toast._timeout = setTimeout(()=>{ toast.style.display = 'none'; }, 2400);
 }
 function escapeHTML(str){
     return String(str).replace(/[&<>"']/g, m=>({
@@ -1604,11 +1611,8 @@ function downloadTextFile(content, filename){
     }
 }
 
-// ====================== 图片文字识别（核心修复版） ======================
-// 核心思路：优先使用OCR识别出的原始文字，直接填充到编辑框
-// 不再使用哈希去题库随机匹配
+// ====================== 图片文字识别 ======================
 async function recognizeImage(file, engine){
-    // 1. 优先使用百度OCR（如果配置了）
     if(engine === 'baidu'){
         if(BAIDU_OCR_KEY.apiKey && BAIDU_OCR_KEY.secretKey){
             try{
@@ -1621,8 +1625,6 @@ async function recognizeImage(file, engine){
             showToast('百度OCR未配置密钥，使用文件名解析');
         }
     }
-    
-    // 2. 尝试使用 Tesseract.js（如果已加载）
     if(engine === 'tesseract' && window.Tesseract){
         try{
             return await tesseractOCR(file);
@@ -1630,12 +1632,9 @@ async function recognizeImage(file, engine){
             console.warn('Tesseract OCR失败', e);
         }
     }
-    
-    // 3. 兜底：基于文件名的智能解析（这是最可靠的方式）
     return await filenameBasedRecognition(file);
 }
 
-// 百度OCR调用
 async function baiduOCR(file){
     const { apiKey, secretKey } = BAIDU_OCR_KEY;
     const tokenResp = await fetch(`https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=${apiKey}&client_secret=${secretKey}`, { method: 'POST' });
@@ -1654,25 +1653,20 @@ async function baiduOCR(file){
     return parseOCRText(text);
 }
 
-// Tesseract.js OCR
 async function tesseractOCR(file){
     const { data } = await Tesseract.recognize(file, 'chi_sim+eng');
     return parseOCRText(data.text);
 }
 
-// 基于文件名的智能识别（最可靠的方式）
 async function filenameBasedRecognition(file){
     const filename = (file.name || '').replace(/\.(jpg|jpeg|png|gif|webp|bmp|heic)$/i, '').trim();
-    
     console.log('文件名解析：', filename);
     
-    // 情况1：文件名包含"题目...答案..."格式
     const qaMatch = filename.match(/题目[：:]\s*(.+?)\s*答案[：:]\s*(.+)/);
     if(qaMatch){
         return { q: qaMatch[1].trim(), a: qaMatch[2].trim() };
     }
     
-    // 情况2：文件名包含多行文本
     const lines = filename.split(/[\n\r]+/).map(l=>l.trim()).filter(Boolean);
     if(lines.length >= 2){
         let q = '', a = '';
@@ -1685,39 +1679,30 @@ async function filenameBasedRecognition(file){
         }
     }
     
-    // 情况3：文件名本身就是一个题目描述
     if(filename.length >= 4){
-        // 尝试在题库中查找匹配的题目
         const matched = questionBank.find(item => 
             item.q.includes(filename) || filename.includes(item.q.substring(0, 8))
         );
         if(matched){
             return { q: matched.q, a: matched.a };
         }
-        // 没有匹配到，把文件名作为题目
-        // 如果文件名包含问号、括号，说明很可能是题目
         if(/[？?（）()]/.test(filename)){
             return { q: filename, a: '（请根据图片内容补充答案）' };
         }
         return { q: filename, a: '（请根据图片内容补充答案）' };
     }
     
-    // 情况4：完全无法识别
     return {
         q: '（图片识别未成功，请手动输入题目）',
         a: '（请手动输入答案）'
     };
 }
 
-// 将OCR识别出的文本智能分割为题目和答案
 function parseOCRText(text){
     if(!text || !text.trim()){
         return { q: '', a: '' };
     }
-    
     let normalized = text.replace(/\r\n/g, '\n').replace(/\n{2,}/g, '\n').trim();
-    
-    // 优先识别"题目：xxx 答案：xxx"格式
     const qaPattern = /题目[：:]\s*(.+?)\s*答案[：:]\s*(.+)/s;
     const qaMatch = normalized.match(qaPattern);
     if(qaMatch){
@@ -1726,14 +1711,11 @@ function parseOCRText(text){
             a: qaMatch[2].trim().replace(/\n+/g, '‖')
         };
     }
-    
     const lines = normalized.split('\n').map(l=>l.trim()).filter(Boolean);
     if(lines.length === 0) return { q: '', a: '' };
     if(lines.length === 1){
         return { q: lines[0], a: '（请补充答案）' };
     }
-    
-    // 多行：寻找题目行
     let qIndex = 0;
     for(let i=0;i<lines.length;i++){
         if(/[（(][^）)]*[）)]/.test(lines[i]) || /[？?]/.test(lines[i]) || /[是为：:]$/.test(lines[i])){
@@ -1741,15 +1723,12 @@ function parseOCRText(text){
             break;
         }
     }
-    
     const q = lines[qIndex];
     const aLines = lines.slice(0, qIndex).concat(lines.slice(qIndex + 1));
     const a = aLines.join('‖');
-    
     return { q, a: a || '（请补充答案）' };
 }
 
-// 文件转base64
 function fileToBase64(file){
     return new Promise((resolve, reject)=>{
         const reader = new FileReader();
@@ -1831,10 +1810,7 @@ async function getFullPageHTML(){
     try{
         const resp = await fetch(location.href, { cache: 'no-cache' });
         let html = await resp.text();
-        
         const newBankJSON = JSON.stringify(questionBank, null, 0);
-        
-        // 精准替换 defaultBank 数组
         const regex = /const\s+defaultBank\s*=\s*\[[\s\S]*?\];/;
         if(regex.test(html)){
             html = html.replace(regex, `const defaultBank = ${newBankJSON};`);
@@ -1927,7 +1903,6 @@ async function syncFullPageToGitHub(silent = false){
     return await pushContentToGitHub(html, msg, silent);
 }
 
-// 测试连接
 async function testGitHubConnection(silent){
     const cfg = loadGhCfg();
     if(!isGhConfigured(cfg)){
@@ -2554,7 +2529,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
         setTimeout(()=>{ refreshPage(); }, 800);
     });
 
-    // ===== 图片OCR识别（核心修复） =====
     ocrArea.addEventListener('click', ()=>{
         ocrInput.value = '';
         ocrInput.click();
@@ -2567,15 +2541,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
             showToast('请选择图片文件');
             return;
         }
-
-        // 显示本地预览
         const reader = new FileReader();
         reader.onload = (ev)=>{
             ocrPreview.innerHTML = `<img src="${ev.target.result}" alt="预览">`;
         };
         reader.readAsDataURL(file);
 
-        // 显示识别进度
         ocrProgress.classList.add('active');
         ocrProgress.textContent = '⏳ 正在识别图片内容…';
         ocrResultHint.classList.remove('active');
@@ -2583,15 +2554,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
         try{
             const engine = ocrEngine.value;
             const result = await recognizeImage(file, engine);
-
-            // 直接使用识别结果填充，不做二次匹配
             if(result && result.q){
                 addQ.value = result.q;
                 addA.value = result.a || '';
-                
                 ocrResultHint.classList.add('active');
                 showToast('✅ 识别完成，已自动填充');
-                
                 setTimeout(()=>{
                     addQ.focus();
                     addQ.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -2714,6 +2681,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const reviveDownloadBtn = document.getElementById('reviveDownloadBtn');
     const revivePreviewBtn = document.getElementById('revivePreviewBtn');
     const reviveSyncBtn = document.getElementById('reviveSyncBtn');
+    const reviveImportCurrentBtn = document.getElementById('reviveImportCurrentBtn');
     const reviveFileInput = document.getElementById('reviveFileInput');
 
     function renderReviveStatus(){
@@ -2728,6 +2696,34 @@ document.addEventListener('DOMContentLoaded', ()=>{
             metaEl.textContent = '';
         }
     }
+
+    // 导入当前代码到复活备份
+    reviveImportCurrentBtn.addEventListener('click', async ()=>{
+        const currentCode = await getFullPageHTML();
+        if(!currentCode || currentCode.trim().length < 100){
+            showToast('当前页面代码不完整，无法导入');
+            return;
+        }
+        const existingBackup = loadReviveBackup();
+        let msg = '⚠️ 确定将当前使用的代码替换/覆盖复活备份文件吗？\n\n';
+        msg += '· 当前代码大小：' + (currentCode.length/1024).toFixed(1) + ' KB\n';
+        if(existingBackup){
+            msg += '· 现有备份大小：' + (existingBackup.size/1024).toFixed(1) + ' KB\n';
+            msg += '· 现有备份时间：' + existingBackup.time + '\n\n';
+            msg += '确认后，现有复活备份将被当前代码完全替换，此操作不可恢复。';
+        }else{
+            msg += '· 当前无复活备份，将创建新的备份。\n\n';
+            msg += '确认后将使用当前代码创建复活备份。';
+        }
+        if(!confirm(msg)) return;
+
+        if(saveReviveBackup(currentCode)){
+            showToast('✅ 已将当前代码导入到复活备份');
+            renderReviveStatus();
+        }else{
+            alert('❌ 保存失败，可能超出浏览器存储限制。\n\n当前代码大小：' + (currentCode.length/1024).toFixed(1) + ' KB');
+        }
+    });
 
     reviveUploadBtn.addEventListener('click', ()=>{
         reviveFileInput.value = '';
@@ -2876,7 +2872,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }
     });
 
-    // 页面初始化
     questionInput.focus();
 });
 </script>
