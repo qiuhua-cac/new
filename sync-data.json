@@ -2926,7 +2926,7 @@
       "将1 g氨氮氧"
     ],
     "updatedAt": 0,
-    "device": "mobile"
+    "device": "pc"
   },
   "bank": {
     "list": [
@@ -3882,6 +3882,6 @@
       }
     ],
     "updatedAt": 1789482069156,
-    "device": "mobile"
+    "device": "pc"
   }
 }
