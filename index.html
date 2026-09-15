@@ -27,10 +27,13 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .result-card .q-label{display:inline-block;font-size:10px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:10px;margin-bottom:6px;font-weight:600;letter-spacing:0.3px;}
 .result-card .q-text{font-size:14px;line-height:1.55;color:#2563eb;font-weight:600;margin-bottom:8px;word-break:break-word;}
 .result-card .a-label{display:inline-block;font-size:10px;background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:10px;margin-bottom:5px;font-weight:600;letter-spacing:0.3px;}
-.result-card .a-text{font-size:14px;line-height:1.65;color:#dc2626;font-weight:bold;word-break:break-word;}
+.result-card .a-text{font-size:14px;line-height:1.65;color:#dc2626;font-weight:800;word-break:break-word;}
 .result-card .a-text .ans-line{display:block;padding:3px 0 3px 16px;position:relative;}
 .result-card .a-text .ans-line::before{content:'▲';position:absolute;left:0;top:3px;color:#ef4444;font-size:11px;font-weight:normal;}
 .result-card .a-text .ans-sep{display:inline-block;color:#f87171;font-weight:normal;padding:0 2px;}
+/* 解析样式：柔和浅灰蓝，不刺眼 */
+.result-card .e-label{display:inline-block;font-size:10px;background:#e2e8f0;color:#475569;padding:2px 8px;border-radius:10px;margin-top:8px;margin-bottom:5px;font-weight:600;letter-spacing:0.3px;}
+.result-card .e-text{font-size:13px;line-height:1.6;color:#334155;background:#f8fafc;border-left:3px solid #94a3b8;padding:8px 12px;border-radius:0 8px 8px 0;word-break:break-word;}
 .no-result{background:#fffbeb;border-left:5px solid #f59e0b;border-radius:14px;padding:16px 18px;color:#92400e;font-size:13px;line-height:1.7;}
 .no-result b{color:#b45309;}
 .bottom-fixed{flex-shrink:0;background:#fff;border-top:1px solid #d0e0f0;box-shadow:0 -4px 16px rgba(30,64,175,0.06);}
@@ -50,14 +53,9 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .input-area input[type="text"]{width:100%;padding:15px 18px;font-size:16px;border:1.5px solid #c8d9ec;border-radius:16px;outline:none;transition:border-color 0.2s, box-shadow 0.2s;background:#f9fcff;color:#1e293b;line-height:1.4;letter-spacing:0.2px;}
 .input-area input[type="text"]:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 4px rgba(59,130,246,0.12);}
 .input-area input[type="text"]::placeholder{color:#7a99bb;font-weight:400;}
-.img-preview{position:absolute;left:0;bottom:64px;background:#fff;border:1px solid #c8d9ec;border-radius:12px;padding:6px;box-shadow:0 6px 16px rgba(0,0,0,0.12);display:none;z-index:5;}
-.img-preview img{max-width:150px;max-height:150px;border-radius:8px;display:block;}
-.img-preview .close-img{position:absolute;top:-10px;right:-10px;width:24px;height:24px;background:#ef4444;color:#fff;border-radius:50%;font-size:14px;text-align:center;line-height:24px;cursor:pointer;font-weight:bold;box-shadow:0 2px 6px rgba(0,0,0,0.15);}
 .send-btn{width:54px;height:54px;border:none;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:0.15s;flex-shrink:0;padding:0;box-shadow:0 4px 14px rgba(59,130,246,0.4);}
 .send-btn:hover{background:linear-gradient(135deg,#2563eb,#1d4ed8);}
 .send-btn:active{transform:scale(0.94);}
-.recording{background:#ef4444 !important;border-color:#ef4444 !important;color:#fff !important;animation:pulse 1s infinite;}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,0.5);}70%{box-shadow:0 0 0 12px rgba(239,68,68,0);}100%{box-shadow:0 0 0 0 rgba(239,68,68,0);}}
 .toast{position:fixed;top:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:12px 26px;border-radius:28px;font-size:14px;z-index:999999;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.35);letter-spacing:0.3px;max-width:90vw;text-align:center;font-weight:500;animation:toastIn 0.2s ease-out;}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-10px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
 .modal-overlay{position:fixed;inset:0;background:rgba(15,30,50,0.55);z-index:1000;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px);}
@@ -97,22 +95,11 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .edit-form{margin-top:14px;border-top:1px solid #eef2f8;padding-top:14px;}
 .edit-form .form-group textarea{width:100%;padding:11px 14px;font-size:13px;border:1.5px solid #c8d9ec;border-radius:10px;outline:none;background:#f9fcff;min-height:70px;resize:vertical;font-family:inherit;line-height:1.5;transition:0.2s;}
 .edit-form .form-group textarea:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
-.ocr-area{background:#f0f7ff;border:1.5px dashed #93c5fd;border-radius:12px;padding:14px;text-align:center;margin-bottom:12px;cursor:pointer;transition:0.15s;position:relative;}
-.ocr-area:hover{background:#e6f2ff;border-color:#60a5fa;}
-.ocr-area .ocr-icon{font-size:28px;margin-bottom:6px;}
-.ocr-area .ocr-text{font-size:12px;color:#3b6ea5;}
-.ocr-area input[type="file"]{display:none;}
-.ocr-area .ocr-progress{display:none;font-size:12px;color:#2563eb;margin-top:8px;font-weight:600;}
-.ocr-area .ocr-progress.active{display:block;}
-.ocr-preview{margin-top:10px;text-align:center;}
-.ocr-preview img{max-width:100%;max-height:140px;border-radius:8px;}
-.ocr-result-hint{display:none;background:#dcfce7;border:1px solid #86efac;border-radius:8px;padding:8px 10px;font-size:11px;color:#166534;line-height:1.6;margin-bottom:10px;}
-.ocr-result-hint.active{display:block;}
-.ocr-result-hint b{color:#15803d;}
-.ocr-engine-select{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;align-items:center;}
-.ocr-engine-select label{font-size:11px;color:#4a6a8a;font-weight:500;}
-.ocr-engine-select select{padding:5px 8px;font-size:11px;border:1px solid #c8d9ec;border-radius:6px;background:#fff;color:#1e3a5f;outline:none;cursor:pointer;}
-.ocr-engine-select select:focus{border-color:#3b82f6;}
+/* 解析编辑框专用柔和颜色 */
+.edit-form .form-group textarea.e-textarea,
+#tab-add .form-group textarea.e-textarea{background:#f8fafc;border-color:#cbd5e1;color:#334155;}
+.edit-form .form-group textarea.e-textarea:focus,
+#tab-add .form-group textarea.e-textarea:focus{border-color:#94a3b8;background:#fff;box-shadow:0 0 0 3px rgba(148,163,184,0.15);}
 .backup-section{background:#fafcff;border:1px solid #e2ecf7;border-radius:12px;padding:12px 14px;margin-top:14px;}
 .backup-title{font-size:12px;font-weight:600;color:#4a6a8a;margin-bottom:8px;display:flex;align-items:center;gap:6px;justify-content:space-between;}
 .backup-item{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:8px;background:#fff;border:1px solid #eef2f8;margin-bottom:6px;font-size:12px;}
@@ -203,27 +190,34 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .revive-popup-actions .rp-btn-copy:hover{background:#d1fae5;}
 .revive-popup-actions .rp-btn-download{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;flex:0 0 auto;padding:12px 14px;}
 .revive-popup-actions .rp-btn-download:hover{background:#dbeafe;}
+/* 历史查询列表 */
+.history-list{max-height:300px;overflow-y:auto;}
+.history-item{padding:10px 14px;border-bottom:1px solid #eef2f8;cursor:pointer;font-size:13px;color:#1e3a5f;transition:0.12s;word-break:break-word;}
+.history-item:last-child{border-bottom:none;}
+.history-item:hover{background:#eef6ff;}
+.history-item:active{background:#dbeafe;}
+.history-empty{text-align:center;color:#8aa2c0;font-size:12px;padding:20px;}
 @media (max-width: 600px) {
-    body{padding:10px;}
-    .header-row{margin-bottom:10px;}
-    .app-header h1{font-size:18px;}
+    body{padding:6px;}
+    .header-row{margin-bottom:6px;}
+    .app-header h1{font-size:17px;}
     .app-header .subtitle{font-size:11px;}
     .login-btn{font-size:11px;padding:5px 10px;}
-    .app-container{border-radius:16px;}
-    .chat-area{padding:14px 12px;}
+    .app-container{border-radius:12px;}
+    .chat-area{padding:12px 10px;}
     .result-card{padding:12px 14px;margin-bottom:10px;border-left-width:4px;}
     .result-card .q-text{font-size:13px;line-height:1.5;}
     .result-card .a-text{font-size:13px;line-height:1.6;}
     .result-card .q-label,.result-card .a-label{font-size:9px;padding:2px 7px;}
+    .result-card .e-label{font-size:9px;padding:2px 7px;}
+    .result-card .e-text{font-size:12px;padding:6px 10px;}
     .no-result{font-size:12px;padding:14px 16px;}
     .toolbar{padding:6px 12px 2px;gap:4px;}
     .toolbar button{font-size:12px;padding:6px 12px;}
     .toolbar .icon-btn-sm{width:38px;height:38px;font-size:18px;}
-    .input-area{padding:4px 12px 12px;gap:6px;}
+    .input-area{padding:4px 10px 10px;gap:6px;}
     .input-area input[type="text"]{font-size:15px;padding:13px 16px;border-radius:14px;}
     .send-btn{width:52px;height:52px;font-size:22px;}
-    .img-preview img{max-width:120px;max-height:120px;}
-    .img-preview{bottom:60px;}
     .modal{max-height:94vh;border-radius:14px;}
     .modal-body{padding:14px 16px;}
     .bank-list{max-height:260px;}
@@ -248,15 +242,13 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
     <div class="chat-area" id="chatArea">
         <div class="empty-state" id="emptyState">
             <div class="empty-icon">💬</div>
-            <div class="empty-text">输入题目关键词开始查询<br>支持文字、语音、图片</div>
+            <div class="empty-text">输入题目关键词开始查询<br>支持文字查询</div>
         </div>
     </div>
     <div class="bottom-fixed">
         <div class="toolbar">
             <div class="toolbar-left">
-                <button class="icon-btn-sm" id="voiceBtn" title="语音输入">🎤</button>
-                <button class="icon-btn-sm" id="imageBtn" title="上传/拍照">📷</button>
-                <input type="file" id="imageInput" accept="image/*" capture="environment" style="display:none;">
+                <button class="icon-btn-sm" id="historyBtn" title="历史查询">🕒</button>
             </div>
             <div class="toolbar-right">
                 <button class="btn-clear-chat" id="clearChatBtn">🗑 清空对话</button>
@@ -266,10 +258,6 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
         <div class="input-area">
             <div class="input-wrap">
                 <input type="text" id="questionInput" placeholder="请输入题目关键词…" autocomplete="off">
-                <div class="img-preview" id="imgPreview">
-                    <span class="close-img" id="closeImg">✕</span>
-                    <img id="previewImg" src="" alt="预览">
-                </div>
             </div>
             <button class="send-btn" id="sendBtn" title="发送">➤</button>
         </div>
@@ -303,6 +291,23 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
             <button class="rp-btn-copy" id="rpCopy" title="复制备份代码">📋</button>
             <button class="rp-btn-secondary" id="rpLater">稍后</button>
             <button class="rp-btn-primary" id="rpRestore">立即恢复</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========== 历史查询弹窗 ========== -->
+<div class="modal-overlay" id="historyModal">
+    <div class="modal" style="max-width:400px;">
+        <div class="modal-header">
+            <h3>🕒 历史查询</h3>
+            <button class="modal-close" id="historyClose">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="history-list" id="historyList"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" id="historyClear">清空历史</button>
+            <button class="btn" id="historyCancel">关闭</button>
         </div>
     </div>
 </div>
@@ -361,6 +366,10 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
                         <label>答案（多段请用 ‖ 分隔）</label>
                         <textarea id="editA" placeholder="答案内容，多个答案用 ‖ 分隔"></textarea>
                     </div>
+                    <div class="form-group">
+                        <label>解析（选填，留空则不显示）</label>
+                        <textarea id="editE" class="e-textarea" placeholder="题目解析内容，留空则不显示解析"></textarea>
+                    </div>
                     <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">
                         <button class="btn btn-sm" id="editCodePreview">👁 代码预览</button>
                         <button class="btn btn-sm" id="editCancel">取消</button>
@@ -371,22 +380,6 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
             </div>
 
             <div class="tab-content" id="tab-add">
-                <div class="ocr-engine-select">
-                    <label>🔧 识别引擎：</label>
-                    <select id="ocrEngine">
-                        <option value="filename">文件名智能解析（推荐）</option>
-                        <option value="baidu">百度OCR（需配置密钥）</option>
-                        <option value="tesseract">浏览器OCR（需加载库）</option>
-                    </select>
-                </div>
-                <div class="ocr-area" id="ocrArea">
-                    <div class="ocr-icon">📷</div>
-                    <div class="ocr-text">点击上传题目图片，自动识别题目与答案</div>
-                    <input type="file" id="ocrInput" accept="image/*" capture="environment">
-                    <div class="ocr-progress" id="ocrProgress">⏳ 正在识别图片内容…</div>
-                </div>
-                <div class="ocr-result-hint" id="ocrResultHint">✅ 图片识别完成，已自动填充到下方编辑框，请核对后保存。</div>
-                <div class="ocr-preview" id="ocrPreview"></div>
                 <div class="form-group">
                     <label>题目</label>
                     <textarea id="addQ" placeholder="输入题目内容"></textarea>
@@ -394,6 +387,10 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
                 <div class="form-group">
                     <label>答案（多段请用 ‖ 分隔）</label>
                     <textarea id="addA" placeholder="输入答案内容，多个答案用 ‖ 分隔"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>解析（选填，留空则不显示）</label>
+                    <textarea id="addE" class="e-textarea" placeholder="题目解析内容，留空则不显示解析"></textarea>
                 </div>
                 <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">
                     <button class="btn btn-sm" id="addPreview">👁 预览</button>
@@ -681,14 +678,11 @@ const STORAGE_KEY = 'zktest_bank_v1';
 const BACKUP_KEY  = 'zktest_backups_v1';
 const GH_CFG_KEY  = 'zktest_gh_cfg_v1';
 const REVIVE_KEY  = 'zktest_revive_v1';
+const HISTORY_KEY = 'zktest_history_v1';
 const CONFIRM_CODE = 'qiuhua';
-const BAIDU_OCR_KEY = { apiKey: '', secretKey: '' };
 
 // ====================== 全局状态 ======================
 let questionBank = [];
-let currentImageFile = null;
-let recognition = null;
-let isRecording = false;
 let isLoggedIn = false;
 
 // ====================== 复活备份管理 ======================
@@ -713,9 +707,8 @@ function saveReviveBackup(content){
     return true;
 }
 
-// ====================== 页面完整性检测（替代旧的时间戳误报机制） ======================
+// ====================== 页面完整性检测 ======================
 function checkPageIntegrity() {
-    // 1. 检查核心函数是否存在
     const coreFunctions = ['matchQuestions', 'getFullPageHTML', 'pushContentToGitHub', 'loadBank', 'renderResults'];
     for (let fn of coreFunctions) {
         if (typeof window[fn] !== 'function' && typeof eval(fn) !== 'function') {
@@ -723,8 +716,6 @@ function checkPageIntegrity() {
             return { ok: false, reason: `核心函数 ${fn} 丢失` };
         }
     }
-    
-    // 2. 检查核心 DOM 元素是否存在
     const coreElements = ['chatArea', 'questionInput', 'sendBtn', 'toast'];
     for (let id of coreElements) {
         if (!document.getElementById(id)) {
@@ -732,24 +723,18 @@ function checkPageIntegrity() {
             return { ok: false, reason: `核心DOM元素 ${id} 丢失` };
         }
     }
-    
-    // 3. 尝试执行一次简单的题库匹配（如果题库为空则跳过）
     try {
         if (typeof questionBank !== 'undefined' && questionBank && questionBank.length > 0) {
-            const testResult = matchQuestions("测试");
-            // 如果没有报错，说明基本逻辑正常
+            matchQuestions("测试");
         }
     } catch (e) {
         console.error('[完整性检测] 核心逻辑执行报错:', e);
         return { ok: false, reason: '核心逻辑执行报错: ' + e.message };
     }
-    
     return { ok: true };
 }
 
-// 页面加载时检查一次（仅当存在复活备份时才提示）
 window.addEventListener('load', () => {
-    // 延迟一小会儿，等所有 DOM 和初始化完成
     setTimeout(() => {
         const integrity = checkPageIntegrity();
         if (!integrity.ok) {
@@ -833,86 +818,49 @@ function downloadTextFile(content, filename){
     }
 }
 
-// ====================== 图片文字识别 ======================
-async function recognizeImage(file, engine){
-    if(engine === 'baidu'){
-        if(BAIDU_OCR_KEY.apiKey && BAIDU_OCR_KEY.secretKey){
-            try{ return await baiduOCR(file); }
-            catch(e){ console.warn('百度OCR失败', e); showToast('百度OCR失败，使用文件名解析'); }
-        }else{ showToast('百度OCR未配置密钥，使用文件名解析'); }
-    }
-    if(engine === 'tesseract' && window.Tesseract){
-        try{ return await tesseractOCR(file); }
-        catch(e){ console.warn('Tesseract OCR失败', e); }
-    }
-    return await filenameBasedRecognition(file);
-}
-async function baiduOCR(file){
-    const { apiKey, secretKey } = BAIDU_OCR_KEY;
-    const tokenResp = await fetch(`https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=${apiKey}&client_secret=${secretKey}`, { method: 'POST' });
-    const tokenData = await tokenResp.json();
-    if(!tokenData.access_token) throw new Error('获取百度access_token失败');
-    const base64 = await fileToBase64(file);
-    const imageB64 = base64.split(',')[1];
-    const ocrResp = await fetch(`https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic?access_token=${tokenData.access_token}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `image=${encodeURIComponent(imageB64)}`
-    });
-    const ocrData = await ocrResp.json();
-    if(!ocrData.words_result || !ocrData.words_result.length) throw new Error('百度OCR未识别到文字');
-    const text = ocrData.words_result.map(w=>w.words).join('\n');
-    return parseOCRText(text);
-}
-async function tesseractOCR(file){
-    const { data } = await Tesseract.recognize(file, 'chi_sim+eng');
-    return parseOCRText(data.text);
-}
-async function filenameBasedRecognition(file){
-    const filename = (file.name || '').replace(/\.(jpg|jpeg|png|gif|webp|bmp|heic)$/i, '').trim();
-    const qaMatch = filename.match(/题目[：:]\s*(.+?)\s*答案[：:]\s*(.+)/);
-    if(qaMatch){ return { q: qaMatch[1].trim(), a: qaMatch[2].trim() }; }
-    const lines = filename.split(/[\n\r]+/).map(l=>l.trim()).filter(Boolean);
-    if(lines.length >= 2){
-        let q = '', a = '';
-        for(const line of lines){
-            if(/^题目[：:]/.test(line)) q = line.replace(/^题目[：:]\s*/,'');
-            else if(/^答案[：:]/.test(line)) a = line.replace(/^答案[：:]\s*/,'');
+// ====================== 历史查询 ======================
+function loadHistory(){
+    try{
+        const raw = localStorage.getItem(HISTORY_KEY);
+        if(raw){
+            const arr = JSON.parse(raw);
+            if(Array.isArray(arr)) return arr.slice(0,8);
         }
-        if(q || a){ return { q: q || '（未识别到题目）', a: a || '（未识别到答案）' }; }
-    }
-    if(filename.length >= 4){
-        const matched = questionBank.find(item => item.q.includes(filename) || filename.includes(item.q.substring(0, 8)));
-        if(matched){ return { q: matched.q, a: matched.a }; }
-        return { q: filename, a: '（请根据图片内容补充答案）' };
-    }
-    return { q: '（图片识别未成功，请手动输入题目）', a: '（请手动输入答案）' };
+    }catch(e){}
+    return [];
 }
-function parseOCRText(text){
-    if(!text || !text.trim()){ return { q: '', a: '' }; }
-    let normalized = text.replace(/\r\n/g, '\n').replace(/\n{2,}/g, '\n').trim();
-    const qaPattern = /题目[：:]\s*(.+?)\s*答案[：:]\s*(.+)/s;
-    const qaMatch = normalized.match(qaPattern);
-    if(qaMatch){
-        return { q: qaMatch[1].trim().replace(/\n+/g, ' '), a: qaMatch[2].trim().replace(/\n+/g, '‖') };
-    }
-    const lines = normalized.split('\n').map(l=>l.trim()).filter(Boolean);
-    if(lines.length === 0) return { q: '', a: '' };
-    if(lines.length === 1){ return { q: lines[0], a: '（请补充答案）' }; }
-    let qIndex = 0;
-    for(let i=0;i<lines.length;i++){
-        if(/[（(][^）)]*[）)]/.test(lines[i]) || /[？?]/.test(lines[i]) || /[是为：:]$/.test(lines[i])){ qIndex = i; break; }
-    }
-    const q = lines[qIndex];
-    const aLines = lines.slice(0, qIndex).concat(lines.slice(qIndex + 1));
-    return { q, a: aLines.join('‖') || '（请补充答案）' };
+function saveHistory(list){
+    try{ localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0,8))); }catch(e){}
 }
-function fileToBase64(file){
-    return new Promise((resolve, reject)=>{
-        const reader = new FileReader();
-        reader.onload = ()=> resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
+function addHistory(keyword){
+    if(!keyword || !keyword.trim()) return;
+    const kw = keyword.trim();
+    let list = loadHistory();
+    list = list.filter(item => item !== kw);
+    list.unshift(kw);
+    if(list.length > 8) list = list.slice(0,8);
+    saveHistory(list);
+}
+function renderHistoryList(){
+    const el = document.getElementById('historyList');
+    const list = loadHistory();
+    el.innerHTML = '';
+    if(!list.length){
+        el.innerHTML = '<div class="history-empty">暂无历史查询记录</div>';
+        return;
+    }
+    list.forEach((kw, idx)=>{
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.textContent = kw;
+        div.addEventListener('click', ()=>{
+            document.getElementById('historyModal').classList.remove('active');
+            document.getElementById('questionInput').value = kw;
+            // 触发查询
+            const event = new Event('click');
+            document.getElementById('sendBtn').dispatchEvent(event);
+        });
+        el.appendChild(div);
     });
 }
 
@@ -922,10 +870,22 @@ function loadBank(){
         const raw = localStorage.getItem(STORAGE_KEY);
         if(raw){
             const arr = JSON.parse(raw);
-            if(Array.isArray(arr) && arr.length){ questionBank = arr; return; }
+            if(Array.isArray(arr) && arr.length){
+                // 兼容旧数据，补充 e 字段
+                questionBank = arr.map(item => ({
+                    q: item.q || '',
+                    a: item.a || '',
+                    e: item.e || ''
+                }));
+                return;
+            }
         }
     }catch(e){ console.warn('读取题库失败', e); }
-    questionBank = defaultBank.slice();
+    questionBank = defaultBank.map(item => ({
+        q: item.q || '',
+        a: item.a || '',
+        e: item.e || ''
+    }));
 }
 function persistBank(){
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(questionBank)); }
@@ -1173,11 +1133,17 @@ function renderResults(results, query){
     results.forEach((r, idx)=>{
         const card = document.createElement('div');
         card.className = 'result-card';
+        // 仅当解析非空时渲染解析部分
+        const parseHtml = r.item.e && r.item.e.trim() ? `
+            <div class="e-label">解析</div>
+            <div class="e-text">${escapeHTML(r.item.e)}</div>
+        ` : '';
         card.innerHTML = `
             <div class="q-label">题目 ${idx+1}</div>
             <div class="q-text">${escapeHTML(r.item.q)}</div>
             <div class="a-label">答案</div>
             <div class="a-text">${formatAnswerHTML(r.item.a)}</div>
+            ${parseHtml}
         `;
         chatArea.appendChild(card);
     });
@@ -1194,6 +1160,7 @@ function showPreviewModal(titleText, items, mode, htmlContent, readonly){
             <div class="bi-idx">#${i+1}</div>
             <div class="bi-q">${escapeHTML(x.q)}</div>
             <div class="bi-a">答案：${escapeHTML(x.a)}</div>
+            ${x.e && x.e.trim() ? `<div class="bi-a" style="color:#475569;margin-top:4px;">解析：${escapeHTML(x.e)}</div>` : ''}
         </div>
     `).join('');
     const codeContent = htmlContent ? escapeHTML(htmlContent) : '（无代码内容）';
@@ -1285,7 +1252,6 @@ function bindRevivePopup(){
         overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
     });
 
-    // 下载备份文件
     rpDownload.addEventListener('click', ()=>{
         const backup = loadReviveBackup();
         if(!backup){ showToast('暂无复活备份'); return; }
@@ -1301,7 +1267,6 @@ function bindRevivePopup(){
         else{ showToast('下载失败，请重试'); }
     });
 
-    // 复制备份代码到剪贴板
     rpCopy.addEventListener('click', async ()=>{
         const backup = loadReviveBackup();
         if(!backup){ showToast('暂无复活备份'); return; }
@@ -1321,7 +1286,6 @@ function bindRevivePopup(){
         }
     });
 
-    // 一键恢复到 GitHub
     rpRestore.addEventListener('click', async ()=>{
         const backup = loadReviveBackup();
         if(!backup){ showToast('暂无复活备份'); return; }
@@ -1361,25 +1325,38 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const sendBtn       = document.getElementById('sendBtn');
     const clearChatBtn  = document.getElementById('clearChatBtn');
     const clearInputBtn = document.getElementById('clearInputBtn');
-    const voiceBtn      = document.getElementById('voiceBtn');
-    const imageBtn      = document.getElementById('imageBtn');
-    const imageInput    = document.getElementById('imageInput');
-    const imgPreview    = document.getElementById('imgPreview');
-    const previewImg    = document.getElementById('previewImg');
-    const closeImg      = document.getElementById('closeImg');
+    const historyBtn    = document.getElementById('historyBtn');
 
     bindRevivePopup();
+
+    // ===== 历史查询 =====
+    const historyModal = document.getElementById('historyModal');
+    const historyClose = document.getElementById('historyClose');
+    const historyCancel = document.getElementById('historyCancel');
+    const historyClear = document.getElementById('historyClear');
+
+    historyBtn.addEventListener('click', ()=>{
+        renderHistoryList();
+        historyModal.classList.add('active');
+    });
+    historyClose.addEventListener('click', ()=> historyModal.classList.remove('active'));
+    historyCancel.addEventListener('click', ()=> historyModal.classList.remove('active'));
+    historyClear.addEventListener('click', ()=>{
+        if(!confirm('确定清空全部历史查询记录吗？')) return;
+        saveHistory([]);
+        renderHistoryList();
+        showToast('历史记录已清空');
+    });
 
     // ===== 查询发送 =====
     function sendQuestion(){
         const text = questionInput.value.trim();
-        if(!text && !currentImageFile){ showToast('请输入问题，或上传图片'); return; }
-        if(!text && currentImageFile){ showToast('图片已收到，但题库匹配需要文字，请补充关键词'); return; }
+        if(!text){ showToast('请输入问题关键词'); return; }
+        addHistory(text);
         chatArea.innerHTML = '';
         const results = matchQuestions(text);
         renderResults(results, text);
         questionInput.value = '';
-        clearImage();
         if(results.length === 0) showToast('未找到匹配题目');
         else showToast(`找到 ${results.length} 条相关题目`);
         questionInput.focus();
@@ -1392,7 +1369,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     // ===== 清空 =====
     clearInputBtn.addEventListener('click', ()=>{
         questionInput.value = '';
-        clearImage();
         questionInput.focus();
     });
     clearChatBtn.addEventListener('click', ()=>{
@@ -1400,80 +1376,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
         const empty = document.createElement('div');
         empty.className = 'empty-state';
         empty.id = 'emptyState';
-        empty.innerHTML = `<div class="empty-icon">💬</div><div class="empty-text">输入题目关键词开始查询<br>支持文字、语音、图片</div>`;
+        empty.innerHTML = `<div class="empty-icon">💬</div><div class="empty-text">输入题目关键词开始查询<br>支持文字查询</div>`;
         chatArea.appendChild(empty);
         showToast('对话已清空');
-    });
-
-    // ===== 图片处理 =====
-    function clearImage(){
-        currentImageFile = null;
-        imageInput.value = '';
-        previewImg.src = '';
-        imgPreview.style.display = 'none';
-    }
-    imageBtn.addEventListener('click', ()=>{ imageInput.value = ''; imageInput.click(); });
-    imageInput.addEventListener('change', (e)=>{
-        const file = e.target.files && e.target.files[0];
-        if(!file) return;
-        if(file.size > 10 * 1024 * 1024){ showToast('图片过大，请选择小于 10MB 的图片'); return; }
-        currentImageFile = file;
-        const reader = new FileReader();
-        reader.onload = (ev)=>{ previewImg.src = ev.target.result; imgPreview.style.display = 'block'; };
-        reader.readAsDataURL(file);
-    });
-    closeImg.addEventListener('click', (e)=>{ e.stopPropagation(); clearImage(); });
-
-    // ===== 语音识别 =====
-    function initRecognition(){
-        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if(!SR) return null;
-        const rec = new SR();
-        rec.lang = 'zh-CN';
-        rec.continuous = false;
-        rec.interimResults = true;
-        rec.maxAlternatives = 1;
-        return rec;
-    }
-    function bindRecognition(rec){
-        rec.onstart = ()=>{
-            isRecording = true;
-            voiceBtn.classList.add('recording');
-            voiceBtn.textContent = '⏺';
-            showToast('正在聆听…请说话');
-        };
-        rec.onresult = (e)=>{
-            let transcript = '';
-            for(let i = e.resultIndex; i < e.results.length; i++){ transcript += e.results[i][0].transcript; }
-            questionInput.value = transcript;
-            if(e.results[0].isFinal) showToast('识别完成：' + transcript);
-        };
-        rec.onerror = (e)=>{
-            console.warn('语音识别错误', e);
-            let errMsg = '语音识别失败';
-            if(e.error === 'not-allowed') errMsg = '请允许麦克风权限';
-            else if(e.error === 'no-speech') errMsg = '未检测到语音，请重试';
-            else if(e.error === 'audio-capture') errMsg = '未找到麦克风';
-            else if(e.error === 'network') errMsg = '网络错误';
-            showToast(errMsg);
-            isRecording = false;
-            voiceBtn.classList.remove('recording');
-            voiceBtn.textContent = '🎤';
-        };
-        rec.onend = ()=>{
-            isRecording = false;
-            voiceBtn.classList.remove('recording');
-            voiceBtn.textContent = '🎤';
-        };
-    }
-    voiceBtn.addEventListener('click', ()=>{
-        if(isRecording){ if(recognition){ try{ recognition.stop(); }catch(e){} } return; }
-        const rec = initRecognition();
-        if(!rec){ showToast('当前浏览器不支持语音识别'); return; }
-        recognition = rec;
-        bindRecognition(rec);
-        try{ rec.start(); }
-        catch(e){ setTimeout(()=>{ try{ rec.start(); }catch(e2){ showToast('无法启动录音'); } }, 200); }
     });
 
     // ===== 登录 =====
@@ -1534,6 +1439,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const editForm      = document.getElementById('editForm');
     const editQ         = document.getElementById('editQ');
     const editA         = document.getElementById('editA');
+    const editE         = document.getElementById('editE');
     const editCancel    = document.getElementById('editCancel');
     const editSave      = document.getElementById('editSave');
     const editDelete    = document.getElementById('editDelete');
@@ -1545,7 +1451,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         bankList.innerHTML = '';
         questionBank.forEach((item, idx)=>{
             if(kw){
-                const hay = (item.q + ' ' + item.a).toLowerCase();
+                const hay = (item.q + ' ' + item.a + ' ' + (item.e||'')).toLowerCase();
                 if(hay.indexOf(kw) === -1) return;
             }
             const div = document.createElement('div');
@@ -1555,6 +1461,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 <div class="bi-idx">#${idx+1}</div>
                 <div class="bi-q">${escapeHTML(item.q)}</div>
                 <div class="bi-a">答案：${escapeHTML(item.a.substring(0,80))}${item.a.length>80?'…':''}</div>
+                ${item.e && item.e.trim() ? `<div class="bi-a" style="color:#475569;margin-top:3px;">解析：${escapeHTML(item.e.substring(0,60))}${item.e.length>60?'…':''}</div>` : ''}
             `;
             div.addEventListener('click', ()=>{ selectedIdx = idx; renderBankList(bankSearch.value); showEditForm(idx); });
             bankList.appendChild(div);
@@ -1566,6 +1473,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if(!item){ editForm.style.display = 'none'; return; }
         editQ.value = item.q;
         editA.value = item.a;
+        editE.value = item.e || '';
         editForm.style.display = 'block';
     }
     bankSearch.addEventListener('input', ()=>{ selectedIdx = -1; editForm.style.display = 'none'; renderBankList(bankSearch.value); });
@@ -1574,7 +1482,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     editCodePreview.addEventListener('click', async ()=>{
         const html = await getFullPageHTML();
-        const previewItem = { q: editQ.value.trim() || '（空）', a: editA.value.trim() || '（空）', highlight: true };
+        const previewItem = { q: editQ.value.trim() || '（空）', a: editA.value.trim() || '（空）', e: editE.value.trim() || '', highlight: true };
         const listItems = questionBank.map((x,i)=>{ if(i === selectedIdx) return previewItem; return x; });
         showPreviewModal('编辑预览', listItems, 'list', html || '（无法获取代码）', true);
     });
@@ -1583,11 +1491,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if(selectedIdx < 0 || !questionBank[selectedIdx]) return;
         const newQ = editQ.value.trim();
         const newA = editA.value.trim();
+        const newE = editE.value.trim();
         if(!newQ || !newA){ showToast('题目和答案不能为空'); return; }
         const ok = await askConfirm('确认修改？（输入确认代码）');
         if(!ok) return;
         backupCurrentBank();
-        questionBank[selectedIdx] = { q: newQ, a: newA };
+        questionBank[selectedIdx] = { q: newQ, a: newA, e: newE };
         persistBank();
         showToast('已保存修改，正在同步完整页面…');
         await syncFullPageToGitHub(true);
@@ -1609,28 +1518,23 @@ document.addEventListener('DOMContentLoaded', ()=>{
     // ===== 新增题目 =====
     const addQ       = document.getElementById('addQ');
     const addA       = document.getElementById('addA');
+    const addE       = document.getElementById('addE');
     const addSave    = document.getElementById('addSave');
     const addClear   = document.getElementById('addClear');
     const addPreview = document.getElementById('addPreview');
-    const ocrArea    = document.getElementById('ocrArea');
-    const ocrInput   = document.getElementById('ocrInput');
-    const ocrPreview = document.getElementById('ocrPreview');
-    const ocrProgress = document.getElementById('ocrProgress');
-    const ocrResultHint = document.getElementById('ocrResultHint');
-    const ocrEngine  = document.getElementById('ocrEngine');
 
     addClear.addEventListener('click', ()=>{
-        addQ.value = ''; addA.value = ''; ocrPreview.innerHTML = '';
-        ocrResultHint.classList.remove('active');
+        addQ.value = ''; addA.value = ''; addE.value = '';
     });
 
     addPreview.addEventListener('click', async ()=>{
         const q = addQ.value.trim() || '（未填写题目）';
         const a = addA.value.trim() || '（未填写答案）';
+        const e = addE.value.trim();
         const listItems = questionBank.slice();
-        listItems.push({ q, a, highlight: true });
+        listItems.push({ q, a, e, highlight: true });
         const originalBank = questionBank;
-        questionBank = listItems.map(x=> ({q:x.q, a:x.a}));
+        questionBank = listItems.map(x=> ({q:x.q, a:x.a, e:x.e}));
         const html = await getFullPageHTML();
         questionBank = originalBank;
         showPreviewModal('新增预览', listItems, 'list', html || '（无法获取代码）', true);
@@ -1639,45 +1543,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
     addSave.addEventListener('click', async ()=>{
         const q = addQ.value.trim();
         const a = addA.value.trim();
+        const e = addE.value.trim();
         if(!q || !a){ showToast('请填写题目和答案'); return; }
         const ok = await askConfirm('确认新增题目？（输入确认代码）');
         if(!ok) return;
         backupCurrentBank();
-        questionBank.push({ q, a });
+        questionBank.push({ q, a, e });
         persistBank();
         showToast(`已新增题目（共${questionBank.length}题），正在同步完整页面…`);
         const success = await syncFullPageToGitHub(true);
         if(success){ showToast('✅ 新增已同步到GitHub'); }
         else{ showToast('⚠️ 同步失败，但已保存到本地'); }
         setTimeout(()=>{ refreshPage(); }, 800);
-    });
-
-    ocrArea.addEventListener('click', ()=>{ ocrInput.value = ''; ocrInput.click(); });
-    ocrInput.addEventListener('change', async (e)=>{
-        const file = e.target.files && e.target.files[0];
-        if(!file) return;
-        if(!file.type.startsWith('image/')){ showToast('请选择图片文件'); return; }
-        const reader = new FileReader();
-        reader.onload = (ev)=>{ ocrPreview.innerHTML = `<img src="${ev.target.result}" alt="预览">`; };
-        reader.readAsDataURL(file);
-        ocrProgress.classList.add('active');
-        ocrProgress.textContent = '⏳ 正在识别图片内容…';
-        ocrResultHint.classList.remove('active');
-        try{
-            const engine = ocrEngine.value;
-            const result = await recognizeImage(file, engine);
-            if(result && result.q){
-                addQ.value = result.q;
-                addA.value = result.a || '';
-                ocrResultHint.classList.add('active');
-                showToast('✅ 识别完成，已自动填充');
-                setTimeout(()=>{ addQ.focus(); addQ.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 200);
-            }else{
-                ocrResultHint.classList.remove('active');
-                showToast('⚠️ 未识别到内容，请手动输入');
-            }
-        }catch(err){ console.warn('OCR识别失败', err); showToast('识别失败，请手动输入'); }
-        finally{ ocrProgress.classList.remove('active'); }
     });
 
     // ===== 备份面板 =====
