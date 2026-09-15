@@ -8,389 +8,69 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft Yahei",-apple-system,BlinkMacSystemFont,sans-serif;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;}
-body{
-    background:#d4e4f7;
-    padding:16px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-}
-
-/* 顶部标题行 */
-.header-row{
-    width:100%;max-width:760px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    margin-bottom:14px;
-    flex-shrink:0;
-}
+body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-items:center;}
+.header-row{width:100%;max-width:760px;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:14px;flex-shrink:0;}
 .app-header{text-align:center;}
 .app-header h1{font-size:20px;color:#1e40af;margin-bottom:4px;font-weight:600;letter-spacing:0.5px;}
 .app-header .subtitle{font-size:12px;color:#3b5f8a;}
-
-/* 登录按钮 */
-.login-btn{
-    position:absolute;
-    right:0;
-    top:0;
-    font-size:12px;
-    padding:6px 14px;
-    border:1px solid #c8d9ec;
-    border-radius:10px;
-    background:#fff;
-    color:#1e40af;
-    cursor:pointer;
-    font-weight:500;
-    box-shadow:0 1px 3px rgba(0,0,0,0.04);
-    transition:0.15s;
-}
+.login-btn{position:absolute;right:0;top:0;font-size:12px;padding:6px 14px;border:1px solid #c8d9ec;border-radius:10px;background:#fff;color:#1e40af;cursor:pointer;font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:0.15s;}
 .login-btn:hover{background:#e8f2fe;border-color:#9bbde0;}
 .login-btn:active{transform:scale(0.97);}
 .login-btn.logged-in{background:#dbeafe;border-color:#93c5fd;color:#1d4ed8;}
-
-/* 主容器 */
-.app-container{
-    width:100%;max-width:760px;
-    background:#fff;
-    border-radius:20px;
-    box-shadow:0 8px 30px rgba(30,64,175,0.15);
-    overflow:hidden;
-    display:flex;
-    flex-direction:column;
-    flex:1;
-    min-height:0;
-}
-
-/* 对话显示区 */
-.chat-area{
-    flex:1;
-    padding:18px 16px;
-    overflow-y:auto;
-    background:#f8fcff;
-    min-height:0;
-    -webkit-overflow-scrolling:touch;
-}
-
-/* 空状态 */
+.app-container{width:100%;max-width:760px;background:#fff;border-radius:20px;box-shadow:0 8px 30px rgba(30,64,175,0.15);overflow:hidden;display:flex;flex-direction:column;flex:1;min-height:0;}
+.chat-area{flex:1;padding:18px 16px;overflow-y:auto;background:#f8fcff;min-height:0;-webkit-overflow-scrolling:touch;}
 .empty-state{text-align:center;color:#6a8aad;padding:70px 20px;}
 .empty-state .empty-icon{font-size:44px;margin-bottom:12px;opacity:0.7;}
 .empty-state .empty-text{font-size:13px;line-height:1.8;}
-
-/* ====== 结果卡片 ====== */
-.result-card{
-    background:#fff;
-    border-radius:14px;
-    padding:14px 16px;
-    margin-bottom:12px;
-    border-left:5px solid #3b82f6;
-    box-shadow:0 2px 10px rgba(30,64,175,0.06);
-    animation:fadeIn 0.28s ease-out;
-}
+.result-card{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;border-left:5px solid #3b82f6;box-shadow:0 2px 10px rgba(30,64,175,0.06);animation:fadeIn 0.28s ease-out;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
-
-.result-card .q-label{
-    display:inline-block;
-    font-size:10px;
-    background:#dbeafe;
-    color:#1e40af;
-    padding:2px 8px;
-    border-radius:10px;
-    margin-bottom:6px;
-    font-weight:600;
-    letter-spacing:0.3px;
-}
-.result-card .q-text{
-    font-size:14px;
-    line-height:1.55;
-    color:#2563eb;
-    font-weight:600;
-    margin-bottom:8px;
-    word-break:break-word;
-}
-.result-card .a-label{
-    display:inline-block;
-    font-size:10px;
-    background:#fee2e2;
-    color:#b91c1c;
-    padding:2px 8px;
-    border-radius:10px;
-    margin-bottom:5px;
-    font-weight:600;
-    letter-spacing:0.3px;
-}
-.result-card .a-text{
-    font-size:14px;
-    line-height:1.65;
-    color:#dc2626;
-    font-weight:bold;
-    word-break:break-word;
-}
-.result-card .a-text .ans-line{
-    display:block;
-    padding:3px 0 3px 16px;
-    position:relative;
-}
-.result-card .a-text .ans-line::before{
-    content:'▲';
-    position:absolute;
-    left:0;
-    top:3px;
-    color:#ef4444;
-    font-size:11px;
-    font-weight:normal;
-}
-.result-card .a-text .ans-sep{
-    display:inline-block;
-    color:#f87171;
-    font-weight:normal;
-    padding:0 2px;
-}
-
-/* 无结果 */
-.no-result{
-    background:#fffbeb;
-    border-left:5px solid #f59e0b;
-    border-radius:14px;
-    padding:16px 18px;
-    color:#92400e;
-    font-size:13px;
-    line-height:1.7;
-}
+.result-card .q-label{display:inline-block;font-size:10px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:10px;margin-bottom:6px;font-weight:600;letter-spacing:0.3px;}
+.result-card .q-text{font-size:14px;line-height:1.55;color:#2563eb;font-weight:600;margin-bottom:8px;word-break:break-word;}
+.result-card .a-label{display:inline-block;font-size:10px;background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:10px;margin-bottom:5px;font-weight:600;letter-spacing:0.3px;}
+.result-card .a-text{font-size:14px;line-height:1.65;color:#dc2626;font-weight:bold;word-break:break-word;}
+.result-card .a-text .ans-line{display:block;padding:3px 0 3px 16px;position:relative;}
+.result-card .a-text .ans-line::before{content:'▲';position:absolute;left:0;top:3px;color:#ef4444;font-size:11px;font-weight:normal;}
+.result-card .a-text .ans-sep{display:inline-block;color:#f87171;font-weight:normal;padding:0 2px;}
+.no-result{background:#fffbeb;border-left:5px solid #f59e0b;border-radius:14px;padding:16px 18px;color:#92400e;font-size:13px;line-height:1.7;}
 .no-result b{color:#b45309;}
-
-/* ===== 底部固定区域 ===== */
-.bottom-fixed{
-    flex-shrink:0;
-    background:#fff;
-    border-top:1px solid #d0e0f0;
-    box-shadow:0 -4px 16px rgba(30,64,175,0.06);
-}
-
-/* 工具栏 */
-.toolbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:8px 18px 4px;
-    flex-wrap:wrap;
-    gap:6px;
-}
+.bottom-fixed{flex-shrink:0;background:#fff;border-top:1px solid #d0e0f0;box-shadow:0 -4px 16px rgba(30,64,175,0.06);}
+.toolbar{display:flex;justify-content:space-between;align-items:center;padding:8px 18px 4px;flex-wrap:wrap;gap:6px;}
 .toolbar-left{display:flex;gap:8px;align-items:center;}
 .toolbar-right{display:flex;gap:6px;align-items:center;}
-.toolbar button{
-    font-size:13px;
-    padding:7px 14px;
-    border:1px solid #c8d9ec;
-    border-radius:10px;
-    background:#fff;
-    color:#1e3a5f;
-    cursor:pointer;
-    transition:0.15s;
-    font-weight:500;
-    box-shadow:0 1px 3px rgba(0,0,0,0.02);
-    display:flex;
-    align-items:center;
-    gap:4px;
-    white-space:nowrap;
-}
+.toolbar button{font-size:13px;padding:7px 14px;border:1px solid #c8d9ec;border-radius:10px;background:#fff;color:#1e3a5f;cursor:pointer;transition:0.15s;font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.02);display:flex;align-items:center;gap:4px;white-space:nowrap;}
 .toolbar button:hover{background:#e8f2fe;border-color:#9bbde0;}
 .toolbar button:active{background:#d4e6fa;transform:scale(0.97);}
 .toolbar .btn-clear-chat{color:#c0392b;border-color:#f5b8b8;}
 .toolbar .btn-clear-chat:hover{background:#fef0f0;}
-
-.toolbar .icon-btn-sm{
-    width:40px;height:40px;
-    border-radius:50%;
-    border:1px solid #c8d9ec;
-    background:#f5faff;
-    font-size:19px;
-    cursor:pointer;
-    display:flex;align-items:center;justify-content:center;
-    transition:0.15s;
-    padding:0;
-    box-shadow:0 1px 4px rgba(0,0,0,0.03);
-}
+.toolbar .icon-btn-sm{width:40px;height:40px;border-radius:50%;border:1px solid #c8d9ec;background:#f5faff;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:0.15s;padding:0;box-shadow:0 1px 4px rgba(0,0,0,0.03);}
 .toolbar .icon-btn-sm:hover{background:#e0eefe;border-color:#9bbde0;}
 .toolbar .icon-btn-sm:active{transform:scale(0.93);}
-
-/* ===== 输入区 ===== */
-.input-area{
-    padding:6px 16px 14px;
-    display:flex;
-    align-items:center;
-    gap:8px;
-}
-.input-area .input-wrap{
-    flex:1;
-    position:relative;
-    min-width:0;
-}
-.input-area input[type="text"]{
-    width:100%;
-    padding:15px 18px;
-    font-size:16px;
-    border:1.5px solid #c8d9ec;
-    border-radius:16px;
-    outline:none;
-    transition:border-color 0.2s, box-shadow 0.2s;
-    background:#f9fcff;
-    color:#1e293b;
-    line-height:1.4;
-    letter-spacing:0.2px;
-}
-.input-area input[type="text"]:focus{
-    border-color:#3b82f6;
-    background:#fff;
-    box-shadow:0 0 0 4px rgba(59,130,246,0.12);
-}
+.input-area{padding:6px 16px 14px;display:flex;align-items:center;gap:8px;}
+.input-area .input-wrap{flex:1;position:relative;min-width:0;}
+.input-area input[type="text"]{width:100%;padding:15px 18px;font-size:16px;border:1.5px solid #c8d9ec;border-radius:16px;outline:none;transition:border-color 0.2s, box-shadow 0.2s;background:#f9fcff;color:#1e293b;line-height:1.4;letter-spacing:0.2px;}
+.input-area input[type="text"]:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 4px rgba(59,130,246,0.12);}
 .input-area input[type="text"]::placeholder{color:#7a99bb;font-weight:400;}
-
-/* 图片预览 */
-.img-preview{
-    position:absolute;
-    left:0;bottom:64px;
-    background:#fff;
-    border:1px solid #c8d9ec;
-    border-radius:12px;
-    padding:6px;
-    box-shadow:0 6px 16px rgba(0,0,0,0.12);
-    display:none;
-    z-index:5;
-}
+.img-preview{position:absolute;left:0;bottom:64px;background:#fff;border:1px solid #c8d9ec;border-radius:12px;padding:6px;box-shadow:0 6px 16px rgba(0,0,0,0.12);display:none;z-index:5;}
 .img-preview img{max-width:150px;max-height:150px;border-radius:8px;display:block;}
-.img-preview .close-img{
-    position:absolute;top:-10px;right:-10px;
-    width:24px;height:24px;background:#ef4444;color:#fff;
-    border-radius:50%;font-size:14px;text-align:center;line-height:24px;
-    cursor:pointer;font-weight:bold;
-    box-shadow:0 2px 6px rgba(0,0,0,0.15);
-}
-
-/* 发送按钮 */
-.send-btn{
-    width:54px;height:54px;
-    border:none;border-radius:50%;
-    background:linear-gradient(135deg,#3b82f6,#2563eb);
-    color:#fff;
-    font-size:24px;
-    cursor:pointer;
-    display:flex;align-items:center;justify-content:center;
-    transition:0.15s;
-    flex-shrink:0;
-    padding:0;
-    box-shadow:0 4px 14px rgba(59,130,246,0.4);
-}
+.img-preview .close-img{position:absolute;top:-10px;right:-10px;width:24px;height:24px;background:#ef4444;color:#fff;border-radius:50%;font-size:14px;text-align:center;line-height:24px;cursor:pointer;font-weight:bold;box-shadow:0 2px 6px rgba(0,0,0,0.15);}
+.send-btn{width:54px;height:54px;border:none;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:0.15s;flex-shrink:0;padding:0;box-shadow:0 4px 14px rgba(59,130,246,0.4);}
 .send-btn:hover{background:linear-gradient(135deg,#2563eb,#1d4ed8);}
 .send-btn:active{transform:scale(0.94);}
-
-/* 语音录制动画 */
-.recording{
-    background:#ef4444 !important;
-    border-color:#ef4444 !important;
-    color:#fff !important;
-    animation:pulse 1s infinite;
-}
-@keyframes pulse{
-    0%{box-shadow:0 0 0 0 rgba(239,68,68,0.5);}
-    70%{box-shadow:0 0 0 12px rgba(239,68,68,0);}
-    100%{box-shadow:0 0 0 0 rgba(239,68,68,0);}
-}
-
-/* 提示气泡（置顶显示，z-index最高） */
-.toast{
-    position:fixed;top:24px;left:50%;transform:translateX(-50%);
-    background:#1e293b;color:#fff;padding:12px 26px;border-radius:28px;
-    font-size:14px;z-index:999999;display:none;
-    box-shadow:0 8px 24px rgba(0,0,0,0.35);
-    letter-spacing:0.3px;
-    max-width:90vw;
-    text-align:center;
-    font-weight:500;
-    animation:toastIn 0.2s ease-out;
-}
+.recording{background:#ef4444 !important;border-color:#ef4444 !important;color:#fff !important;animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,0.5);}70%{box-shadow:0 0 0 12px rgba(239,68,68,0);}100%{box-shadow:0 0 0 0 rgba(239,68,68,0);}}
+.toast{position:fixed;top:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:12px 26px;border-radius:28px;font-size:14px;z-index:999999;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.35);letter-spacing:0.3px;max-width:90vw;text-align:center;font-weight:500;animation:toastIn 0.2s ease-out;}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-10px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
-
-/* ========== 弹窗通用 ========== */
-.modal-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(15,30,50,0.55);
-    z-index:1000;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:16px;
-    backdrop-filter:blur(3px);
-}
+.modal-overlay{position:fixed;inset:0;background:rgba(15,30,50,0.55);z-index:1000;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px);}
 .modal-overlay.active{display:flex;}
-
-.modal{
-    background:#fff;
-    border-radius:18px;
-    width:100%;
-    max-width:560px;
-    max-height:90vh;
-    display:flex;
-    flex-direction:column;
-    box-shadow:0 20px 50px rgba(0,0,0,0.3);
-    overflow:hidden;
-    animation:modalIn 0.25s ease-out;
-}
+.modal{background:#fff;border-radius:18px;width:100%;max-width:560px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 20px 50px rgba(0,0,0,0.3);overflow:hidden;animation:modalIn 0.25s ease-out;}
 @keyframes modalIn{from{opacity:0;transform:scale(0.94);}to{opacity:1;transform:scale(1);}}
-
-.modal-header{
-    padding:16px 20px;
-    background:linear-gradient(135deg,#3b82f6,#2563eb);
-    color:#fff;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-shrink:0;
-}
+.modal-header{padding:16px 20px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
 .modal-header h3{font-size:16px;font-weight:600;display:flex;align-items:center;gap:6px;}
-.modal-close{
-    background:rgba(255,255,255,0.2);
-    border:none;
-    color:#fff;
-    width:30px;height:30px;
-    border-radius:50%;
-    cursor:pointer;
-    font-size:16px;
-    display:flex;align-items:center;justify-content:center;
-    transition:0.15s;
-}
+.modal-close{background:rgba(255,255,255,0.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:0.15s;}
 .modal-close:hover{background:rgba(255,255,255,0.35);}
-
-.modal-body{
-    padding:18px 20px;
-    overflow-y:auto;
-    flex:1;
-    min-height:0;
-}
-
-.modal-footer{
-    padding:12px 20px 16px;
-    display:flex;
-    gap:8px;
-    justify-content:flex-end;
-    border-top:1px solid #eef2f8;
-    background:#fafcff;
-    flex-shrink:0;
-}
-
-.btn{
-    font-size:13px;
-    padding:9px 18px;
-    border-radius:10px;
-    border:1px solid #c8d9ec;
-    background:#fff;
-    color:#1e3a5f;
-    cursor:pointer;
-    font-weight:500;
-    transition:0.15s;
-}
+.modal-body{padding:18px 20px;overflow-y:auto;flex:1;min-height:0;}
+.modal-footer{padding:12px 20px 16px;display:flex;gap:8px;justify-content:flex-end;border-top:1px solid #eef2f8;background:#fafcff;flex-shrink:0;}
+.btn{font-size:13px;padding:9px 18px;border-radius:10px;border:1px solid #c8d9ec;background:#fff;color:#1e3a5f;cursor:pointer;font-weight:500;transition:0.15s;}
 .btn:hover{background:#e8f2fe;border-color:#9bbde0;}
 .btn:active{transform:scale(0.97);}
 .btn-primary{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;}
@@ -399,362 +79,78 @@ body{
 .btn-danger:hover{background:#fef0f0;}
 .btn-sm{font-size:12px;padding:6px 12px;border-radius:8px;}
 .btn:disabled{opacity:0.5;cursor:not-allowed;}
-
-/* 登录表单 */
 .form-group{margin-bottom:14px;}
 .form-group label{display:block;font-size:12px;color:#4a6a8a;margin-bottom:5px;font-weight:500;}
-.form-group input{
-    width:100%;
-    padding:11px 14px;
-    font-size:14px;
-    border:1.5px solid #c8d9ec;
-    border-radius:10px;
-    outline:none;
-    background:#f9fcff;
-    transition:0.2s;
-}
+.form-group input{width:100%;padding:11px 14px;font-size:14px;border:1.5px solid #c8d9ec;border-radius:10px;outline:none;background:#f9fcff;transition:0.2s;}
 .form-group input:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
-
-/* 题库编辑 */
-.bank-toolbar{
-    display:flex;
-    gap:8px;
-    margin-bottom:12px;
-    flex-wrap:wrap;
-    align-items:center;
-}
-.bank-toolbar input{
-    flex:1;
-    min-width:120px;
-    padding:9px 12px;
-    font-size:13px;
-    border:1.5px solid #c8d9ec;
-    border-radius:10px;
-    outline:none;
-    background:#f9fcff;
-}
+.bank-toolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;}
+.bank-toolbar input{flex:1;min-width:120px;padding:9px 12px;font-size:13px;border:1.5px solid #c8d9ec;border-radius:10px;outline:none;background:#f9fcff;}
 .bank-toolbar input:focus{border-color:#3b82f6;background:#fff;}
-
-.bank-list{
-    max-height:340px;
-    overflow-y:auto;
-    border:1px solid #e2ecf7;
-    border-radius:12px;
-    background:#fafdff;
-}
-.bank-item{
-    padding:12px 14px;
-    border-bottom:1px solid #eef4fb;
-    cursor:pointer;
-    transition:0.12s;
-    position:relative;
-}
+.bank-list{max-height:340px;overflow-y:auto;border:1px solid #e2ecf7;border-radius:12px;background:#fafdff;}
+.bank-item{padding:12px 14px;border-bottom:1px solid #eef4fb;cursor:pointer;transition:0.12s;position:relative;}
 .bank-item:last-child{border-bottom:none;}
 .bank-item:hover{background:#eef6ff;}
 .bank-item.selected{background:#dbeafe;border-left:3px solid #2563eb;padding-left:11px;}
 .bank-item .bi-q{font-size:13px;color:#1e40af;font-weight:600;line-height:1.5;margin-bottom:3px;word-break:break-word;}
 .bank-item .bi-a{font-size:12px;color:#b91c1c;line-height:1.5;word-break:break-word;}
-.bank-item .bi-idx{
-    position:absolute;
-    top:10px;right:12px;
-    font-size:10px;
-    color:#8aa2c0;
-    background:#eef4fb;
-    padding:1px 7px;
-    border-radius:8px;
-}
-
-/* 编辑表单 */
-.edit-form{
-    margin-top:14px;
-    border-top:1px solid #eef2f8;
-    padding-top:14px;
-}
-.edit-form .form-group textarea{
-    width:100%;
-    padding:11px 14px;
-    font-size:13px;
-    border:1.5px solid #c8d9ec;
-    border-radius:10px;
-    outline:none;
-    background:#f9fcff;
-    min-height:70px;
-    resize:vertical;
-    font-family:inherit;
-    line-height:1.5;
-    transition:0.2s;
-}
+.bank-item .bi-idx{position:absolute;top:10px;right:12px;font-size:10px;color:#8aa2c0;background:#eef4fb;padding:1px 7px;border-radius:8px;}
+.edit-form{margin-top:14px;border-top:1px solid #eef2f8;padding-top:14px;}
+.edit-form .form-group textarea{width:100%;padding:11px 14px;font-size:13px;border:1.5px solid #c8d9ec;border-radius:10px;outline:none;background:#f9fcff;min-height:70px;resize:vertical;font-family:inherit;line-height:1.5;transition:0.2s;}
 .edit-form .form-group textarea:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
-
-/* 图片识别区 */
-.ocr-area{
-    background:#f0f7ff;
-    border:1.5px dashed #93c5fd;
-    border-radius:12px;
-    padding:14px;
-    text-align:center;
-    margin-bottom:12px;
-    cursor:pointer;
-    transition:0.15s;
-    position:relative;
-}
+.ocr-area{background:#f0f7ff;border:1.5px dashed #93c5fd;border-radius:12px;padding:14px;text-align:center;margin-bottom:12px;cursor:pointer;transition:0.15s;position:relative;}
 .ocr-area:hover{background:#e6f2ff;border-color:#60a5fa;}
 .ocr-area .ocr-icon{font-size:28px;margin-bottom:6px;}
 .ocr-area .ocr-text{font-size:12px;color:#3b6ea5;}
 .ocr-area input[type="file"]{display:none;}
-.ocr-area .ocr-progress{
-    display:none;
-    font-size:12px;
-    color:#2563eb;
-    margin-top:8px;
-    font-weight:600;
-}
+.ocr-area .ocr-progress{display:none;font-size:12px;color:#2563eb;margin-top:8px;font-weight:600;}
 .ocr-area .ocr-progress.active{display:block;}
 .ocr-preview{margin-top:10px;text-align:center;}
 .ocr-preview img{max-width:100%;max-height:140px;border-radius:8px;}
-
-/* 图片识别结果的提示 */
-.ocr-result-hint{
-    display:none;
-    background:#dcfce7;
-    border:1px solid #86efac;
-    border-radius:8px;
-    padding:8px 10px;
-    font-size:11px;
-    color:#166534;
-    line-height:1.6;
-    margin-bottom:10px;
-}
+.ocr-result-hint{display:none;background:#dcfce7;border:1px solid #86efac;border-radius:8px;padding:8px 10px;font-size:11px;color:#166534;line-height:1.6;margin-bottom:10px;}
 .ocr-result-hint.active{display:block;}
 .ocr-result-hint b{color:#15803d;}
-
-/* OCR引擎选择 */
-.ocr-engine-select{
-    display:flex;
-    gap:6px;
-    margin-bottom:10px;
-    flex-wrap:wrap;
-    align-items:center;
-}
-.ocr-engine-select label{
-    font-size:11px;
-    color:#4a6a8a;
-    font-weight:500;
-}
-.ocr-engine-select select{
-    padding:5px 8px;
-    font-size:11px;
-    border:1px solid #c8d9ec;
-    border-radius:6px;
-    background:#fff;
-    color:#1e3a5f;
-    outline:none;
-    cursor:pointer;
-}
+.ocr-engine-select{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;align-items:center;}
+.ocr-engine-select label{font-size:11px;color:#4a6a8a;font-weight:500;}
+.ocr-engine-select select{padding:5px 8px;font-size:11px;border:1px solid #c8d9ec;border-radius:6px;background:#fff;color:#1e3a5f;outline:none;cursor:pointer;}
 .ocr-engine-select select:focus{border-color:#3b82f6;}
-
-/* 备份区 */
-.backup-section{
-    background:#fafcff;
-    border:1px solid #e2ecf7;
-    border-radius:12px;
-    padding:12px 14px;
-    margin-top:14px;
-}
-.backup-title{
-    font-size:12px;
-    font-weight:600;
-    color:#4a6a8a;
-    margin-bottom:8px;
-    display:flex;
-    align-items:center;
-    gap:6px;
-    justify-content:space-between;
-}
-.backup-item{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:8px 10px;
-    border-radius:8px;
-    background:#fff;
-    border:1px solid #eef2f8;
-    margin-bottom:6px;
-    font-size:12px;
-}
+.backup-section{background:#fafcff;border:1px solid #e2ecf7;border-radius:12px;padding:12px 14px;margin-top:14px;}
+.backup-title{font-size:12px;font-weight:600;color:#4a6a8a;margin-bottom:8px;display:flex;align-items:center;gap:6px;justify-content:space-between;}
+.backup-item{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:8px;background:#fff;border:1px solid #eef2f8;margin-bottom:6px;font-size:12px;}
 .backup-item .bi-name{color:#1e3a5f;font-weight:500;}
 .backup-item .bi-time{color:#8aa2c0;font-size:10px;margin-left:8px;}
 .backup-item .bi-actions{display:flex;gap:5px;align-items:center;}
 .backup-item.locked{background:#fff8e6;border-color:#fde68a;}
 .lock-icon{font-size:12px;cursor:pointer;user-select:none;}
-
-/* 标签页 */
-.tabs{
-    display:flex;
-    gap:4px;
-    margin-bottom:14px;
-    border-bottom:1px solid #eef2f8;
-    flex-wrap:wrap;
-}
-.tab{
-    padding:8px 14px;
-    font-size:13px;
-    color:#6a8aad;
-    cursor:pointer;
-    border-bottom:2px solid transparent;
-    margin-bottom:-1px;
-    font-weight:500;
-    transition:0.15s;
-}
+.tabs{display:flex;gap:4px;margin-bottom:14px;border-bottom:1px solid #eef2f8;flex-wrap:wrap;}
+.tab{padding:8px 14px;font-size:13px;color:#6a8aad;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500;transition:0.15s;}
 .tab:hover{color:#3b82f6;}
 .tab.active{color:#2563eb;border-bottom-color:#2563eb;font-weight:600;}
-
 .tab-content{display:none;}
 .tab-content.active{display:block;}
-
-/* GitHub 同步区（可折叠） */
-.github-section{
-    background:#f0f7ff;
-    border:1px solid #c8d9ec;
-    border-radius:12px;
-    margin-top:12px;
-    overflow:hidden;
-}
-.github-header{
-    padding:10px 14px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    cursor:pointer;
-    background:#e8f2ff;
-    transition:0.15s;
-    user-select:none;
-}
+.github-section{background:#f0f7ff;border:1px solid #c8d9ec;border-radius:12px;margin-top:12px;overflow:hidden;}
+.github-header{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;background:#e8f2ff;transition:0.15s;user-select:none;}
 .github-header:hover{background:#dceaff;}
-.github-header .gh-title{
-    font-weight:600;
-    color:#1e40af;
-    font-size:12px;
-    display:flex;
-    align-items:center;
-    gap:6px;
-}
-.github-header .gh-status{
-    font-size:11px;
-    padding:2px 8px;
-    border-radius:8px;
-    font-weight:500;
-}
+.github-header .gh-title{font-weight:600;color:#1e40af;font-size:12px;display:flex;align-items:center;gap:6px;}
+.github-header .gh-status{font-size:11px;padding:2px 8px;border-radius:8px;font-weight:500;}
 .gh-status.configured{background:#dcfce7;color:#166534;}
 .gh-status.unconfigured{background:#fee2e2;color:#991b1b;}
-.github-header .gh-arrow{
-    font-size:11px;
-    color:#5a7a9a;
-    transition:transform 0.2s;
-    margin-left:6px;
-}
+.github-header .gh-arrow{font-size:11px;color:#5a7a9a;transition:transform 0.2s;margin-left:6px;}
 .github-section.expanded .gh-arrow{transform:rotate(90deg);}
-.github-body{
-    max-height:0;
-    overflow:hidden;
-    transition:max-height 0.28s ease;
-    padding:0 14px;
-}
-.github-section.expanded .github-body{
-    max-height:420px;
-    padding:12px 14px 14px;
-}
-.github-body .gh-hint{
-    color:#5a7a9a;
-    font-size:11px;
-    line-height:1.6;
-    margin-bottom:8px;
-}
-.github-row{
-    display:flex;
-    gap:6px;
-    align-items:center;
-    margin-top:6px;
-}
-.github-row input{
-    flex:1;
-    padding:8px 10px;
-    font-size:12px;
-    border:1.5px solid #c8d9ec;
-    border-radius:8px;
-    outline:none;
-    background:#fff;
-    font-family:inherit;
-}
+.github-body{max-height:0;overflow:hidden;transition:max-height 0.28s ease;padding:0 14px;}
+.github-section.expanded .github-body{max-height:420px;padding:12px 14px 14px;}
+.github-body .gh-hint{color:#5a7a9a;font-size:11px;line-height:1.6;margin-bottom:8px;}
+.github-row{display:flex;gap:6px;align-items:center;margin-top:6px;}
+.github-row input{flex:1;padding:8px 10px;font-size:12px;border:1.5px solid #c8d9ec;border-radius:8px;outline:none;background:#fff;font-family:inherit;}
 .github-row input:focus{border-color:#3b82f6;}
-
-/* 同步提示 */
-.gh-sync-info{
-    font-size:11px;
-    color:#166534;
-    background:#dcfce7;
-    border-radius:8px;
-    padding:6px 10px;
-    margin-top:8px;
-    line-height:1.6;
-}
-
-/* 复活备份区 */
-.revive-section{
-    background:linear-gradient(135deg,#fef3c7,#fde68a);
-    border:1.5px solid #f59e0b;
-    border-radius:12px;
-    padding:14px;
-    margin-top:14px;
-}
-.revive-title{
-    font-weight:700;
-    color:#92400e;
-    font-size:13px;
-    margin-bottom:8px;
-    display:flex;
-    align-items:center;
-    gap:6px;
-}
-.revive-hint{
-    font-size:11px;
-    color:#78350f;
-    line-height:1.6;
-    margin-bottom:10px;
-}
-.revive-status{
-    background:#fff;
-    border:1px solid #fcd34d;
-    border-radius:8px;
-    padding:8px 10px;
-    font-size:11px;
-    color:#78350f;
-    margin-bottom:8px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:6px;
-}
+.gh-sync-info{font-size:11px;color:#166534;background:#dcfce7;border-radius:8px;padding:6px 10px;margin-top:8px;line-height:1.6;}
+.revive-section{background:linear-gradient(135deg,#fef3c7,#fde68a);border:1.5px solid #f59e0b;border-radius:12px;padding:14px;margin-top:14px;}
+.revive-title{font-weight:700;color:#92400e;font-size:13px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.revive-hint{font-size:11px;color:#78350f;line-height:1.6;margin-bottom:10px;}
+.revive-status{background:#fff;border:1px solid #fcd34d;border-radius:8px;padding:8px 10px;font-size:11px;color:#78350f;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
 .revive-status .rs-ok{color:#166534;font-weight:600;}
 .revive-status .rs-no{color:#991b1b;font-weight:600;}
-.revive-row{
-    display:flex;
-    gap:6px;
-    flex-wrap:wrap;
-    justify-content:flex-end;
-}
-.revive-row button{
-    font-size:12px;
-    padding:7px 12px;
-    border-radius:8px;
-    border:1px solid #d97706;
-    background:#fff;
-    color:#92400e;
-    cursor:pointer;
-    font-weight:500;
-    transition:0.15s;
-}
+.revive-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+.revive-row button{font-size:12px;padding:7px 12px;border-radius:8px;border:1px solid #d97706;background:#fff;color:#92400e;cursor:pointer;font-weight:500;transition:0.15s;}
 .revive-row button:hover{background:#fef3c7;}
 .revive-row button:active{transform:scale(0.97);}
 .revive-row button.primary{background:#d97706;color:#fff;border-color:#b45309;}
@@ -765,218 +161,48 @@ body{
 .revive-row button.download:hover{background:#0284c7;}
 .revive-row button.import{background:#8b5cf6;color:#fff;border-color:#7c3aed;}
 .revive-row button.import:hover{background:#7c3aed;}
-
-/* 二次确认小弹窗 */
-.confirm-overlay{
-    position:fixed;inset:0;
-    background:rgba(15,30,50,0.55);
-    z-index:1100;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:16px;
-}
+.confirm-overlay{position:fixed;inset:0;background:rgba(15,30,50,0.55);z-index:1100;display:none;align-items:center;justify-content:center;padding:16px;}
 .confirm-overlay.active{display:flex;}
-.confirm-box{
-    background:#fff;
-    border-radius:14px;
-    padding:20px;
-    max-width:340px;
-    width:100%;
-    box-shadow:0 20px 50px rgba(0,0,0,0.3);
-    animation:modalIn 0.2s ease-out;
-}
+.confirm-box{background:#fff;border-radius:14px;padding:20px;max-width:340px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,0.3);animation:modalIn 0.2s ease-out;}
 .confirm-box h4{font-size:15px;color:#1e3a5f;margin-bottom:12px;font-weight:600;}
-.confirm-box input{
-    width:100%;
-    padding:11px 14px;
-    font-size:14px;
-    border:1.5px solid #c8d9ec;
-    border-radius:10px;
-    outline:none;
-    background:#f9fcff;
-    margin-bottom:14px;
-}
+.confirm-box input{width:100%;padding:11px 14px;font-size:14px;border:1.5px solid #c8d9ec;border-radius:10px;outline:none;background:#f9fcff;margin-bottom:14px;}
 .confirm-box input:focus{border-color:#3b82f6;background:#fff;}
 .confirm-actions{display:flex;gap:8px;justify-content:flex-end;}
-
-/* 预览切换标签 */
-.preview-tabs{
-    display:flex;
-    gap:4px;
-    margin-bottom:10px;
-    border-bottom:1px solid #eef2f8;
-}
-.preview-tab{
-    padding:6px 14px;
-    font-size:12px;
-    color:#6a8aad;
-    cursor:pointer;
-    border-bottom:2px solid transparent;
-    margin-bottom:-1px;
-    font-weight:500;
-    transition:0.15s;
-}
+.preview-tabs{display:flex;gap:4px;margin-bottom:10px;border-bottom:1px solid #eef2f8;}
+.preview-tab{padding:6px 14px;font-size:12px;color:#6a8aad;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500;transition:0.15s;}
 .preview-tab:hover{color:#3b82f6;}
 .preview-tab.active{color:#2563eb;border-bottom-color:#2563eb;font-weight:600;}
-
-/* 代码预览区 */
-.code-preview{
-    background:#1e293b;
-    color:#a5f3fc;
-    border-radius:10px;
-    padding:12px 14px;
-    font-family:'Consolas','Monaco',monospace;
-    font-size:11px;
-    line-height:1.6;
-    overflow-x:auto;
-    white-space:pre;
-    max-height:420px;
-    overflow-y:auto;
-    word-break:break-all;
-    border:1px solid #0f172a;
-}
-.code-preview .code-hint{
-    color:#64748b;
-    font-style:italic;
-    margin-bottom:6px;
-    display:block;
-    white-space:normal;
-}
-
-/* 只读题库预览 */
-.readonly-list{
-    max-height:420px;
-    overflow-y:auto;
-    border:1px solid #e2ecf7;
-    border-radius:12px;
-    background:#fafdff;
-}
-.readonly-list .bank-item{
-    cursor:default;
-}
-.readonly-list .bank-item:hover{
-    background:#fafdff;
-}
-
-/* ========== 复活弹窗（崩溃时专用） ========== */
-.revive-popup-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.75);
-    z-index:99999;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:16px;
-    backdrop-filter:blur(5px);
-}
+.code-preview{background:#1e293b;color:#a5f3fc;border-radius:10px;padding:12px 14px;font-family:'Consolas','Monaco',monospace;font-size:11px;line-height:1.6;overflow-x:auto;white-space:pre;max-height:420px;overflow-y:auto;word-break:break-all;border:1px solid #0f172a;}
+.code-preview .code-hint{color:#64748b;font-style:italic;margin-bottom:6px;display:block;white-space:normal;}
+.readonly-list{max-height:420px;overflow-y:auto;border:1px solid #e2ecf7;border-radius:12px;background:#fafdff;}
+.readonly-list .bank-item{cursor:default;}
+.readonly-list .bank-item:hover{background:#fafdff;}
+.revive-popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(5px);}
 .revive-popup-overlay.active{display:flex;}
-.revive-popup{
-    background:#fff;
-    border-radius:18px;
-    max-width:440px;
-    width:100%;
-    box-shadow:0 25px 70px rgba(0,0,0,0.5);
-    overflow:hidden;
-    animation:reviveIn 0.35s ease-out;
-    border:3px solid #f59e0b;
-}
-@keyframes reviveIn{
-    0%{opacity:0;transform:scale(0.8) translateY(30px);}
-    60%{transform:scale(1.02) translateY(-5px);}
-    100%{opacity:1;transform:scale(1) translateY(0);}
-}
-.revive-popup-header{
-    background:linear-gradient(135deg,#f59e0b,#d97706);
-    color:#fff;
-    padding:20px 22px 16px;
-    text-align:center;
-}
-.revive-popup-header .rp-icon{
-    font-size:40px;
-    margin-bottom:6px;
-    display:block;
-    animation:pulse 1.5s infinite;
-}
-.revive-popup-header h2{
-    font-size:18px;
-    font-weight:700;
-    margin-bottom:4px;
-    letter-spacing:0.5px;
-}
-.revive-popup-header .rp-sub{
-    font-size:12px;
-    opacity:0.9;
-}
-.revive-popup-body{
-    padding:20px 22px;
-}
-.revive-popup-body .rp-info{
-    background:#fef3c7;
-    border:1px solid #fcd34d;
-    border-radius:10px;
-    padding:10px 12px;
-    font-size:12px;
-    color:#78350f;
-    line-height:1.7;
-    margin-bottom:14px;
-}
+.revive-popup{background:#fff;border-radius:18px;max-width:440px;width:100%;box-shadow:0 25px 70px rgba(0,0,0,0.5);overflow:hidden;animation:reviveIn 0.35s ease-out;border:3px solid #f59e0b;}
+@keyframes reviveIn{0%{opacity:0;transform:scale(0.8) translateY(30px);}60%{transform:scale(1.02) translateY(-5px);}100%{opacity:1;transform:scale(1) translateY(0);}}
+.revive-popup-header{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;padding:20px 22px 16px;text-align:center;}
+.revive-popup-header .rp-icon{font-size:40px;margin-bottom:6px;display:block;animation:pulse 1.5s infinite;}
+.revive-popup-header h2{font-size:18px;font-weight:700;margin-bottom:4px;letter-spacing:0.5px;}
+.revive-popup-header .rp-sub{font-size:12px;opacity:0.9;}
+.revive-popup-body{padding:20px 22px;}
+.revive-popup-body .rp-info{background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;padding:10px 12px;font-size:12px;color:#78350f;line-height:1.7;margin-bottom:14px;}
 .revive-popup-body .rp-info b{color:#92400e;}
-.revive-popup-body .rp-meta{
-    font-size:11px;
-    color:#8aa2c0;
-    text-align:center;
-    margin-bottom:14px;
-}
-.revive-popup-body .rp-warning{
-    background:#fee2e2;
-    border:1px solid #fecaca;
-    border-radius:10px;
-    padding:10px 12px;
-    font-size:11px;
-    color:#991b1b;
-    line-height:1.6;
-    margin-bottom:14px;
-}
-.revive-popup-actions{
-    display:flex;
-    gap:8px;
-    padding:0 22px 20px;
-}
-.revive-popup-actions button{
-    flex:1;
-    padding:12px 16px;
-    border-radius:12px;
-    border:none;
-    font-size:14px;
-    font-weight:600;
-    cursor:pointer;
-    transition:0.15s;
-}
+.revive-popup-body .rp-meta{font-size:11px;color:#8aa2c0;text-align:center;margin-bottom:14px;}
+.revive-popup-body .rp-warning{background:#fee2e2;border:1px solid #fecaca;border-radius:10px;padding:10px 12px;font-size:11px;color:#991b1b;line-height:1.6;margin-bottom:14px;}
+.revive-popup-actions{display:flex;gap:8px;padding:0 22px 20px;flex-wrap:wrap;}
+.revive-popup-actions button{flex:1;padding:12px 16px;border-radius:12px;border:none;font-size:14px;font-weight:600;cursor:pointer;transition:0.15s;}
 .revive-popup-actions button:active{transform:scale(0.97);}
-.revive-popup-actions .rp-btn-primary{
-    background:linear-gradient(135deg,#f59e0b,#d97706);
-    color:#fff;
-    box-shadow:0 4px 14px rgba(245,158,11,0.4);
-}
+.revive-popup-actions .rp-btn-primary{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;box-shadow:0 4px 14px rgba(245,158,11,0.4);}
 .revive-popup-actions .rp-btn-primary:hover{background:linear-gradient(135deg,#d97706,#b45309);}
-.revive-popup-actions .rp-btn-secondary{
-    background:#f1f5f9;
-    color:#475569;
-    border:1px solid #e2e8f0;
-}
+.revive-popup-actions .rp-btn-secondary{background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;}
 .revive-popup-actions .rp-btn-secondary:hover{background:#e2e8f0;}
-.revive-popup-actions .rp-btn-preview{
-    background:#dbeafe;
-    color:#1e40af;
-    border:1px solid #93c5fd;
-    flex:0 0 auto;
-    padding:12px 14px;
-}
+.revive-popup-actions .rp-btn-preview{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;flex:0 0 auto;padding:12px 14px;}
 .revive-popup-actions .rp-btn-preview:hover{background:#bfdbfe;}
-
-/* 移动端适配 */
+.revive-popup-actions .rp-btn-copy{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;flex:0 0 auto;padding:12px 14px;}
+.revive-popup-actions .rp-btn-copy:hover{background:#d1fae5;}
+.revive-popup-actions .rp-btn-download{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;flex:0 0 auto;padding:12px 14px;}
+.revive-popup-actions .rp-btn-download:hover{background:#dbeafe;}
 @media (max-width: 600px) {
     body{padding:10px;}
     .header-row{margin-bottom:10px;}
@@ -988,8 +214,7 @@ body{
     .result-card{padding:12px 14px;margin-bottom:10px;border-left-width:4px;}
     .result-card .q-text{font-size:13px;line-height:1.5;}
     .result-card .a-text{font-size:13px;line-height:1.6;}
-    .result-card .q-label,
-    .result-card .a-label{font-size:9px;padding:2px 7px;}
+    .result-card .q-label,.result-card .a-label{font-size:9px;padding:2px 7px;}
     .no-result{font-size:12px;padding:14px 16px;}
     .toolbar{padding:6px 12px 2px;gap:4px;}
     .toolbar button{font-size:12px;padding:6px 12px;}
@@ -1023,13 +248,9 @@ body{
     <div class="chat-area" id="chatArea">
         <div class="empty-state" id="emptyState">
             <div class="empty-icon">💬</div>
-            <div class="empty-text">
-                输入题目关键词开始查询<br>
-                支持文字、语音、图片
-            </div>
+            <div class="empty-text">输入题目关键词开始查询<br>支持文字、语音、图片</div>
         </div>
     </div>
-
     <div class="bottom-fixed">
         <div class="toolbar">
             <div class="toolbar-left">
@@ -1042,7 +263,6 @@ body{
                 <button id="clearInputBtn">✖ 清空输入</button>
             </div>
         </div>
-
         <div class="input-area">
             <div class="input-wrap">
                 <input type="text" id="questionInput" placeholder="请输入题目关键词…" autocomplete="off">
@@ -1058,7 +278,7 @@ body{
 
 <div class="toast" id="toast"></div>
 
-<!-- ========== 复活弹窗（崩溃时自动弹出） ========== -->
+<!-- ========== 复活弹窗 ========== -->
 <div class="revive-popup-overlay" id="revivePopup">
     <div class="revive-popup">
         <div class="revive-popup-header">
@@ -1068,9 +288,9 @@ body{
         </div>
         <div class="revive-popup-body">
             <div class="rp-info">
-                ⚠️ 页面可能已崩溃或代码错乱。<br>
+                ⚠️ 页面代码可能已损坏或功能错乱。<br>
                 检测到本地存在<b>复活备份</b>，可以一键恢复至 GitHub 仓库。<br>
-                恢复后请刷新页面以重新加载。
+                若自动恢复失败，可下载或复制代码手动上传至 GitHub。
             </div>
             <div class="rp-meta" id="revivePopupMeta"></div>
             <div class="rp-warning">
@@ -1078,7 +298,9 @@ body{
             </div>
         </div>
         <div class="revive-popup-actions">
-            <button class="rp-btn-preview" id="rpPreview">👁</button>
+            <button class="rp-btn-preview" id="rpPreview" title="预览备份代码">👁</button>
+            <button class="rp-btn-download" id="rpDownload" title="下载备份文件">📥</button>
+            <button class="rp-btn-copy" id="rpCopy" title="复制备份代码">📋</button>
             <button class="rp-btn-secondary" id="rpLater">稍后</button>
             <button class="rp-btn-primary" id="rpRestore">立即恢复</button>
         </div>
@@ -1124,14 +346,12 @@ body{
                 <div class="tab" data-tab="tab-revive">💊 复活备份</div>
             </div>
 
-            <!-- 搜索编辑 -->
             <div class="tab-content active" id="tab-search">
                 <div class="bank-toolbar">
                     <input type="text" id="bankSearch" placeholder="输入关键词搜索题目…">
                     <button class="btn btn-sm" id="bankClearSearch">清空</button>
                 </div>
                 <div class="bank-list" id="bankList"></div>
-
                 <div class="edit-form" id="editForm" style="display:none;">
                     <div class="form-group">
                         <label>题目</label>
@@ -1150,9 +370,7 @@ body{
                 </div>
             </div>
 
-            <!-- 新增题目 -->
             <div class="tab-content" id="tab-add">
-                <!-- OCR引擎选择 -->
                 <div class="ocr-engine-select">
                     <label>🔧 识别引擎：</label>
                     <select id="ocrEngine">
@@ -1161,18 +379,14 @@ body{
                         <option value="tesseract">浏览器OCR（需加载库）</option>
                     </select>
                 </div>
-
                 <div class="ocr-area" id="ocrArea">
                     <div class="ocr-icon">📷</div>
                     <div class="ocr-text">点击上传题目图片，自动识别题目与答案</div>
                     <input type="file" id="ocrInput" accept="image/*" capture="environment">
                     <div class="ocr-progress" id="ocrProgress">⏳ 正在识别图片内容…</div>
                 </div>
-                <div class="ocr-result-hint" id="ocrResultHint">
-                    ✅ 图片识别完成，已自动填充到下方编辑框，请核对后保存。
-                </div>
+                <div class="ocr-result-hint" id="ocrResultHint">✅ 图片识别完成，已自动填充到下方编辑框，请核对后保存。</div>
                 <div class="ocr-preview" id="ocrPreview"></div>
-
                 <div class="form-group">
                     <label>题目</label>
                     <textarea id="addQ" placeholder="输入题目内容"></textarea>
@@ -1188,7 +402,6 @@ body{
                 </div>
             </div>
 
-            <!-- 备份档案 -->
             <div class="tab-content" id="tab-backup">
                 <div style="font-size:12px;color:#4a6a8a;margin-bottom:10px;line-height:1.6;">
                     每次保存修改或新增前，系统会自动备份当前题库。<br>
@@ -1201,7 +414,6 @@ body{
                 </div>
             </div>
 
-            <!-- 复活备份（最高优先级） -->
             <div class="tab-content" id="tab-revive">
                 <div class="revive-section">
                     <div class="revive-title">💊 复活备份（最高优先级）</div>
@@ -1229,43 +441,25 @@ body{
                 </div>
             </div>
 
-            <!-- GitHub 同步（可折叠） -->
             <div class="github-section" id="githubSection">
                 <div class="github-header" id="githubHeader">
-                    <div class="gh-title">
-                        🐙 GitHub 仓库同步
-                        <span class="gh-status unconfigured" id="ghStatus">未配置</span>
-                    </div>
+                    <div class="gh-title">🐙 GitHub 仓库同步 <span class="gh-status unconfigured" id="ghStatus">未配置</span></div>
                     <span class="gh-arrow">▶</span>
                 </div>
                 <div class="github-body">
-                    <div class="gh-hint">
-                        配置好仓库信息后，每次保存（修改/新增/恢复）将自动同步完整页面代码到 GitHub。<br>
-                        需要 Personal Access Token（至少 repo 权限）。
-                    </div>
-                    <div class="github-row">
-                        <input type="text" id="ghOwner" placeholder="用户名/组织 (owner)">
-                    </div>
-                    <div class="github-row">
-                        <input type="text" id="ghRepo" placeholder="仓库名 (repo)">
-                    </div>
-                    <div class="github-row">
-                        <input type="text" id="ghPath" placeholder="文件路径 (如 index.html)">
-                    </div>
-                    <div class="github-row">
-                        <input type="password" id="ghToken" placeholder="Personal Access Token">
-                    </div>
+                    <div class="gh-hint">配置好仓库信息后，每次保存（修改/新增/恢复）将自动同步完整页面代码到 GitHub。<br>需要 Personal Access Token（至少 repo 权限）。</div>
+                    <div class="github-row"><input type="text" id="ghOwner" placeholder="用户名/组织 (owner)"></div>
+                    <div class="github-row"><input type="text" id="ghRepo" placeholder="仓库名 (repo)"></div>
+                    <div class="github-row"><input type="text" id="ghPath" placeholder="文件路径 (如 index.html)"></div>
+                    <div class="github-row"><input type="password" id="ghToken" placeholder="Personal Access Token"></div>
                     <div class="github-row" style="justify-content:flex-end;flex-wrap:wrap;">
                         <button class="btn btn-sm" id="ghTest">🔌 测试连接</button>
                         <button class="btn btn-sm" id="ghSaveCfg">💾 保存配置</button>
                         <button class="btn btn-sm btn-primary" id="ghSyncNow">☁ 立即同步</button>
                     </div>
-                    <div class="gh-sync-info" id="ghSyncInfo" style="display:none;">
-                        ✅ 已同步完整页面代码（含最新题库）
-                    </div>
+                    <div class="gh-sync-info" id="ghSyncInfo" style="display:none;">✅ 已同步完整页面代码（含最新题库）</div>
                 </div>
             </div>
-
         </div>
         <div class="modal-footer">
             <button class="btn" id="bankCancel">关闭</button>
@@ -1273,7 +467,6 @@ body{
     </div>
 </div>
 
-<!-- ========== 二次确认弹窗 ========== -->
 <div class="confirm-overlay" id="confirmOverlay">
     <div class="confirm-box">
         <h4 id="confirmTitle">请输入确认代码</h4>
@@ -1286,7 +479,7 @@ body{
 </div>
 
 <script>
-// ====================== 题库数据（默认） ======================
+// ====================== 题库数据 ======================
 const defaultBank = [
 {q:"凡在高地面（）的地点进行的工作都应视作高处作业", a:"2米及以上"},
 {q:"有限空间作业时，气体检测应在作业前（）分钟内完成，作业中至少每（）分钟重复检测一次", a:"30‖30"},
@@ -1489,8 +682,6 @@ const BACKUP_KEY  = 'zktest_backups_v1';
 const GH_CFG_KEY  = 'zktest_gh_cfg_v1';
 const REVIVE_KEY  = 'zktest_revive_v1';
 const CONFIRM_CODE = 'qiuhua';
-const HEALTH_KEY = 'zktest_health_v1';
-const SESSION_KEY = 'zktest_session_id';
 const BAIDU_OCR_KEY = { apiKey: '', secretKey: '' };
 
 // ====================== 全局状态 ======================
@@ -1522,68 +713,60 @@ function saveReviveBackup(content){
     return true;
 }
 
-// ====================== 崩溃检测（优化版：防止误报） ======================
-// 优化要点：
-// 1. 延长超时判定到 60 秒，避免息屏/切后台/短暂卡顿导致的误报
-// 2. 添加页面可见性判断，页面隐藏时不写入也不判定
-// 3. 使用 sessionStorage 记录会话ID，同一会话内的正常刷新不触发崩溃检测
-// 4. 降低写入频率到每 10 秒一次，减少无谓的IO
-const CRASH_TIMEOUT_MS = 60000; // 60秒无更新才视为异常
-
-function getSessionId(){
-    try{
-        let sid = sessionStorage.getItem(SESSION_KEY);
-        if(!sid){
-            sid = 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-            sessionStorage.setItem(SESSION_KEY, sid);
+// ====================== 页面完整性检测（替代旧的时间戳误报机制） ======================
+function checkPageIntegrity() {
+    // 1. 检查核心函数是否存在
+    const coreFunctions = ['matchQuestions', 'getFullPageHTML', 'pushContentToGitHub', 'loadBank', 'renderResults'];
+    for (let fn of coreFunctions) {
+        if (typeof window[fn] !== 'function' && typeof eval(fn) !== 'function') {
+            console.error(`[完整性检测] 核心函数 ${fn} 丢失`);
+            return { ok: false, reason: `核心函数 ${fn} 丢失` };
         }
-        return sid;
-    }catch(e){
-        return 'sess_fallback';
     }
-}
-
-function writeHealthTick(){
-    // 页面隐藏时不写入（避免息屏/切后台误判）
-    if(document.hidden) return;
-    try{
-        const sid = getSessionId();
-        localStorage.setItem(HEALTH_KEY, JSON.stringify({
-            ts: Date.now(),
-            url: location.href,
-            sid: sid
-        }));
-    }catch(e){}
-}
-
-function clearHealthTick(){
-    try{ localStorage.removeItem(HEALTH_KEY); }catch(e){}
-}
-
-function checkPreviousCrash(){
-    try{
-        const raw = localStorage.getItem(HEALTH_KEY);
-        if(!raw) return false;
-        const obj = JSON.parse(raw);
-        if(!obj || !obj.ts) return false;
-        // 同一会话内的刷新不算崩溃（用户主动刷新 / 保存后自动刷新）
-        const currentSid = getSessionId();
-        if(obj.sid && obj.sid === currentSid){
-            // 同一会话，判断是否为正常刷新：时间间隔小于 5 秒视为正常刷新
-            const elapsed = Date.now() - obj.ts;
-            if(elapsed < 5000) return false;
-            // 超过 5 秒但同一会话，可能是长时间未操作，不算崩溃
-            return false;
+    
+    // 2. 检查核心 DOM 元素是否存在
+    const coreElements = ['chatArea', 'questionInput', 'sendBtn', 'toast'];
+    for (let id of coreElements) {
+        if (!document.getElementById(id)) {
+            console.error(`[完整性检测] 核心DOM元素 ${id} 丢失`);
+            return { ok: false, reason: `核心DOM元素 ${id} 丢失` };
         }
-        // 不同会话（新打开的标签页 / 重新进入），才检查是否超时
-        const elapsed = Date.now() - obj.ts;
-        return elapsed > CRASH_TIMEOUT_MS;
-    }catch(e){ return false; }
+    }
+    
+    // 3. 尝试执行一次简单的题库匹配（如果题库为空则跳过）
+    try {
+        if (typeof questionBank !== 'undefined' && questionBank && questionBank.length > 0) {
+            const testResult = matchQuestions("测试");
+            // 如果没有报错，说明基本逻辑正常
+        }
+    } catch (e) {
+        console.error('[完整性检测] 核心逻辑执行报错:', e);
+        return { ok: false, reason: '核心逻辑执行报错: ' + e.message };
+    }
+    
+    return { ok: true };
 }
+
+// 页面加载时检查一次（仅当存在复活备份时才提示）
+window.addEventListener('load', () => {
+    // 延迟一小会儿，等所有 DOM 和初始化完成
+    setTimeout(() => {
+        const integrity = checkPageIntegrity();
+        if (!integrity.ok) {
+            console.warn('[完整性检测] 未通过:', integrity.reason);
+            if (loadReviveBackup()) {
+                showRevivePopup();
+            } else {
+                showToast('检测到页面异常，但未找到复活备份，请手动修复代码');
+            }
+        }
+    }, 1200);
+});
 
 // ====================== 通用工具 ======================
 function showToast(msg){
     const toast = document.getElementById('toast');
+    if(!toast) return;
     toast.textContent = msg;
     toast.style.display = 'block';
     clearTimeout(toast._timeout);
@@ -1654,26 +837,16 @@ function downloadTextFile(content, filename){
 async function recognizeImage(file, engine){
     if(engine === 'baidu'){
         if(BAIDU_OCR_KEY.apiKey && BAIDU_OCR_KEY.secretKey){
-            try{
-                return await baiduOCR(file);
-            }catch(e){
-                console.warn('百度OCR失败', e);
-                showToast('百度OCR失败，使用文件名解析');
-            }
-        }else{
-            showToast('百度OCR未配置密钥，使用文件名解析');
-        }
+            try{ return await baiduOCR(file); }
+            catch(e){ console.warn('百度OCR失败', e); showToast('百度OCR失败，使用文件名解析'); }
+        }else{ showToast('百度OCR未配置密钥，使用文件名解析'); }
     }
     if(engine === 'tesseract' && window.Tesseract){
-        try{
-            return await tesseractOCR(file);
-        }catch(e){
-            console.warn('Tesseract OCR失败', e);
-        }
+        try{ return await tesseractOCR(file); }
+        catch(e){ console.warn('Tesseract OCR失败', e); }
     }
     return await filenameBasedRecognition(file);
 }
-
 async function baiduOCR(file){
     const { apiKey, secretKey } = BAIDU_OCR_KEY;
     const tokenResp = await fetch(`https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=${apiKey}&client_secret=${secretKey}`, { method: 'POST' });
@@ -1691,21 +864,14 @@ async function baiduOCR(file){
     const text = ocrData.words_result.map(w=>w.words).join('\n');
     return parseOCRText(text);
 }
-
 async function tesseractOCR(file){
     const { data } = await Tesseract.recognize(file, 'chi_sim+eng');
     return parseOCRText(data.text);
 }
-
 async function filenameBasedRecognition(file){
     const filename = (file.name || '').replace(/\.(jpg|jpeg|png|gif|webp|bmp|heic)$/i, '').trim();
-    console.log('文件名解析：', filename);
-    
     const qaMatch = filename.match(/题目[：:]\s*(.+?)\s*答案[：:]\s*(.+)/);
-    if(qaMatch){
-        return { q: qaMatch[1].trim(), a: qaMatch[2].trim() };
-    }
-    
+    if(qaMatch){ return { q: qaMatch[1].trim(), a: qaMatch[2].trim() }; }
     const lines = filename.split(/[\n\r]+/).map(l=>l.trim()).filter(Boolean);
     if(lines.length >= 2){
         let q = '', a = '';
@@ -1713,61 +879,34 @@ async function filenameBasedRecognition(file){
             if(/^题目[：:]/.test(line)) q = line.replace(/^题目[：:]\s*/,'');
             else if(/^答案[：:]/.test(line)) a = line.replace(/^答案[：:]\s*/,'');
         }
-        if(q || a){
-            return { q: q || '（未识别到题目）', a: a || '（未识别到答案）' };
-        }
+        if(q || a){ return { q: q || '（未识别到题目）', a: a || '（未识别到答案）' }; }
     }
-    
     if(filename.length >= 4){
-        const matched = questionBank.find(item => 
-            item.q.includes(filename) || filename.includes(item.q.substring(0, 8))
-        );
-        if(matched){
-            return { q: matched.q, a: matched.a };
-        }
-        if(/[？?（）()]/.test(filename)){
-            return { q: filename, a: '（请根据图片内容补充答案）' };
-        }
+        const matched = questionBank.find(item => item.q.includes(filename) || filename.includes(item.q.substring(0, 8)));
+        if(matched){ return { q: matched.q, a: matched.a }; }
         return { q: filename, a: '（请根据图片内容补充答案）' };
     }
-    
-    return {
-        q: '（图片识别未成功，请手动输入题目）',
-        a: '（请手动输入答案）'
-    };
+    return { q: '（图片识别未成功，请手动输入题目）', a: '（请手动输入答案）' };
 }
-
 function parseOCRText(text){
-    if(!text || !text.trim()){
-        return { q: '', a: '' };
-    }
+    if(!text || !text.trim()){ return { q: '', a: '' }; }
     let normalized = text.replace(/\r\n/g, '\n').replace(/\n{2,}/g, '\n').trim();
     const qaPattern = /题目[：:]\s*(.+?)\s*答案[：:]\s*(.+)/s;
     const qaMatch = normalized.match(qaPattern);
     if(qaMatch){
-        return {
-            q: qaMatch[1].trim().replace(/\n+/g, ' '),
-            a: qaMatch[2].trim().replace(/\n+/g, '‖')
-        };
+        return { q: qaMatch[1].trim().replace(/\n+/g, ' '), a: qaMatch[2].trim().replace(/\n+/g, '‖') };
     }
     const lines = normalized.split('\n').map(l=>l.trim()).filter(Boolean);
     if(lines.length === 0) return { q: '', a: '' };
-    if(lines.length === 1){
-        return { q: lines[0], a: '（请补充答案）' };
-    }
+    if(lines.length === 1){ return { q: lines[0], a: '（请补充答案）' }; }
     let qIndex = 0;
     for(let i=0;i<lines.length;i++){
-        if(/[（(][^）)]*[）)]/.test(lines[i]) || /[？?]/.test(lines[i]) || /[是为：:]$/.test(lines[i])){
-            qIndex = i;
-            break;
-        }
+        if(/[（(][^）)]*[）)]/.test(lines[i]) || /[？?]/.test(lines[i]) || /[是为：:]$/.test(lines[i])){ qIndex = i; break; }
     }
     const q = lines[qIndex];
     const aLines = lines.slice(0, qIndex).concat(lines.slice(qIndex + 1));
-    const a = aLines.join('‖');
-    return { q, a: a || '（请补充答案）' };
+    return { q, a: aLines.join('‖') || '（请补充答案）' };
 }
-
 function fileToBase64(file){
     return new Promise((resolve, reject)=>{
         const reader = new FileReader();
@@ -1783,10 +922,7 @@ function loadBank(){
         const raw = localStorage.getItem(STORAGE_KEY);
         if(raw){
             const arr = JSON.parse(raw);
-            if(Array.isArray(arr) && arr.length){
-                questionBank = arr;
-                return;
-            }
+            if(Array.isArray(arr) && arr.length){ questionBank = arr; return; }
         }
     }catch(e){ console.warn('读取题库失败', e); }
     questionBank = defaultBank.slice();
@@ -1860,9 +996,7 @@ async function getFullPageHTML(){
             if(insertIdx > -1){
                 const insertion = `\n// ====== 题库数据（自动注入） ======\nconst defaultBank = ${newBankJSON};\n`;
                 html = html.slice(0, insertIdx + scriptTag.length) + insertion + html.slice(insertIdx + scriptTag.length);
-            }else{
-                return null;
-            }
+            }else{ return null; }
         }
         return html;
     }catch(e){
@@ -1880,15 +1014,11 @@ async function pushContentToGitHub(content, message, silent){
     }
     const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
     const contentB64 = btoa(unescape(encodeURIComponent(content)));
-
     try{
         let sha = null;
         const getResp = await fetch(apiBase, {
             method: 'GET',
-            headers: {
-                'Authorization': `token ${cfg.token}`,
-                'Accept': 'application/vnd.github.v3+json'
-            }
+            headers: { 'Authorization': `token ${cfg.token}`, 'Accept': 'application/vnd.github.v3+json' }
         });
         if(getResp.ok){
             const data = await getResp.json();
@@ -1900,7 +1030,6 @@ async function pushContentToGitHub(content, message, silent){
             branch: 'main'
         };
         if(sha) body.sha = sha;
-
         const putResp = await fetch(apiBase, {
             method: 'PUT',
             headers: {
@@ -1952,10 +1081,7 @@ async function testGitHubConnection(silent){
     try{
         const resp = await fetch(apiBase, {
             method: 'GET',
-            headers: {
-                'Authorization': `token ${cfg.token}`,
-                'Accept': 'application/vnd.github.v3+json'
-            }
+            headers: { 'Authorization': `token ${cfg.token}`, 'Accept': 'application/vnd.github.v3+json' }
         });
         if(resp.ok){
             if(!silent) showToast('✅ 连接成功，文件已存在');
@@ -2029,16 +1155,11 @@ function formatAnswerHTML(ans){
     const raw = String(ans || '');
     const normalized = raw.replace(/[｜|‖]/g, '‖');
     let parts = normalized.split('‖').map(s=>s.trim()).filter(Boolean);
-    if(parts.length <= 1){
-        return escapeHTML(parts[0] || raw);
-    }
+    if(parts.length <= 1){ return escapeHTML(parts[0] || raw); }
     const allShort = parts.every(p => p.length <= 8);
-    if(allShort){
-        return parts.map(p=>escapeHTML(p)).join(' <span class="ans-sep">‖</span> ');
-    }
+    if(allShort){ return parts.map(p=>escapeHTML(p)).join(' <span class="ans-sep">‖</span> '); }
     return parts.map(p=>`<span class="ans-line">${escapeHTML(p)}</span>`).join('');
 }
-
 function renderResults(results, query){
     const chatArea = document.getElementById('chatArea');
     chatArea.innerHTML = '';
@@ -2063,12 +1184,11 @@ function renderResults(results, query){
     chatArea.scrollTop = 0;
 }
 
-// ====================== 预览通用组件 ======================
+// ====================== 预览组件 ======================
 function showPreviewModal(titleText, items, mode, htmlContent, readonly){
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay active';
     overlay.style.zIndex = 1300;
-    
     const listHTML = items.map((x,i)=>`
         <div class="bank-item" style="cursor:default;${x.highlight?'background:#dcfce7;border-left:3px solid #22c55e;':''}">
             <div class="bi-idx">#${i+1}</div>
@@ -2076,9 +1196,7 @@ function showPreviewModal(titleText, items, mode, htmlContent, readonly){
             <div class="bi-a">答案：${escapeHTML(x.a)}</div>
         </div>
     `).join('');
-    
     const codeContent = htmlContent ? escapeHTML(htmlContent) : '（无代码内容）';
-    
     overlay.innerHTML = `
         <div class="modal" style="max-width:720px;">
             <div class="modal-header">
@@ -2099,13 +1217,10 @@ function showPreviewModal(titleText, items, mode, htmlContent, readonly){
                     <pre class="code-preview"><span class="code-hint">// 完整页面代码（含题库数据）</span>${codeContent}</pre>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn" data-close="1">关闭</button>
-            </div>
+            <div class="modal-footer"><button class="btn" data-close="1">关闭</button></div>
         </div>
     `;
     document.body.appendChild(overlay);
-    
     const tabs = overlay.querySelectorAll('.preview-tab');
     const listPane = overlay.querySelector('#previewListPane');
     const codePane = overlay.querySelector('#previewCodePane');
@@ -2113,22 +1228,14 @@ function showPreviewModal(titleText, items, mode, htmlContent, readonly){
         t.addEventListener('click', ()=>{
             tabs.forEach(x=>x.classList.remove('active'));
             t.classList.add('active');
-            if(t.dataset.tab === 'list'){
-                listPane.style.display = 'block';
-                codePane.style.display = 'none';
-            }else{
-                listPane.style.display = 'none';
-                codePane.style.display = 'block';
-            }
+            if(t.dataset.tab === 'list'){ listPane.style.display = 'block'; codePane.style.display = 'none'; }
+            else{ listPane.style.display = 'none'; codePane.style.display = 'block'; }
         });
     });
-    
     overlay.querySelectorAll('[data-close]').forEach(b=>{
         b.addEventListener('click', ()=> overlay.remove());
     });
-    overlay.addEventListener('click', (e)=>{
-        if(e.target === overlay) overlay.remove();
-    });
+    overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
     return overlay;
 }
 
@@ -2137,17 +1244,16 @@ function showRevivePopup(){
     const popup = document.getElementById('revivePopup');
     const metaEl = document.getElementById('revivePopupMeta');
     const backup = loadReviveBackup();
-    if(!backup){
-        metaEl.textContent = '（无可用备份）';
-    }else{
-        metaEl.textContent = `备份时间：${backup.time} · 大小：${(backup.size/1024).toFixed(1)} KB`;
-    }
+    if(!backup){ metaEl.textContent = '（无可用备份）'; }
+    else{ metaEl.textContent = `备份时间：${backup.time} · 大小：${(backup.size/1024).toFixed(1)} KB`; }
     popup.classList.add('active');
 }
 
 function bindRevivePopup(){
     const popup = document.getElementById('revivePopup');
     const rpPreview = document.getElementById('rpPreview');
+    const rpDownload = document.getElementById('rpDownload');
+    const rpCopy = document.getElementById('rpCopy');
     const rpLater = document.getElementById('rpLater');
     const rpRestore = document.getElementById('rpRestore');
 
@@ -2171,37 +1277,77 @@ function bindRevivePopup(){
                     </div>
                     <pre class="code-preview"><span class="code-hint">// 复活备份内容（完整页面代码）</span>${escapeHTML(backup.content)}</pre>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn" data-close="1">关闭</button>
-                </div>
+                <div class="modal-footer"><button class="btn" data-close="1">关闭</button></div>
             </div>
         `;
         document.body.appendChild(overlay);
-        overlay.querySelectorAll('[data-close]').forEach(b=>{
-            b.addEventListener('click', ()=> overlay.remove());
-        });
-        overlay.addEventListener('click', (e)=>{
-            if(e.target === overlay) overlay.remove();
-        });
+        overlay.querySelectorAll('[data-close]').forEach(b=>{ b.addEventListener('click', ()=> overlay.remove()); });
+        overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
     });
 
+    // 下载备份文件
+    rpDownload.addEventListener('click', ()=>{
+        const backup = loadReviveBackup();
+        if(!backup){ showToast('暂无复活备份'); return; }
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth()+1).padStart(2,'0');
+        const d = String(now.getDate()).padStart(2,'0');
+        const hh = String(now.getHours()).padStart(2,'0');
+        const mm = String(now.getMinutes()).padStart(2,'0');
+        const ss = String(now.getSeconds()).padStart(2,'0');
+        const filename = `复活备份_${y}${m}${d}_${hh}${mm}${ss}.txt`;
+        if(downloadTextFile(backup.content, filename)){ showToast('✅ 已开始下载：' + filename); }
+        else{ showToast('下载失败，请重试'); }
+    });
+
+    // 复制备份代码到剪贴板
+    rpCopy.addEventListener('click', async ()=>{
+        const backup = loadReviveBackup();
+        if(!backup){ showToast('暂无复活备份'); return; }
+        try{
+            await navigator.clipboard.writeText(backup.content);
+            showToast('✅ 备份代码已复制到剪贴板，请手动粘贴到 GitHub');
+        }catch(err){
+            const textarea = document.createElement('textarea');
+            textarea.value = backup.content;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try{ document.execCommand('copy'); showToast('✅ 备份代码已复制到剪贴板'); }
+            catch(e){ showToast('❌ 复制失败，请手动全选复制'); }
+            document.body.removeChild(textarea);
+        }
+    });
+
+    // 一键恢复到 GitHub
     rpRestore.addEventListener('click', async ()=>{
         const backup = loadReviveBackup();
         if(!backup){ showToast('暂无复活备份'); return; }
         const cfg = loadGhCfg();
-        if(!isGhConfigured(cfg)){ showToast('请先配置GitHub仓库信息（登录后进入题库管理配置）'); return; }
+        if(!isGhConfigured(cfg)){ 
+            showToast('GitHub 未配置，无法自动恢复。请先下载或复制代码手动上传。'); 
+            return; 
+        }
         const ok = await askConfirm('确认使用复活备份覆盖GitHub仓库？');
         if(!ok) return;
         popup.classList.remove('active');
         showToast('正在推送复活备份至GitHub…');
-        const success = await pushContentToGitHub(
-            backup.content,
-            `💊 复活备份恢复 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,
-            false
-        );
-        if(success){
-            showToast('✅ 复活备份已推送至GitHub，正在刷新…');
-            setTimeout(()=>{ location.reload(); }, 1000);
+        try{
+            const success = await pushContentToGitHub(
+                backup.content,
+                `💊 复活备份恢复 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,
+                false
+            );
+            if(success){
+                showToast('✅ 复活备份已推送至GitHub，正在刷新…');
+                setTimeout(()=>{ location.reload(); }, 1500);
+            }else{
+                showToast('❌ 推送失败，请检查网络或Token权限。建议下载代码手动上传。');
+            }
+        }catch(e){
+            showToast('❌ 推送异常：' + e.message);
         }
     });
 }
@@ -2221,29 +1367,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const imgPreview    = document.getElementById('imgPreview');
     const previewImg    = document.getElementById('previewImg');
     const closeImg      = document.getElementById('closeImg');
-
-    // ===== 崩溃检测（优化版） =====
-    const crashed = checkPreviousCrash();
-    const reviveBackup = loadReviveBackup();
-    // 只在检测到崩溃 且 存在备份 且 页面可见时 才弹窗
-    if(crashed && reviveBackup && !document.hidden){
-        setTimeout(()=>{ 
-            // 再次确认页面可见，避免延迟期间被切后台
-            if(!document.hidden) showRevivePopup(); 
-        }, 800);
-    }
-    // 页面可见时才写入标记
-    writeHealthTick();
-    // 每10秒写入一次（降低频率，减少IO）
-    setInterval(()=>{ writeHealthTick(); }, 10000);
-    // 页面从后台切回前台时，立即写入一次标记
-    document.addEventListener('visibilitychange', ()=>{
-        if(!document.hidden){
-            writeHealthTick();
-        }
-    });
-    // 正常退出时清除标记
-    window.addEventListener('beforeunload', ()=>{ clearHealthTick(); });
 
     bindRevivePopup();
 
@@ -2277,35 +1400,26 @@ document.addEventListener('DOMContentLoaded', ()=>{
         const empty = document.createElement('div');
         empty.className = 'empty-state';
         empty.id = 'emptyState';
-        empty.innerHTML = `
-            <div class="empty-icon">💬</div>
-            <div class="empty-text">输入题目关键词开始查询<br>支持文字、语音、图片</div>
-        `;
+        empty.innerHTML = `<div class="empty-icon">💬</div><div class="empty-text">输入题目关键词开始查询<br>支持文字、语音、图片</div>`;
         chatArea.appendChild(empty);
         showToast('对话已清空');
     });
 
-    // ===== 图片处理（主界面） =====
+    // ===== 图片处理 =====
     function clearImage(){
         currentImageFile = null;
         imageInput.value = '';
         previewImg.src = '';
         imgPreview.style.display = 'none';
     }
-    imageBtn.addEventListener('click', ()=>{
-        imageInput.value = '';
-        imageInput.click();
-    });
+    imageBtn.addEventListener('click', ()=>{ imageInput.value = ''; imageInput.click(); });
     imageInput.addEventListener('change', (e)=>{
         const file = e.target.files && e.target.files[0];
         if(!file) return;
         if(file.size > 10 * 1024 * 1024){ showToast('图片过大，请选择小于 10MB 的图片'); return; }
         currentImageFile = file;
         const reader = new FileReader();
-        reader.onload = (ev)=>{
-            previewImg.src = ev.target.result;
-            imgPreview.style.display = 'block';
-        };
+        reader.onload = (ev)=>{ previewImg.src = ev.target.result; imgPreview.style.display = 'block'; };
         reader.readAsDataURL(file);
     });
     closeImg.addEventListener('click', (e)=>{ e.stopPropagation(); clearImage(); });
@@ -2330,9 +1444,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         };
         rec.onresult = (e)=>{
             let transcript = '';
-            for(let i = e.resultIndex; i < e.results.length; i++){
-                transcript += e.results[i][0].transcript;
-            }
+            for(let i = e.resultIndex; i < e.results.length; i++){ transcript += e.results[i][0].transcript; }
             questionInput.value = transcript;
             if(e.results[0].isFinal) showToast('识别完成：' + transcript);
         };
@@ -2355,18 +1467,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
         };
     }
     voiceBtn.addEventListener('click', ()=>{
-        if(isRecording){
-            if(recognition){ try{ recognition.stop(); }catch(e){} }
-            return;
-        }
+        if(isRecording){ if(recognition){ try{ recognition.stop(); }catch(e){} } return; }
         const rec = initRecognition();
         if(!rec){ showToast('当前浏览器不支持语音识别'); return; }
         recognition = rec;
         bindRecognition(rec);
         try{ rec.start(); }
-        catch(e){
-            setTimeout(()=>{ try{ rec.start(); }catch(e2){ showToast('无法启动录音'); } }, 200);
-        }
+        catch(e){ setTimeout(()=>{ try{ rec.start(); }catch(e2){ showToast('无法启动录音'); } }, 200); }
     });
 
     // ===== 登录 =====
@@ -2383,12 +1490,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     loginBtn.addEventListener('click', ()=>{
         if(isLoggedIn) openBank();
-        else {
-            loginUser.value = '';
-            loginPass.value = '';
-            loginModal.classList.add('active');
-            setTimeout(()=>loginUser.focus(), 100);
-        }
+        else { loginUser.value = ''; loginPass.value = ''; loginModal.classList.add('active'); setTimeout(()=>loginUser.focus(), 100); }
     });
     loginClose.addEventListener('click', ()=> loginModal.classList.remove('active'));
     loginCancel.addEventListener('click', ()=> loginModal.classList.remove('active'));
@@ -2404,9 +1506,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
             loginBtn.classList.add('logged-in');
             showToast('登录成功');
             setTimeout(openBank, 200);
-        }else{
-            showToast('账号或密码错误');
-        }
+        }else{ showToast('账号或密码错误'); }
     }
 
     function openBank(){
@@ -2425,9 +1525,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         document.querySelectorAll('.tab').forEach(t=> t.classList.toggle('active', t.dataset.tab === tabId));
         document.querySelectorAll('.tab-content').forEach(c=> c.classList.toggle('active', c.id === tabId));
     }
-    document.querySelectorAll('.tab').forEach(t=>{
-        t.addEventListener('click', ()=> switchTab(t.dataset.tab));
-    });
+    document.querySelectorAll('.tab').forEach(t=>{ t.addEventListener('click', ()=> switchTab(t.dataset.tab)); });
 
     // ===== 题库列表渲染 =====
     const bankSearch    = document.getElementById('bankSearch');
@@ -2458,16 +1556,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 <div class="bi-q">${escapeHTML(item.q)}</div>
                 <div class="bi-a">答案：${escapeHTML(item.a.substring(0,80))}${item.a.length>80?'…':''}</div>
             `;
-            div.addEventListener('click', ()=>{
-                selectedIdx = idx;
-                renderBankList(bankSearch.value);
-                showEditForm(idx);
-            });
+            div.addEventListener('click', ()=>{ selectedIdx = idx; renderBankList(bankSearch.value); showEditForm(idx); });
             bankList.appendChild(div);
         });
-        if(!bankList.children.length){
-            bankList.innerHTML = '<div style="font-size:12px;color:#8aa2c0;text-align:center;padding:20px;">未找到匹配题目</div>';
-        }
+        if(!bankList.children.length){ bankList.innerHTML = '<div style="font-size:12px;color:#8aa2c0;text-align:center;padding:20px;">未找到匹配题目</div>'; }
     }
     function showEditForm(idx){
         const item = questionBank[idx];
@@ -2476,30 +1568,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
         editA.value = item.a;
         editForm.style.display = 'block';
     }
-    bankSearch.addEventListener('input', ()=>{
-        selectedIdx = -1;
-        editForm.style.display = 'none';
-        renderBankList(bankSearch.value);
-    });
-    bankClearSearch.addEventListener('click', ()=>{
-        bankSearch.value = '';
-        selectedIdx = -1;
-        editForm.style.display = 'none';
-        renderBankList('');
-    });
-    editCancel.addEventListener('click', ()=>{
-        selectedIdx = -1;
-        editForm.style.display = 'none';
-        renderBankList(bankSearch.value);
-    });
+    bankSearch.addEventListener('input', ()=>{ selectedIdx = -1; editForm.style.display = 'none'; renderBankList(bankSearch.value); });
+    bankClearSearch.addEventListener('click', ()=>{ bankSearch.value = ''; selectedIdx = -1; editForm.style.display = 'none'; renderBankList(''); });
+    editCancel.addEventListener('click', ()=>{ selectedIdx = -1; editForm.style.display = 'none'; renderBankList(bankSearch.value); });
 
     editCodePreview.addEventListener('click', async ()=>{
         const html = await getFullPageHTML();
         const previewItem = { q: editQ.value.trim() || '（空）', a: editA.value.trim() || '（空）', highlight: true };
-        const listItems = questionBank.map((x,i)=>{
-            if(i === selectedIdx) return previewItem;
-            return x;
-        });
+        const listItems = questionBank.map((x,i)=>{ if(i === selectedIdx) return previewItem; return x; });
         showPreviewModal('编辑预览', listItems, 'list', html || '（无法获取代码）', true);
     });
 
@@ -2544,9 +1620,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const ocrEngine  = document.getElementById('ocrEngine');
 
     addClear.addEventListener('click', ()=>{
-        addQ.value = '';
-        addA.value = '';
-        ocrPreview.innerHTML = '';
+        addQ.value = ''; addA.value = ''; ocrPreview.innerHTML = '';
         ocrResultHint.classList.remove('active');
     });
 
@@ -2573,36 +1647,22 @@ document.addEventListener('DOMContentLoaded', ()=>{
         persistBank();
         showToast(`已新增题目（共${questionBank.length}题），正在同步完整页面…`);
         const success = await syncFullPageToGitHub(true);
-        if(success){
-            showToast('✅ 新增已同步到GitHub');
-        }else{
-            showToast('⚠️ 同步失败，但已保存到本地');
-        }
+        if(success){ showToast('✅ 新增已同步到GitHub'); }
+        else{ showToast('⚠️ 同步失败，但已保存到本地'); }
         setTimeout(()=>{ refreshPage(); }, 800);
     });
 
-    ocrArea.addEventListener('click', ()=>{
-        ocrInput.value = '';
-        ocrInput.click();
-    });
-
+    ocrArea.addEventListener('click', ()=>{ ocrInput.value = ''; ocrInput.click(); });
     ocrInput.addEventListener('change', async (e)=>{
         const file = e.target.files && e.target.files[0];
         if(!file) return;
-        if(!file.type.startsWith('image/')){
-            showToast('请选择图片文件');
-            return;
-        }
+        if(!file.type.startsWith('image/')){ showToast('请选择图片文件'); return; }
         const reader = new FileReader();
-        reader.onload = (ev)=>{
-            ocrPreview.innerHTML = `<img src="${ev.target.result}" alt="预览">`;
-        };
+        reader.onload = (ev)=>{ ocrPreview.innerHTML = `<img src="${ev.target.result}" alt="预览">`; };
         reader.readAsDataURL(file);
-
         ocrProgress.classList.add('active');
         ocrProgress.textContent = '⏳ 正在识别图片内容…';
         ocrResultHint.classList.remove('active');
-
         try{
             const engine = ocrEngine.value;
             const result = await recognizeImage(file, engine);
@@ -2611,20 +1671,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 addA.value = result.a || '';
                 ocrResultHint.classList.add('active');
                 showToast('✅ 识别完成，已自动填充');
-                setTimeout(()=>{
-                    addQ.focus();
-                    addQ.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 200);
+                setTimeout(()=>{ addQ.focus(); addQ.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 200);
             }else{
                 ocrResultHint.classList.remove('active');
                 showToast('⚠️ 未识别到内容，请手动输入');
             }
-        }catch(err){
-            console.warn('OCR识别失败', err);
-            showToast('识别失败，请手动输入');
-        }finally{
-            ocrProgress.classList.remove('active');
-        }
+        }catch(err){ console.warn('OCR识别失败', err); showToast('识别失败，请手动输入'); }
+        finally{ ocrProgress.classList.remove('active'); }
     });
 
     // ===== 备份面板 =====
@@ -2632,10 +1685,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         const b = loadBackups();
         const el = document.getElementById('backupList');
         el.innerHTML = '';
-        if(!b.list.length){
-            el.innerHTML = '<div style="font-size:12px;color:#8aa2c0;text-align:center;padding:16px;">暂无备份档案</div>';
-            return;
-        }
+        if(!b.list.length){ el.innerHTML = '<div style="font-size:12px;color:#8aa2c0;text-align:center;padding:16px;">暂无备份档案</div>'; return; }
         b.list.forEach((item, idx)=>{
             const div = document.createElement('div');
             div.className = 'backup-item' + (item.locked ? ' locked':'');
@@ -2654,7 +1704,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
             `;
             el.appendChild(div);
         });
-
         el.querySelectorAll('[data-act="view"]').forEach(btn=>{
             btn.addEventListener('click', ()=>{
                 const idx = +btn.dataset.idx;
@@ -2719,9 +1768,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
                     const lockedCount = bb.list.filter(x=>x.locked).length;
                     if(lockedCount >= 2){ showToast('最多上锁2个档案'); return; }
                     item.locked = true;
-                }else{
-                    item.locked = false;
-                }
+                }else{ item.locked = false; }
                 saveBackups(bb);
                 renderBackups();
             });
@@ -2749,13 +1796,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }
     }
 
-    // 导入当前代码到复活备份
     reviveImportCurrentBtn.addEventListener('click', async ()=>{
         const currentCode = await getFullPageHTML();
-        if(!currentCode || currentCode.trim().length < 100){
-            showToast('当前页面代码不完整，无法导入');
-            return;
-        }
+        if(!currentCode || currentCode.trim().length < 100){ showToast('当前页面代码不完整，无法导入'); return; }
         const existingBackup = loadReviveBackup();
         let msg = '⚠️ 确定将当前使用的代码替换/覆盖复活备份文件吗？\n\n';
         msg += '· 当前代码大小：' + (currentCode.length/1024).toFixed(1) + ' KB\n';
@@ -2768,49 +1811,28 @@ document.addEventListener('DOMContentLoaded', ()=>{
             msg += '确认后将使用当前代码创建复活备份。';
         }
         if(!confirm(msg)) return;
-
-        if(saveReviveBackup(currentCode)){
-            showToast('✅ 已将当前代码导入到复活备份');
-            renderReviveStatus();
-        }else{
-            alert('❌ 保存失败，可能超出浏览器存储限制。\n\n当前代码大小：' + (currentCode.length/1024).toFixed(1) + ' KB');
-        }
+        if(saveReviveBackup(currentCode)){ showToast('✅ 已将当前代码导入到复活备份'); renderReviveStatus(); }
+        else{ alert('❌ 保存失败，可能超出浏览器存储限制。\n\n当前代码大小：' + (currentCode.length/1024).toFixed(1) + ' KB'); }
     });
 
-    reviveUploadBtn.addEventListener('click', ()=>{
-        reviveFileInput.value = '';
-        reviveFileInput.click();
-    });
+    reviveUploadBtn.addEventListener('click', ()=>{ reviveFileInput.value = ''; reviveFileInput.click(); });
     reviveFileInput.addEventListener('change', (e)=>{
         const file = e.target.files && e.target.files[0];
         if(!file) return;
-        if(!file.name.toLowerCase().endsWith('.txt')){
-            showToast('请选择 .txt 文件');
-            return;
-        }
+        if(!file.name.toLowerCase().endsWith('.txt')){ showToast('请选择 .txt 文件'); return; }
         const reader = new FileReader();
         reader.onload = (ev)=>{
             const content = ev.target.result;
-            if(!content || content.length < 100){
-                showToast('文件内容过短，可能不是有效的备份');
-                return;
-            }
-            if(saveReviveBackup(content)){
-                showToast('✅ 复活备份已上传/覆盖');
-                renderReviveStatus();
-            }else{
-                showToast('保存失败，可能是文件过大超出存储限制');
-            }
+            if(!content || content.length < 100){ showToast('文件内容过短，可能不是有效的备份'); return; }
+            if(saveReviveBackup(content)){ showToast('✅ 复活备份已上传/覆盖'); renderReviveStatus(); }
+            else{ showToast('保存失败，可能是文件过大超出存储限制'); }
         };
         reader.readAsText(file);
     });
 
     reviveDownloadBtn.addEventListener('click', ()=>{
         const backup = loadReviveBackup();
-        if(!backup){
-            showToast('暂无复活备份，请先上传');
-            return;
-        }
+        if(!backup){ showToast('暂无复活备份，请先上传'); return; }
         const now = new Date();
         const y = now.getFullYear();
         const m = String(now.getMonth()+1).padStart(2,'0');
@@ -2819,11 +1841,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
         const mm = String(now.getMinutes()).padStart(2,'0');
         const ss = String(now.getSeconds()).padStart(2,'0');
         const filename = `复活备份_${y}${m}${d}_${hh}${mm}${ss}.txt`;
-        if(downloadTextFile(backup.content, filename)){
-            showToast('✅ 已开始下载：' + filename);
-        }else{
-            showToast('下载失败，请重试');
-        }
+        if(downloadTextFile(backup.content, filename)){ showToast('✅ 已开始下载：' + filename); }
+        else{ showToast('下载失败，请重试'); }
     });
 
     revivePreviewBtn.addEventListener('click', ()=>{
@@ -2839,23 +1858,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
                     <button class="modal-close" data-close="1">✕</button>
                 </div>
                 <div class="modal-body">
-                    <div style="font-size:11px;color:#8aa2c0;margin-bottom:6px;">
-                        上传时间：${escapeHTML(backup.time)} · 大小：${(backup.size/1024).toFixed(1)} KB
-                    </div>
+                    <div style="font-size:11px;color:#8aa2c0;margin-bottom:6px;">上传时间：${escapeHTML(backup.time)} · 大小：${(backup.size/1024).toFixed(1)} KB</div>
                     <pre class="code-preview"><span class="code-hint">// 复活备份内容（完整页面代码）</span>${escapeHTML(backup.content)}</pre>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn" data-close="1">关闭</button>
-                </div>
+                <div class="modal-footer"><button class="btn" data-close="1">关闭</button></div>
             </div>
         `;
         document.body.appendChild(overlay);
-        overlay.querySelectorAll('[data-close]').forEach(b=>{
-            b.addEventListener('click', ()=> overlay.remove());
-        });
-        overlay.addEventListener('click', (e)=>{
-            if(e.target === overlay) overlay.remove();
-        });
+        overlay.querySelectorAll('[data-close]').forEach(b=>{ b.addEventListener('click', ()=> overlay.remove()); });
+        overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
     });
 
     reviveSyncBtn.addEventListener('click', async ()=>{
@@ -2880,9 +1891,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const ghStatus      = document.getElementById('ghStatus');
     const ghSyncInfo    = document.getElementById('ghSyncInfo');
 
-    githubHeader.addEventListener('click', ()=>{
-        githubSection.classList.toggle('expanded');
-    });
+    githubHeader.addEventListener('click', ()=>{ githubSection.classList.toggle('expanded'); });
 
     function renderGhCfg(){
         const cfg = loadGhCfg();
@@ -2894,13 +1903,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
     function updateGhStatus(){
         const cfg = loadGhCfg();
-        if(isGhConfigured(cfg)){
-            ghStatus.textContent = '已配置';
-            ghStatus.className = 'gh-status configured';
-        }else{
-            ghStatus.textContent = '未配置';
-            ghStatus.className = 'gh-status unconfigured';
-        }
+        if(isGhConfigured(cfg)){ ghStatus.textContent = '已配置'; ghStatus.className = 'gh-status configured'; }
+        else{ ghStatus.textContent = '未配置'; ghStatus.className = 'gh-status unconfigured'; }
     }
     document.getElementById('ghSaveCfg').addEventListener('click', ()=>{
         const cfg = {
@@ -2913,15 +1917,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
         updateGhStatus();
         showToast('GitHub 配置已保存');
     });
-    document.getElementById('ghTest').addEventListener('click', ()=>{
-        testGitHubConnection(false);
-    });
+    document.getElementById('ghTest').addEventListener('click', ()=>{ testGitHubConnection(false); });
     document.getElementById('ghSyncNow').addEventListener('click', async ()=>{
         const ok = await syncFullPageToGitHub(false);
-        if(ok){
-            ghSyncInfo.style.display = 'block';
-            ghSyncInfo.textContent = `✅ 已同步完整页面代码（含${questionBank.length}题）`;
-        }
+        if(ok){ ghSyncInfo.style.display = 'block'; ghSyncInfo.textContent = `✅ 已同步完整页面代码（含${questionBank.length}题）`; }
     });
 
     questionInput.focus();
