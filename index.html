@@ -486,6 +486,17 @@ const GH_CFG_KEY  = 'zktest_gh_cfg_v1';
 const REVIVE_KEY  = 'zktest_revive_v1';
 const HISTORY_KEY = 'zktest_history_v1';
 const CONFIRM_CODE = 'qiuhua';
+// ====================== 云同步 ======================
+const SYNC_FILE = 'sync-data.json';
+const SYNC_KEYS = ['ghConfig','reviveBackup','backups','history'];
+
+function detectDevice(){
+    const ua = navigator.userAgent || '';
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile|HarmonyOS/i.test(ua);
+    return isMobile ? 'mobile' : 'pc';
+}
+const DEVICE = detectDevice();
+function nowTs(){ return Date.now(); }
 
 // ====================== 全局状态 ======================
 let questionBank = [];
@@ -502,14 +513,20 @@ function loadReviveBackup(){
     }catch(e){}
     return null;
 }
-function saveReviveBackup(content){
+function saveReviveBackup(content, extra){
     const now = new Date();
     const timeStr = now.toLocaleString('zh-CN',{hour12:false});
-    const obj = { content, time: timeStr, size: content.length };
-    try{ localStorage.setItem(REVIVE_KEY, JSON.stringify(obj)); }catch(e){
-        console.warn('复活备份保存失败', e);
-        return false;
-    }
+    const obj = {
+        content,
+        time: timeStr,
+        size: content.length,
+        updatedAt: nowTs(),
+        device: DEVICE
+    };
+    if(extra){ Object.assign(obj, extra); obj.updatedAt = nowTs(); obj.device = DEVICE; }
+    try{ localStorage.setItem(REVIVE_KEY, JSON.stringify(obj)); }
+    catch(e){ console.warn('复活备份保存失败', e); return false; }
+    if(typeof pushSyncData === 'function') pushSyncData(true);
     return true;
 }
 
@@ -541,7 +558,9 @@ function checkPageIntegrity() {
 }
 
 window.addEventListener('load', () => {
-    setTimeout(() => {
+    setTimeout(async () => {
+        try{ await syncFromCloud(); }catch(e){ console.warn(e); }
+
         const integrity = checkPageIntegrity();
         if (!integrity.ok) {
             console.warn('[完整性检测] 未通过:', integrity.reason);
@@ -629,14 +648,21 @@ function loadHistory(){
     try{
         const raw = localStorage.getItem(HISTORY_KEY);
         if(raw){
-            const arr = JSON.parse(raw);
-            if(Array.isArray(arr)) return arr.slice(0,8);
+            const obj = JSON.parse(raw);
+            if(Array.isArray(obj)) return obj.slice(0,8);
+            if(obj && Array.isArray(obj.list)) return obj.list.slice(0,8);
         }
     }catch(e){}
     return [];
 }
 function saveHistory(list){
-    try{ localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0,8))); }catch(e){}
+    try{
+        localStorage.setItem(HISTORY_KEY, JSON.stringify({
+            list: list.slice(0,8),
+            updatedAt: nowTs(),
+            device: DEVICE
+        }));
+    }catch(e){}
 }
 function addHistory(keyword){
     if(!keyword || !keyword.trim()) return;
@@ -696,6 +722,7 @@ function loadBank(){
 function persistBank(){
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(questionBank)); }
     catch(e){ console.warn('保存题库失败', e); }
+    if(typeof pushSyncData === 'function') pushSyncData(true);
 }
 
 // ====================== 备份管理 ======================
@@ -710,7 +737,10 @@ function loadBackups(){
     return { list: [] };
 }
 function saveBackups(obj){
+    obj.updatedAt = nowTs();
+    obj.device = DEVICE;
     try{ localStorage.setItem(BACKUP_KEY, JSON.stringify(obj)); }catch(e){}
+    if(typeof pushSyncData === 'function') pushSyncData(true);
 }
 function backupCurrentBank(){
     const b = loadBackups();
@@ -740,7 +770,10 @@ function loadGhCfg(){
     return { owner:'', repo:'', path:'', token:'' };
 }
 function saveGhCfg(cfg){
+    cfg.updatedAt = nowTs();
+    cfg.device = DEVICE;
     try{ localStorage.setItem(GH_CFG_KEY, JSON.stringify(cfg)); }catch(e){}
+    if(typeof pushSyncData === 'function') pushSyncData(true);
 }
 function isGhConfigured(cfg){
     return cfg && cfg.owner && cfg.repo && cfg.path && cfg.token;
@@ -819,6 +852,122 @@ async function pushContentToGitHub(content, message, silent){
         if(!silent) showToast('GitHub 同步异常：' + e.message);
         return false;
     }
+}
+
+// ====================== 云同步核心 ======================
+function loadLocalSync(){
+    const out = {};
+    out.ghConfig     = loadGhCfg();
+    out.reviveBackup = loadReviveBackup() || {};
+    out.backups      = loadBackups();
+    out.history      = { list: loadHistory() };
+    SYNC_KEYS.forEach(k=>{
+        if(!out[k]) out[k] = {};
+        if(typeof out[k].updatedAt !== 'number') out[k].updatedAt = 0;
+        if(!out[k].device) out[k].device = DEVICE;
+    });
+    return out;
+}
+
+function saveLocalSync(sync){
+    if(sync.ghConfig) saveGhCfg(sync.ghConfig);
+    if(sync.reviveBackup && sync.reviveBackup.content){
+        saveReviveBackup(sync.reviveBackup.content, sync.reviveBackup);
+    }
+    if(sync.backups) saveBackups(sync.backups);
+    if(sync.history) saveHistory(sync.history.list || []);
+}
+
+function pickNewer(localRec, remoteRec){
+    if(!remoteRec) return localRec;
+    if(!localRec)  return remoteRec;
+    const lt = localRec.updatedAt || 0;
+    const rt = remoteRec.updatedAt || 0;
+    if(rt > lt) return remoteRec;
+    if(rt < lt) return localRec;
+    if(remoteRec.device === 'mobile' && localRec.device !== 'mobile') return remoteRec;
+    if(localRec.device === 'mobile' && remoteRec.device !== 'mobile') return localRec;
+    return localRec;
+}
+
+function mergeSync(localSync, remoteSync){
+    const merged = {};
+    SYNC_KEYS.forEach(k=>{
+        merged[k] = pickNewer(localSync[k], remoteSync ? remoteSync[k] : null);
+    });
+    return merged;
+}
+
+function getSyncPath(cfg){
+    const dir = cfg.path.includes('/') ? cfg.path.replace(/\/[^/]+$/, '/') : '';
+    return dir + SYNC_FILE;
+}
+
+async function pushSyncData(silent = true){
+    const cfg = loadGhCfg();
+    if(!isGhConfigured(cfg)) return false;
+    const syncPath = getSyncPath(cfg);
+    const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${syncPath}`;
+    const sync = loadLocalSync();
+    const content = JSON.stringify(sync, null, 2);
+    const contentB64 = btoa(unescape(encodeURIComponent(content)));
+    try{
+        let sha = null;
+        const getResp = await fetch(apiBase, {
+            method:'GET',
+            headers:{ 'Authorization':`token ${cfg.token}`, 'Accept':'application/vnd.github.v3+json' }
+        });
+        if(getResp.ok){ sha = (await getResp.json()).sha; }
+        const body = {
+            message: `sync-data ${new Date().toLocaleString('zh-CN',{hour12:false})} [${DEVICE}]`,
+            content: contentB64,
+            branch: 'main'
+        };
+        if(sha) body.sha = sha;
+        const putResp = await fetch(apiBase, {
+            method:'PUT',
+            headers:{
+                'Authorization':`token ${cfg.token}`,
+                'Accept':'application/vnd.github.v3+json',
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+        if(putResp.ok){ if(!silent) showToast('✅ 云端配置已同步'); return true; }
+        console.warn('pushSyncData 失败', await putResp.text());
+        return false;
+    }catch(e){ console.warn('pushSyncData 异常', e); return false; }
+}
+
+async function pullSyncData(){
+    const cfg = loadGhCfg();
+    if(!isGhConfigured(cfg)) return null;
+    const syncPath = getSyncPath(cfg);
+    const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${syncPath}`;
+    try{
+        const resp = await fetch(apiBase, {
+            method:'GET',
+            headers:{ 'Authorization':`token ${cfg.token}`, 'Accept':'application/vnd.github.v3+json' }
+        });
+        if(!resp.ok) return null;
+        const data = await resp.json();
+        const text = decodeURIComponent(escape(atob(data.content.replace(/\n/g,''))));
+        return JSON.parse(text);
+    }catch(e){ console.warn('pullSyncData 异常', e); return null; }
+}
+
+async function syncFromCloud(){
+    const remote = await pullSyncData();
+    if(!remote) return;
+    const local = loadLocalSync();
+    const merged = mergeSync(local, remote);
+    saveLocalSync(merged);
+    const remoteStr = JSON.stringify(remote);
+    const mergedStr = JSON.stringify(merged);
+    if(remoteStr !== mergedStr){
+        await pushSyncData(true);
+    }
+    loadBank();
 }
 
 // ====================== 同步完整页面 ======================
