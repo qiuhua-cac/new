@@ -4,7 +4,7 @@
     "repo": "new",
     "path": "index.html",
     "token": "",
-    "updatedAt": 1789481811154,
+    "updatedAt": 1789481831400,
     "device": "pc"
   },
   "reviveBackup": {
@@ -3857,14 +3857,9 @@
         "q": "带式脱水机紧急停机拉绳开关属于（）保护",
         "a": "急停",
         "e": ""
-      },
-      {
-        "q": "手机测试",
-        "a": "手机测试",
-        "e": "手机测试"
       }
     ],
-    "updatedAt": 1789481796370,
+    "updatedAt": 1789481822489,
     "device": "pc"
   }
 }
