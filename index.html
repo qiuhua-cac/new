@@ -1051,6 +1051,16 @@ async function syncFromCloud(){
     loadBank();
 }
 
+// ====================== 题库时间戳 ======================
+const BANK_TS_KEY = 'zktest_bank_ts_v1';
+function loadBankUpdatedAt(){
+    const v = localStorage.getItem(BANK_TS_KEY);
+    return v ? parseInt(v, 10) : 0;
+}
+function saveBankUpdatedAt(ts){
+    localStorage.setItem(BANK_TS_KEY, String(ts || nowTs()));
+}
+
 // ====================== 同步完整页面 ======================
 async function syncFullPageToGitHub(silent = false){
     const cfg = loadGhCfg();
