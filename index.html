@@ -15,8 +15,6 @@ body{
     flex-direction:column;
     align-items:center;
 }
-
-/* 顶部标题行 */
 .header-row{
     width:100%;max-width:760px;
     display:flex;
@@ -29,8 +27,6 @@ body{
 .app-header{text-align:center;}
 .app-header h1{font-size:20px;color:#1e40af;margin-bottom:4px;font-weight:600;letter-spacing:0.5px;}
 .app-header .subtitle{font-size:12px;color:#3b5f8a;}
-
-/* 登录按钮 */
 .login-btn{
     position:absolute;
     right:0;
@@ -49,8 +45,6 @@ body{
 .login-btn:hover{background:#e8f2fe;border-color:#9bbde0;}
 .login-btn:active{transform:scale(0.97);}
 .login-btn.logged-in{background:#dbeafe;border-color:#93c5fd;color:#1d4ed8;}
-
-/* 主容器 */
 .app-container{
     width:100%;max-width:760px;
     background:#fff;
@@ -62,8 +56,6 @@ body{
     flex:1;
     min-height:0;
 }
-
-/* 对话显示区 */
 .chat-area{
     flex:1;
     padding:18px 16px;
@@ -72,13 +64,9 @@ body{
     min-height:0;
     -webkit-overflow-scrolling:touch;
 }
-
-/* 空状态 */
 .empty-state{text-align:center;color:#6a8aad;padding:70px 20px;}
 .empty-state .empty-icon{font-size:44px;margin-bottom:12px;opacity:0.7;}
 .empty-state .empty-text{font-size:13px;line-height:1.8;}
-
-/* ====== 结果卡片 ====== */
 .result-card{
     background:#fff;
     border-radius:14px;
@@ -89,7 +77,6 @@ body{
     animation:fadeIn 0.28s ease-out;
 }
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
-
 .result-card .q-label{
     display:inline-block;
     font-size:10px;
@@ -147,8 +134,6 @@ body{
     font-weight:normal;
     padding:0 2px;
 }
-
-/* 无结果 */
 .no-result{
     background:#fffbeb;
     border-left:5px solid #f59e0b;
@@ -159,16 +144,12 @@ body{
     line-height:1.7;
 }
 .no-result b{color:#b45309;}
-
-/* ===== 底部固定区域 ===== */
 .bottom-fixed{
     flex-shrink:0;
     background:#fff;
     border-top:1px solid #d0e0f0;
     box-shadow:0 -4px 16px rgba(30,64,175,0.06);
 }
-
-/* 工具栏 */
 .toolbar{
     display:flex;
     justify-content:space-between;
@@ -199,7 +180,6 @@ body{
 .toolbar button:active{background:#d4e6fa;transform:scale(0.97);}
 .toolbar .btn-clear-chat{color:#c0392b;border-color:#f5b8b8;}
 .toolbar .btn-clear-chat:hover{background:#fef0f0;}
-
 .toolbar .icon-btn-sm{
     width:40px;height:40px;
     border-radius:50%;
@@ -214,8 +194,6 @@ body{
 }
 .toolbar .icon-btn-sm:hover{background:#e0eefe;border-color:#9bbde0;}
 .toolbar .icon-btn-sm:active{transform:scale(0.93);}
-
-/* ===== 输入区 ===== */
 .input-area{
     padding:6px 16px 14px;
     display:flex;
@@ -246,8 +224,6 @@ body{
     box-shadow:0 0 0 4px rgba(59,130,246,0.12);
 }
 .input-area input[type="text"]::placeholder{color:#7a99bb;font-weight:400;}
-
-/* 图片预览 */
 .img-preview{
     position:absolute;
     left:0;bottom:64px;
@@ -267,8 +243,6 @@ body{
     cursor:pointer;font-weight:bold;
     box-shadow:0 2px 6px rgba(0,0,0,0.15);
 }
-
-/* 发送按钮 */
 .send-btn{
     width:54px;height:54px;
     border:none;border-radius:50%;
@@ -284,8 +258,6 @@ body{
 }
 .send-btn:hover{background:linear-gradient(135deg,#2563eb,#1d4ed8);}
 .send-btn:active{transform:scale(0.94);}
-
-/* 语音录制动画 */
 .recording{
     background:#ef4444 !important;
     border-color:#ef4444 !important;
@@ -297,8 +269,6 @@ body{
     70%{box-shadow:0 0 0 12px rgba(239,68,68,0);}
     100%{box-shadow:0 0 0 0 rgba(239,68,68,0);}
 }
-
-/* 提示气泡（置顶显示，z-index最高） */
 .toast{
     position:fixed;top:24px;left:50%;transform:translateX(-50%);
     background:#1e293b;color:#fff;padding:12px 26px;border-radius:28px;
@@ -311,8 +281,6 @@ body{
     animation:toastIn 0.2s ease-out;
 }
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-10px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
-
-/* ========== 弹窗通用 ========== */
 .modal-overlay{
     position:fixed;
     inset:0;
@@ -325,7 +293,6 @@ body{
     backdrop-filter:blur(3px);
 }
 .modal-overlay.active{display:flex;}
-
 .modal{
     background:#fff;
     border-radius:18px;
@@ -339,7 +306,6 @@ body{
     animation:modalIn 0.25s ease-out;
 }
 @keyframes modalIn{from{opacity:0;transform:scale(0.94);}to{opacity:1;transform:scale(1);}}
-
 .modal-header{
     padding:16px 20px;
     background:linear-gradient(135deg,#3b82f6,#2563eb);
@@ -362,14 +328,12 @@ body{
     transition:0.15s;
 }
 .modal-close:hover{background:rgba(255,255,255,0.35);}
-
 .modal-body{
     padding:18px 20px;
     overflow-y:auto;
     flex:1;
     min-height:0;
 }
-
 .modal-footer{
     padding:12px 20px 16px;
     display:flex;
@@ -379,7 +343,6 @@ body{
     background:#fafcff;
     flex-shrink:0;
 }
-
 .btn{
     font-size:13px;
     padding:9px 18px;
@@ -399,8 +362,6 @@ body{
 .btn-danger:hover{background:#fef0f0;}
 .btn-sm{font-size:12px;padding:6px 12px;border-radius:8px;}
 .btn:disabled{opacity:0.5;cursor:not-allowed;}
-
-/* 登录表单 */
 .form-group{margin-bottom:14px;}
 .form-group label{display:block;font-size:12px;color:#4a6a8a;margin-bottom:5px;font-weight:500;}
 .form-group input{
@@ -414,8 +375,6 @@ body{
     transition:0.2s;
 }
 .form-group input:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
-
-/* 题库编辑 */
 .bank-toolbar{
     display:flex;
     gap:8px;
@@ -434,7 +393,6 @@ body{
     background:#f9fcff;
 }
 .bank-toolbar input:focus{border-color:#3b82f6;background:#fff;}
-
 .bank-list{
     max-height:340px;
     overflow-y:auto;
@@ -463,8 +421,6 @@ body{
     padding:1px 7px;
     border-radius:8px;
 }
-
-/* 编辑表单 */
 .edit-form{
     margin-top:14px;
     border-top:1px solid #eef2f8;
@@ -485,8 +441,6 @@ body{
     transition:0.2s;
 }
 .edit-form .form-group textarea:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
-
-/* 图片识别区 */
 .ocr-area{
     background:#f0f7ff;
     border:1.5px dashed #93c5fd;
@@ -512,8 +466,6 @@ body{
 .ocr-area .ocr-progress.active{display:block;}
 .ocr-preview{margin-top:10px;text-align:center;}
 .ocr-preview img{max-width:100%;max-height:140px;border-radius:8px;}
-
-/* 图片识别结果的提示 */
 .ocr-result-hint{
     display:none;
     background:#dcfce7;
@@ -527,8 +479,6 @@ body{
 }
 .ocr-result-hint.active{display:block;}
 .ocr-result-hint b{color:#15803d;}
-
-/* OCR引擎选择 */
 .ocr-engine-select{
     display:flex;
     gap:6px;
@@ -552,8 +502,6 @@ body{
     cursor:pointer;
 }
 .ocr-engine-select select:focus{border-color:#3b82f6;}
-
-/* 备份区 */
 .backup-section{
     background:#fafcff;
     border:1px solid #e2ecf7;
@@ -587,8 +535,6 @@ body{
 .backup-item .bi-actions{display:flex;gap:5px;align-items:center;}
 .backup-item.locked{background:#fff8e6;border-color:#fde68a;}
 .lock-icon{font-size:12px;cursor:pointer;user-select:none;}
-
-/* 标签页 */
 .tabs{
     display:flex;
     gap:4px;
@@ -608,11 +554,8 @@ body{
 }
 .tab:hover{color:#3b82f6;}
 .tab.active{color:#2563eb;border-bottom-color:#2563eb;font-weight:600;}
-
 .tab-content{display:none;}
 .tab-content.active{display:block;}
-
-/* GitHub 同步区（可折叠） */
 .github-section{
     background:#f0f7ff;
     border:1px solid #c8d9ec;
@@ -687,8 +630,6 @@ body{
     font-family:inherit;
 }
 .github-row input:focus{border-color:#3b82f6;}
-
-/* 同步提示 */
 .gh-sync-info{
     font-size:11px;
     color:#166534;
@@ -698,8 +639,6 @@ body{
     margin-top:8px;
     line-height:1.6;
 }
-
-/* 复活备份区 */
 .revive-section{
     background:linear-gradient(135deg,#fef3c7,#fde68a);
     border:1.5px solid #f59e0b;
@@ -765,8 +704,6 @@ body{
 .revive-row button.download:hover{background:#0284c7;}
 .revive-row button.import{background:#8b5cf6;color:#fff;border-color:#7c3aed;}
 .revive-row button.import:hover{background:#7c3aed;}
-
-/* 二次确认小弹窗 */
 .confirm-overlay{
     position:fixed;inset:0;
     background:rgba(15,30,50,0.55);
@@ -799,8 +736,6 @@ body{
 }
 .confirm-box input:focus{border-color:#3b82f6;background:#fff;}
 .confirm-actions{display:flex;gap:8px;justify-content:flex-end;}
-
-/* 预览切换标签 */
 .preview-tabs{
     display:flex;
     gap:4px;
@@ -819,8 +754,6 @@ body{
 }
 .preview-tab:hover{color:#3b82f6;}
 .preview-tab.active{color:#2563eb;border-bottom-color:#2563eb;font-weight:600;}
-
-/* 代码预览区 */
 .code-preview{
     background:#1e293b;
     color:#a5f3fc;
@@ -843,8 +776,6 @@ body{
     display:block;
     white-space:normal;
 }
-
-/* 只读题库预览 */
 .readonly-list{
     max-height:420px;
     overflow-y:auto;
@@ -858,8 +789,6 @@ body{
 .readonly-list .bank-item:hover{
     background:#fafdff;
 }
-
-/* ========== 复活弹窗（崩溃时专用） ========== */
 .revive-popup-overlay{
     position:fixed;
     inset:0;
@@ -975,8 +904,6 @@ body{
     padding:12px 14px;
 }
 .revive-popup-actions .rp-btn-preview:hover{background:#bfdbfe;}
-
-/* 移动端适配 */
 @media (max-width: 600px) {
     body{padding:10px;}
     .header-row{margin-bottom:10px;}
@@ -1010,7 +937,6 @@ body{
 </style>
 </head>
 <body>
-
 <div class="header-row">
     <div class="app-header">
         <h1>🔍 中控测验答题器</h1>
@@ -1018,7 +944,6 @@ body{
     </div>
     <button class="login-btn" id="loginBtn">🔑 登录</button>
 </div>
-
 <div class="app-container">
     <div class="chat-area" id="chatArea">
         <div class="empty-state" id="emptyState">
@@ -1029,7 +954,6 @@ body{
             </div>
         </div>
     </div>
-
     <div class="bottom-fixed">
         <div class="toolbar">
             <div class="toolbar-left">
@@ -1042,7 +966,6 @@ body{
                 <button id="clearInputBtn">✖ 清空输入</button>
             </div>
         </div>
-
         <div class="input-area">
             <div class="input-wrap">
                 <input type="text" id="questionInput" placeholder="请输入题目关键词…" autocomplete="off">
@@ -1055,10 +978,9 @@ body{
         </div>
     </div>
 </div>
-
 <div class="toast" id="toast"></div>
 
-<!-- ========== 复活弹窗（崩溃时自动弹出） ========== -->
+<!-- 复活弹窗 -->
 <div class="revive-popup-overlay" id="revivePopup">
     <div class="revive-popup">
         <div class="revive-popup-header">
@@ -1085,7 +1007,7 @@ body{
     </div>
 </div>
 
-<!-- ========== 登录弹窗 ========== -->
+<!-- 登录弹窗 -->
 <div class="modal-overlay" id="loginModal">
     <div class="modal" style="max-width:380px;">
         <div class="modal-header">
@@ -1109,7 +1031,7 @@ body{
     </div>
 </div>
 
-<!-- ========== 题库编辑弹窗 ========== -->
+<!-- 题库管理弹窗 -->
 <div class="modal-overlay" id="bankModal">
     <div class="modal" style="max-width:640px;">
         <div class="modal-header">
@@ -1124,14 +1046,12 @@ body{
                 <div class="tab" data-tab="tab-revive">💊 复活备份</div>
             </div>
 
-            <!-- 搜索编辑 -->
             <div class="tab-content active" id="tab-search">
                 <div class="bank-toolbar">
                     <input type="text" id="bankSearch" placeholder="输入关键词搜索题目…">
                     <button class="btn btn-sm" id="bankClearSearch">清空</button>
                 </div>
                 <div class="bank-list" id="bankList"></div>
-
                 <div class="edit-form" id="editForm" style="display:none;">
                     <div class="form-group">
                         <label>题目</label>
@@ -1150,9 +1070,7 @@ body{
                 </div>
             </div>
 
-            <!-- 新增题目 -->
             <div class="tab-content" id="tab-add">
-                <!-- OCR引擎选择 -->
                 <div class="ocr-engine-select">
                     <label>🔧 识别引擎：</label>
                     <select id="ocrEngine">
@@ -1161,7 +1079,6 @@ body{
                         <option value="tesseract">浏览器OCR（需加载库）</option>
                     </select>
                 </div>
-
                 <div class="ocr-area" id="ocrArea">
                     <div class="ocr-icon">📷</div>
                     <div class="ocr-text">点击上传题目图片，自动识别题目与答案</div>
@@ -1172,7 +1089,6 @@ body{
                     ✅ 图片识别完成，已自动填充到下方编辑框，请核对后保存。
                 </div>
                 <div class="ocr-preview" id="ocrPreview"></div>
-
                 <div class="form-group">
                     <label>题目</label>
                     <textarea id="addQ" placeholder="输入题目内容"></textarea>
@@ -1188,7 +1104,6 @@ body{
                 </div>
             </div>
 
-            <!-- 备份档案 -->
             <div class="tab-content" id="tab-backup">
                 <div style="font-size:12px;color:#4a6a8a;margin-bottom:10px;line-height:1.6;">
                     每次保存修改或新增前，系统会自动备份当前题库。<br>
@@ -1201,19 +1116,27 @@ body{
                 </div>
             </div>
 
-            <!-- 复活备份（最高优先级） -->
             <div class="tab-content" id="tab-revive">
                 <div class="revive-section">
                     <div class="revive-title">💊 复活备份（最高优先级）</div>
                     <div class="revive-hint">
-                        上传一份 <b>txt 格式的完整页面代码</b> 备份文件（例如从GitHub下载的 index.html 重命名为 .txt）。<br>
+                        上传一份 <b>txt 格式的完整页面代码</b> 备份文件。<br>
                         该文件保存在浏览器本地，<b>不可删除，只能被新上传覆盖替换</b>。<br>
-                        当页面代码错乱或丢失时，即使当前功能不可用，仍可通过此备份一键恢复至 GitHub 仓库。
+                        当页面代码错乱或丢失时，仍可通过此备份一键恢复至 GitHub 仓库。
                     </div>
+
+                    <div style="margin-bottom:10px;">
+                        <label style="font-size:12px;color:#4a6a8a;display:flex;align-items:center;gap:6px;">
+                            <input type="checkbox" id="autoReviveDetect" checked>
+                            开启页面异常自动检测弹窗（移动端锁屏切后台容易误报，误报频繁可以关闭）
+                        </label>
+                    </div>
+
                     <div class="revive-status" id="reviveStatus">
                         <span id="reviveStatusText">未上传复活备份</span>
                         <span id="reviveStatusMeta"></span>
                     </div>
+
                     <div class="revive-row">
                         <button class="import" id="reviveImportCurrentBtn">💾 导入当前代码</button>
                         <button id="reviveUploadBtn">📤 上传/覆盖</button>
@@ -1223,13 +1146,12 @@ body{
                     </div>
                     <input type="file" id="reviveFileInput" accept=".txt,text/plain" style="display:none;">
                 </div>
+
                 <div style="font-size:11px;color:#78350f;margin-top:10px;line-height:1.6;background:#fffbeb;border-radius:8px;padding:8px 10px;">
-                    ⚠️ 提示：复活备份仅保存完整页面代码（HTML+题库）。恢复时会将 txt 内容直接覆盖到 GitHub 仓库指定路径，请谨慎操作。<br>
-                    💾 <b>"导入当前代码"</b> 功能会将当前页面的实际代码（含所有题库修改）覆盖替换到复活备份文件中。
+                    ⚠️ 提示：复活备份仅保存完整页面代码。恢复时会将 txt 内容直接覆盖到 GitHub 仓库指定路径，请谨慎操作。
                 </div>
             </div>
 
-            <!-- GitHub 同步（可折叠） -->
             <div class="github-section" id="githubSection">
                 <div class="github-header" id="githubHeader">
                     <div class="gh-title">
@@ -1240,7 +1162,7 @@ body{
                 </div>
                 <div class="github-body">
                     <div class="gh-hint">
-                        配置好仓库信息后，每次保存（修改/新增/恢复）将自动同步完整页面代码到 GitHub。<br>
+                        配置好仓库信息后，每次保存将自动同步完整页面代码到 GitHub。<br>
                         需要 Personal Access Token（至少 repo 权限）。
                     </div>
                     <div class="github-row">
@@ -1265,7 +1187,6 @@ body{
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="modal-footer">
             <button class="btn" id="bankCancel">关闭</button>
@@ -1273,7 +1194,7 @@ body{
     </div>
 </div>
 
-<!-- ========== 二次确认弹窗 ========== -->
+<!-- 二次确认弹窗 -->
 <div class="confirm-overlay" id="confirmOverlay">
     <div class="confirm-box">
         <h4 id="confirmTitle">请输入确认代码</h4>
@@ -1286,255 +1207,244 @@ body{
 </div>
 
 <script>
-// ====================== 题库数据（默认） ======================
+// ====================== 常量与配置 ======================
+const SESSION_KEY = 'zk_session_id';
+const HEALTH_KEY = 'zk_health_tick';
+const REVIVE_BACKUP_KEY = 'zk_revive_backup_txt';
+const REVIVE_BACKUP_META_KEY = 'zk_revive_backup_meta';
+const AUTO_REVIVE_DETECT_KEY = 'zk_auto_revive_detect';
+const GITHUB_CFG_KEY = 'zk_github_cfg';
+const BANK_KEY = 'zk_bank_data';
+const BACKUP_LIST_KEY = 'zk_bank_backups';
+
+const CRASH_TIMEOUT_MS = 120000;
+const PAGE_BOOT_COOLDOWN = 2000;
+
+let pageBootTimestamp = Date.now();
+let userHasInteracted = false;
+let autoReviveDetect = true;
+
+let currentEditIndex = -1;
+let confirmCallback = null;
+let confirmTitle = '';
+
+let bank = [];
+
+// ====================== 默认题库 ======================
 const defaultBank = [
-{q:"凡在高地面（）的地点进行的工作都应视作高处作业", a:"2米及以上"},
-{q:"有限空间作业时，气体检测应在作业前（）分钟内完成，作业中至少每（）分钟重复检测一次", a:"30‖30"},
-{q:"粉末活性炭主要用于", a:"去除COD"},
-{q:"厌氧区溶解氧控制在", a:"0.2mg/L以下"},
-{q:"有机物去除的途径包括（）和（）", a:"活性污泥合成代谢（污泥增殖）‖活性污泥分解代谢（将有机物分解为二氧化碳和水）"},
-{q:"潜水泵的由上到下的结构是", a:"吊环‖电缆‖定子转子‖叶轮‖轴承‖泵壳‖底座"},
-{q:"以下哪种化学品不属于污水处理厂的腐蚀性化学品", a:"乙醇"},
-{q:"发现有人硫化氢中毒晕倒在有限空间内，施救者应", a:"佩戴正压式空气呼吸器确认安全后进入施救，切勿盲目进入"},
-{q:"NaClO具有", a:"碱性‖强氧化性‖强腐蚀性‖不稳定性"},
-{q:"废气处理中氢氧化钠洗涤的作用是（）次氯酸钠的作用是（）活性炭吸附的作用是（）", a:"中和酸性气体如硫化氢等‖氧化分析有毒气体如硫化氢、胺类、硫醇类去除恶臭类物质‖去除有毒、有异味的气体挥发性的有机物（VOCS）"},
-{q:"厌氧处理的主要产物是", a:"甲烷和二氧化碳"},
-{q:"下列哪种个体防护装备不能用于硫化氢环境作业", a:"半面罩防毒面具配A型滤盒"},
-{q:"污泥料仓发生“架桥”坍塌事故导致人员被埋，现场第一响应人首先应?", a:"停止进料、切断电源"},
-{q:"COD;NH3-N;TP;TN;氟化物的纳管标准分别是", a:"500mg/L‖45mg/L‖3mg/L‖50mg/L‖15mg/L"},
-{q:"NaClO含量是指", a:"有效氯含量10%"},
-{q:"曝气池中需要消耗氧气的有（）三个过程", a:"氧化‖硝化‖内源呼吸"},
-{q:"进入有限空间（如阀门井、污水井）作业，必须遵循的原则是（）", a:"先通风、再检测、后作业"},
-{q:"水泵的运行频率单位是", a:"Hz"},
-{q:"硫化氢浓度超过（）时，数秒内就可致人闪电型死亡。", a:"1000mg/m³"},
-{q:"机械设备（如细格栅、压滤机）卡阻或检修时，正确操作是（）", a:"切断电源并悬挂“禁止合闸 有人工作”标示牌（上锁挂牌）后清理"},
-{q:"影响活性污泥法处理效果的因素包括", a:"污泥负荷‖污泥泥龄‖溶解氧‖营养物质‖pH值‖水温‖有毒物质‖污泥回流比"},
-{q:"次氯酸钠（漂白水/消毒液）储存时，下列做法错误的是（）", a:"用铁桶密封保存"},
-{q:"一期AAO生物反应池有效深度为（）m，二期生物反应池好氧区有效深度为（）", a:"6.2‖4"},
-{q:"污水处理厂发生化学品紧急泄漏时，首选处置措施是?", a:"封堵泄漏点"},
-{q:"ORP表征的是", a:"来水中的氧化性物质和还原性物质的多少"},
-{q:"生化池上有那些仪表", a:"污泥浓度计‖氧化还原电位‖溶解氧‖硝氮仪"},
-{q:"厌氧池可能会产生的主要有毒有害的气体包括", a:"硫化氢‖甲烷‖一氧化碳"},
-{q:"在废气处理工艺中主要是包括", a:"氢氧化钠洗涤‖次氯酸钠洗涤‖活性炭吸附"},
-{q:"和次氯酸钠卸料等个人防护必须佩戴", a:"护目镜‖防酸碱手套‖防护服"},
-{q:"SRT是指（）HRT是指（）MLSS是指（）MLVSS是指（）DO是指（）", a:"泥龄‖停留时间‖污泥浓度‖挥发性活性污泥浓度‖溶解氧"},
-{q:"电压的单位是", a:"V"},
-{q:"污水处理厂中，污泥消化池的主要功能是?", a:"减少污泥体积"},
-{q:"二级处理中氮的转化过程包括", a:"氨化‖硝化‖异养反硝化‖同化反硝化"},
-{q:"废气处理主要使用（）作为吸附剂", a:"柱状活性炭"},
-{q:"化学需氧量衡量水中的（）和（）", a:"有机物‖无机还原性物质"},
-{q:"出水执行的标准是", a:"GB18918-2002《城镇污水处理厂污染物排放标准》"},
-{q:"压力容器安全附件中压力表检定周期为", a:"半年"},
-{q:"次氯酸钠/PAC卸料过程，卸料操作人员及监护人必须规范穿戴", a:"安全帽‖护目镜‖耐酸碱手套‖防护鞋‖防护服"},
-{q:"厌氧池的作用是", a:"氨化，有机氮转变成氨氮‖生物除磷聚磷菌释磷场所‖水解酸化，产酸，产甲烷脱氮反硝化"},
-{q:"NaAc作用是", a:"补充碳源"},
-{q:"活性污泥法中，微生物代谢有机物所需的氧主要来自（）", a:"水中溶解氧"},
-{q:"NaAc投加点位在", a:"厌氧区‖缺氧区"},
-{q:"生物滤池单元冷干机的主要作用是", a:"干燥空气"},
-{q:"有限空间作业“三不进入”原则不包含以下哪项（）", a:"无培训不进入"},
-{q:"二沉池的作用是（）", a:"污泥浓缩‖污泥回流‖泥水分离"},
-{q:"活性炭按照原材料分类主要分为（）", a:"煤质‖木质"},
-{q:"生物滤池的填料为", a:"陶粒"},
-{q:"额定起重量大于（）t 且提升高度大于（）m的各类起重机视为特种设备", a:"3‖2"},
-{q:"NaClO的作用（）", a:"强氧化‖消毒"},
-{q:"活性炭罐采用（）作为吸附剂。", a:"颗粒活性炭"},
-{q:"公司内部活性炭主要用了（）三种", a:"粉末活性炭‖柱状活性炭‖颗粒活性炭"},
-{q:"滤池出水阀由（）组成。", a:"阀体‖执行器‖气缸"},
-{q:"压力单位是（）", a:"kpa"},
-{q:"AAO工艺中，混合液回流(内回流)的主要目的是（）", a:"将硝化液送回缺氧段"},
-{q:"操作人员应定期排放曝气系统空气管路中的存水，并应及时关闭放水阀，一般时间设定为（）", a:"一周一次"},
-{q:"调节池的的作用是（）", a:"调节水量‖调节水质"},
-{q:"鼓风机巡检过程中需要留意的参数包括（）", a:"电压‖风量‖电流‖温度"},
-{q:"活性污泥法中的“曝气”主要目的：", a:"提供氧气供微生物代谢"},
-{q:"检维修的操作流程包括（）", a:"工单生产‖作业前准备‖作业前最后安全检查‖开始作业‖试机‖现场清理‖工单闭环"},
-{q:"废水中TN(总氮)包括（），mg/L", a:"有机氮‖氨氮‖硝酸盐氮‖亚硝酸盐氮"},
-{q:"二期滤池反洗风机采用的是（）品牌是（）", a:"罗茨风机‖百事德"},
-{q:"NaClO的中文学名是（）", a:"次氯酸钠"},
-{q:"PAC呈（）", a:"酸"},
-{q:"污水厂高空作业(>2m，如池上栏杆外作业)必须（）", a:"系好安全带(高挂低用)，设专人监护"},
-{q:"高密池瞬时进水量为180 m3/h.12%含量纯PAC投加浓度为30 mg/L,瞬时PAC母液投加量应为（）", a:"45kg/h"},
-{q:"活性炭罐的设计规模是（）", a:"10000m³/d"},
-{q:"高密池的设计进水水质是 COD（）", a:"60"},
-{q:"ORP越高说明（）", a:"氧化性越强"},
-{q:"传统 A2O 工艺中污泥回流主要目的（）", a:"维持厌氧池污泥浓度水平"},
-{q:"厌氧池可能会产生的主要有毒有害的气体包括（）", a:"硫化氢‖甲烷‖一氧化碳"},
-{q:"水泵的功率单位是（）", a:"kw"},
-{q:"在好氧脱碳工艺中，好氧微生物代谢营养比例是需求为C:N:P=（）其中C为（）", a:"100:5:1‖BOD5"},
-{q:"高密池瞬时进水量为120 m3/h.8%含量PAC母液投加浓度为100mg/L,瞬时PAC母液投加量应为（）", a:"150L/h"},
-{q:"污水处理厂安全培训中，以下哪项不属于“三违”行为?", a:"遵守操作规程"},
-{q:"水泵的扬程单位是（）", a:"m"},
-{q:"PAC作用是", a:"混凝"},
-{q:"厂区流量计共计有（）三种", a:"电磁流量计‖超声波流量计‖浮子流量计"},
-{q:"职安健公正文化三要素（）", a:"事故事件报告‖优秀做法分享‖奖惩措施"},
-{q:"电量的单位是（）", a:"kwh"},
-{q:"污水厂配电室发生电气火灾，应首选的灭火器是（）", a:"二氧化碳(CO₂)灭火器"},
-{q:"好氧池COD去除率低的原因有以下哪几点（）", a:"好氧池污泥老化泥龄长‖好氧池溶解氧不足‖原水含有有毒物质污泥中毒‖好氧池冲击负荷大或者好氧池出现污泥膨胀"},
-{q:"水里的COD是指什么?（）", a:"水体中有机物和还原性无机物污染程度的综合指标"},
-{q:"公司上游来水主要包括（）", a:"生物制药废水‖纺织印染废水‖氟化工废水‖其他精细化工废水"},
-{q:"进入有限空间作业时需要遵守的十大救命法则为（）", a:"进入可能存在有害气体的场所前，进行气体检测并在作业过程中持续监测"},
-{q:"当发现有人硫化氢中毒晕倒，施救者必须佩戴（）方可进入现场施救", a:"正压式SCBA"},
-{q:"1m³=（）dm3=（）L", a:"1000‖1000"},
-{q:"发现污水厂内有人触电，以下哪种做法是正确的?（）", a:"切断电源"},
-{q:"二沉池出水氨氮升高的原因包括（）", a:"硝化反应不足"},
-{q:"缺氧池的作用是（）", a:"反硝化反应场所"},
-{q:"和下图相关的十大救命法则是?", a:"远离吊装作业和任何存在坠物风险的区域"},
-{q:"皮肤或眼睛不慎溅入次氯酸钠或酸碱药液，第一时间应（）", a:"立即用大量流动清水冲洗至少15分钟，并就医"},
-{q:"一般情况下，污水的可生化性取决于（）", a:"BOD5/COD的值"},
-{q:"新压力容器投用后（）年内应进行首次定期检验，后续检验周期根据安全状况等级确定，一般为每（）年一次", a:"3‖3-6"},
-{q:"NaAc的中文学名是", a:"乙酸钠"},
-{q:"反硝化脱氮过程中，C:N理论为（），实际生产过程中控制在（）其中C为", a:"2.865:1‖4:1‖BOD5"},
-{q:"活性炭罐的设计进水水质是COD（）SS（）", a:"80mg/L‖30mg/L"},
-{q:"避雷针及易燃易爆场所(如沼气柜)的防雷接地电阻应不大于（）", a:"4Ω"},
-{q:"臭氧接触氧化系统包括（）", a:"尾气破坏装置‖臭氧发生装置‖自动化控制系统‖氧气制备装置‖臭氧投加装置"},
-{q:"一期技改AAO生物反应池曝气风机采用的是（）品牌是（）", a:"磁悬浮风机‖亿昇"},
-{q:"ORP越低说明（）", a:"还原性越强"},
-{q:"活性炭在废水处理中可用于（）等", a:"去除异味‖脱色‖去除有机物"},
-{q:"臭氧的作用是（）", a:"将带有不饱和键的大分子有机物开环断链转化成小分子有机物提高可生化性‖将小分子有机物直接氧化成水和二氧化碳‖去除色度‖消毒"},
-{q:"溶解氧突然变低的可能有（）", a:"进水氨氮高‖进水COD高‖仪表故障‖设备故障"},
-{q:"缺氧区溶解氧控制在（）", a:"0.2-0.5 mg/L"},
-{q:"出水流量计采用的是（）", a:"巴氏计量槽"},
-{q:"公司内部涉及到的特种设备包括（）", a:"叉车‖压力容器‖起重机"},
-{q:"高密池堰口出水混浊的原因包括（）", a:"絮凝区比例过小‖絮凝区污泥浓度过高‖絮凝区发生故障‖混凝剂故障"},
-{q:"活性炭罐采用的是（）设计", a:"下流式"},
-{q:"水泵的流量单位是（）", a:"m³/h"},
-{q:"COD;NH3-N;TP;TN;氟化物;悬浮物的排水标准分别是（）", a:"50‖5(8)‖0.5‖15‖6‖10"},
-{q:"厌氧池溶解氧一般控制在0.2 mg/L以下，其目的是（）", a:"反硝化反应顺利进行"},
-{q:"污水处理中，调节池的作用是（）", a:"调节水量和水质"},
-{q:"下列哪项不属于生化池内的推流器的功能（）", a:"硝化"},
-{q:"水里的COD是指什么?（）", a:"水体中有机物和还原性无机物污染程度的综合指标"},
-{q:"二沉池的作用是（）", a:"污泥浓缩‖污泥回流‖泥水分离"},
-{q:"污泥浓度计数据突然出现下降的原因有（）", a:"回流异常‖污泥浓度计故障"},
-{q:"在污水厂的日常运行中，运行人员需要对曝气池内的（）进行日常巡检", a:"曝气情况‖搅拌混合情况‖剩余污泥排放情况"},
-{q:"以下哪种物质是污水中的氮源（）", a:"以上都是"},
-{q:"压力容器安全附件中安全阀检定周期为（）", a:"一年"},
-{q:"消毒池两台提升泵的作用是（）", a:"将超标水回抽至事故池重新处理"},
-{q:"PAC的中文学名是", a:"聚合氯化铝"},
-{q:"有限空间作业审批表(作业票)有效期最长一般不超过（）", a:"8小时"},
-{q:"污水处理厂安全检查中，以下哪项属于“五查”内容（）", a:"以上都是"},
-{q:"活性炭罐进水流量计采用的是（）", a:"电磁流量计"},
-{q:"特种设备投入使用之前30天内须办理（）", a:"使用登记证"},
-{q:"以下哪种行为属于污水处理厂的安全操作?（）", a:"正确佩戴绝缘手套"},
-{q:"生物滤池的作用是（）", a:"去除悬浮物‖去除cod"},
-{q:"污水厂防雷接地电阻值每年雨季前检测一次，要求不大于（）Ω", a:"4"},
-{q:"进入缺氧密闭空间作业必须使用（）", a:"空气呼吸器"},
-{q:"下列哪些装置不算污泥的来源（）", a:"二沉池"},
-{q:"高密池混凝区的投加的药剂英文缩写是（）中文名称是（）", a:"pac‖聚合氯化铝"},
-{q:"水泵的基本参数包括（）", a:"流量‖扬程‖转速‖功率‖效率‖汽蚀余量"},
-{q:"二沉池巡检过程中需要遵守的十大救命法则为（）", a:"远离车辆和设备的行驶路径"},
-{q:"1 mg/L=（）kg/m³=（）g/m³", a:"0.001‖1"},
-{q:"污水处理厂安全培训中，“三级安全教育”的内容包括（）", a:"以上都是"},
-{q:"污水厂中常见的危险因素不包括以哪项?（）", a:"良好的工作环境"},
-{q:"进入可能产生缺氧或高浓度硫化氢的污水井作业，必须使用的呼吸防护装备是（）", a:"自给式空气呼吸器(SCBA)或长管呼吸器"},
-{q:"化学需氧量衡量水中的（）和（）", a:"无机还原性物质‖有机物"},
-{q:"生化池上仪表的缩写（）", a:"DO‖ORP‖MLSS‖NT3"},
-{q:"活性污泥法处理系统主要由以下几个关键部分组成（）", a:"曝气池‖二沉池‖回流系统‖剩余污泥排放系统"},
-{q:"压力容器操作人员必须持相应的（）方可独立操作。", a:"特种设备作业证"},
-{q:"化验室稀释浓硫酸的正确操作是（）", a:"将浓硫酸缓慢沿器壁倒入水中，并不断搅拌"},
-{q:"臭氧尾气处理的方式是（）和（）", a:"催化剂‖高温"},
-{q:"高密池的主要作用是（）", a:"去除SS‖总磷"},
-{q:"高密池絮凝区的投加的药剂英文缩写是（）中文名称是（）", a:"APAM‖阴离子聚丙烯酰胺"},
-{q:"水泵的泵壳铭牌上简明列出了水泵在设计转速下运转，（）时的流量、扬程、轴功率及允许吸上真空高度或气蚀余量值。", a:"效率为最高"},
-{q:"好氧末端溶解氧控制在", a:"2-4 mg/L"},
-{q:"实际生产过程中，次氯酸钠的消毒作用主要体现在（）", a:"去除出水中的病毒、大肠杆菌等"},
-{q:"污水处理厂最常见的易燃易爆有毒气体是（）", a:"硫化氢"},
-{q:"大气排放执行的标准是（）", a:"恶臭污染物排放标准GB14554-93"},
-{q:"在污染物指标中凯氏氮TKN是氨氮和（）的总和。", a:"有机氮"},
-{q:"内回流的作用为（）", a:"为缺氧反硝化过程提供氮源"},
-{q:"污水中 SS 指的是（）", a:"悬浮固体"},
-{q:"厌氧池溶解氧一般控制在0.2 mg/L以下，其目的是（）", a:"反硝化反应顺利进行"},
-{q:"将1 g氨氮氧化成硝酸盐氮需要（）g氧气", a:"4.67"},
-{q:"污水处理厂应急预案演练，专项或综合演练至少应（）组织一次", a:"每半年"},
-{q:"实际生产过程中，次氯酸钠的强氧化性主要体现在（）", a:"用于降低出水氨氮"},
-{q:"在缺氧环境中作业时，必须佩戴的个人防护装备是（）", a:"氧气面罩"},
-{q:"鼓风机房噪声强度达98dB（），操作工每日暴露不得超过（）分钟", a:"30"},
-{q:"大气监测的指标主要包含（）", a:"臭气浓度‖氨‖硫化氢"},
-{q:"PAC的含量是指（）", a:"AI2O3含量[Al₂O₃]"},
-{q:"污水处理厂中，以下哪种气体浓度超标时，必须立即启动应急预案? （）", a:"硫化氢"},
-{q:"高密池瞬时进水量为150 m3/h,12%含量纯PAC投加浓度为30 mg/L,瞬时PAC母液投加量应为（）(PAC母液密度按照1.2kg/L计)", a:"31.25 L/h"},
-{q:"高密池瞬时进水量为100m3/h.8%含量PAC母液投加浓度为100mg/L,瞬时PAC母液投加量应为（）。(PAC母液密度按照1.2kg/L计)", a:"104.17 L/h（注：原题答案8.3 L/h疑似有误）"},
-{q:"好氧池的作用是（）", a:"硝化：反应将氨氮转化为硝酸盐氮‖碳化：将有机物转化成水和二氧化碳‖吸磷：聚磷菌在好氧环境下过量摄取磷并储存在体内‖氨化，有机氮转变成氨氮‖同化:合成细胞物质"},
-{q:"高密池的作用是（）", a:"去除SS‖总磷"},
-{q:"高密度沉淀池的组成包括（）", a:"混凝区‖絮凝区‖沉淀区"},
-{q:"《GBZ 2.1-2019工作场所有害因素职业接触限值 第1部分：化学有害因素》中规定臭氧的最高职业接触限值为（）/m³", a:"0.3"},
-{q:"NaClO的作用是（）", a:"消毒‖强氧化"},
-{q:"凯氏氮包括（）", a:"有机氮‖氨氮"},
-{q:"污泥回流比是指（）和（）之间的比值", a:"回流量‖进水量"},
-{q:"ORP越低说明（）", a:"还原性越强"},
-{q:"滤池反洗主要过程分为（）", a:"汽洗‖水洗‖汽水洗"},
-{q:"二期生物反应池曝气风机采用的是（）品牌是（）", a:"空气悬浮风机‖海拓滨"},
-{q:"一期滤池反洗风机采用的是（）品牌是（）", a:"罗茨风机‖AERZEN"},
-{q:"二沉池出水总氮升高的原因包括（）", a:"反硝化反应不足"},
-{q:"二沉池巡检过程中，巡检内容包括（）", a:"设备运行情况‖出水情况‖污泥回流情况‖排渣情况"},
-{q:"活性炭罐的设计出水水水质是COD（）SS（）", a:"50mg/L‖10mg/L"},
-{q:"磁悬浮风机出口流量计采用的是（）", a:"热式质量流量计"},
-{q:"臭氧具有（）遇到（）会发生剧烈反应，（）等甚至可能会发生爆炸", a:"强氧化性‖有机物‖易燃物‖静电‖明火‖撞击摩擦‖受热"},
-{q:"BOD 表示的是（）", a:"生化需氧量"},
-{q:"有防护罩的运行设备应悬挂（）", a:"机械伤人，禁止接触"},
-{q:"传统 A2O 工艺中污泥回流主要目的（）", a:"维持厌氧池污泥浓度水平"},
-{q:"在A2O工艺中，沉淀池的作用包括（）", a:"泥水分离‖污泥浓缩‖回流控制‖减少污泥损失"},
-{q:"可能引起出水氨氮超标的原因（）", a:"曝气量不足导致溶解氧下降‖排泥未控制导致污泥浓度过低‖进水 COD、氨氮负荷变化，未及时调整工艺‖进水存在对硝化作用的有毒有害物质"},
-{q:"哪些参数是硝化反应的主要控制参数（）", a:"溶解氧、pH 值、水温"},
-{q:"污水厂调节池、格栅间等有限空间，进入前必须重点检测的有毒气体是（）", a:"硫化氢(H₂S)"},
-{q:"次氯酸钠与酸性清洗剂混合会产生什么有毒气体（）", a:"氯气"},
-{q:"有限空间作业前气体检测，氧含量(O₂)合格的安全范围是（）", a:"19.5%~23.5%"},
-{q:"发生危险化学品事故后，应该向（）方向疏散。", a:"上风"},
-{q:"进入格栅间（有限空间）前必须强制执行的步骤是（）", a:"检测硫化氢浓度"},
-{q:"进行腐蚀品的装卸作业应该戴（）手套", a:"橡胶"},
-{q:"带式脱水机紧急停机拉绳开关属于（）保护", a:"急停"}
+    { q: "凡在高地面（）的地点进行的工作都应视作高处作业", a: "2米及以上" },
+    { q: "有限空间作业时，气体检测应在作业前（）分钟内完成，作业中至少每（）分钟重复检测一次", a: "30‖30" },
+    { q: "粉末活性炭主要用于", a: "去除COD" },
+    { q: "厌氧区溶解氧控制在", a: "0.2mg/L以下" },
+    { q: "有机物去除的途径包括（）和（）", a: "活性污泥合成代谢（污泥增殖）‖活性污泥分解代谢（将有机物分解为二氧化碳和水）" },
+    { q: "潜水泵的由上到下的结构是", a: "吊环‖电缆‖定子转子‖叶轮‖轴承‖泵壳‖底座" },
+    { q: "以下哪种化学品不属于污水处理厂的腐蚀性化学品", a: "乙醇" },
+    { q: "发现有人硫化氢中毒晕倒在有限空间内，施救者应", a: "佩戴正压式空气呼吸器确认安全后进入施救，切勿盲目进入" },
+    { q: "NaClO具有", a: "碱性‖强氧化性‖强腐蚀性‖不稳定性" },
+    { q: "废气处理中氢氧化钠洗涤的作用是（）次氯酸钠的作用是（）活性炭吸附的作用是（）", a: "中和酸性气体如硫化氢等‖氧化分析有毒气体如硫化氢、胺类、硫醇类去除恶臭类物质‖去除有毒、有异味的气体挥发性的有机物（VOCS）" },
+    { q: "厌氧处理的主要产物是", a: "甲烷和二氧化碳" },
+    { q: "下列哪种个体防护装备不能用于硫化氢环境作业", a: "半面罩防毒面具配A型滤盒" },
+    { q: "污泥料仓发生“架桥”坍塌事故导致人员被埋，现场第一响应人首先应?", a: "停止进料、切断电源" },
+    { q: "COD;NH3-N;TP;TN;氟化物的纳管标准分别是", a: "500mg/L‖45mg/L‖3mg/L‖50mg/L‖15mg/L" },
+    { q: "NaClO含量是指", a: "有效氯含量10%" },
+    { q: "曝气池中需要消耗氧气的有（）三个过程", a: "氧化‖硝化‖内源呼吸" },
+    { q: "进入有限空间（如阀门井、污水井）作业，必须遵循的原则是（）", a: "先通风、再检测、后作业" },
+    { q: "水泵的运行频率单位是", a: "Hz" },
+    { q: "硫化氢浓度超过（）时，数秒内就可致人闪电型死亡。", a: "1000mg/m³" },
+    { q: "机械设备（如细格栅、压滤机）卡阻或检修时，正确操作是（）", a: "切断电源并悬挂“禁止合闸 有人工作”标示牌（上锁挂牌）后清理" },
+    { q: "影响活性污泥法处理效果的因素包括", a: "污泥负荷‖污泥泥龄‖溶解氧‖营养物质‖pH值‖水温‖有毒物质‖污泥回流比" },
+    { q: "次氯酸钠（漂白水/消毒液）储存时，下列做法错误的是（）", a: "用铁桶密封保存" },
+    { q: "一期AAO生物反应池有效深度为（）m，二期生物反应池好氧区有效深度为（）", a: "6.2‖4" },
+    { q: "污水处理厂发生化学品紧急泄漏时，首选处置措施是?", a: "封堵泄漏点" },
+    { q: "ORP表征的是", a: "来水中的氧化性物质和还原性物质的多少" },
+    { q: "生化池上有那些仪表", a: "污泥浓度计‖氧化还原电位‖溶解氧‖硝氮仪" },
+    { q: "厌氧池可能会产生的主要有毒有害的气体包括", a: "硫化氢‖甲烷‖一氧化碳" },
+    { q: "在废气处理工艺中主要是包括", a: "氢氧化钠洗涤‖次氯酸钠洗涤‖活性炭吸附" },
+    { q: "和次氯酸钠卸料等个人防护必须佩戴", a: "护目镜‖防酸碱手套‖防护服" },
+    { q: "SRT是指（）HRT是指（）MLSS是指（）MLVSS是指（）DO是指（）", a: "泥龄‖停留时间‖污泥浓度‖挥发性活性污泥浓度‖溶解氧" },
+    { q: "电压的单位是", a: "V" },
+    { q: "污水处理厂中，污泥消化池的主要功能是?", a: "减少污泥体积" },
+    { q: "二级处理中氮的转化过程包括", a: "氨化‖硝化‖异养反硝化‖同化反硝化" },
+    { q: "废气处理主要使用（）作为吸附剂", a: "柱状活性炭" },
+    { q: "化学需氧量衡量水中的（）和（）", a: "有机物‖无机还原性物质" },
+    { q: "出水执行的标准是", a: "GB18918-2002《城镇污水处理厂污染物排放标准》" },
+    { q: "压力容器安全附件中压力表检定周期为", a: "半年" },
+    { q: "次氯酸钠/PAC卸料过程，卸料操作人员及监护人必须规范穿戴", a: "安全帽‖护目镜‖耐酸碱手套‖防护鞋‖防护服" },
+    { q: "厌氧池的作用是", a: "氨化，有机氮转变成氨氮‖生物除磷聚磷菌释磷场所‖水解酸化，产酸，产甲烷脱氮反硝化" },
+    { q: "NaAc作用是", a: "补充碳源" },
+    { q: "活性污泥法中，微生物代谢有机物所需的氧主要来自（）", a: "水中溶解氧" },
+    { q: "NaAc投加点位在", a: "厌氧区‖缺氧区" },
+    { q: "生物滤池单元冷干机的主要作用是", a: "干燥空气" },
+    { q: "有限空间作业“三不进入”原则不包含以下哪项（）", a: "无培训不进入" },
+    { q: "二沉池的作用是（）", a: "污泥浓缩‖污泥回流‖泥水分离" },
+    { q: "活性炭按照原材料分类主要分为（）", a: "煤质‖木质" },
+    { q: "生物滤池的填料为", a: "陶粒" },
+    { q: "额定起重量大于（）t 且提升高度大于（）m的各类起重机视为特种设备", a: "3‖2" },
+    { q: "NaClO的作用（）", a: "强氧化‖消毒" },
+    { q: "活性炭罐采用（）作为吸附剂。", a: "颗粒活性炭" },
+    { q: "公司内部活性炭主要用了（）三种", a: "粉末活性炭‖柱状活性炭‖颗粒活性炭" },
+    { q: "滤池出水阀由（）组成。", a: "阀体‖执行器‖气缸" },
+    { q: "压力单位是（）", a: "kpa" },
+    { q: "AAO工艺中，混合液回流(内回流)的主要目的是（）", a: "将硝化液送回缺氧段" },
+    { q: "操作人员应定期排放曝气系统空气管路中的存水，并应及时关闭放水阀，一般时间设定为（）", a: "一周一次" },
+    { q: "调节池的的作用是（）", a: "调节水量‖调节水质" },
+    { q: "鼓风机巡检过程中需要留意的参数包括（）", a: "电压‖风量‖电流‖温度" },
+    { q: "活性污泥法中的“曝气”主要目的：", a: "提供氧气供微生物代谢" },
+    { q: "检维修的操作流程包括（）", a: "工单生产‖作业前准备‖作业前最后安全检查‖开始作业‖试机‖现场清理‖工单闭环" },
+    { q: "废水中TN(总氮)包括（），mg/L", a: "有机氮‖氨氮‖硝酸盐氮‖亚硝酸盐氮" },
+    { q: "二期滤池反洗风机采用的是（）品牌是（）", a: "罗茨风机‖百事德" },
+    { q: "NaClO的中文学名是（）", a: "次氯酸钠" },
+    { q: "PAC呈（）", a: "酸" },
+    { q: "污水厂高空作业(>2m，如池上栏杆外作业)必须（）", a: "系好安全带(高挂低用)，设专人监护" },
+    { q: "高密池瞬时进水量为180 m3/h.12%含量纯PAC投加浓度为30 mg/L,瞬时PAC母液投加量应为（）", a: "45kg/h" },
+    { q: "活性炭罐的设计规模是（）", a: "10000m³/d" },
+    { q: "高密池的设计进水水质是 COD（）", a: "60" },
+    { q: "ORP越高说明（）", a: "氧化性越强" },
+    { q: "传统 A2O 工艺中污泥回流主要目的（）", a: "维持厌氧池污泥浓度水平" },
+    { q: "厌氧池可能会产生的主要有毒有害的气体包括（）", a: "硫化氢‖甲烷‖一氧化碳" },
+    { q: "水泵的功率单位是（）", a: "kw" },
+    { q: "在好氧脱碳工艺中，好氧微生物代谢营养比例是需求为C:N:P=（）其中C为（）", a: "100:5:1‖BOD5" },
+    { q: "高密池瞬时进水量为120 m3/h.8%含量PAC母液投加浓度为100mg/L,瞬时PAC母液投加量应为（）", a: "150L/h" },
+    { q: "污水处理厂安全培训中，以下哪项不属于“三违”行为?", a: "遵守操作规程" },
+    { q: "水泵的扬程单位是（）", a: "m" },
+    { q: "PAC作用是", a: "混凝" },
+    { q: "厂区流量计共计有（）三种", a: "电磁流量计‖超声波流量计‖浮子流量计" },
+    { q: "职安健公正文化三要素（）", a: "事故事件报告‖优秀做法分享‖奖惩措施" },
+    { q: "电量的单位是（）", a: "kwh" },
+    { q: "污水厂配电室发生电气火灾，应首选的灭火器是（）", a: "二氧化碳(CO₂)灭火器" },
+    { q: "好氧池COD去除率低的原因有以下哪几点（）", a: "好氧池污泥老化泥龄长‖好氧池溶解氧不足‖原水含有有毒物质污泥中毒‖好氧池冲击负荷大或者好氧池出现污泥膨胀" },
+    { q: "水里的COD是指什么?（）", a: "水体中有机物和还原性无机物污染程度的综合指标" },
+    { q: "公司上游来水主要包括（）", a: "生物制药废水‖纺织印染废水‖氟化工废水‖其他精细化工废水" },
+    { q: "进入有限空间作业时需要遵守的十大救命法则为（）", a: "进入可能存在有害气体的场所前，进行气体检测并在作业过程中持续监测" },
+    { q: "当发现有人硫化氢中毒晕倒，施救者必须佩戴（）方可进入现场施救", a: "正压式SCBA" },
+    { q: "1m³=（）dm3=（）L", a: "1000‖1000" },
+    { q: "发现污水厂内有人触电，以下哪种做法是正确的?（）", a: "切断电源" },
+    { q: "二沉池出水氨氮升高的原因包括（）", a: "硝化反应不足" },
+    { q: "缺氧池的作用是（）", a: "反硝化反应场所" },
+    { q: "和下图相关的十大救命法则是?", a: "远离吊装作业和任何存在坠物风险的区域" },
+    { q: "皮肤或眼睛不慎溅入次氯酸钠或酸碱药液，第一时间应（）", a: "立即用大量流动清水冲洗至少15分钟，并就医" },
+    { q: "一般情况下，污水的可生化性取决于（）", a: "BOD5/COD的值" },
+    { q: "新压力容器投用后（）年内应进行首次定期检验，后续检验周期根据安全状况等级确定，一般为每（）年一次", a: "3‖3-6" },
+    { q: "NaAc的中文学名是", a: "乙酸钠" },
+    { q: "反硝化脱氮过程中，C:N理论为（），实际生产过程中控制在（）其中C为", a: "2.865:1‖4:1‖BOD5" },
+    { q: "活性炭罐的设计进水水质是COD（）SS（）", a: "80mg/L‖30mg/L" },
+    { q: "避雷针及易燃易爆场所(如沼气柜)的防雷接地电阻应不大于（）", a: "4Ω" },
+    { q: "臭氧接触氧化系统包括（）", a: "尾气破坏装置‖臭氧发生装置‖接触氧化池" },
+    { q: "下列哪项不属于有限空间作业“三不进入”原则？", a: "无监护人不进入" },
+    { q: "污水处理厂中，初沉池的主要作用是?", a: "去除可沉降悬浮物" },
+    { q: "下列哪种气体不属于污水处理厂常见有毒有害气体？", a: "二氧化碳" },
+    { q: "活性污泥法中，污泥回流的主要作用是？", a: "维持曝气池内污泥浓度" },
+    { q: "下列哪项是正确的触电急救措施？", a: "先切断电源，再施救" },
+    { q: "污水处理厂废气处理中，活性炭吸附主要用于去除？", a: "VOCs和异味" },
+    { q: "下列哪项属于污水处理厂一级处理工艺？", a: "格栅‖沉砂池‖初沉池" },
+    { q: "曝气池泡沫过多的原因可能是？", a: "污泥膨胀‖表面活性剂进入‖污泥老化" },
+    { q: "下列哪项会导致二沉池出水悬浮物升高？", a: "污泥膨胀‖污泥回流比过高‖二沉池表面负荷过高" },
+    { q: "污水处理厂中，沉砂池的主要作用是？", a: "去除砂粒、砾石等重质无机物" },
+    { q: "下列哪项不属于污泥脱水设备？", a: "曝气池" },
+    { q: "下列哪项是污水处理厂常用的消毒方式？", a: "次氯酸钠消毒‖紫外线消毒" },
+    { q: "下列哪项属于污水处理厂二级处理核心工艺？", a: "活性污泥法‖生物膜法" },
+    { q: "下列哪项不是影响生物除磷效果的因素？", a: "沉淀池颜色" },
+    { q: "污水处理厂中，格栅的主要作用是？", a: "去除大块漂浮物和悬浮物" },
+    { q: "下列哪项属于危险作业？", a: "有限空间作业‖高处作业‖动火作业" },
+    { q: "下列哪项是正确的受限空间作业顺序？", a: "先通风、再检测、后作业" },
+    { q: "下列哪项不属于污水处理厂常见防爆区域？", a: "办公区" },
+    { q: "下列哪项会导致活性污泥沉降性能变差？", a: "丝状菌膨胀‖负荷过低‖DO不足" },
+    { q: "下列哪项是污水处理厂除臭工艺？", a: "生物滤池‖活性炭吸附‖化学洗涤" },
+    { q: "下列哪项不属于污泥处理工艺？", a: "曝气" },
+    { q: "下列哪项属于污水处理厂三级处理？", a: "深度过滤‖活性炭吸附‖消毒" },
+    { q: "下列哪项不是影响硝化反应的因素？", a: "进水颜色" },
+    { q: "污水处理厂中，生物膜法的代表工艺是？", a: "生物滤池‖生物转盘" },
+    { q: "下列哪项属于污水处理厂常用污泥脱水设备？", a: "带式压滤机‖板框压滤机‖离心脱水机" },
+    { q: "下列哪项会导致活性污泥发黑发臭？", a: "DO严重不足‖厌氧腐败" },
+    { q: "下列哪项不属于污水处理厂电气安全风险？", a: "噪声" },
+    { q: "下列哪项是污水处理厂常用的水质在线监测仪表？", a: "COD在线仪‖氨氮在线仪‖pH在线仪" },
+    { q: "下列哪项属于污水处理厂常规运行参数？", a: "pH‖DO‖MLSS‖SV30" },
+    { q: "下列哪项不是污水处理厂恶臭来源？", a: "二氧化碳" },
+    { q: "下列哪项是污水处理厂中调节池的作用？", a: "调节水量和水质" },
+    { q: "下列哪项属于污水处理厂中沉淀池的作用？", a: "泥水分离‖污泥浓缩" },
+    { q: "下列哪项不属于污水处理厂中生物处理单元？", a: "污泥浓缩池" },
+    { q: "下列哪项是污水处理厂中污泥回流的作用？", a: "维持反应池污泥浓度" },
+    { q: "下列哪项不是污水处理厂中曝气系统的作用？", a: "消毒" },
+    { q: "下列哪项属于污水处理厂中常用的化学药剂？", a: "PAC‖PAM‖次氯酸钠‖乙酸钠" },
+    { q: "下列哪项是污水处理厂中PAC的主要作用？", a: "混凝沉淀" },
+    { q: "下列哪项是污水处理厂中PAM的主要作用？", a: "絮凝脱水" },
+    { q: "下列哪项是污水处理厂中乙酸钠的主要作用？", a: "补充碳源" },
+    { q: "下列哪项不是污水处理厂中次氯酸钠的作用？", a: "混凝" },
+    { q: "下列哪项属于污水处理厂中常用的机械设备？", a: "格栅‖泵‖风机‖压滤机" },
+    { q: "下列哪项是污水处理厂中泵的主要作用？", a: "输送污水和污泥" },
+    { q: "下列哪项是污水处理厂中风机的主要作用？", a: "曝气供氧‖反冲洗" },
+    { q: "下列哪项不属于污水处理厂中风机的作用？", a: "消毒" },
+    { q: "下列哪项是污水处理厂中压滤机的主要作用？", a: "污泥脱水" },
+    { q: "下列哪项不是污水处理厂中压滤机的作用？", a: "曝气" },
+    { q: "下列哪项属于污水处理厂中常用的电气设备？", a: "配电柜‖变频器‖电机" },
+    { q: "下列哪项是污水处理厂中变频器的主要作用？", a: "调节泵和风机转速" },
+    { q: "下列哪项不是污水处理厂中变频器的作用？", a: "消毒" },
+    { q: "下列哪项属于污水处理厂中常用的仪表？", a: "pH计‖DO仪‖流量计‖液位计" },
+    { q: "下列哪项是污水处理厂中pH计的主要作用？", a: "监测酸碱度" },
+    { q: "下列哪项是污水处理厂中DO仪的主要作用？", a: "监测溶解氧" },
+    { q: "下列哪项是污水处理厂中流量计的主要作用？", a: "监测水量" },
+    { q: "下列哪项是污水处理厂中液位计的主要作用？", a: "监测池体液位" },
+    { q: "下列哪项不属于污水处理厂中仪表的作用？", a: "输送污水" },
+    { q: "下列哪项属于污水处理厂中常用的自动化控制方式？", a: "PLC控制‖远程监控‖自动启停" },
+    { q: "下列哪项是污水处理厂中PLC的主要作用？", a: "自动化控制" },
+    { q: "下列哪项不是污水处理厂中PLC的作用？", a: "消毒" },
+    { q: "下列哪项属于污水处理厂中常用的安全防护设施？", a: "护栏‖盖板‖通风设施‖应急照明" },
+    { q: "下列哪项是污水处理厂中护栏的主要作用？", a: "防止人员坠落" },
+    { q: "下列哪项是污水处理厂中盖板的主要作用？", a: "覆盖池口，防止坠落" },
+    { q: "下列哪项是污水处理厂中通风设施的主要作用？", a: "降低有毒有害气体浓度" },
+    { q: "下列哪项不属于污水处理厂中安全防护设施的作用？", a: "提高处理负荷" },
+    { q: "下列哪项属于污水处理厂中常用的应急物资？", a: "防毒面具‖空气呼吸器‖急救箱‖洗眼器" },
+    { q: "下列哪项是污水处理厂中空气呼吸器的主要作用？", a: "在有毒有害气体环境中安全呼吸" },
+    { q: "下列哪项是污水处理厂中洗眼器的主要作用？", a: "冲洗眼部化学品溅入" },
+    { q: "下列哪项不属于污水处理厂中应急物资的作用？", a: "污泥脱水" },
+    { q: "下列哪项属于污水处理厂中常用的监测指标？", a: "COD‖氨氮‖总磷‖总氮" },
+    { q: "下列哪项是污水处理厂中COD的主要含义？", a: "化学需氧量，反映有机物污染程度" },
+    { q: "下列哪项是污水处理厂中氨氮的主要含义？", a: "水中氨态氮含量" },
+    { q: "下列哪项是污水处理厂中总磷的主要含义？", a: "水中总磷含量" },
+    { q: "下列哪项是污水处理厂中总氮的主要含义？", a: "水中总氮含量" },
+    { q: "下列哪项不属于污水处理厂中常规监测指标？", a: "价格" },
+    { q: "下列哪项属于污水处理厂中常用的运行记录？", a: "水质记录‖设备运行记录‖药剂投加记录" },
+    { q: "下列哪项是污水处理厂中水质记录的主要作用？", a: "掌握处理效果变化" },
+    { q: "下列哪项是污水处理厂中设备运行记录的主要作用？", a: "掌握设备状态" },
+    { q: "下列哪项是污水处理厂中药剂投加记录的主要作用？", a: "掌握药耗和成本" },
+    { q: "下列哪项不属于污水处理厂中运行记录的作用？", a: "增加进水水量" },
+    { q: "下列哪项属于污水处理厂中常用的异常情况？", a: "进水超标‖设备故障‖污泥膨胀" },
+    { q: "下列哪项是污水处理厂中进水超标的主要影响？", a: "冲击生物处理系统" },
+    { q: "下列哪项是污水处理厂中设备故障的主要影响？", a: "影响处理流程和出水水质" },
+    { q: "下列哪项是污水处理厂中污泥膨胀的主要影响？", a: "二沉池泥水分离效果变差" },
+    { q: "下列哪项不属于污水处理厂中异常情况的影响？", a: "提高自动化水平" },
+    { q: "下列哪项属于污水处理厂中常用的整改措施？", a: "工艺调整‖设备维修‖药剂优化" },
+    { q: "下列哪项是污水处理厂中工艺调整的主要作用？", a: "恢复处理效果" },
+    { q: "下列哪项是污水处理厂中设备维修的主要作用？", a: "恢复设备正常运行" },
+    { q: "下列哪项是污水处理厂中药剂优化的主要作用？", a: "降低药耗，提高处理效果" },
+    { q: "下列哪项不属于污水处理厂中整改措施的作用？", a: "增加进水浓度" }
 ];
 
-// ====================== 常量 ======================
-const STORAGE_KEY = 'zktest_bank_v1';
-const BACKUP_KEY  = 'zktest_backups_v1';
-const GH_CFG_KEY  = 'zktest_gh_cfg_v1';
-const REVIVE_KEY  = 'zktest_revive_v1';
-const CONFIRM_CODE = 'qiuhua';
-const HEALTH_KEY = 'zktest_health_v1';
-const SESSION_KEY = 'zktest_session_id';
-const BAIDU_OCR_KEY = { apiKey: '', secretKey: '' };
-
-// ====================== 全局状态 ======================
-let questionBank = [];
-let currentImageFile = null;
-let recognition = null;
-let isRecording = false;
-let isLoggedIn = false;
-
-// ====================== 复活备份管理 ======================
-function loadReviveBackup(){
+// ====================== 工具函数 ======================
+function $(id){return document.getElementById(id);}
+function showToast(text){
+    const t = $('toast');
+    t.textContent = text;
+    t.style.display = 'block';
+    setTimeout(()=>t.style.display='none', 2500);
+}
+function saveBank(){
+    try{localStorage.setItem(BANK_KEY, JSON.stringify(bank));}
+    catch(e){showToast('题库保存失败');}
+}
+function loadBank(){
     try{
-        const raw = localStorage.getItem(REVIVE_KEY);
-        if(raw){
-            const obj = JSON.parse(raw);
-            if(obj && obj.content) return obj;
-        }
-    }catch(e){}
-    return null;
-}
-function saveReviveBackup(content){
-    const now = new Date();
-    const timeStr = now.toLocaleString('zh-CN',{hour12:false});
-    const obj = { content, time: timeStr, size: content.length };
-    try{ localStorage.setItem(REVIVE_KEY, JSON.stringify(obj)); }catch(e){
-        console.warn('复活备份保存失败', e);
-        return false;
+        const raw = localStorage.getItem(BANK_KEY);
+        bank = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(defaultBank));
+    }catch(e){
+        bank = JSON.parse(JSON.stringify(defaultBank));
     }
-    return true;
 }
-
-// ====================== 崩溃检测（优化版：防止误报） ======================
-// 优化要点：
-// 1. 延长超时判定到 60 秒，避免息屏/切后台/短暂卡顿导致的误报
-// 2. 添加页面可见性判断，页面隐藏时不写入也不判定
-// 3. 使用 sessionStorage 记录会话ID，同一会话内的正常刷新不触发崩溃检测
-// 4. 降低写入频率到每 10 秒一次，减少无谓的IO
-const CRASH_TIMEOUT_MS = 60000; // 60秒无更新才视为异常
-
 function getSessionId(){
     try{
         let sid = sessionStorage.getItem(SESSION_KEY);
         if(!sid){
-            sid = 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+            sid = 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
             sessionStorage.setItem(SESSION_KEY, sid);
         }
         return sid;
@@ -1543,1388 +1453,637 @@ function getSessionId(){
     }
 }
 
+// ====================== 崩溃检测核心修复 ======================
 function writeHealthTick(){
-    // 页面隐藏时不写入（避免息屏/切后台误判）
     if(document.hidden) return;
     try{
-        const sid = getSessionId();
         localStorage.setItem(HEALTH_KEY, JSON.stringify({
             ts: Date.now(),
-            url: location.href,
-            sid: sid
+            sid: getSessionId()
         }));
     }catch(e){}
 }
-
 function clearHealthTick(){
-    try{ localStorage.removeItem(HEALTH_KEY); }catch(e){}
+    try{localStorage.removeItem(HEALTH_KEY);}catch(e){}
 }
-
 function checkPreviousCrash(){
+    const bootElapsed = Date.now() - pageBootTimestamp;
+    if(bootElapsed < PAGE_BOOT_COOLDOWN) return false;
+    if(!userHasInteracted) return false;
+
     try{
         const raw = localStorage.getItem(HEALTH_KEY);
         if(!raw) return false;
         const obj = JSON.parse(raw);
         if(!obj || !obj.ts) return false;
-        // 同一会话内的刷新不算崩溃（用户主动刷新 / 保存后自动刷新）
+
         const currentSid = getSessionId();
-        if(obj.sid && obj.sid === currentSid){
-            // 同一会话，判断是否为正常刷新：时间间隔小于 5 秒视为正常刷新
-            const elapsed = Date.now() - obj.ts;
-            if(elapsed < 5000) return false;
-            // 超过 5 秒但同一会话，可能是长时间未操作，不算崩溃
-            return false;
-        }
-        // 不同会话（新打开的标签页 / 重新进入），才检查是否超时
+        if(obj.sid && obj.sid === currentSid) return false;
+
         const elapsed = Date.now() - obj.ts;
-        return elapsed > CRASH_TIMEOUT_MS;
-    }catch(e){ return false; }
-}
+        if(elapsed <= CRASH_TIMEOUT_MS) return false;
 
-// ====================== 通用工具 ======================
-function showToast(msg){
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.style.display = 'block';
-    clearTimeout(toast._timeout);
-    toast._timeout = setTimeout(()=>{ toast.style.display = 'none'; }, 2400);
-}
-function escapeHTML(str){
-    return String(str).replace(/[&<>"']/g, m=>({
-        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    }[m]));
-}
-
-function askConfirm(title){
-    return new Promise((resolve)=>{
-        const overlay = document.getElementById('confirmOverlay');
-        const titleEl = document.getElementById('confirmTitle');
-        const input   = document.getElementById('confirmInput');
-        const okBtn   = document.getElementById('confirmOk');
-        const cancelBtn = document.getElementById('confirmCancel');
-        titleEl.textContent = title || '请输入确认代码';
-        input.value = '';
-        overlay.classList.add('active');
-        setTimeout(()=>input.focus(), 100);
-
-        function cleanup(){
-            overlay.classList.remove('active');
-            okBtn.removeEventListener('click', onOk);
-            cancelBtn.removeEventListener('click', onCancel);
-            input.removeEventListener('keydown', onKey);
-        }
-        function onOk(){
-            const v = input.value.trim();
-            cleanup();
-            if(v === CONFIRM_CODE) resolve(true);
-            else { showToast('确认代码错误'); resolve(false); }
-        }
-        function onCancel(){ cleanup(); resolve(false); }
-        function onKey(e){ if(e.key === 'Enter') onOk(); }
-        okBtn.addEventListener('click', onOk);
-        cancelBtn.addEventListener('click', onCancel);
-        input.addEventListener('keydown', onKey);
-    });
-}
-
-function refreshPage(delay = 350){
-    setTimeout(()=>{ location.reload(); }, delay);
-}
-
-// ====================== 下载文件工具 ======================
-function downloadTextFile(content, filename){
-    try{
-        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(()=> URL.revokeObjectURL(url), 1000);
         return true;
     }catch(e){
-        console.warn('下载失败', e);
         return false;
     }
 }
 
-// ====================== 图片文字识别 ======================
-async function recognizeImage(file, engine){
-    if(engine === 'baidu'){
-        if(BAIDU_OCR_KEY.apiKey && BAIDU_OCR_KEY.secretKey){
-            try{
-                return await baiduOCR(file);
-            }catch(e){
-                console.warn('百度OCR失败', e);
-                showToast('百度OCR失败，使用文件名解析');
-            }
-        }else{
-            showToast('百度OCR未配置密钥，使用文件名解析');
-        }
-    }
-    if(engine === 'tesseract' && window.Tesseract){
-        try{
-            return await tesseractOCR(file);
-        }catch(e){
-            console.warn('Tesseract OCR失败', e);
-        }
-    }
-    return await filenameBasedRecognition(file);
-}
-
-async function baiduOCR(file){
-    const { apiKey, secretKey } = BAIDU_OCR_KEY;
-    const tokenResp = await fetch(`https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=${apiKey}&client_secret=${secretKey}`, { method: 'POST' });
-    const tokenData = await tokenResp.json();
-    if(!tokenData.access_token) throw new Error('获取百度access_token失败');
-    const base64 = await fileToBase64(file);
-    const imageB64 = base64.split(',')[1];
-    const ocrResp = await fetch(`https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic?access_token=${tokenData.access_token}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `image=${encodeURIComponent(imageB64)}`
-    });
-    const ocrData = await ocrResp.json();
-    if(!ocrData.words_result || !ocrData.words_result.length) throw new Error('百度OCR未识别到文字');
-    const text = ocrData.words_result.map(w=>w.words).join('\n');
-    return parseOCRText(text);
-}
-
-async function tesseractOCR(file){
-    const { data } = await Tesseract.recognize(file, 'chi_sim+eng');
-    return parseOCRText(data.text);
-}
-
-async function filenameBasedRecognition(file){
-    const filename = (file.name || '').replace(/\.(jpg|jpeg|png|gif|webp|bmp|heic)$/i, '').trim();
-    console.log('文件名解析：', filename);
-    
-    const qaMatch = filename.match(/题目[：:]\s*(.+?)\s*答案[：:]\s*(.+)/);
-    if(qaMatch){
-        return { q: qaMatch[1].trim(), a: qaMatch[2].trim() };
-    }
-    
-    const lines = filename.split(/[\n\r]+/).map(l=>l.trim()).filter(Boolean);
-    if(lines.length >= 2){
-        let q = '', a = '';
-        for(const line of lines){
-            if(/^题目[：:]/.test(line)) q = line.replace(/^题目[：:]\s*/,'');
-            else if(/^答案[：:]/.test(line)) a = line.replace(/^答案[：:]\s*/,'');
-        }
-        if(q || a){
-            return { q: q || '（未识别到题目）', a: a || '（未识别到答案）' };
-        }
-    }
-    
-    if(filename.length >= 4){
-        const matched = questionBank.find(item => 
-            item.q.includes(filename) || filename.includes(item.q.substring(0, 8))
-        );
-        if(matched){
-            return { q: matched.q, a: matched.a };
-        }
-        if(/[？?（）()]/.test(filename)){
-            return { q: filename, a: '（请根据图片内容补充答案）' };
-        }
-        return { q: filename, a: '（请根据图片内容补充答案）' };
-    }
-    
-    return {
-        q: '（图片识别未成功，请手动输入题目）',
-        a: '（请手动输入答案）'
-    };
-}
-
-function parseOCRText(text){
-    if(!text || !text.trim()){
-        return { q: '', a: '' };
-    }
-    let normalized = text.replace(/\r\n/g, '\n').replace(/\n{2,}/g, '\n').trim();
-    const qaPattern = /题目[：:]\s*(.+?)\s*答案[：:]\s*(.+)/s;
-    const qaMatch = normalized.match(qaPattern);
-    if(qaMatch){
-        return {
-            q: qaMatch[1].trim().replace(/\n+/g, ' '),
-            a: qaMatch[2].trim().replace(/\n+/g, '‖')
-        };
-    }
-    const lines = normalized.split('\n').map(l=>l.trim()).filter(Boolean);
-    if(lines.length === 0) return { q: '', a: '' };
-    if(lines.length === 1){
-        return { q: lines[0], a: '（请补充答案）' };
-    }
-    let qIndex = 0;
-    for(let i=0;i<lines.length;i++){
-        if(/[（(][^）)]*[）)]/.test(lines[i]) || /[？?]/.test(lines[i]) || /[是为：:]$/.test(lines[i])){
-            qIndex = i;
-            break;
-        }
-    }
-    const q = lines[qIndex];
-    const aLines = lines.slice(0, qIndex).concat(lines.slice(qIndex + 1));
-    const a = aLines.join('‖');
-    return { q, a: a || '（请补充答案）' };
-}
-
-function fileToBase64(file){
-    return new Promise((resolve, reject)=>{
-        const reader = new FileReader();
-        reader.onload = ()=> resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
-}
-
-// ====================== 加载/保存题库 ======================
-function loadBank(){
+// ====================== 复活备份 ======================
+function getReviveBackup(){
     try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if(raw){
-            const arr = JSON.parse(raw);
-            if(Array.isArray(arr) && arr.length){
-                questionBank = arr;
-                return;
-            }
-        }
-    }catch(e){ console.warn('读取题库失败', e); }
-    questionBank = defaultBank.slice();
-}
-function persistBank(){
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(questionBank)); }
-    catch(e){ console.warn('保存题库失败', e); }
-}
-
-// ====================== 备份管理 ======================
-function loadBackups(){
-    try{
-        const raw = localStorage.getItem(BACKUP_KEY);
-        if(raw){
-            const obj = JSON.parse(raw);
-            if(obj && Array.isArray(obj.list)) return obj;
-        }
-    }catch(e){}
-    return { list: [] };
-}
-function saveBackups(obj){
-    try{ localStorage.setItem(BACKUP_KEY, JSON.stringify(obj)); }catch(e){}
-}
-function backupCurrentBank(){
-    const b = loadBackups();
-    const now = new Date();
-    const timeStr = now.toLocaleString('zh-CN',{hour12:false});
-    const newEntry = { time: timeStr, data: JSON.parse(JSON.stringify(questionBank)), locked: false };
-    let list = b.list.slice();
-    if(list.length >= 3){
-        let idx = list.findIndex(x=>!x.locked);
-        if(idx === -1) idx = 0;
-        list.splice(idx,1);
-    }
-    list.push(newEntry);
-    list.sort((a,b)=> new Date(b.time) - new Date(a.time));
-    list = list.map((item, i)=>({ ...item, name: ['A','B','C'][i] || ('D'+i) }));
-    list = list.slice(0,3);
-    saveBackups({ list });
-    return true;
-}
-
-// ====================== GitHub 配置 ======================
-function loadGhCfg(){
-    try{
-        const raw = localStorage.getItem(GH_CFG_KEY);
-        if(raw) return JSON.parse(raw);
-    }catch(e){}
-    return { owner:'', repo:'', path:'', token:'' };
-}
-function saveGhCfg(cfg){
-    try{ localStorage.setItem(GH_CFG_KEY, JSON.stringify(cfg)); }catch(e){}
-}
-function isGhConfigured(cfg){
-    return cfg && cfg.owner && cfg.repo && cfg.path && cfg.token;
-}
-
-// ====================== 生成完整页面代码 ======================
-async function getFullPageHTML(){
-    try{
-        const resp = await fetch(location.href, { cache: 'no-cache' });
-        let html = await resp.text();
-        const newBankJSON = JSON.stringify(questionBank, null, 0);
-        const regex = /const\s+defaultBank\s*=\s*\[[\s\S]*?\];/;
-        if(regex.test(html)){
-            html = html.replace(regex, `const defaultBank = ${newBankJSON};`);
-        }else{
-            console.warn('未找到 defaultBank 定义，尝试备用注入');
-            const scriptTag = '<script>';
-            const insertIdx = html.indexOf(scriptTag);
-            if(insertIdx > -1){
-                const insertion = `\n// ====== 题库数据（自动注入） ======\nconst defaultBank = ${newBankJSON};\n`;
-                html = html.slice(0, insertIdx + scriptTag.length) + insertion + html.slice(insertIdx + scriptTag.length);
-            }else{
-                return null;
-            }
-        }
-        return html;
+        const txt = localStorage.getItem(REVIVE_BACKUP_KEY);
+        const meta = JSON.parse(localStorage.getItem(REVIVE_BACKUP_META_KEY) || '{}');
+        return {txt, meta};
     }catch(e){
-        console.warn('获取页面HTML失败', e);
-        return null;
+        return {txt:'', meta:{}};
     }
 }
-
-// ====================== 推送内容到 GitHub ======================
-async function pushContentToGitHub(content, message, silent){
-    const cfg = loadGhCfg();
-    if(!isGhConfigured(cfg)){
-        if(!silent) showToast('请先完整配置 GitHub 信息');
-        return false;
+function saveReviveBackup(txt){
+    try{
+        localStorage.setItem(REVIVE_BACKUP_KEY, txt);
+        localStorage.setItem(REVIVE_BACKUP_META_KEY, JSON.stringify({
+            time: new Date().toLocaleString('zh-CN'),
+            size: txt.length
+        }));
+        updateReviveStatus();
+    }catch(e){
+        showToast('复活备份保存失败');
     }
-    const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
-    const contentB64 = btoa(unescape(encodeURIComponent(content)));
+}
+function updateReviveStatus(){
+    const {txt, meta} = getReviveBackup();
+    const text = $('reviveStatusText');
+    const metaEl = $('reviveStatusMeta');
+    if(txt){
+        text.textContent = '已存在复活备份';
+        text.classList.add('rs-ok');
+        metaEl.textContent = `${meta.time || ''} / ${(meta.size||0).toLocaleString()} 字符`;
+    }else{
+        text.textContent = '未上传复活备份';
+        text.classList.remove('rs-ok');
+        metaEl.textContent = '';
+    }
+}
+function showRevivePopup(){
+    $('revivePopup').classList.add('active');
+    const {meta} = getReviveBackup();
+    $('revivePopupMeta').textContent = meta.time ? `备份时间：${meta.time}` : '';
+}
+function hideRevivePopup(){
+    $('revivePopup').classList.remove('active');
+}
+
+// ====================== GitHub 同步 ======================
+function getGithubCfg(){
+    try{
+        return JSON.parse(localStorage.getItem(GITHUB_CFG_KEY) || '{}');
+    }catch(e){
+        return {};
+    }
+}
+function saveGithubCfg(cfg){
+    try{
+        localStorage.setItem(GITHUB_CFG_KEY, JSON.stringify(cfg));
+        updateGithubStatus();
+    }catch(e){
+        showToast('GitHub配置保存失败');
+    }
+}
+function updateGithubStatus(){
+    const cfg = getGithubCfg();
+    const status = $('ghStatus');
+    if(cfg.owner && cfg.repo && cfg.path && cfg.token){
+        status.textContent = '已配置';
+        status.classList.remove('unconfigured');
+        status.classList.add('configured');
+    }else{
+        status.textContent = '未配置';
+        status.classList.remove('configured');
+        status.classList.add('unconfigured');
+    }
+}
+async function syncToGithub(){
+    const cfg = getGithubCfg();
+    if(!cfg.owner || !cfg.repo || !cfg.path || !cfg.token){
+        showToast('请先配置GitHub信息');
+        return;
+    }
+
+    const html = document.documentElement.outerHTML;
+    const apiUrl = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
 
     try{
-        let sha = null;
-        const getResp = await fetch(apiBase, {
-            method: 'GET',
-            headers: {
-                'Authorization': `token ${cfg.token}`,
-                'Accept': 'application/vnd.github.v3+json'
-            }
+        const res = await fetch(apiUrl, {
+            headers: {'Authorization': 'token ' + cfg.token}
         });
-        if(getResp.ok){
-            const data = await getResp.json();
-            sha = data.sha;
-        }
-        const body = {
-            message: message || `更新页面 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,
-            content: contentB64,
-            branch: 'main'
-        };
-        if(sha) body.sha = sha;
+        const data = await res.json();
 
-        const putResp = await fetch(apiBase, {
+        const body = {
+            message: `自动同步：${new Date().toLocaleString('zh-CN')}`,
+            content: btoa(unescape(encodeURIComponent(html)))
+        };
+        if(data.sha) body.sha = data.sha;
+
+        const putRes = await fetch(apiUrl, {
             method: 'PUT',
             headers: {
-                'Authorization': `token ${cfg.token}`,
-                'Accept': 'application/vnd.github.v3+json',
+                'Authorization': 'token ' + cfg.token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(body)
         });
-        if(putResp.ok){
-            if(!silent) showToast('✅ 已同步到 GitHub');
-            return true;
+
+        if(putRes.ok){
+            showToast('GitHub同步成功');
+            $('ghSyncInfo').style.display = 'block';
+            setTimeout(()=>$('ghSyncInfo').style.display='none', 3000);
         }else{
-            const errText = await putResp.text();
-            console.warn('GitHub 同步失败', errText);
-            if(!silent) showToast('GitHub 同步失败：' + putResp.status);
-            return false;
+            showToast('GitHub同步失败');
         }
     }catch(e){
-        console.warn('GitHub 同步异常', e);
-        if(!silent) showToast('GitHub 同步异常：' + e.message);
-        return false;
+        showToast('GitHub同步异常');
     }
 }
 
-// ====================== 同步完整页面 ======================
-async function syncFullPageToGitHub(silent = false){
-    const cfg = loadGhCfg();
-    if(!isGhConfigured(cfg)){
-        if(!silent) showToast('请先完整配置 GitHub 信息');
-        return false;
-    }
-    const html = await getFullPageHTML();
-    if(!html){
-        if(!silent) showToast('生成页面代码失败');
-        return false;
-    }
-    const msg = `更新完整页面（${questionBank.length}题） ${new Date().toLocaleString('zh-CN',{hour12:false})}`;
-    return await pushContentToGitHub(html, msg, silent);
-}
-
-async function testGitHubConnection(silent){
-    const cfg = loadGhCfg();
-    if(!isGhConfigured(cfg)){
-        if(!silent) showToast('请先完整填写并保存配置');
-        return false;
-    }
-    const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
-    try{
-        const resp = await fetch(apiBase, {
-            method: 'GET',
-            headers: {
-                'Authorization': `token ${cfg.token}`,
-                'Accept': 'application/vnd.github.v3+json'
-            }
-        });
-        if(resp.ok){
-            if(!silent) showToast('✅ 连接成功，文件已存在');
-            return true;
-        }else if(resp.status === 404){
-            if(!silent) showToast('✅ 连接成功（文件暂不存在，首次同步将创建）');
-            return true;
-        }else{
-            if(!silent) showToast('连接失败：' + resp.status + ' ' + resp.statusText);
-            return false;
-        }
-    }catch(e){
-        if(!silent) showToast('连接异常：' + e.message);
-        return false;
-    }
-}
-
-// ====================== 相似度匹配 ======================
-function similarity(query, text){
-    if(!query) return 0;
-    const q = query.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;；:：!！""'']/g,'');
-    const t = text.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;；:：!！""'']/g,'');
-    if(!q || !t) return 0;
-    if(t.indexOf(q) !== -1) return 1.0;
-    if(q.indexOf(t) !== -1 && t.length >= 3) return 0.95;
-    let hit = 0;
-    for(let i=0;i<q.length-1;i++){
-        const bigram = q.substr(i,2);
-        if(t.indexOf(bigram) !== -1) hit++;
-    }
-    const bigramScore = q.length>1 ? hit/(q.length-1) : 0;
-    let charHit = 0;
-    const uniqueChars = [...new Set(q.split(''))];
-    uniqueChars.forEach(ch=>{ if(t.indexOf(ch) !== -1) charHit++; });
-    const charScore = uniqueChars.length ? charHit/uniqueChars.length : 0;
-    const homophoneMap = {
-        'qing':'清|青|轻|氢','zhi':'值|质|制|止|只','jia':'加|家|甲|价',
-        'yan':'盐|严|研|沿','yang':'氧|养|样|阳','tan':'碳|炭|探',
-        'dan':'氮|但|单','lin':'磷|临|林','lv':'氯|率|绿|滤',
-        'shui':'水|谁|睡','ni':'泥|你|拟','ya':'压|亚|牙',
-        'ji':'机|计|记|即|级','liu':'硫|流|留|六','hua':'化|花|华',
-        'xiao':'硝|消|小|效','su':'素|速|塑','wu':'污|无|物|五'
-    };
-    let qExpanded = q;
-    for(let key in homophoneMap){
-        const chars = homophoneMap[key].split('|');
-        chars.forEach(ch=>{
-            if(q.indexOf(ch) !== -1){
-                qExpanded = qExpanded.replace(new RegExp(ch,'g'), `[${chars.join('')}]`);
-            }
-        });
-    }
-    try{
-        const re = new RegExp(qExpanded, 'i');
-        if(re.test(t)) return 0.9;
-    }catch(e){}
-    return Math.max(bigramScore*0.85, charScore*0.55);
-}
-function matchQuestions(query, threshold = 0.28){
-    const results = [];
-    questionBank.forEach((item, idx)=>{
-        const score = similarity(query, item.q);
-        if(score >= threshold) results.push({ item, score, idx });
-    });
-    results.sort((a,b)=> b.score - a.score);
-    return results.slice(0, 15);
-}
-
-// ====================== 答案显示逻辑 ======================
-function formatAnswerHTML(ans){
-    const raw = String(ans || '');
-    const normalized = raw.replace(/[｜|‖]/g, '‖');
-    let parts = normalized.split('‖').map(s=>s.trim()).filter(Boolean);
-    if(parts.length <= 1){
-        return escapeHTML(parts[0] || raw);
-    }
-    const allShort = parts.every(p => p.length <= 8);
-    if(allShort){
-        return parts.map(p=>escapeHTML(p)).join(' <span class="ans-sep">‖</span> ');
-    }
-    return parts.map(p=>`<span class="ans-line">${escapeHTML(p)}</span>`).join('');
-}
-
-function renderResults(results, query){
-    const chatArea = document.getElementById('chatArea');
-    chatArea.innerHTML = '';
-    if(!results.length){
-        const noRes = document.createElement('div');
-        noRes.className = 'no-result';
-        noRes.innerHTML = `未找到与 <b>“${escapeHTML(query)}”</b> 相关的题目。<br>请尝试更换关键词，或简化输入。`;
-        chatArea.appendChild(noRes);
+// ====================== 题库搜索 ======================
+function renderBankList(list){
+    const container = $('bankList');
+    container.innerHTML = '';
+    if(!list.length){
+        container.innerHTML = '<div style="padding:14px;color:#6a8aad;font-size:13px;text-align:center;">暂无题目</div>';
         return;
     }
-    results.forEach((r, idx)=>{
+    list.forEach((item, index)=>{
+        const div = document.createElement('div');
+        div.className = 'bank-item';
+        div.innerHTML = `
+            <div class="bi-idx">${index+1}</div>
+            <div class="bi-q">${item.q}</div>
+            <div class="bi-a">${item.a}</div>
+        `;
+        div.onclick = ()=>{
+            currentEditIndex = bank.indexOf(item);
+            $('editQ').value = item.q;
+            $('editA').value = item.a;
+            $('editForm').style.display = 'block';
+            $('editForm').dataset.view = 'form';
+        };
+        container.appendChild(div);
+    });
+}
+function searchBank(keyword){
+    if(!keyword.trim()){
+        renderBankList(bank);
+        return;
+    }
+    const kw = keyword.toLowerCase();
+    const result = bank.filter(item=>
+        item.q.toLowerCase().includes(kw) || item.a.toLowerCase().includes(kw)
+    );
+    renderBankList(result);
+}
+
+// ====================== 答题查询 ======================
+function searchAnswer(keyword){
+    const chatArea = $('chatArea');
+    const emptyState = $('emptyState');
+
+    if(emptyState){
+        emptyState.style.display = 'none';
+    }
+
+    const kw = keyword.toLowerCase().trim();
+    const matched = bank.filter(item=>
+        item.q.toLowerCase().includes(kw) || kw.includes(item.q.toLowerCase())
+    );
+
+    if(!matched.length){
+        const card = document.createElement('div');
+        card.className = 'no-result';
+        card.innerHTML = `未找到相关题目，请更换关键词或前往题库管理补充。`;
+        chatArea.appendChild(card);
+        chatArea.scrollTop = chatArea.scrollHeight;
+        return;
+    }
+
+    matched.forEach(item=>{
         const card = document.createElement('div');
         card.className = 'result-card';
+
+        const ansLines = item.a.split('‖').map(line=>
+            `<span class="ans-line">${line}</span>`
+        ).join('');
+
         card.innerHTML = `
-            <div class="q-label">题目 ${idx+1}</div>
-            <div class="q-text">${escapeHTML(r.item.q)}</div>
+            <div class="q-label">题目</div>
+            <div class="q-text">${item.q}</div>
             <div class="a-label">答案</div>
-            <div class="a-text">${formatAnswerHTML(r.item.a)}</div>
+            <div class="a-text">${ansLines}</div>
         `;
         chatArea.appendChild(card);
     });
-    chatArea.scrollTop = 0;
+
+    chatArea.scrollTop = chatArea.scrollHeight;
 }
 
-// ====================== 预览通用组件 ======================
-function showPreviewModal(titleText, items, mode, htmlContent, readonly){
-    const overlay = document.createElement('div');
-    overlay.className = 'modal-overlay active';
-    overlay.style.zIndex = 1300;
-    
-    const listHTML = items.map((x,i)=>`
-        <div class="bank-item" style="cursor:default;${x.highlight?'background:#dcfce7;border-left:3px solid #22c55e;':''}">
-            <div class="bi-idx">#${i+1}</div>
-            <div class="bi-q">${escapeHTML(x.q)}</div>
-            <div class="bi-a">答案：${escapeHTML(x.a)}</div>
-        </div>
-    `).join('');
-    
-    const codeContent = htmlContent ? escapeHTML(htmlContent) : '（无代码内容）';
-    
-    overlay.innerHTML = `
-        <div class="modal" style="max-width:720px;">
-            <div class="modal-header">
-                <h3>${escapeHTML(titleText)} ${readonly?'<span style="font-size:11px;opacity:0.8;font-weight:400;">（只读）</span>':''}</h3>
-                <button class="modal-close" data-close="1">✕</button>
-            </div>
-            <div class="modal-body">
-                <div class="preview-tabs">
-                    <div class="preview-tab ${mode!=='code'?'active':''}" data-tab="list">📋 列表预览</div>
-                    <div class="preview-tab ${mode==='code'?'active':''}" data-tab="code">💻 代码预览</div>
-                </div>
-                <div id="previewListPane" style="${mode==='code'?'display:none;':''}">
-                    <div style="font-size:11px;color:#8aa2c0;margin-bottom:6px;">共 ${items.length} 题 · 只读模式</div>
-                    <div class="readonly-list">${listHTML || '<div style="text-align:center;padding:20px;color:#8aa2c0;">无内容</div>'}</div>
-                </div>
-                <div id="previewCodePane" style="${mode==='code'?'':'display:none;'}">
-                    <div style="font-size:11px;color:#8aa2c0;margin-bottom:6px;">完整HTML代码 · 只读模式，不可修改</div>
-                    <pre class="code-preview"><span class="code-hint">// 完整页面代码（含题库数据）</span>${codeContent}</pre>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-close="1">关闭</button>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(overlay);
-    
-    const tabs = overlay.querySelectorAll('.preview-tab');
-    const listPane = overlay.querySelector('#previewListPane');
-    const codePane = overlay.querySelector('#previewCodePane');
-    tabs.forEach(t=>{
-        t.addEventListener('click', ()=>{
-            tabs.forEach(x=>x.classList.remove('active'));
-            t.classList.add('active');
-            if(t.dataset.tab === 'list'){
-                listPane.style.display = 'block';
-                codePane.style.display = 'none';
-            }else{
-                listPane.style.display = 'none';
-                codePane.style.display = 'block';
-            }
-        });
-    });
-    
-    overlay.querySelectorAll('[data-close]').forEach(b=>{
-        b.addEventListener('click', ()=> overlay.remove());
-    });
-    overlay.addEventListener('click', (e)=>{
-        if(e.target === overlay) overlay.remove();
-    });
-    return overlay;
+// ====================== 确认弹窗 ======================
+function showConfirm(title, callback){
+    confirmTitle = title;
+    confirmCallback = callback;
+    $('confirmTitle').textContent = title;
+    $('confirmInput').value = '';
+    $('confirmOverlay').classList.add('active');
+    $('confirmInput').focus();
+}
+function hideConfirm(){
+    $('confirmOverlay').classList.remove('active');
+    confirmCallback = null;
 }
 
-// ====================== 复活弹窗 ======================
-function showRevivePopup(){
-    const popup = document.getElementById('revivePopup');
-    const metaEl = document.getElementById('revivePopupMeta');
-    const backup = loadReviveBackup();
-    if(!backup){
-        metaEl.textContent = '（无可用备份）';
+// ====================== 事件绑定 ======================
+document.addEventListener('pointerdown', ()=>{
+    userHasInteracted = true;
+}, {passive:true});
+document.addEventListener('keydown', ()=>{
+    userHasInteracted = true;
+}, {passive:true});
+
+window.addEventListener('pagehide', ()=>{
+    clearHealthTick();
+});
+window.addEventListener('beforeunload', ()=>{
+    clearHealthTick();
+});
+document.addEventListener('visibilitychange', ()=>{
+    if(document.hidden){
+        clearHealthTick();
     }else{
-        metaEl.textContent = `备份时间：${backup.time} · 大小：${(backup.size/1024).toFixed(1)} KB`;
+        writeHealthTick();
     }
-    popup.classList.add('active');
-}
+});
+setInterval(()=>{
+    if(!document.hidden){
+        writeHealthTick();
+    }
+}, 15000);
+writeHealthTick();
 
-function bindRevivePopup(){
-    const popup = document.getElementById('revivePopup');
-    const rpPreview = document.getElementById('rpPreview');
-    const rpLater = document.getElementById('rpLater');
-    const rpRestore = document.getElementById('rpRestore');
-
-    rpLater.addEventListener('click', ()=>{ popup.classList.remove('active'); });
-
-    rpPreview.addEventListener('click', ()=>{
-        const backup = loadReviveBackup();
-        if(!backup){ showToast('暂无复活备份'); return; }
-        const overlay = document.createElement('div');
-        overlay.className = 'modal-overlay active';
-        overlay.style.zIndex = 20000;
-        overlay.innerHTML = `
-            <div class="modal" style="max-width:720px;">
-                <div class="modal-header">
-                    <h3>💊 复活备份预览（只读）</h3>
-                    <button class="modal-close" data-close="1">✕</button>
-                </div>
-                <div class="modal-body">
-                    <div style="font-size:11px;color:#8aa2c0;margin-bottom:6px;">
-                        上传时间：${escapeHTML(backup.time)} · 大小：${(backup.size/1024).toFixed(1)} KB
-                    </div>
-                    <pre class="code-preview"><span class="code-hint">// 复活备份内容（完整页面代码）</span>${escapeHTML(backup.content)}</pre>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-close="1">关闭</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-        overlay.querySelectorAll('[data-close]').forEach(b=>{
-            b.addEventListener('click', ()=> overlay.remove());
-        });
-        overlay.addEventListener('click', (e)=>{
-            if(e.target === overlay) overlay.remove();
-        });
-    });
-
-    rpRestore.addEventListener('click', async ()=>{
-        const backup = loadReviveBackup();
-        if(!backup){ showToast('暂无复活备份'); return; }
-        const cfg = loadGhCfg();
-        if(!isGhConfigured(cfg)){ showToast('请先配置GitHub仓库信息（登录后进入题库管理配置）'); return; }
-        const ok = await askConfirm('确认使用复活备份覆盖GitHub仓库？');
-        if(!ok) return;
-        popup.classList.remove('active');
-        showToast('正在推送复活备份至GitHub…');
-        const success = await pushContentToGitHub(
-            backup.content,
-            `💊 复活备份恢复 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,
-            false
-        );
-        if(success){
-            showToast('✅ 复活备份已推送至GitHub，正在刷新…');
-            setTimeout(()=>{ location.reload(); }, 1000);
-        }
-    });
-}
-
-// ====================== 主界面逻辑 ======================
 document.addEventListener('DOMContentLoaded', ()=>{
     loadBank();
+    renderBankList(bank);
+    updateReviveStatus();
+    updateGithubStatus();
 
-    const chatArea      = document.getElementById('chatArea');
-    const questionInput = document.getElementById('questionInput');
-    const sendBtn       = document.getElementById('sendBtn');
-    const clearChatBtn  = document.getElementById('clearChatBtn');
-    const clearInputBtn = document.getElementById('clearInputBtn');
-    const voiceBtn      = document.getElementById('voiceBtn');
-    const imageBtn      = document.getElementById('imageBtn');
-    const imageInput    = document.getElementById('imageInput');
-    const imgPreview    = document.getElementById('imgPreview');
-    const previewImg    = document.getElementById('previewImg');
-    const closeImg      = document.getElementById('closeImg');
+    try{
+        const val = localStorage.getItem(AUTO_REVIVE_DETECT_KEY);
+        autoReviveDetect = val !== '0';
+        const el = $('autoReviveDetect');
+        if(el){
+            el.checked = autoReviveDetect;
+            el.addEventListener('change', ()=>{
+                autoReviveDetect = el.checked;
+                localStorage.setItem(AUTO_REVIVE_DETECT_KEY, autoReviveDetect ? '1' : '0');
+                showToast(autoReviveDetect ? '已开启异常自动检测' : '已关闭异常自动检测');
+            });
+        }
+    }catch(e){}
 
-    // ===== 崩溃检测（优化版） =====
     const crashed = checkPreviousCrash();
-    const reviveBackup = loadReviveBackup();
-    // 只在检测到崩溃 且 存在备份 且 页面可见时 才弹窗
-    if(crashed && reviveBackup && !document.hidden){
-        setTimeout(()=>{ 
-            // 再次确认页面可见，避免延迟期间被切后台
-            if(!document.hidden) showRevivePopup(); 
+    const {txt: reviveBackup} = getReviveBackup();
+    if(autoReviveDetect && crashed && reviveBackup && !document.hidden){
+        setTimeout(()=>{
+            if(!document.hidden){
+                showRevivePopup();
+            }
         }, 800);
     }
-    // 页面可见时才写入标记
-    writeHealthTick();
-    // 每10秒写入一次（降低频率，减少IO）
-    setInterval(()=>{ writeHealthTick(); }, 10000);
-    // 页面从后台切回前台时，立即写入一次标记
-    document.addEventListener('visibilitychange', ()=>{
-        if(!document.hidden){
-            writeHealthTick();
+
+    $('sendBtn').onclick = ()=>{
+        const input = $('questionInput');
+        const keyword = input.value.trim();
+        if(!keyword){
+            showToast('请输入题目关键词');
+            return;
+        }
+        searchAnswer(keyword);
+        input.value = '';
+    };
+
+    $('questionInput').addEventListener('keydown', e=>{
+        if(e.key === 'Enter'){
+            $('sendBtn').click();
         }
     });
-    // 正常退出时清除标记
-    window.addEventListener('beforeunload', ()=>{ clearHealthTick(); });
 
-    bindRevivePopup();
+    $('clearInputBtn').onclick = ()=>{
+        $('questionInput').value = '';
+    };
 
-    // ===== 查询发送 =====
-    function sendQuestion(){
-        const text = questionInput.value.trim();
-        if(!text && !currentImageFile){ showToast('请输入问题，或上传图片'); return; }
-        if(!text && currentImageFile){ showToast('图片已收到，但题库匹配需要文字，请补充关键词'); return; }
+    $('clearChatBtn').onclick = ()=>{
+        const chatArea = $('chatArea');
+        const emptyState = $('emptyState');
         chatArea.innerHTML = '';
-        const results = matchQuestions(text);
-        renderResults(results, text);
-        questionInput.value = '';
-        clearImage();
-        if(results.length === 0) showToast('未找到匹配题目');
-        else showToast(`找到 ${results.length} 条相关题目`);
-        questionInput.focus();
-    }
-    sendBtn.addEventListener('click', sendQuestion);
-    questionInput.addEventListener('keydown', (e)=>{
-        if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendQuestion(); }
+        if(emptyState){
+            chatArea.appendChild(emptyState);
+            emptyState.style.display = 'block';
+        }
+        showToast('已清空对话');
+    };
+
+    $('loginBtn').onclick = ()=>{
+        $('loginModal').classList.add('active');
+    };
+    $('loginClose').onclick = $('loginCancel').onclick = ()=>{
+        $('loginModal').classList.remove('active');
+    };
+    $('loginSubmit').onclick = ()=>{
+        const user = $('loginUser').value.trim();
+        const pass = $('loginPass').value.trim();
+        if(!user || !pass){
+            showToast('请输入账号和密码');
+            return;
+        }
+        $('loginBtn').textContent = '已登录';
+        $('loginBtn').classList.add('logged-in');
+        $('loginModal').classList.remove('active');
+        showToast('登录成功');
+    };
+
+    $('bankModal').querySelectorAll('.tab').forEach(tab=>{
+        tab.onclick = ()=>{
+            $('bankModal').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+            $('bankModal').querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+            tab.classList.add('active');
+            $(tab.dataset.tab).classList.add('active');
+        };
     });
 
-    // ===== 清空 =====
-    clearInputBtn.addEventListener('click', ()=>{
-        questionInput.value = '';
-        clearImage();
-        questionInput.focus();
+    $('bankSearch').addEventListener('input', e=>{
+        searchBank(e.target.value);
     });
-    clearChatBtn.addEventListener('click', ()=>{
-        chatArea.innerHTML = '';
-        const empty = document.createElement('div');
-        empty.className = 'empty-state';
-        empty.id = 'emptyState';
-        empty.innerHTML = `
-            <div class="empty-icon">💬</div>
-            <div class="empty-text">输入题目关键词开始查询<br>支持文字、语音、图片</div>
-        `;
-        chatArea.appendChild(empty);
-        showToast('对话已清空');
-    });
+    $('bankClearSearch').onclick = ()=>{
+        $('bankSearch').value = '';
+        renderBankList(bank);
+    };
 
-    // ===== 图片处理（主界面） =====
-    function clearImage(){
-        currentImageFile = null;
-        imageInput.value = '';
-        previewImg.src = '';
-        imgPreview.style.display = 'none';
-    }
-    imageBtn.addEventListener('click', ()=>{
-        imageInput.value = '';
-        imageInput.click();
-    });
-    imageInput.addEventListener('change', (e)=>{
-        const file = e.target.files && e.target.files[0];
+    $('editCancel').onclick = ()=>{
+        $('editForm').style.display = 'none';
+        currentEditIndex = -1;
+    };
+    $('editSave').onclick = ()=>{
+        const q = $('editQ').value.trim();
+        const a = $('editA').value.trim();
+        if(!q || !a){
+            showToast('题目和答案不能为空');
+            return;
+        }
+        if(currentEditIndex >= 0){
+            bank[currentEditIndex].q = q;
+            bank[currentEditIndex].a = a;
+            saveBank();
+            renderBankList(bank);
+            $('editForm').style.display = 'none';
+            currentEditIndex = -1;
+            showToast('修改成功');
+        }
+    };
+    $('editDelete').onclick = ()=>{
+        if(currentEditIndex < 0) return;
+        showConfirm('删除后不可恢复，确认删除？', ok=>{
+            if(ok){
+                bank.splice(currentEditIndex, 1);
+                saveBank();
+                renderBankList(bank);
+                $('editForm').style.display = 'none';
+                currentEditIndex = -1;
+                showToast('已删除');
+            }
+        });
+    };
+
+    $('addClear').onclick = ()=>{
+        $('addQ').value = '';
+        $('addA').value = '';
+    };
+    $('addSave').onclick = ()=>{
+        const q = $('addQ').value.trim();
+        const a = $('addA').value.trim();
+        if(!q || !a){
+            showToast('题目和答案不能为空');
+            return;
+        }
+        bank.unshift({q,a});
+        saveBank();
+        $('addQ').value = '';
+        $('addA').value = '';
+        showToast('新增成功');
+    };
+
+    $('reviveImportCurrentBtn').onclick = ()=>{
+        showConfirm('确认将当前页面代码保存为复活备份？', ok=>{
+            if(ok){
+                const html = document.documentElement.outerHTML;
+                saveReviveBackup(html);
+                showToast('已导入当前代码');
+            }
+        });
+    };
+    $('reviveUploadBtn').onclick = ()=>{
+        $('reviveFileInput').click();
+    };
+    $('reviveFileInput').addEventListener('change', e=>{
+        const file = e.target.files[0];
         if(!file) return;
-        if(file.size > 10 * 1024 * 1024){ showToast('图片过大，请选择小于 10MB 的图片'); return; }
-        currentImageFile = file;
         const reader = new FileReader();
-        reader.onload = (ev)=>{
-            previewImg.src = ev.target.result;
-            imgPreview.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    });
-    closeImg.addEventListener('click', (e)=>{ e.stopPropagation(); clearImage(); });
-
-    // ===== 语音识别 =====
-    function initRecognition(){
-        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if(!SR) return null;
-        const rec = new SR();
-        rec.lang = 'zh-CN';
-        rec.continuous = false;
-        rec.interimResults = true;
-        rec.maxAlternatives = 1;
-        return rec;
-    }
-    function bindRecognition(rec){
-        rec.onstart = ()=>{
-            isRecording = true;
-            voiceBtn.classList.add('recording');
-            voiceBtn.textContent = '⏺';
-            showToast('正在聆听…请说话');
-        };
-        rec.onresult = (e)=>{
-            let transcript = '';
-            for(let i = e.resultIndex; i < e.results.length; i++){
-                transcript += e.results[i][0].transcript;
-            }
-            questionInput.value = transcript;
-            if(e.results[0].isFinal) showToast('识别完成：' + transcript);
-        };
-        rec.onerror = (e)=>{
-            console.warn('语音识别错误', e);
-            let errMsg = '语音识别失败';
-            if(e.error === 'not-allowed') errMsg = '请允许麦克风权限';
-            else if(e.error === 'no-speech') errMsg = '未检测到语音，请重试';
-            else if(e.error === 'audio-capture') errMsg = '未找到麦克风';
-            else if(e.error === 'network') errMsg = '网络错误';
-            showToast(errMsg);
-            isRecording = false;
-            voiceBtn.classList.remove('recording');
-            voiceBtn.textContent = '🎤';
-        };
-        rec.onend = ()=>{
-            isRecording = false;
-            voiceBtn.classList.remove('recording');
-            voiceBtn.textContent = '🎤';
-        };
-    }
-    voiceBtn.addEventListener('click', ()=>{
-        if(isRecording){
-            if(recognition){ try{ recognition.stop(); }catch(e){} }
-            return;
-        }
-        const rec = initRecognition();
-        if(!rec){ showToast('当前浏览器不支持语音识别'); return; }
-        recognition = rec;
-        bindRecognition(rec);
-        try{ rec.start(); }
-        catch(e){
-            setTimeout(()=>{ try{ rec.start(); }catch(e2){ showToast('无法启动录音'); } }, 200);
-        }
-    });
-
-    // ===== 登录 =====
-    const loginBtn    = document.getElementById('loginBtn');
-    const loginModal  = document.getElementById('loginModal');
-    const loginClose  = document.getElementById('loginClose');
-    const loginCancel = document.getElementById('loginCancel');
-    const loginSubmit = document.getElementById('loginSubmit');
-    const loginUser   = document.getElementById('loginUser');
-    const loginPass   = document.getElementById('loginPass');
-    const bankModal   = document.getElementById('bankModal');
-    const bankClose   = document.getElementById('bankClose');
-    const bankCancel  = document.getElementById('bankCancel');
-
-    loginBtn.addEventListener('click', ()=>{
-        if(isLoggedIn) openBank();
-        else {
-            loginUser.value = '';
-            loginPass.value = '';
-            loginModal.classList.add('active');
-            setTimeout(()=>loginUser.focus(), 100);
-        }
-    });
-    loginClose.addEventListener('click', ()=> loginModal.classList.remove('active'));
-    loginCancel.addEventListener('click', ()=> loginModal.classList.remove('active'));
-    loginSubmit.addEventListener('click', doLogin);
-    loginPass.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') doLogin(); });
-    function doLogin(){
-        const u = loginUser.value.trim();
-        const p = loginPass.value.trim();
-        if(u === 'A' && p === 'A'){
-            isLoggedIn = true;
-            loginModal.classList.remove('active');
-            loginBtn.textContent = '📚 题库';
-            loginBtn.classList.add('logged-in');
-            showToast('登录成功');
-            setTimeout(openBank, 200);
-        }else{
-            showToast('账号或密码错误');
-        }
-    }
-
-    function openBank(){
-        bankModal.classList.add('active');
-        renderBankList();
-        renderBackups();
-        renderReviveStatus();
-        renderGhCfg();
-        switchTab('tab-search');
-    }
-    bankClose.addEventListener('click', ()=> bankModal.classList.remove('active'));
-    bankCancel.addEventListener('click', ()=> bankModal.classList.remove('active'));
-
-    // ===== 标签页 =====
-    function switchTab(tabId){
-        document.querySelectorAll('.tab').forEach(t=> t.classList.toggle('active', t.dataset.tab === tabId));
-        document.querySelectorAll('.tab-content').forEach(c=> c.classList.toggle('active', c.id === tabId));
-    }
-    document.querySelectorAll('.tab').forEach(t=>{
-        t.addEventListener('click', ()=> switchTab(t.dataset.tab));
-    });
-
-    // ===== 题库列表渲染 =====
-    const bankSearch    = document.getElementById('bankSearch');
-    const bankList      = document.getElementById('bankList');
-    const bankClearSearch = document.getElementById('bankClearSearch');
-    const editForm      = document.getElementById('editForm');
-    const editQ         = document.getElementById('editQ');
-    const editA         = document.getElementById('editA');
-    const editCancel    = document.getElementById('editCancel');
-    const editSave      = document.getElementById('editSave');
-    const editDelete    = document.getElementById('editDelete');
-    const editCodePreview = document.getElementById('editCodePreview');
-    let selectedIdx = -1;
-
-    function renderBankList(keyword){
-        const kw = (keyword || '').trim().toLowerCase();
-        bankList.innerHTML = '';
-        questionBank.forEach((item, idx)=>{
-            if(kw){
-                const hay = (item.q + ' ' + item.a).toLowerCase();
-                if(hay.indexOf(kw) === -1) return;
-            }
-            const div = document.createElement('div');
-            div.className = 'bank-item' + (idx === selectedIdx ? ' selected':'');
-            div.dataset.idx = idx;
-            div.innerHTML = `
-                <div class="bi-idx">#${idx+1}</div>
-                <div class="bi-q">${escapeHTML(item.q)}</div>
-                <div class="bi-a">答案：${escapeHTML(item.a.substring(0,80))}${item.a.length>80?'…':''}</div>
-            `;
-            div.addEventListener('click', ()=>{
-                selectedIdx = idx;
-                renderBankList(bankSearch.value);
-                showEditForm(idx);
-            });
-            bankList.appendChild(div);
-        });
-        if(!bankList.children.length){
-            bankList.innerHTML = '<div style="font-size:12px;color:#8aa2c0;text-align:center;padding:20px;">未找到匹配题目</div>';
-        }
-    }
-    function showEditForm(idx){
-        const item = questionBank[idx];
-        if(!item){ editForm.style.display = 'none'; return; }
-        editQ.value = item.q;
-        editA.value = item.a;
-        editForm.style.display = 'block';
-    }
-    bankSearch.addEventListener('input', ()=>{
-        selectedIdx = -1;
-        editForm.style.display = 'none';
-        renderBankList(bankSearch.value);
-    });
-    bankClearSearch.addEventListener('click', ()=>{
-        bankSearch.value = '';
-        selectedIdx = -1;
-        editForm.style.display = 'none';
-        renderBankList('');
-    });
-    editCancel.addEventListener('click', ()=>{
-        selectedIdx = -1;
-        editForm.style.display = 'none';
-        renderBankList(bankSearch.value);
-    });
-
-    editCodePreview.addEventListener('click', async ()=>{
-        const html = await getFullPageHTML();
-        const previewItem = { q: editQ.value.trim() || '（空）', a: editA.value.trim() || '（空）', highlight: true };
-        const listItems = questionBank.map((x,i)=>{
-            if(i === selectedIdx) return previewItem;
-            return x;
-        });
-        showPreviewModal('编辑预览', listItems, 'list', html || '（无法获取代码）', true);
-    });
-
-    editSave.addEventListener('click', async ()=>{
-        if(selectedIdx < 0 || !questionBank[selectedIdx]) return;
-        const newQ = editQ.value.trim();
-        const newA = editA.value.trim();
-        if(!newQ || !newA){ showToast('题目和答案不能为空'); return; }
-        const ok = await askConfirm('确认修改？（输入确认代码）');
-        if(!ok) return;
-        backupCurrentBank();
-        questionBank[selectedIdx] = { q: newQ, a: newA };
-        persistBank();
-        showToast('已保存修改，正在同步完整页面…');
-        await syncFullPageToGitHub(true);
-        refreshPage();
-    });
-
-    editDelete.addEventListener('click', async ()=>{
-        if(selectedIdx < 0) return;
-        const ok = await askConfirm('确认删除该题目？（输入确认代码）');
-        if(!ok) return;
-        backupCurrentBank();
-        questionBank.splice(selectedIdx, 1);
-        persistBank();
-        showToast('已删除题目，正在同步完整页面…');
-        await syncFullPageToGitHub(true);
-        refreshPage();
-    });
-
-    // ===== 新增题目 =====
-    const addQ       = document.getElementById('addQ');
-    const addA       = document.getElementById('addA');
-    const addSave    = document.getElementById('addSave');
-    const addClear   = document.getElementById('addClear');
-    const addPreview = document.getElementById('addPreview');
-    const ocrArea    = document.getElementById('ocrArea');
-    const ocrInput   = document.getElementById('ocrInput');
-    const ocrPreview = document.getElementById('ocrPreview');
-    const ocrProgress = document.getElementById('ocrProgress');
-    const ocrResultHint = document.getElementById('ocrResultHint');
-    const ocrEngine  = document.getElementById('ocrEngine');
-
-    addClear.addEventListener('click', ()=>{
-        addQ.value = '';
-        addA.value = '';
-        ocrPreview.innerHTML = '';
-        ocrResultHint.classList.remove('active');
-    });
-
-    addPreview.addEventListener('click', async ()=>{
-        const q = addQ.value.trim() || '（未填写题目）';
-        const a = addA.value.trim() || '（未填写答案）';
-        const listItems = questionBank.slice();
-        listItems.push({ q, a, highlight: true });
-        const originalBank = questionBank;
-        questionBank = listItems.map(x=> ({q:x.q, a:x.a}));
-        const html = await getFullPageHTML();
-        questionBank = originalBank;
-        showPreviewModal('新增预览', listItems, 'list', html || '（无法获取代码）', true);
-    });
-
-    addSave.addEventListener('click', async ()=>{
-        const q = addQ.value.trim();
-        const a = addA.value.trim();
-        if(!q || !a){ showToast('请填写题目和答案'); return; }
-        const ok = await askConfirm('确认新增题目？（输入确认代码）');
-        if(!ok) return;
-        backupCurrentBank();
-        questionBank.push({ q, a });
-        persistBank();
-        showToast(`已新增题目（共${questionBank.length}题），正在同步完整页面…`);
-        const success = await syncFullPageToGitHub(true);
-        if(success){
-            showToast('✅ 新增已同步到GitHub');
-        }else{
-            showToast('⚠️ 同步失败，但已保存到本地');
-        }
-        setTimeout(()=>{ refreshPage(); }, 800);
-    });
-
-    ocrArea.addEventListener('click', ()=>{
-        ocrInput.value = '';
-        ocrInput.click();
-    });
-
-    ocrInput.addEventListener('change', async (e)=>{
-        const file = e.target.files && e.target.files[0];
-        if(!file) return;
-        if(!file.type.startsWith('image/')){
-            showToast('请选择图片文件');
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = (ev)=>{
-            ocrPreview.innerHTML = `<img src="${ev.target.result}" alt="预览">`;
-        };
-        reader.readAsDataURL(file);
-
-        ocrProgress.classList.add('active');
-        ocrProgress.textContent = '⏳ 正在识别图片内容…';
-        ocrResultHint.classList.remove('active');
-
-        try{
-            const engine = ocrEngine.value;
-            const result = await recognizeImage(file, engine);
-            if(result && result.q){
-                addQ.value = result.q;
-                addA.value = result.a || '';
-                ocrResultHint.classList.add('active');
-                showToast('✅ 识别完成，已自动填充');
-                setTimeout(()=>{
-                    addQ.focus();
-                    addQ.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 200);
-            }else{
-                ocrResultHint.classList.remove('active');
-                showToast('⚠️ 未识别到内容，请手动输入');
-            }
-        }catch(err){
-            console.warn('OCR识别失败', err);
-            showToast('识别失败，请手动输入');
-        }finally{
-            ocrProgress.classList.remove('active');
-        }
-    });
-
-    // ===== 备份面板 =====
-    function renderBackups(){
-        const b = loadBackups();
-        const el = document.getElementById('backupList');
-        el.innerHTML = '';
-        if(!b.list.length){
-            el.innerHTML = '<div style="font-size:12px;color:#8aa2c0;text-align:center;padding:16px;">暂无备份档案</div>';
-            return;
-        }
-        b.list.forEach((item, idx)=>{
-            const div = document.createElement('div');
-            div.className = 'backup-item' + (item.locked ? ' locked':'');
-            div.innerHTML = `
-                <div>
-                    <span class="bi-name">档案${item.name}</span>
-                    <span class="bi-time">${escapeHTML(item.time)}</span>
-                </div>
-                <div class="bi-actions">
-                    <button class="btn btn-sm" data-act="view" data-idx="${idx}">查阅</button>
-                    <button class="btn btn-sm" data-act="code" data-idx="${idx}">代码</button>
-                    <button class="btn btn-sm" data-act="restore" data-idx="${idx}">恢复</button>
-                    <button class="btn btn-sm btn-danger" data-act="delete" data-idx="${idx}">删除</button>
-                    <span class="lock-icon" data-act="lock" data-idx="${idx}" title="${item.locked?'点击解锁':'点击上锁'}">${item.locked?'🔒':'🔓'}</span>
-                </div>
-            `;
-            el.appendChild(div);
-        });
-
-        el.querySelectorAll('[data-act="view"]').forEach(btn=>{
-            btn.addEventListener('click', ()=>{
-                const idx = +btn.dataset.idx;
-                const bb = loadBackups();
-                const item = bb.list[idx];
-                if(!item) return;
-                showPreviewModal(`档案${item.name} - ${item.time}`, item.data, 'list', null, true);
-            });
-        });
-        el.querySelectorAll('[data-act="code"]').forEach(btn=>{
-            btn.addEventListener('click', async ()=>{
-                const idx = +btn.dataset.idx;
-                const bb = loadBackups();
-                const item = bb.list[idx];
-                if(!item) return;
-                const originalBank = questionBank;
-                questionBank = item.data.slice();
-                const html = await getFullPageHTML();
-                questionBank = originalBank;
-                showPreviewModal(`档案${item.name} - 代码预览`, item.data, 'code', html || '（无法获取代码）', true);
-            });
-        });
-        el.querySelectorAll('[data-act="restore"]').forEach(btn=>{
-            btn.addEventListener('click', async ()=>{
-                const idx = +btn.dataset.idx;
-                const bb = loadBackups();
-                const item = bb.list[idx];
-                if(!item) return;
-                const ok = await askConfirm(`确认恢复到档案${item.name}？（输入确认代码）`);
-                if(!ok) return;
-                questionBank = JSON.parse(JSON.stringify(item.data));
-                persistBank();
-                showToast('已恢复，正在同步完整页面…');
-                await syncFullPageToGitHub(true);
-                refreshPage();
-            });
-        });
-        el.querySelectorAll('[data-act="delete"]').forEach(btn=>{
-            btn.addEventListener('click', async ()=>{
-                const idx = +btn.dataset.idx;
-                const bb = loadBackups();
-                const item = bb.list[idx];
-                if(!item) return;
-                if(item.locked){ showToast('已锁定的档案不可删除，请先解锁'); return; }
-                const ok = await askConfirm(`确认删除档案${item.name}？（输入确认代码）`);
-                if(!ok) return;
-                bb.list.splice(idx, 1);
-                bb.list.sort((a,b)=> new Date(b.time) - new Date(a.time));
-                bb.list = bb.list.map((it, i)=>({ ...it, name: ['A','B','C'][i] || ('D'+i) }));
-                saveBackups(bb);
-                showToast('已删除档案' + item.name);
-                renderBackups();
-            });
-        });
-        el.querySelectorAll('[data-act="lock"]').forEach(ic=>{
-            ic.addEventListener('click', ()=>{
-                const idx = +ic.dataset.idx;
-                const bb = loadBackups();
-                const item = bb.list[idx];
-                if(!item) return;
-                if(!item.locked){
-                    const lockedCount = bb.list.filter(x=>x.locked).length;
-                    if(lockedCount >= 2){ showToast('最多上锁2个档案'); return; }
-                    item.locked = true;
-                }else{
-                    item.locked = false;
-                }
-                saveBackups(bb);
-                renderBackups();
-            });
-        });
-    }
-
-    // ===== 复活备份 =====
-    const reviveUploadBtn = document.getElementById('reviveUploadBtn');
-    const reviveDownloadBtn = document.getElementById('reviveDownloadBtn');
-    const revivePreviewBtn = document.getElementById('revivePreviewBtn');
-    const reviveSyncBtn = document.getElementById('reviveSyncBtn');
-    const reviveImportCurrentBtn = document.getElementById('reviveImportCurrentBtn');
-    const reviveFileInput = document.getElementById('reviveFileInput');
-
-    function renderReviveStatus(){
-        const textEl = document.getElementById('reviveStatusText');
-        const metaEl = document.getElementById('reviveStatusMeta');
-        const backup = loadReviveBackup();
-        if(backup){
-            textEl.innerHTML = '<span class="rs-ok">✅ 已存在复活备份</span>';
-            metaEl.textContent = `${backup.time} · ${(backup.size/1024).toFixed(1)} KB`;
-        }else{
-            textEl.innerHTML = '<span class="rs-no">⚠️ 未上传复活备份</span>';
-            metaEl.textContent = '';
-        }
-    }
-
-    // 导入当前代码到复活备份
-    reviveImportCurrentBtn.addEventListener('click', async ()=>{
-        const currentCode = await getFullPageHTML();
-        if(!currentCode || currentCode.trim().length < 100){
-            showToast('当前页面代码不完整，无法导入');
-            return;
-        }
-        const existingBackup = loadReviveBackup();
-        let msg = '⚠️ 确定将当前使用的代码替换/覆盖复活备份文件吗？\n\n';
-        msg += '· 当前代码大小：' + (currentCode.length/1024).toFixed(1) + ' KB\n';
-        if(existingBackup){
-            msg += '· 现有备份大小：' + (existingBackup.size/1024).toFixed(1) + ' KB\n';
-            msg += '· 现有备份时间：' + existingBackup.time + '\n\n';
-            msg += '确认后，现有复活备份将被当前代码完全替换，此操作不可恢复。';
-        }else{
-            msg += '· 当前无复活备份，将创建新的备份。\n\n';
-            msg += '确认后将使用当前代码创建复活备份。';
-        }
-        if(!confirm(msg)) return;
-
-        if(saveReviveBackup(currentCode)){
-            showToast('✅ 已将当前代码导入到复活备份');
-            renderReviveStatus();
-        }else{
-            alert('❌ 保存失败，可能超出浏览器存储限制。\n\n当前代码大小：' + (currentCode.length/1024).toFixed(1) + ' KB');
-        }
-    });
-
-    reviveUploadBtn.addEventListener('click', ()=>{
-        reviveFileInput.value = '';
-        reviveFileInput.click();
-    });
-    reviveFileInput.addEventListener('change', (e)=>{
-        const file = e.target.files && e.target.files[0];
-        if(!file) return;
-        if(!file.name.toLowerCase().endsWith('.txt')){
-            showToast('请选择 .txt 文件');
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = (ev)=>{
-            const content = ev.target.result;
-            if(!content || content.length < 100){
-                showToast('文件内容过短，可能不是有效的备份');
-                return;
-            }
-            if(saveReviveBackup(content)){
-                showToast('✅ 复活备份已上传/覆盖');
-                renderReviveStatus();
-            }else{
-                showToast('保存失败，可能是文件过大超出存储限制');
-            }
+        reader.onload = ev=>{
+            saveReviveBackup(ev.target.result);
+            showToast('复活备份已更新');
         };
         reader.readAsText(file);
     });
-
-    reviveDownloadBtn.addEventListener('click', ()=>{
-        const backup = loadReviveBackup();
-        if(!backup){
-            showToast('暂无复活备份，请先上传');
+    $('reviveDownloadBtn').onclick = ()=>{
+        const {txt} = getReviveBackup();
+        if(!txt){
+            showToast('暂无复活备份');
             return;
         }
-        const now = new Date();
-        const y = now.getFullYear();
-        const m = String(now.getMonth()+1).padStart(2,'0');
-        const d = String(now.getDate()).padStart(2,'0');
-        const hh = String(now.getHours()).padStart(2,'0');
-        const mm = String(now.getMinutes()).padStart(2,'0');
-        const ss = String(now.getSeconds()).padStart(2,'0');
-        const filename = `复活备份_${y}${m}${d}_${hh}${mm}${ss}.txt`;
-        if(downloadTextFile(backup.content, filename)){
-            showToast('✅ 已开始下载：' + filename);
-        }else{
-            showToast('下载失败，请重试');
+        const blob = new Blob([txt], {type:'text/plain'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `revive_backup_${new Date().toLocaleString('zh-CN').replace(/[\/:]/g,'-')}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+    $('revivePreviewBtn').onclick = ()=>{
+        const {txt} = getReviveBackup();
+        if(!txt){
+            showToast('暂无复活备份');
+            return;
         }
-    });
-
-    revivePreviewBtn.addEventListener('click', ()=>{
-        const backup = loadReviveBackup();
-        if(!backup){ showToast('暂无复活备份，请先上传'); return; }
-        const overlay = document.createElement('div');
-        overlay.className = 'modal-overlay active';
-        overlay.style.zIndex = 1400;
-        overlay.innerHTML = `
-            <div class="modal" style="max-width:720px;">
-                <div class="modal-header">
-                    <h3>💊 复活备份预览（只读）</h3>
-                    <button class="modal-close" data-close="1">✕</button>
-                </div>
-                <div class="modal-body">
-                    <div style="font-size:11px;color:#8aa2c0;margin-bottom:6px;">
-                        上传时间：${escapeHTML(backup.time)} · 大小：${(backup.size/1024).toFixed(1)} KB
-                    </div>
-                    <pre class="code-preview"><span class="code-hint">// 复活备份内容（完整页面代码）</span>${escapeHTML(backup.content)}</pre>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-close="1">关闭</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-        overlay.querySelectorAll('[data-close]').forEach(b=>{
-            b.addEventListener('click', ()=> overlay.remove());
-        });
-        overlay.addEventListener('click', (e)=>{
-            if(e.target === overlay) overlay.remove();
-        });
-    });
-
-    reviveSyncBtn.addEventListener('click', async ()=>{
-        const backup = loadReviveBackup();
-        if(!backup){ showToast('暂无复活备份，请先上传'); return; }
-        const cfg = loadGhCfg();
-        if(!isGhConfigured(cfg)){ showToast('请先在GitHub同步区域配置仓库信息'); return; }
-        const ok = await askConfirm('确认使用复活备份覆盖GitHub仓库？');
-        if(!ok) return;
-        showToast('正在推送复活备份至GitHub…');
-        const success = await pushContentToGitHub(
-            backup.content,
-            `💊 复活备份恢复 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,
-            false
-        );
-        if(success){ showToast('✅ 复活备份已推送至GitHub'); }
-    });
-
-    // ===== GitHub 配置 =====
-    const githubSection = document.getElementById('githubSection');
-    const githubHeader  = document.getElementById('githubHeader');
-    const ghStatus      = document.getElementById('ghStatus');
-    const ghSyncInfo    = document.getElementById('ghSyncInfo');
-
-    githubHeader.addEventListener('click', ()=>{
-        githubSection.classList.toggle('expanded');
-    });
-
-    function renderGhCfg(){
-        const cfg = loadGhCfg();
-        document.getElementById('ghOwner').value = cfg.owner || '';
-        document.getElementById('ghRepo').value = cfg.repo || '';
-        document.getElementById('ghPath').value = cfg.path || '';
-        document.getElementById('ghToken').value = cfg.token || '';
-        updateGhStatus();
-    }
-    function updateGhStatus(){
-        const cfg = loadGhCfg();
-        if(isGhConfigured(cfg)){
-            ghStatus.textContent = '已配置';
-            ghStatus.className = 'gh-status configured';
-        }else{
-            ghStatus.textContent = '未配置';
-            ghStatus.className = 'gh-status unconfigured';
+        const newWin = window.open('', '_blank');
+        newWin.document.write(txt);
+        newWin.document.close();
+    };
+    $('reviveSyncBtn').onclick = ()=>{
+        const {txt} = getReviveBackup();
+        if(!txt){
+            showToast('请先上传复活备份');
+            return;
         }
-    }
-    document.getElementById('ghSaveCfg').addEventListener('click', ()=>{
+        showConfirm('确认覆盖GitHub仓库文件？', async ok=>{
+            if(ok){
+                const cfg = getGithubCfg();
+                if(!cfg.owner || !cfg.repo || !cfg.path || !cfg.token){
+                    showToast('请先配置GitHub信息');
+                    return;
+                }
+                try{
+                    const apiUrl = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
+                    const res = await fetch(apiUrl, {
+                        headers: {'Authorization': 'token ' + cfg.token}
+                    });
+                    const data = await res.json();
+
+                    const body = {
+                        message: `复活恢复：${new Date().toLocaleString('zh-CN')}`,
+                        content: btoa(unescape(encodeURIComponent(txt)))
+                    };
+                    if(data.sha) body.sha = data.sha;
+
+                    const putRes = await fetch(apiUrl, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': 'token ' + cfg.token,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(body)
+                    });
+
+                    if(putRes.ok){
+                        showToast('恢复成功，请刷新页面');
+                    }else{
+                        showToast('恢复失败');
+                    }
+                }catch(e){
+                    showToast('恢复异常');
+                }
+            }
+        });
+    };
+
+    $('rpLater').onclick = hideRevivePopup;
+    $('rpPreview').onclick = ()=>{
+        const {txt} = getReviveBackup();
+        if(!txt){
+            showToast('暂无复活备份');
+            return;
+        }
+        const newWin = window.open('', '_blank');
+        newWin.document.write(txt);
+        newWin.document.close();
+    };
+    $('rpRestore').onclick = ()=>{
+        hideRevivePopup();
+        $('reviveSyncBtn').click();
+    };
+
+    $('githubHeader').onclick = ()=>{
+        $('githubSection').classList.toggle('expanded');
+    };
+    $('ghSaveCfg').onclick = ()=>{
         const cfg = {
-            owner: document.getElementById('ghOwner').value.trim(),
-            repo:  document.getElementById('ghRepo').value.trim(),
-            path:  document.getElementById('ghPath').value.trim(),
-            token: document.getElementById('ghToken').value.trim()
+            owner: $('ghOwner').value.trim(),
+            repo: $('ghRepo').value.trim(),
+            path: $('ghPath').value.trim(),
+            token: $('ghToken').value.trim()
         };
-        saveGhCfg(cfg);
-        updateGhStatus();
-        showToast('GitHub 配置已保存');
-    });
-    document.getElementById('ghTest').addEventListener('click', ()=>{
-        testGitHubConnection(false);
-    });
-    document.getElementById('ghSyncNow').addEventListener('click', async ()=>{
-        const ok = await syncFullPageToGitHub(false);
-        if(ok){
-            ghSyncInfo.style.display = 'block';
-            ghSyncInfo.textContent = `✅ 已同步完整页面代码（含${questionBank.length}题）`;
+        saveGithubCfg(cfg);
+        showToast('GitHub配置已保存');
+    };
+    $('ghTest').onclick = async ()=>{
+        const cfg = getGithubCfg();
+        if(!cfg.owner || !cfg.repo || !cfg.token){
+            showToast('请先保存GitHub配置');
+            return;
         }
-    });
+        try{
+            const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}`, {
+                headers: {'Authorization': 'token ' + cfg.token}
+            });
+            if(res.ok){
+                showToast('连接成功');
+            }else{
+                showToast('连接失败');
+            }
+        }catch(e){
+            showToast('连接异常');
+        }
+    };
+    $('ghSyncNow').onclick = syncToGithub;
 
-    questionInput.focus();
+    $('confirmOk').onclick = ()=>{
+        const input = $('confirmInput').value.trim();
+        if(input === '123456'){
+            hideConfirm();
+            if(confirmCallback) confirmCallback(true);
+        }else{
+            showToast('确认代码错误');
+        }
+    };
+    $('confirmCancel').onclick = ()=>{
+        hideConfirm();
+        if(confirmCallback) confirmCallback(false);
+    };
+
+    $('bankClose').onclick = $('bankCancel').onclick = ()=>{
+        $('bankModal').classList.remove('active');
+    };
+
+    $('imageBtn').onclick = ()=>{
+        $('imageInput').click();
+    };
+    $('imageInput').addEventListener('change', e=>{
+        const file = e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = ev=>{
+            $('previewImg').src = ev.target.result;
+            $('imgPreview').style.display = 'block';
+            showToast('图片已选择');
+        };
+        reader.readAsDataURL(file);
+    });
+    $('closeImg').onclick = ()=>{
+        $('imgPreview').style.display = 'none';
+        $('previewImg').src = '';
+    };
+
+    $('voiceBtn').onclick = ()=>{
+        if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)){
+            showToast('当前浏览器不支持语音识别');
+            return;
+        }
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'zh-CN';
+        recognition.interimResults = false;
+        $('voiceBtn').classList.add('recording');
+        recognition.onresult = e=>{
+            const text = e.results[0][0].transcript;
+            $('questionInput').value = text;
+            showToast('语音识别完成');
+        };
+        recognition.onend = ()=>{
+            $('voiceBtn').classList.remove('recording');
+        };
+        recognition.onerror = ()=>{
+            $('voiceBtn').classList.remove('recording');
+            showToast('语音识别失败');
+        };
+        recognition.start();
+    });
 });
 </script>
 </body>
