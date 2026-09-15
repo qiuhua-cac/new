@@ -857,7 +857,15 @@ async function pushContentToGitHub(content, message, silent){
 // ====================== 云同步核心 ======================
 function loadLocalSync(){
     const out = {};
-    out.ghConfig     = loadGhCfg();
+    const cfg = loadGhCfg();
+    out.ghConfig = {
+        owner: cfg.owner || '',
+        repo:  cfg.repo  || '',
+        path:  cfg.path  || '',
+        token: '',                              // 不同步 Token，避免被 GitHub 拦截
+        updatedAt: cfg.updatedAt || 0,
+        device: cfg.device || DEVICE
+    };
     out.reviveBackup = loadReviveBackup() || {};
     out.backups      = loadBackups();
     out.history      = { list: loadHistory() };
@@ -870,7 +878,13 @@ function loadLocalSync(){
 }
 
 function saveLocalSync(sync){
-    if(sync.ghConfig) saveGhCfg(sync.ghConfig);
+    if(sync.ghConfig){
+        const localCfg = loadGhCfg();
+        const merged = Object.assign({}, sync.ghConfig);
+        // 本地已有 Token 就不被空值覆盖
+        if(!merged.token && localCfg.token) merged.token = localCfg.token;
+        saveGhCfg(merged);
+    }
     if(sync.reviveBackup && sync.reviveBackup.content){
         saveReviveBackup(sync.reviveBackup.content, sync.reviveBackup);
     }
