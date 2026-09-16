@@ -4,7 +4,7 @@
     "repo": "new",
     "path": "index.html",
     "token": "",
-    "updatedAt": 1789532614899,
+    "updatedAt": 1789550028005,
     "device": "mobile"
   },
   "reviveBackup": {
@@ -963,7 +963,14 @@
     "device": "mobile"
   },
   "history": {
-    "list": [],
+    "list": [
+      "naclo",
+      "水泵",
+      "好氧末端",
+      "臭氧作用",
+      "压力容器",
+      "三要素"
+    ],
     "updatedAt": 0,
     "device": "mobile"
   },
