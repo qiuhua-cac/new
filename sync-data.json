@@ -4,7 +4,7 @@
     "repo": "new",
     "path": "index.html",
     "token": "",
-    "updatedAt": 1790001796390,
+    "updatedAt": 1790222685458,
     "device": "pc"
   },
   "reviveBackup": {
@@ -964,14 +964,15 @@
   },
   "history": {
     "list": [
-      "次氯酸钠",
-      "糖罐",
-      "naclo",
       "水泵",
-      "好氧末端",
-      "臭氧作用",
-      "压力容器",
-      "三要素"
+      "1mg",
+      "缺氧",
+      "cnp",
+      "臭氧",
+      "压力",
+      "高密池",
+      "pac",
+      "psc"
     ],
     "updatedAt": 0,
     "device": "pc"
