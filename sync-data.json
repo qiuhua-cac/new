@@ -7052,6 +7052,20 @@
       "orderSetting": "all",
       "updatedAt": 1790799387073,
       "customExplanation": ""
+    },
+    "污水厂高空作业(>2m，如池上栏杆外作业)必须（）": {
+      "customQuestion": "污水厂高空作业(>2m，如池上栏杆外作业)必须",
+      "customAnswer": "污水厂高空作业(>2m，如池上栏杆外作业)必须",
+      "isChoice": true,
+      "options": [
+        "A. 单人快速完成",
+        "B. 系好安全带(高挂低用)，设专人监护",
+        "C. 穿防滑鞋即可",
+        "D. 可不办票直接作业"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790799466655
     }
   }
 }
