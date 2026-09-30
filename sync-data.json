@@ -6964,6 +6964,20 @@
       "orderSetting": "all",
       "updatedAt": 1790799158577,
       "customExplanation": ""
+    },
+    "下列哪项不属于生化池内的推流器的功能（）": {
+      "customQuestion": "下列哪项不属于生化池内的推流器的功能",
+      "customAnswer": "下列哪项不属于生化池内的推流器的功能",
+      "isChoice": true,
+      "options": [
+        "A. 推流",
+        "B. 搅拌",
+        "C. 防止泥沙堆积",
+        "D. 硝化"
+      ],
+      "correct": "D",
+      "orderSetting": "all",
+      "updatedAt": 1790799189592
     }
   }
 }
