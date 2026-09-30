@@ -912,26 +912,12 @@ function clearPracticeState(){
 function loadPracticeEdit(){
     try{
         const raw = localStorage.getItem(PRACTICE_EDIT_KEY);
-        if(raw){
-            const obj = JSON.parse(raw);
-            // ★ 修复：保留 updatedAt / device
-            if(typeof obj !== 'object' || obj === null) return {};
-            if(typeof obj.updatedAt !== 'number') obj.updatedAt = 0;
-            if(!obj.device) obj.device = DEVICE;
-            return obj;
-        }
+        if(raw) return JSON.parse(raw);
     }catch(e){}
-    return { updatedAt: 0, device: DEVICE };
+    return {};
 }
 function savePracticeEdit(data){
-    // ★ 修复：写入时强制刷新 updatedAt，让云同步知道这是"更新的版本"
-    try{
-        if(data && typeof data === 'object'){
-            data.updatedAt = Date.now();
-            data.device = DEVICE;
-        }
-        localStorage.setItem(PRACTICE_EDIT_KEY, JSON.stringify(data));
-    }catch(e){}
+    try{ localStorage.setItem(PRACTICE_EDIT_KEY, JSON.stringify(data)); }catch(e){}
     if(typeof pushSyncData === 'function') pushSyncData(true);
 }
 const PRACTICE_ONLY_KEY = '__practice_only__';
@@ -958,14 +944,11 @@ function loadPracticeCfg(){
                 singleOptions: obj.singleOptions || {},
                 multiOptions: obj.multiOptions || {},
                 singleCorrect: obj.singleCorrect || {},
-                multiCorrect: obj.multiCorrect || {},
-                // ★ 修复：保留 updatedAt / device，云同步才能正确比较新旧
-                updatedAt: obj.updatedAt || 0,
-                device: obj.device || DEVICE
+                multiCorrect: obj.multiCorrect || {}
             };
         }
     }catch(e){}
-    return { threshold: 75, singleOptions: {}, multiOptions: {}, singleCorrect: {}, multiCorrect: {}, updatedAt: 0, device: DEVICE };
+    return { threshold: 75, singleOptions: {}, multiOptions: {}, singleCorrect: {}, multiCorrect: {} };
 }
 function savePracticeCfg(cfg){
     cfg.updatedAt = nowTs();
@@ -1462,17 +1445,9 @@ function saveLocalSync(sync){
         try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(questionBank)); }catch(e){}
         saveBankUpdatedAt(sync.bank.updatedAt || nowTs());
     }
-        if(sync.practiceCfg){
-        // ★ 修复：同步回来的 practiceCfg 必须真的写进 localStorage
-        try{
-            localStorage.setItem(PRACTICE_CFG_KEY, JSON.stringify(sync.practiceCfg));
-        }catch(e){ console.warn('saveLocalSync practiceCfg 失败', e); }
-    }
-    if(sync.practiceEdit){
-        try{
-            localStorage.setItem(PRACTICE_EDIT_KEY, JSON.stringify(sync.practiceEdit));
-        }catch(e){ console.warn('saveLocalSync practiceEdit 失败', e); }
-    }
+    if(sync.practiceCfg){ savePracticeCfg(sync.practiceCfg); }
+    if(sync.practiceEdit){ savePracticeEdit(sync.practiceEdit); }
+}
 function pickNewer(localRec, remoteRec){
     if(!remoteRec) return localRec;
     if(!localRec)  return remoteRec;
@@ -1480,14 +1455,6 @@ function pickNewer(localRec, remoteRec){
     const rt = remoteRec.updatedAt || 0;
     if(rt > lt) return remoteRec;
     if(rt < lt) return localRec;
-    // ★ 修复：两边时间戳相同（含都为 0 的情况）
-    // 如果本地是空的但远端有数据 → 用远端
-    // 如果本地有数据但远端是空的 → 用本地
-    const localHasData = JSON.stringify(localRec).length > 50;
-    const remoteHasData = JSON.stringify(remoteRec).length > 50;
-    if(remoteHasData && !localHasData) return remoteRec;
-    if(localHasData && !remoteHasData) return localRec;
-    // 都有数据或都空 → 用设备优先级判断
     if(remoteRec.device === 'mobile' && localRec.device !== 'mobile') return remoteRec;
     if(localRec.device === 'mobile' && remoteRec.device !== 'mobile') return localRec;
     return localRec;
