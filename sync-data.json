@@ -6290,24 +6290,19 @@
       "updatedAt": 1790780382535
     },
     "二沉池巡检内容包括（）": {
-      "customQuestion": "二沉池巡检内容包括",
-      "customAnswer": "二沉池巡检内容包括",
+      "customQuestion": "二沉池巡检内容包括（）",
+      "customAnswer": "AB",
       "isChoice": true,
       "options": [
-        "A. 减速机是否异响或漏油",
-        "B. 走道板是否有障碍物",
-        "C. 走道轮是否转动正常",
-        "D. 出水是否均匀",
-        "E. 出水悬浮物是否在合理范围之内",
-        "F. 堰口出水是否均匀",
-        "G. 浮渣积累情况",
-        "H. 排渣是否通畅",
-        "I. 污泥回流情况",
-        "J. 吸泥孔是否堵塞"
+        "A. 选项A",
+        "B. 选项B",
+        "C. 选项C",
+        "D. 选项D"
       ],
-      "correct": "ABCDEFGHIJ",
+      "correct": "AB",
       "orderSetting": "all",
-      "updatedAt": 1790792044616
+      "updatedAt": 1790792067905,
+      "customExplanation": ""
     }
   }
 }
