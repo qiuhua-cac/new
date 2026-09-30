@@ -2415,22 +2415,26 @@ function getQuestionScore(idx){
     if(!Array.isArray(answer)) return 0;
     const perBlank = 5 / correctParts.length;
     if(orderSetting === 'all'){
-        const studentSet = answer.map(a => (a || '').trim()).filter(Boolean);
-        const correctSet = correctParts.map(a => a.trim());
-        if(studentSet.length !== correctSet.length) return 0;
-        let matchCount = 0;
-        const usedCorrect = new Array(correctSet.length).fill(false);
-        for(let i = 0; i < studentSet.length; i++){
-            for(let j = 0; j < correctSet.length; j++){
-                if(!usedCorrect[j] && answerSimilarity(studentSet[i], correctSet[j]) >= threshold){
-                    matchCount++;
-                    usedCorrect[j] = true;
-                    break;
-                }
+    // 不要求填写数量和答案数量相等，逐空评分
+    const studentSlots = Array.isArray(answer) ? answer.map(a => (a || '').trim()) : [];
+    const correctSet = correctParts.map(a => a.trim());
+    if(correctSet.length === 0) return 0;
+    let matchCount = 0;
+    const usedCorrect = new Array(correctSet.length).fill(false);
+    // 遍历学生每一个已填答案，去匹配尚未被匹配的正确答案
+    for(let i = 0; i < studentSlots.length; i++){
+        if(!studentSlots[i]) continue; // 空答案跳过
+        for(let j = 0; j < correctSet.length; j++){
+            if(!usedCorrect[j] && answerSimilarity(studentSlots[i], correctSet[j]) >= threshold){
+                matchCount++;
+                usedCorrect[j] = true;
+                break;
             }
         }
-        return (matchCount / correctSet.length) * 5;
     }
+    // 得分 = 已匹配数 / 正确答案总数 * 5
+    return (matchCount / correctSet.length) * 5;
+}
     if(orderSetting === 'none'){
         let total = 0;
         for(let i = 0; i < correctParts.length; i++){
