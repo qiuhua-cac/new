@@ -2104,32 +2104,101 @@ function parseQuestionWithAnswers(text, orderSetting){
 function buildFillQuestionHTMLFromParsed(parsed, answerData, submitted, showMarks){
     let html = escapeHTML(parsed.displayText);
     const answers = parsed.answers;
+    const rules = parsed.orderRules || [];
     let blankIndex = 0;
 
-    // ★ 新增：预计算"用户每个空匹配到标准答案的哪一项"
-    // 逻辑与 getQuestionScore 的乱序匹配一致
-    // matchedCorrectIndex[用户空索引] = 匹配到的标准答案索引，-1 表示没匹配到
+    // ★ 预计算每个空的 ✔/✘（完全按 orderSetting 与 orderRules 判定，与 getQuestionScore 一致）
+    // matchedCorrectIndex[用户空索引] = 匹配到的标准答案索引，-1 表示未匹配
     let matchedCorrectIndex = [];
     if(submitted && showMarks && Array.isArray(answerData)){
         const cfg = loadPracticeCfg();
         const threshold = (cfg.threshold || 75) / 100;
-        const usedCorrect = new Array(answers.length).fill(false);
+        const orderSetting = getOrderSetting(practiceQuestions[practiceCurrentIndex]) || 'all';
+
         matchedCorrectIndex = new Array(answerData.length).fill(-1);
-        for(let i = 0; i < answerData.length; i++){
-            const studentAns = (answerData[i] || '').trim();
-            if(!studentAns) continue;
-            // 优先：优先匹配"同位置"的标准答案（如果同位置还没被占用）
-            if(i < answers.length && !usedCorrect[i] && answerSimilarity(studentAns, answers[i] || '') >= threshold){
-                matchedCorrectIndex[i] = i;
-                usedCorrect[i] = true;
-                continue;
+
+        if(orderSetting === 'none'){
+            // ========== 固定顺序：逐空同位置比对 ==========
+            for(let i = 0; i < answers.length; i++){
+                const studentAns = (answerData[i] || '').trim();
+                if(!studentAns) continue;
+                if(answerSimilarity(studentAns, answers[i] || '') >= threshold){
+                    matchedCorrectIndex[i] = i;
+                }
             }
-            // 其次：跨位置匹配（和评分逻辑一致）
-            for(let j = 0; j < answers.length; j++){
-                if(!usedCorrect[j] && answerSimilarity(studentAns, answers[j] || '') >= threshold){
-                    matchedCorrectIndex[i] = j;
-                    usedCorrect[j] = true;
-                    break;
+        }else if(orderSetting === 'partial'){
+            // ========== 部分乱序：按 orderRules 分组 ==========
+            // 把标准答案按"相邻同规则"分组
+            const groups = [];
+            let cur = null;
+            for(let i = 0; i < answers.length; i++){
+                const r = rules[i] || 'order';
+                if(!cur || cur.rule !== r){
+                    cur = { rule: r, indices: [i] };
+                    groups.push(cur);
+                }else{
+                    cur.indices.push(i);
+                }
+            }
+            let cursor = 0;
+            for(const g of groups){
+                const n = g.indices.length;
+                if(g.rule === 'fixed'){
+                    // 固定组：同位置比对
+                    for(let k = 0; k < n; k++){
+                        const ci = g.indices[k];
+                        const si = cursor + k;
+                        const studentAns = (answerData[si] || '').trim();
+                        if(!studentAns) continue;
+                        if(answerSimilarity(studentAns, answers[ci] || '') >= threshold){
+                            matchedCorrectIndex[si] = ci;
+                        }
+                    }
+                }else{
+                    // 乱序组：组内任意跨位置匹配
+                    const used = new Array(n).fill(false);
+                    for(let k = 0; k < n; k++){
+                        const si = cursor + k;
+                        const studentAns = (answerData[si] || '').trim();
+                        if(!studentAns) continue;
+                        // 先尝试同位置
+                        const sameIdx = k;
+                        if(!used[sameIdx] && answerSimilarity(studentAns, answers[g.indices[sameIdx]] || '') >= threshold){
+                            matchedCorrectIndex[si] = g.indices[sameIdx];
+                            used[sameIdx] = true;
+                            continue;
+                        }
+                        // 再跨位置
+                        for(let j = 0; j < n; j++){
+                            if(!used[j] && answerSimilarity(studentAns, answers[g.indices[j]] || '') >= threshold){
+                                matchedCorrectIndex[si] = g.indices[j];
+                                used[j] = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                cursor += n;
+            }
+        }else{
+            // ========== 全乱序（默认）：所有空之间任意跨位置匹配 ==========
+            const usedCorrect = new Array(answers.length).fill(false);
+            for(let i = 0; i < answerData.length; i++){
+                const studentAns = (answerData[i] || '').trim();
+                if(!studentAns) continue;
+                // 先尝试同位置
+                if(i < answers.length && !usedCorrect[i] && answerSimilarity(studentAns, answers[i] || '') >= threshold){
+                    matchedCorrectIndex[i] = i;
+                    usedCorrect[i] = true;
+                    continue;
+                }
+                // 再跨位置
+                for(let j = 0; j < answers.length; j++){
+                    if(!usedCorrect[j] && answerSimilarity(studentAns, answers[j] || '') >= threshold){
+                        matchedCorrectIndex[i] = j;
+                        usedCorrect[j] = true;
+                        break;
+                    }
                 }
             }
         }
@@ -2139,7 +2208,6 @@ function buildFillQuestionHTMLFromParsed(parsed, answerData, submitted, showMark
         const val = answerData && answerData[idx] ? escapeHTML(answerData[idx]) : '';
         let markHTML = '';
         if(submitted && showMarks){
-            // ★ 改：根据预计算的匹配结果画 ✔/✘，而不是按位置死板比对
             if(matchedCorrectIndex[idx] >= 0){
                 markHTML = ' <span class="blank-mark ok">✔</span>';
             }else{
