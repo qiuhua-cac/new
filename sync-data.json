@@ -2781,6 +2781,20 @@
       "correct": null,
       "orderSetting": "none",
       "updatedAt": 1790806295691
+    },
+    "凡在高地面（）的地点进行的工作都应视作高处作业": {
+      "customQuestion": "凡在高地面（）的地点进行的工作都应视作高处作业",
+      "customAnswer": "B",
+      "customExplanation": "单选题答案",
+      "isChoice": true,
+      "options": [
+        "A. 1.5米以上",
+        "B. 2米以上",
+        "C. 3米以上",
+        "D. 2.5米以上"
+      ],
+      "correct": "B",
+      "updatedAt": 1790808397743
     }
   }
 }
