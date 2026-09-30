@@ -6495,8 +6495,8 @@
       "customExplanation": ""
     },
     "污水厂调节池、格栅间等有限空间，进入前必须重点检测的有毒气体是（）": {
-      "customQuestion": "污水厂调节池、格栅间等有限空间，进入前必须重点检测的有毒气体是</答案>硫化氢(H₂S)<答案\\>",
-      "customAnswer": "硫化氢(H₂S)",
+      "customQuestion": "污水厂调节池、格栅间等有限空间，进入前必须重点检测的有毒气体是（）",
+      "customAnswer": "B",
       "isChoice": true,
       "options": [
         "A. 以氧化碳(CO)",
@@ -6506,7 +6506,7 @@
       ],
       "correct": "B",
       "orderSetting": "all",
-      "updatedAt": 1790793923944,
+      "updatedAt": 1790796218313,
       "customExplanation": ""
     },
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
