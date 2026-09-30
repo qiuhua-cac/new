@@ -6391,6 +6391,20 @@
       "orderSetting": "all",
       "updatedAt": 1790793641357,
       "customExplanation": ""
+    },
+    "污水处理厂发生化学品紧急泄漏时，首选处置措施是?": {
+      "customQuestion": "污水处理厂发生化学品紧急泄漏时，首选处置措施是?",
+      "customAnswer": "污水处理厂发生化学品紧急泄漏时，首选处置措施是?",
+      "isChoice": true,
+      "options": [
+        "A. 立即撤离",
+        "B. 封堵泄漏点",
+        "C. 报警",
+        "D. 以上都是"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790793679463
     }
   }
 }
