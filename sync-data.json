@@ -6501,6 +6501,20 @@
       "orderSetting": "all",
       "updatedAt": 1790793923944,
       "customExplanation": ""
+    },
+    "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
+      "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
+      "customAnswer": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
+      "isChoice": true,
+      "options": [
+        "A. 立即进入将其拖出",
+        "B. 佩戴正压式空气呼吸器确认安全后进入施救，切勿盲目进入",
+        "C. 用长棍将其拨出",
+        "D. 先通风再派人进入不用呼吸器"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790793988384
     }
   }
 }
