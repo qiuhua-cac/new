@@ -6274,7 +6274,14 @@
   },
   "practiceCfg": {
     "threshold": 75,
-    "singleOptions": {},
+    "singleOptions": {
+      "以下哪种行为属于污水处理厂的安全操作?（）": [
+        "A. 在高压设备旁吸烟",
+        "B. 正确佩戴绝缘手套",
+        "C. 随意触碰电气设备",
+        "D. 以上都不是"
+      ]
+    },
     "multiOptions": {
       "二沉池巡检内容包括（）": [
         "A. 减速机是否异响或漏油",
@@ -6289,7 +6296,9 @@
         "J. 吸泥孔是否堵塞"
       ]
     },
-    "singleCorrect": {},
+    "singleCorrect": {
+      "以下哪种行为属于污水处理厂的安全操作?（）": "B"
+    },
     "multiCorrect": {
       "二沉池巡检内容包括（）": "ABCDEFGHIJ"
     },
@@ -6325,8 +6334,8 @@
       "customExplanation": ""
     },
     "以下哪种行为属于污水处理厂的安全操作?（）": {
-      "customQuestion": "以下哪种行为属于污水处理厂的安全操作?",
-      "customAnswer": "以下哪种行为属于污水处理厂的安全操作?",
+      "customQuestion": "以下哪种行为属于污水处理厂的安全操作?</答案>正确佩戴绝缘手套<答案\\>",
+      "customAnswer": "正确佩戴绝缘手套",
       "isChoice": true,
       "options": [
         "A. 在高压设备旁吸烟",
@@ -6336,7 +6345,8 @@
       ],
       "correct": "B",
       "orderSetting": "all",
-      "updatedAt": 1790793497941
+      "updatedAt": 1790793499449,
+      "customExplanation": ""
     }
   }
 }
