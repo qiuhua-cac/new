@@ -7074,6 +7074,20 @@
       "orderSetting": "all",
       "updatedAt": 1790799467494,
       "customExplanation": "单选题"
+    },
+    "活性污泥法中，微生物代谢有机物所需的氧主要来自（）": {
+      "customQuestion": "活性污泥法中，微生物代谢有机物所需的氧主要来自",
+      "customAnswer": "活性污泥法中，微生物代谢有机物所需的氧主要来自",
+      "isChoice": true,
+      "options": [
+        "A. 空气",
+        "B. 水中溶解氧",
+        "C. 曝气装置",
+        "D. 化学药剂"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790799501880
     }
   }
 }
