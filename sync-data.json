@@ -6677,6 +6677,20 @@
       "orderSetting": "all",
       "updatedAt": 1790798068583,
       "customExplanation": "本题为选择题答案(填空题看另外一题)，单选题"
+    },
+    "污水中 SS 指的是（）": {
+      "customQuestion": "污水中 SS 指的是",
+      "customAnswer": "污水中 SS 指的是",
+      "isChoice": true,
+      "options": [
+        "A. 溶解性固体",
+        "B. 悬浮固体",
+        "C. 挥发性固体",
+        "D. 固定性固体"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790798108116
     }
   }
 }
