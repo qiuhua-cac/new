@@ -245,6 +245,9 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .inline-blank.wrong{border-color:#ef4444;background:#fef2f2;}
 .inline-blank:disabled{opacity:0.9;cursor:default;background:#f9fcff;}
 .inline-blank::placeholder{color:#b8a88a;font-size:11px;}
+.blank-mark{display:inline-block;font-size:16px;font-weight:700;margin:0 2px;vertical-align:middle;line-height:1;}
+.blank-mark.ok{color:#16a34a;}
+.blank-mark.no{color:#dc2626;}
 .practice-options{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
 .practice-option{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid #c8d9ec;border-radius:10px;cursor:pointer;transition:0.15s;background:#f9fcff;}
 .practice-option:hover{background:#e8f2fe;border-color:#9bbde0;}
@@ -2093,17 +2096,46 @@ function parseQuestionWithAnswers(text, orderSetting){
     }
     return { displayText, answers, orderRules, originalText: text };
 }
-function buildFillQuestionHTMLFromParsed(parsed, answerData, submitted){
+function buildFillQuestionHTMLFromParsed(parsed, answerData, submitted, showMarks){
     let html = escapeHTML(parsed.displayText);
     const answers = parsed.answers;
     let blankIndex = 0;
+
     function makeInput(idx){
         const val = answerData && answerData[idx] ? escapeHTML(answerData[idx]) : '';
-        return `<textarea class="inline-blank" data-blank="${idx}" rows="1" ${submitted?'disabled':''} placeholder="">${val}</textarea>`;
+        let markHTML = '';
+        if(submitted && showMarks){
+            const studentAns = (answerData && answerData[idx]) ? String(answerData[idx]) : '';
+            const cfg = loadPracticeCfg();
+            const threshold = (cfg.threshold || 75) / 100;
+            const sim = answerSimilarity(studentAns, answers[idx] || '');
+            if(sim >= threshold){
+                markHTML = ' <span class="blank-mark ok">✔</span>';
+            }else{
+                markHTML = ' <span class="blank-mark no">✘</span>';
+            }
+        }
+        return `<textarea class="inline-blank" data-blank="${idx}" rows="1" ${submitted?'disabled':''} placeholder="">${val}</textarea>${markHTML}`;
     }
-    html = html.replace(/⬜/g, ()=>{ if(blankIndex < answers.length){ return makeInput(blankIndex++); } return '⬜'; });
-    html = html.replace(/（\s*）|\(\s*\)|_{2,}|＿{2,}/g, ()=>{ if(blankIndex < answers.length){ return makeInput(blankIndex++); } return '（）'; });
-    while(blankIndex < answers.length){ html += ' ' + makeInput(blankIndex++); }
+
+    html = html.replace(/⬜/g, ()=>{
+        if(blankIndex < answers.length){
+            return makeInput(blankIndex++);
+        }
+        return '⬜';
+    });
+
+    html = html.replace(/（\s*）|\(\s*\)|_{2,}|＿{2,}/g, ()=>{
+        if(blankIndex < answers.length){
+            return makeInput(blankIndex++);
+        }
+        return '（）';
+    });
+
+    while(blankIndex < answers.length){
+        html += ' ' + makeInput(blankIndex++);
+    }
+
     return html;
 }
 function getPracticeQuestion(q){
@@ -2251,11 +2283,15 @@ function renderPracticeQuestion(){
             </div>`;
         });
         answerHTML += `</div>`;
-    }else{
+            }else{
         typeLabel = '📝 填空题';
         const parsed = getParsedForQuestion(rawQ);
+        let showMarks = false;
+        if(submitted){
+            showMarks = isPartiallyCorrect(rawQ, idx);
+        }
         answerHTML = `<div class="practice-answer-area" id="practiceAnswerArea">`;
-        answerHTML += buildFillQuestionHTMLFromParsed(parsed, answerData, submitted);
+        answerHTML += buildFillQuestionHTMLFromParsed(parsed, answerData, submitted, showMarks);
         answerHTML += `</div>`;
     }
     let feedbackHTML = '';
@@ -2483,6 +2519,81 @@ function getQuestionScore(idx){
         cursor += n;
     }
     return totalScore;
+}
+// 判断填空题是否为"部分答对"
+function isPartiallyCorrect(rawQ, idx){
+    if(isQuestionChoice(rawQ)) return false;
+    const answer = practiceAnswers[idx];
+    const parsed = getParsedForQuestion(rawQ);
+    const correctParts = parsed.answers;
+    if(correctParts.length === 0) return false;
+    if(!Array.isArray(answer)) return false;
+
+    const cfg = loadPracticeCfg();
+    const threshold = (cfg.threshold || 75) / 100;
+    const orderSetting = getOrderSetting(rawQ);
+
+    let correctCount = 0;
+
+    if(orderSetting === 'all'){
+        const studentSlots = answer.map(a => (a || '').trim());
+        const usedCorrect = new Array(correctParts.length).fill(false);
+        for(let i = 0; i < studentSlots.length; i++){
+            if(!studentSlots[i]) continue;
+            for(let j = 0; j < correctParts.length; j++){
+                if(!usedCorrect[j] && answerSimilarity(studentSlots[i], correctParts[j]) >= threshold){
+                    correctCount++;
+                    usedCorrect[j] = true;
+                    break;
+                }
+            }
+        }
+    }else if(orderSetting === 'none'){
+        for(let i = 0; i < correctParts.length; i++){
+            const sim = answerSimilarity((answer[i] || '').trim(), correctParts[i] || '');
+            if(sim >= threshold) correctCount++;
+        }
+    }else{
+        const groups = [];
+        let cur = null;
+        const rules = parsed.orderRules;
+        for(let i = 0; i < correctParts.length; i++){
+            const r = rules[i] || 'order';
+            if(!cur || cur.rule !== r){ cur = { rule: r, indices: [i] }; groups.push(cur); }
+            else { cur.indices.push(i); }
+        }
+        let cursor = 0;
+        for(const g of groups){
+            const n = g.indices.length;
+            if(g.rule === 'fixed'){
+                for(let k = 0; k < n; k++){
+                    const ci = g.indices[k];
+                    const si = cursor + k;
+                    const sim = answerSimilarity((answer[si] || '').trim(), correctParts[ci] || '');
+                    if(sim >= threshold) correctCount++;
+                }
+            }else{
+                const studentSlice = [];
+                for(let k = 0; k < n; k++) studentSlice.push((answer[cursor + k] || '').trim());
+                const correctSlice = g.indices.map(ci => correctParts[ci]);
+                const used = new Array(n).fill(false);
+                for(let k = 0; k < n; k++){
+                    if(!studentSlice[k]) continue;
+                    for(let j = 0; j < n; j++){
+                        if(!used[j] && answerSimilarity(studentSlice[k], correctSlice[j]) >= threshold){
+                            correctCount++;
+                            used[j] = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            cursor += n;
+        }
+    }
+
+    const total = correctParts.length;
+    return correctCount > 0 && correctCount < total;
 }
 function submitPracticeAnswer(){
     if(practiceSubmitted[practiceCurrentIndex]) return false;
