@@ -6369,6 +6369,20 @@
       "orderSetting": "all",
       "updatedAt": 1790793575513,
       "customExplanation": ""
+    },
+    "发现污水厂内有人触电，以下哪种做法是正确的?（）": {
+      "customQuestion": "发现污水厂内有人触电，以下哪种做法是正确的?",
+      "customAnswer": "发现污水厂内有人触电，以下哪种做法是正确的?",
+      "isChoice": true,
+      "options": [
+        "A. 立即用手拉触电者",
+        "B. 切断电源",
+        "C. 继续工作",
+        "D. 等待别人处理"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790793639471
     }
   }
 }
