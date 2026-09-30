@@ -6023,6 +6023,21 @@
   },
   "practiceEdit": {
     "updatedAt": 0,
-    "device": "pc"
+    "device": "pc",
+    "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
+      "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
+      "customAnswer": "佩戴正压式空气呼吸器确认安全后进入施救，切勿盲目进入",
+      "isChoice": true,
+      "options": [
+        "A. 选项A",
+        "B. 选项B",
+        "C. 选项C",
+        "D. 选项D"
+      ],
+      "correct": "A",
+      "orderSetting": "none",
+      "partialOrderConfig": null,
+      "updatedAt": 1790773764439
+    }
   }
 }
