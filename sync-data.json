@@ -6986,6 +6986,20 @@
       "orderSetting": "all",
       "updatedAt": 1790799190578,
       "customExplanation": ""
+    },
+    "有限空间作业“三不进入”原则不包含以下哪项（）": {
+      "customQuestion": "有限空间作业“三不进入”原则不包含以下哪项",
+      "customAnswer": "有限空间作业“三不进入”原则不包含以下哪项",
+      "isChoice": true,
+      "options": [
+        "A. 无审批不进入",
+        "B. 无监护不进入",
+        "C. 无方案不进入",
+        "D. 无培训不进入"
+      ],
+      "correct": "D",
+      "orderSetting": "all",
+      "updatedAt": 1790799261961
     }
   }
 }
