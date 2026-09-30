@@ -6743,6 +6743,20 @@
       "orderSetting": "all",
       "updatedAt": 1790798267461,
       "customExplanation": ""
+    },
+    "污水处理厂安全培训中，“三级安全教育”的内容包括（）": {
+      "customQuestion": "污水处理厂安全培训中，“三级安全教育”的内容包括",
+      "customAnswer": "污水处理厂安全培训中，“三级安全教育”的内容包括",
+      "isChoice": true,
+      "options": [
+        "A. 公司级安全教育",
+        "B. 车间级安全教育",
+        "C. 班组级安全教育",
+        "D. 以上都是"
+      ],
+      "correct": "D",
+      "orderSetting": "all",
+      "updatedAt": 1790798333419
     }
   }
 }
