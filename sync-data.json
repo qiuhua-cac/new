@@ -6435,6 +6435,20 @@
       "orderSetting": "all",
       "updatedAt": 1790793747797,
       "customExplanation": ""
+    },
+    "污泥料仓发生“架桥”坍塌事故导致人员被埋，现场第一响应人首先应?": {
+      "customQuestion": "污泥料仓发生“架桥”坍塌事故导致人员被埋，现场第一响应人首先应?",
+      "customAnswer": "污泥料仓发生“架桥”坍塌事故导致人员被埋，现场第一响应人首先应?",
+      "isChoice": true,
+      "options": [
+        "A. 立即跳入仓内救人",
+        "B. 停止进料、切断电源",
+        "C. 拨打120",
+        "D. 开启仓底滑架"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790793794951
     }
   }
 }
