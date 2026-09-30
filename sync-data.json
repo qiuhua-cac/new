@@ -1305,7 +1305,7 @@
             "e": ""
           }
         ],
-        "locked": true,
+        "locked": false,
         "name": "A"
       },
       {
@@ -2601,7 +2601,7 @@
         "name": "B"
       }
     ],
-    "updatedAt": 1790762890602,
+    "updatedAt": 1790762894002,
     "device": "pc"
   },
   "history": {
