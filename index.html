@@ -93,15 +93,18 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .bank-toolbar input{flex:1;min-width:120px;padding:9px 12px;font-size:13px;border:1.5px solid #c8d9ec;border-radius:10px;outline:none;background:#f9fcff;}
 .bank-toolbar input:focus{border-color:#3b82f6;background:#fff;}
 .bank-list{max-height:340px;overflow-y:auto;border:1px solid #e2ecf7;border-radius:12px;background:#fafdff;}
-.bank-item{padding:12px 14px;border-bottom:1px solid #eef4fb;cursor:pointer;transition:0.12s;position:relative;}
+.bank-item{padding:12px 14px;border-bottom:1px solid #eef4fb;cursor:pointer;transition:0.12s;position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;}
 .bank-item:last-child{border-bottom:none;}
 .bank-item:hover{background:#eef6ff;}
 .bank-item.selected{background:#dbeafe;border-left:3px solid #2563eb;padding-left:11px;}
+.bank-item .bi-content{flex:1;min-width:0;}
 .bank-item .bi-q{font-size:13px;color:#1e40af;font-weight:600;line-height:1.5;margin-bottom:3px;word-break:break-word;}
 .bank-item .bi-a{font-size:12px;color:#b91c1c;line-height:1.5;word-break:break-word;}
 .bank-item .bi-idx{position:absolute;top:10px;right:12px;font-size:10px;color:#8aa2c0;background:#eef4fb;padding:1px 7px;border-radius:8px;}
 .bank-item .bi-hidden-tag{position:absolute;top:10px;left:12px;font-size:10px;color:#b45309;background:#fef3c7;padding:1px 7px;border-radius:8px;font-weight:600;}
 .bank-item .bi-choice-tag{position:absolute;top:10px;right:70px;font-size:10px;color:#7c3aed;background:#ede9fe;padding:1px 7px;border-radius:8px;font-weight:600;}
+.bank-item .bi-edit-btn{font-size:11px;padding:4px 12px;border-radius:6px;border:1px solid #c8d9ec;background:#fff;color:#1e40af;cursor:pointer;font-weight:600;white-space:nowrap;flex-shrink:0;transition:0.15s;}
+.bank-item .bi-edit-btn:hover{background:#dbeafe;border-color:#93c5fd;}
 .edit-form{margin-top:14px;border-top:1px solid #eef2f8;padding-top:14px;}
 .edit-form .form-group textarea{width:100%;padding:11px 14px;font-size:13px;border:1.5px solid #c8d9ec;border-radius:10px;outline:none;background:#f9fcff;min-height:70px;resize:vertical;font-family:inherit;line-height:1.5;transition:0.2s;}
 .edit-form .form-group textarea:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
@@ -483,6 +486,33 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
     border-color: #a78bfa;
     color: #5b21b6;
 }
+/* 乱序标记样式（编辑时显示，练习时隐藏） */
+.editor-content .editor-fixed-start,
+.editor-content .editor-fixed-end,
+.editor-content .editor-order-start,
+.editor-content .editor-order-end {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin: 0 2px;
+    cursor: pointer;
+    user-select: none;
+    vertical-align: middle;
+}
+.editor-content .editor-fixed-start,
+.editor-content .editor-fixed-end {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+.editor-content .editor-order-start,
+.editor-content .editor-order-end {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+}
 .editor-help {
     font-size: 11px;
     color: #8aa2c0;
@@ -498,6 +528,39 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
     margin-bottom: 8px;
     font-weight: 600;
 }
+/* 横向排列的练习标签 */
+.practice-tab-switch {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+.practice-tab-switch .pts {
+    padding: 8px 20px;
+    font-size: 13px;
+    color: #6a8aad;
+    cursor: pointer;
+    border: 1.5px solid #e2ecf7;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: 0.15s;
+    background: #fff;
+    flex: 1;
+    text-align: center;
+}
+.practice-tab-switch .pts:hover {
+    color: #3b82f6;
+    border-color: #93c5fd;
+    background: #f0f7ff;
+}
+.practice-tab-switch .pts.active {
+    color: #fff;
+    background: linear-gradient(135deg,#3b82f6,#2563eb);
+    border-color: #2563eb;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(59,130,246,0.3);
+}
+
 /* 乱序设置 */
 .order-setting {
     display: flex;
@@ -521,24 +584,27 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .order-setting input[type="radio"] {
     accent-color: #3b82f6;
 }
-.order-setting .order-partial-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-top: 4px;
-    width: 100%;
+.order-setting .order-partial-btn {
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: 8px;
+    border: 1px solid #a78bfa;
+    background: #ede9fe;
+    color: #5b21b6;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.15s;
 }
-.order-setting .order-partial-list label {
-    font-size: 11px;
-    background: #f1f5f9;
-    padding: 2px 8px;
-    border-radius: 6px;
-    border: 1px solid #e2e8f0;
+.order-setting .order-partial-btn:hover {
+    background: #ddd6fe;
 }
-.order-setting .order-partial-list input[type="checkbox"] {
-    accent-color: #3b82f6;
-    width: 14px;
-    height: 14px;
+
+/* 预览弹窗中的练习界面预览 */
+.practice-preview-box {
+    background: #f8fcff;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid #e2ecf7;
 }
 
 @media (max-width: 600px) {
@@ -587,6 +653,9 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
     .editor-content{font-size:13px;padding:10px 12px;min-height:100px;}
     .practice-body{max-height:calc(94vh - 150px);}
     .inline-blank{min-width:55px;padding:3px 8px;font-size:13px;}
+    .practice-tab-switch .pts { font-size: 11px; padding: 6px 10px; }
+    .bank-item { flex-wrap: wrap; }
+    .bank-item .bi-edit-btn { font-size: 10px; padding: 3px 8px; }
 }
 </style>
 </head>
@@ -1052,6 +1121,7 @@ const REVIVE_KEY  = 'zktest_revive_v1';
 const HISTORY_KEY = 'zktest_history_v1';
 const PRACTICE_CFG_KEY = 'zktest_practice_cfg_v1';
 const PRACTICE_EDIT_KEY = 'zktest_practice_edit_v1';
+const PRACTICE_STATE_KEY = 'zktest_practice_state_v1';
 const CONFIRM_CODE = 'qiuhua';
 const SYNC_FILE = 'sync-data.json';
 const SYNC_KEYS = ['ghConfig','reviveBackup','backups','history','bank','practiceCfg','practiceEdit'];
@@ -1081,7 +1151,7 @@ let practiceTotalScore = 0;
 let practiceTimeLimit = 20 * 60;
 let practiceThreshold = 75;
 let practiceFinished = false;
-let practiceResultViewed = false; // 是否查看过总分
+let practiceResultViewed = false;
 
 // 练习管理状态
 let practiceSelectedIdx = -1;
@@ -1094,8 +1164,37 @@ let pinHiddenPracticeSingle = false;
 let pinHiddenPracticeMulti = false;
 
 // 练习编辑状态
-let practiceEditData = {};
 let editingPracticeIdx = -1;
+
+// ====================== 练习状态保存（关闭保留进度） ======================
+function savePracticeState(){
+    if(practiceFinished || practiceQuestions.length === 0) return;
+    const state = {
+        practiceQuestions: practiceQuestions,
+        practiceAnswers: practiceAnswers,
+        practiceSubmitted: practiceSubmitted,
+        practiceCurrentIndex: practiceCurrentIndex,
+        practiceTotalScore: practiceTotalScore,
+        practiceStartTime: practiceStartTime,
+        practiceTimeLimit: practiceTimeLimit,
+        practiceFinished: practiceFinished,
+        savedAt: nowTs()
+    };
+    try{ localStorage.setItem(PRACTICE_STATE_KEY, JSON.stringify(state)); }catch(e){}
+}
+function loadPracticeState(){
+    try{
+        const raw = localStorage.getItem(PRACTICE_STATE_KEY);
+        if(!raw) return null;
+        const state = JSON.parse(raw);
+        if(state.practiceFinished) return null;
+        if(!state.practiceQuestions || state.practiceQuestions.length !== 20) return null;
+        return state;
+    }catch(e){ return null; }
+}
+function clearPracticeState(){
+    try{ localStorage.removeItem(PRACTICE_STATE_KEY); }catch(e){}
+}
 
 // ====================== 练习编辑数据 ======================
 function loadPracticeEdit(){
@@ -1192,7 +1291,6 @@ function checkPageIntegrity() {
 window.addEventListener('load', () => {
     setTimeout(async () => {
         try{ await syncFromCloud(); }catch(e){ console.warn(e); }
-        // 延迟检测，确保所有函数已定义
         setTimeout(() => {
             const integrity = checkPageIntegrity();
             if (!integrity.ok) {
@@ -1944,9 +2042,11 @@ function showPreviewModal(titleText, items, mode, htmlContent, readonly){
             <div class="bi-idx">#${i+1}</div>
             ${x.hidden?'<div class="bi-hidden-tag">🔕 已隐藏</div>':''}
             ${x.isChoice?'<div class="bi-choice-tag">🔘 选择题</div>':''}
-            <div class="bi-q">${escapeHTML(x.q)}</div>
-            <div class="bi-a">答案：${escapeHTML(x.a)}</div>
-            ${x.e && x.e.trim() ? `<div class="bi-a" style="color:#475569;margin-top:4px;">解析：${escapeHTML(x.e)}</div>` : ''}
+            <div class="bi-content">
+                <div class="bi-q">${escapeHTML(x.q)}</div>
+                <div class="bi-a">答案：${escapeHTML(x.a)}</div>
+                ${x.e && x.e.trim() ? `<div class="bi-a" style="color:#475569;margin-top:4px;">解析：${escapeHTML(x.e)}</div>` : ''}
+            </div>
         </div>
     `).join('');
     const codeContent = htmlContent ? escapeHTML(htmlContent) : '（无代码内容）';
@@ -1990,6 +2090,81 @@ function showPreviewModal(titleText, items, mode, htmlContent, readonly){
     });
     overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
     return overlay;
+}
+
+// ====================== 练习预览（真实界面） ======================
+function showPracticePreview(idx){
+    const rawQ = questionBank[idx];
+    if(!rawQ) return;
+    const q = getPracticeQuestion(rawQ);
+    const isChoice = isQuestionChoice(rawQ);
+    const cfg = loadPracticeCfg();
+    const editData = loadPracticeEdit();
+    const ed = editData[rawQ.q];
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay active';
+    overlay.style.zIndex = 1400;
+    
+    let answerHTML = '';
+    let typeLabel = '';
+    
+    if(isChoice){
+        let opts = [];
+        let correctAnswer = '';
+        if(ed && ed.options){
+            opts = ed.options;
+            correctAnswer = ed.correct || '';
+        }else{
+            opts = cfg.singleOptions[rawQ.q] || cfg.multiOptions[rawQ.q] || ['A. 选项A','B. 选项B','C. 选项C','D. 选项D'];
+            correctAnswer = cfg.singleCorrect[rawQ.q] || cfg.multiCorrect[rawQ.q] || 'A';
+        }
+        const isMulti = ed ? (ed.correct && ed.correct.length > 1) : (cfg.multiCorrect[rawQ.q] !== undefined);
+        typeLabel = isMulti ? '☑️ 多选题' : '🔘 单选题';
+        
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        answerHTML = `<div class="practice-options">`;
+        opts.forEach((opt, i)=>{
+            const letter = letters[i];
+            const optText = opt.replace(/^[A-Z]\.\s*/, '');
+            answerHTML += `<div class="practice-option">
+                <div class="opt-label">${letter}</div>
+                <div class="opt-text">${escapeHTML(optText)}</div>
+            </div>`;
+        });
+        answerHTML += `</div>`;
+    }else{
+        typeLabel = '📝 填空题';
+        const correctParts = (ed && ed.customAnswer ? ed.customAnswer : rawQ.a).split(/[｜|‖]/).map(s=>s.trim()).filter(Boolean);
+        answerHTML = `<div class="practice-answer-area">`;
+        answerHTML += buildFillQuestionHTML(q.q, correctParts, null, false, idx);
+        answerHTML += `</div>`;
+    }
+    
+    overlay.innerHTML = `
+        <div class="modal" style="max-width:720px;">
+            <div class="modal-header">
+                <h3>👁 练习预览（真实界面）</h3>
+                <button class="modal-close" data-close="1">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="font-size:11px;color:#8aa2c0;margin-bottom:10px;">以下是本题在练习模式中的真实显示效果（不可作答）</div>
+                <div class="practice-preview-box">
+                    <div class="practice-question-card">
+                        <div class="pq-type">${typeLabel}</div>
+                        <div class="pq-text">${isChoice ? escapeHTML(q.q) : answerHTML}</div>
+                        ${isChoice ? answerHTML : ''}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"><button class="btn" data-close="1">关闭</button></div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    overlay.querySelectorAll('[data-close]').forEach(b=>{
+        b.addEventListener('click', ()=> overlay.remove());
+    });
+    overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
 }
 
 // ====================== 复活弹窗 ======================
@@ -2098,6 +2273,29 @@ function bindRevivePopup(){
 
 // ====================== 练习功能 ======================
 function startPractice(){
+    // 先检查是否有保存的进度
+    const savedState = loadPracticeState();
+    if(savedState){
+        practiceQuestions = savedState.practiceQuestions;
+        practiceAnswers = savedState.practiceAnswers;
+        practiceSubmitted = savedState.practiceSubmitted;
+        practiceCurrentIndex = savedState.practiceCurrentIndex;
+        practiceTotalScore = savedState.practiceTotalScore;
+        practiceStartTime = savedState.practiceStartTime;
+        practiceTimeLimit = savedState.practiceTimeLimit;
+        practiceFinished = false;
+        practiceResultViewed = false;
+        
+        document.getElementById('practiceModal').classList.add('active');
+        document.getElementById('practiceProgressBar').style.display = 'flex';
+        document.getElementById('practiceFooter').style.display = 'flex';
+        document.getElementById('practiceContainer').classList.remove('practice-minimize');
+        renderPracticeQuestion();
+        startPracticeTimer();
+        showToast('已恢复上次练习进度');
+        return;
+    }
+    
     const available = questionBank.filter(item => !item.hidden);
     if(available.length < 20){
         showToast(`题库中仅有 ${available.length} 道可用题目（已隐藏的不计入），无法抽取20题`);
@@ -2120,6 +2318,7 @@ function startPractice(){
     document.getElementById('practiceContainer').classList.remove('practice-minimize');
     renderPracticeQuestion();
     startPracticeTimer();
+    savePracticeState();
 }
 
 function startPracticeTimer(){
@@ -2201,9 +2400,34 @@ function getOrderSetting(q){
     return 'none';
 }
 
-// 构建内嵌填空HTML（带乱序支持）
+// 获取部分乱序配置
+function getPartialOrderConfig(q){
+    const editData = loadPracticeEdit();
+    const key = q.q;
+    if(editData[key] && editData[key].partialOrderConfig){
+        return editData[key].partialOrderConfig;
+    }
+    return null;
+}
+
+// 构建内嵌填空HTML（带乱序支持，练习时隐藏标记）
 function buildFillQuestionHTML(qText, correctParts, answerData, submitted, currentIdx){
-    let html = escapeHTML(qText);
+    // 从练习编辑中获取自定义题目文本
+    const rawQ = practiceQuestions[currentIdx];
+    let displayText = qText;
+    if(rawQ){
+        const editData = loadPracticeEdit();
+        const ed = editData[rawQ.q];
+        if(ed && ed.customQuestion){
+            displayText = ed.customQuestion;
+        }
+    }
+    
+    // 移除乱序标记（练习时不显示）
+    let html = escapeHTML(displayText);
+    html = html.replace(/<\\固>/g, '').replace(/<\\固\/>/g, '');
+    html = html.replace(/<\\乱序>/g, '').replace(/<\\乱序\/>/g, '');
+    
     const blankCount = correctParts.length;
     let blankIndex = 0;
     
@@ -2225,7 +2449,7 @@ function buildFillQuestionHTML(qText, correctParts, answerData, submitted, curre
 }
 
 // 检查乱序答案是否匹配
-function checkOrderedAnswer(studentAns, correctParts, orderSetting, qText){
+function checkOrderedAnswer(studentAns, correctParts, orderSetting, qText, rawQ){
     if(!Array.isArray(studentAns)) return 0;
     
     // 如果orderSetting为all，则允许全部乱序
@@ -2247,26 +2471,57 @@ function checkOrderedAnswer(studentAns, correctParts, orderSetting, qText){
         return matchCount / correctSet.length;
     }
     
-    // 如果orderSetting为partial，则需要检查部分乱序
+    // 如果orderSetting为partial，则根据部分乱序配置
     if(orderSetting === 'partial'){
-        // 简单处理：允许答案之间位置互换，但保持有上下文的位置固定
-        // 这里简化：全部允许乱序（与all相同，但实际应更复杂，这里简化处理）
-        // 实际应用中可以更精细控制
-        const studentSet = studentAns.map(a => (a || '').trim()).filter(Boolean);
-        const correctSet = correctParts.map(a => a.trim());
-        if(studentSet.length !== correctSet.length) return 0;
-        let matchCount = 0;
-        const usedCorrect = new Array(correctSet.length).fill(false);
-        for(let i = 0; i < studentSet.length; i++){
-            for(let j = 0; j < correctSet.length; j++){
-                if(!usedCorrect[j] && answerSimilarity(studentSet[i], correctSet[j]) >= (practiceThreshold / 100)){
-                    matchCount++;
-                    usedCorrect[j] = true;
-                    break;
+        const config = getPartialOrderConfig(rawQ);
+        if(!config || !config.groups || config.groups.length === 0){
+            // 没有配置，按默认顺序匹配
+            let totalScore = 0;
+            const perBlank = 5 / correctParts.length;
+            for(let i = 0; i < correctParts.length; i++){
+                const sim = answerSimilarity(studentAns[i] || '', correctParts[i] || '');
+                if(sim >= (practiceThreshold / 100)){
+                    totalScore += perBlank;
                 }
             }
+            return totalScore / 5;
         }
-        return matchCount / correctSet.length;
+        
+        // 根据配置的分组进行匹配
+        const studentSet = studentAns.map(a => (a || '').trim());
+        const correctSet = correctParts.map(a => a.trim());
+        let matchCount = 0;
+        
+        // 处理固定组（按顺序匹配）
+        config.groups.forEach(group => {
+            if(group.type === 'fixed'){
+                group.indices.forEach(idx => {
+                    if(idx < studentSet.length && idx < correctSet.length){
+                        if(answerSimilarity(studentSet[idx], correctSet[idx]) >= (practiceThreshold / 100)){
+                            matchCount++;
+                        }
+                    }
+                });
+            } else if(group.type === 'order'){
+                // 乱序组：在这组索引内匹配
+                const groupIndices = group.indices;
+                const studentGroup = groupIndices.map(idx => studentSet[idx] || '');
+                const correctGroup = groupIndices.map(idx => correctSet[idx] || '');
+                
+                const usedCorrect = new Array(correctGroup.length).fill(false);
+                for(let i = 0; i < studentGroup.length; i++){
+                    for(let j = 0; j < correctGroup.length; j++){
+                        if(!usedCorrect[j] && answerSimilarity(studentGroup[i], correctGroup[j]) >= (practiceThreshold / 100)){
+                            matchCount++;
+                            usedCorrect[j] = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+        
+        return matchCount / correctParts.length;
     }
     
     // 默认：按顺序匹配
@@ -2376,6 +2631,7 @@ function renderPracticeQuestion(){
                 const blankIdx = parseInt(inp.dataset.blank);
                 if(!practiceAnswers[idx]) practiceAnswers[idx] = [];
                 practiceAnswers[idx][blankIdx] = inp.value;
+                savePracticeState();
             });
         });
     }
@@ -2402,6 +2658,7 @@ function renderPracticeQuestion(){
                         opt.classList.add('selected');
                     }
                 }
+                savePracticeState();
             });
         });
     }
@@ -2432,7 +2689,14 @@ function renderPracticeQuestion(){
         finishBtn.style.display = 'none';
     }
     
-    nextBtn.textContent = idx === 19 ? '已是最后一题' : '下一题 ▶';
+    // 合并后的按钮文字：未提交显示"提交答案"，已提交显示"下一题"
+    if(submitted){
+        nextBtn.textContent = idx === 19 ? '已是最后一题' : '下一题 ▶';
+        nextBtn.className = 'primary';
+    } else {
+        nextBtn.textContent = idx === 19 ? '提交并完成' : '提交答案';
+        nextBtn.className = 'primary';
+    }
 }
 
 function getQuestionScore(idx){
@@ -2465,7 +2729,7 @@ function getQuestionScore(idx){
     }else{
         const correctParts = (ed && ed.customAnswer ? ed.customAnswer : rawQ.a).split(/[｜|‖]/).map(s=>s.trim()).filter(Boolean);
         const orderSetting = getOrderSetting(rawQ);
-        const ratio = checkOrderedAnswer(answer, correctParts, orderSetting, rawQ.q);
+        const ratio = checkOrderedAnswer(answer, correctParts, orderSetting, rawQ.q, rawQ);
         return ratio * 5;
     }
 }
@@ -2480,12 +2744,12 @@ function submitPracticeAnswer(){
     if(isChoice){
         if(!answer || (typeof answer === 'string' && answer.trim() === '')){
             showToast('请至少选择一个选项');
-            return;
+            return false;
         }
     }else{
         if(!answer || !Array.isArray(answer) || answer.every(a => !a || !a.trim())){
             showToast('请至少填写一个空');
-            return;
+            return false;
         }
     }
     
@@ -2494,6 +2758,8 @@ function submitPracticeAnswer(){
     practiceTotalScore += score;
     renderPracticeQuestion();
     document.getElementById('practiceProgressScore').textContent = `得分：${practiceTotalScore}`;
+    savePracticeState();
+    return true;
 }
 
 function finishPractice(){
@@ -2501,6 +2767,7 @@ function finishPractice(){
     practiceFinished = true;
     clearInterval(practiceTimerInterval);
     practiceTimerInterval = null;
+    clearPracticeState();
     
     let total = 0;
     for(let i=0;i<20;i++){
@@ -2596,6 +2863,7 @@ function resetPractice(){
         clearInterval(practiceTimerInterval);
         practiceTimerInterval = null;
     }
+    clearPracticeState();
     document.getElementById('practiceContainer').classList.remove('practice-minimize');
     document.getElementById('practiceProgressBar').style.display = 'flex';
     document.getElementById('practiceFooter').style.display = 'flex';
@@ -2627,12 +2895,16 @@ function openPracticeEditor(idx){
             <h4>📝 题目编辑</h4>
             <div class="practice-editor-toolbar" id="editorToolbar">
                 <button data-action="blank" title="在光标处插入答题框">⬜ 答题框</button>
-                <button data-action="single" title="在光标处插入单选框">🔘 单选框</button>
-                <button data-action="multi" title="在光标处插入多选框">☑️ 多选框</button>
+                <button data-action="fixed-start" title="插入固定起始标记">🔒 固定开始</button>
+                <button data-action="fixed-end" title="插入固定结束标记">🔓 固定结束</button>
+                <button data-action="order-start" title="插入乱序起始标记">🔀 乱序开始</button>
+                <button data-action="order-end" title="插入乱序结束标记">🔀 乱序结束</button>
             </div>
             <div class="editor-content" id="editorContent" contenteditable="true">${escapeHTML(customQuestion)}</div>
             <div class="editor-help">
-                💡 点击上方工具按钮在光标位置插入答题框/选项。答题框数量对应答案数量。可自由删除或新增。
+                💡 点击上方工具按钮在光标位置插入答题框或乱序标记。答题框数量对应答案数量。<br>
+                🔒 固定开始/结束：标记之间的答案不允许乱序。<br>
+                🔀 乱序开始/结束：标记之间的答案允许乱序。
             </div>
         </div>
         <div class="editor-section">
@@ -2648,9 +2920,10 @@ function openPracticeEditor(idx){
                 <label><input type="radio" name="orderSetting" value="none" ${orderSetting==='none'?'checked':''}> 不允许乱序</label>
                 <label><input type="radio" name="orderSetting" value="all" ${orderSetting==='all'?'checked':''}> 全部允许乱序</label>
                 <label><input type="radio" name="orderSetting" value="partial" ${orderSetting==='partial'?'checked':''}> 部分乱序</label>
+                <button class="order-partial-btn" id="orderPartialBtn" style="${orderSetting==='partial'?'':'display:none;'}">⚙️ 设置部分乱序</button>
             </div>
             <div class="editor-help" style="margin-top:4px;">
-                💡 乱序仅适用于答案之间无上下文的情况（如"（）和（）"可乱序，但"（）遇到（）"不可乱序）。
+                💡 乱序仅适用于答案之间无上下文的情况。部分乱序需在题目中用 🔒 和 🔀 标记范围。
             </div>
         </div>
         <div class="editor-section">
@@ -2685,10 +2958,14 @@ function openPracticeEditor(idx){
         let insertHTML = '';
         if(action === 'blank'){
             insertHTML = '<span class="editor-blank" contenteditable="false">⬜</span>';
-        }else if(action === 'single'){
-            insertHTML = '<span class="editor-option single" contenteditable="false">🔘</span>';
-        }else if(action === 'multi'){
-            insertHTML = '<span class="editor-option multi" contenteditable="false">☑️</span>';
+        }else if(action === 'fixed-start'){
+            insertHTML = '<span class="editor-fixed-start" contenteditable="false">&lt;\\固&gt;</span>';
+        }else if(action === 'fixed-end'){
+            insertHTML = '<span class="editor-fixed-end" contenteditable="false">&lt;\\固/&gt;</span>';
+        }else if(action === 'order-start'){
+            insertHTML = '<span class="editor-order-start" contenteditable="false">&lt;\\乱序&gt;</span>';
+        }else if(action === 'order-end'){
+            insertHTML = '<span class="editor-order-end" contenteditable="false">&lt;\\乱序/&gt;</span>';
         }
         
         if(insertHTML){
@@ -2713,6 +2990,111 @@ function openPracticeEditor(idx){
         `;
         row.querySelector('.pe-opt-del').addEventListener('click', ()=>{ row.remove(); });
         container.appendChild(row);
+    });
+    
+    // 部分乱序设置按钮
+    document.getElementById('orderPartialBtn').addEventListener('click', ()=>{
+        const editor = document.getElementById('editorContent');
+        const text = editor.innerText;
+        
+        // 解析 <\固>...</固/> 和 <\乱序>...</乱序/>
+        const groups = [];
+        const regex = /<\\固>(.*?)<\\固\/>|<\\乱序>(.*?)<\\乱序\/>/gs;
+        let match;
+        let groupIndex = 0;
+        
+        while((match = regex.exec(text)) !== null){
+            const type = match[1] !== undefined ? 'fixed' : 'order';
+            const content = match[1] !== undefined ? match[1] : match[2];
+            groups.push({ type, content, index: groupIndex });
+            groupIndex++;
+        }
+        
+        if(groups.length === 0){
+            showToast('请先在题目中用 🔒 和 🔀 标记乱序范围');
+            return;
+        }
+        
+        // 弹出配置窗口
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay active';
+        overlay.style.zIndex = 1500;
+        overlay.innerHTML = `
+            <div class="modal" style="max-width:500px;">
+                <div class="modal-header">
+                    <h3>⚙️ 设置部分乱序</h3>
+                    <button class="modal-close" data-close="1">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div style="font-size:12px;color:#4a6a8a;margin-bottom:12px;line-height:1.6;">
+                        系统已识别到以下分组，请为每个分组设置是否允许乱序：
+                    </div>
+                    <div id="partialOrderGroups">
+                        ${groups.map((g, i) => `
+                            <div style="padding:8px 12px;margin-bottom:8px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+                                <div style="font-size:12px;color:#475569;margin-bottom:4px;">
+                                    <b>分组 ${i+1}</b>：${g.type === 'fixed' ? '🔒 固定' : '🔀 乱序'}
+                                </div>
+                                <div style="font-size:13px;color:#1e293b;">${escapeHTML(g.content)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="editor-help">
+                        💡 标记为 🔒 的分组将按顺序匹配，标记为 🔀 的分组允许内部乱序。
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-close="1">取消</button>
+                    <button class="btn btn-primary" id="savePartialOrder">保存设置</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        
+        overlay.querySelectorAll('[data-close]').forEach(b=>{
+            b.addEventListener('click', ()=> overlay.remove());
+        });
+        overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
+        
+        document.getElementById('savePartialOrder').addEventListener('click', ()=>{
+            // 保存配置到editData
+            const editData = loadPracticeEdit();
+            if(!editData[rawQ.q]) editData[rawQ.q] = {};
+            
+            // 计算每个分组对应的答案索引
+            const allBlanks = [];
+            let blankIdx = 0;
+            const tempText = text.replace(/<\\固>(.*?)<\\固\/>|<\\乱序>(.*?)<\\乱序\/>/gs, (m, fixed, order) => {
+                const content = fixed || order;
+                const type = fixed ? 'fixed' : 'order';
+                // 统计这个分组内的答题框数量
+                const blankCount = (content.match(/⬜/g) || []).length;
+                const indices = [];
+                for(let i = 0; i < blankCount; i++){
+                    indices.push(blankIdx++);
+                }
+                allBlanks.push({ type, indices, content });
+                return '';
+            });
+            
+            editData[rawQ.q].partialOrderConfig = {
+                groups: allBlanks,
+                updatedAt: nowTs()
+            };
+            editData[rawQ.q].orderSetting = 'partial';
+            savePracticeEdit(editData);
+            
+            overlay.remove();
+            showToast('✅ 部分乱序设置已保存');
+        });
+    });
+    
+    // 监听单选按钮变化
+    document.querySelectorAll('input[name="orderSetting"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const btn = document.getElementById('orderPartialBtn');
+            if(btn) btn.style.display = e.target.value === 'partial' ? 'inline-block' : 'none';
+        });
     });
     
     modal.classList.add('active');
@@ -2750,7 +3132,7 @@ function getEditorOptions(containerId){
     return opts;
 }
 
-// ====================== 练习管理列表渲染 ======================
+// ====================== 练习管理列表渲染（横向按钮 + 去编辑） ======================
 function renderPracticeList(type, keyword){
     const cfg = loadPracticeCfg();
     let listEl, countEl, searchEl, pinCheck;
@@ -2818,15 +3200,35 @@ function renderPracticeList(type, keyword){
             <div class="bi-idx">#${idx+1}</div>
             ${item.hidden?'<div class="bi-hidden-tag">🔕 已隐藏</div>':''}
             ${item.isChoice?'<div class="bi-choice-tag">🔘 选择题</div>':''}
-            <div class="bi-q">${escapeHTML(item.q)}</div>
-            <div class="bi-a">答案：${escapeHTML(item.a.substring(0,60))}${item.a.length>60?'…':''}</div>
-            ${extra}
+            <div class="bi-content">
+                <div class="bi-q">${escapeHTML(item.q)}</div>
+                <div class="bi-a">答案：${escapeHTML(item.a.substring(0,60))}${item.a.length>60?'…':''}</div>
+                ${extra}
+            </div>
+            <button class="bi-edit-btn" data-idx="${idx}">✏️ 去编辑</button>
         `;
-        div.addEventListener('click', ()=>{
+        div.addEventListener('click', (e)=>{
+            if(e.target.classList.contains('bi-edit-btn')) return;
             practiceSelectedIdx = idx;
             practiceSelectedType = type;
             renderPracticeList(type, searchEl.value);
             showPracticeEditForm(idx, type);
+        });
+        div.querySelector('.bi-edit-btn').addEventListener('click', (e)=>{
+            e.stopPropagation();
+            // 跳转到编辑处
+            practiceSelectedIdx = idx;
+            practiceSelectedType = type;
+            renderPracticeList(type, searchEl.value);
+            showPracticeEditForm(idx, type);
+            // 滚动到编辑区域
+            setTimeout(() => {
+                const formId = type === 'fill' ? 'practiceEditForm' : type === 'single' ? 'practiceSingleEditForm' : 'practiceMultiEditForm';
+                const form = document.getElementById(formId);
+                if(form){
+                    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
         });
         listEl.appendChild(div);
     });
@@ -2981,16 +3383,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
     // ===== 练习弹窗关闭 =====
     document.getElementById('practiceClose').addEventListener('click', ()=>{
         if(practiceFinished){
-            // 查看过总分后关闭
             if(confirm('是否关闭？关闭后不可查阅。')){
                 resetPractice();
                 document.getElementById('practiceModal').classList.remove('active');
             }
         }else{
-            // 未完成练习，关闭不重置
-            if(confirm('是否关闭练习？答题进度将保留，下次打开继续。')){
-                document.getElementById('practiceModal').classList.remove('active');
-            }
+            // 保存进度并直接关闭
+            savePracticeState();
+            document.getElementById('practiceModal').classList.remove('active');
         }
     });
 
@@ -2999,45 +3399,31 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if(practiceCurrentIndex > 0){
             practiceCurrentIndex--;
             renderPracticeQuestion();
+            savePracticeState();
         }
     });
+
+    // 合并的按钮：提交答案 / 下一题
     document.getElementById('practiceNextBtn').addEventListener('click', ()=>{
-        // 先提交当前题，再进入下一题
         if(!practiceSubmitted[practiceCurrentIndex]){
             // 未提交，先提交
-            const idx = practiceCurrentIndex;
-            const rawQ = practiceQuestions[idx];
-            const answer = practiceAnswers[idx];
-            const isChoice = isQuestionChoice(rawQ);
-            
-            if(isChoice){
-                if(!answer || (typeof answer === 'string' && answer.trim() === '')){
-                    showToast('请至少选择一个选项');
-                    return;
-                }
-            }else{
-                if(!answer || !Array.isArray(answer) || answer.every(a => !a || !a.trim())){
-                    showToast('请至少填写一个空');
-                    return;
+            const ok = submitPracticeAnswer();
+            if(ok){
+                // 提交成功后，如果是最后一题且所有题都已提交，显示查看总分
+                if(practiceCurrentIndex === 19 && practiceSubmitted.every(s=>s)){
+                    document.getElementById('practiceFinishBtn').style.display = 'inline-block';
                 }
             }
-            
-            practiceSubmitted[idx] = true;
-            const score = getQuestionScore(idx);
-            practiceTotalScore += score;
-            renderPracticeQuestion();
-            document.getElementById('practiceProgressScore').textContent = `得分：${practiceTotalScore}`;
-        }else{
+        } else {
             // 已提交，进入下一题
             if(practiceCurrentIndex < 19){
                 practiceCurrentIndex++;
                 renderPracticeQuestion();
+                savePracticeState();
             }
         }
     });
-    document.getElementById('practiceSubmitBtn').addEventListener('click', ()=>{
-        submitPracticeAnswer();
-    });
+
     document.getElementById('practiceFinishBtn').addEventListener('click', ()=>{
         finishPractice();
     });
@@ -3055,7 +3441,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if(!rawQ) return;
         
         const editorContent = document.getElementById('editorContent');
-        const customQuestion = editorContent.innerText.replace(/\n+/g, '\n').trim();
+        // 提取纯文本，保留乱序标记
+        let customQuestion = editorContent.innerHTML;
+        // 将span标记转换回纯文本标记
+        customQuestion = customQuestion.replace(/<span class="editor-blank"[^>]*>⬜<\/span>/g, '（）');
+        customQuestion = customQuestion.replace(/<span class="editor-fixed-start"[^>]*>&lt;\\固&gt;<\/span>/g, '<\\固>');
+        customQuestion = customQuestion.replace(/<span class="editor-fixed-end"[^>]*>&lt;\\固\/&gt;<\/span>/g, '<\\固/>');
+        customQuestion = customQuestion.replace(/<span class="editor-order-start"[^>]*>&lt;\\乱序&gt;<\/span>/g, '<\\乱序>');
+        customQuestion = customQuestion.replace(/<span class="editor-order-end"[^>]*>&lt;\\乱序\/&gt;<\/span>/g, '<\\乱序/>');
+        // 清理其他HTML
+        customQuestion = customQuestion.replace(/<[^>]+>/g, '');
+        customQuestion = customQuestion.trim();
+        
         const customAnswer = document.getElementById('editorAnswer').value.trim();
         const isChoice = document.getElementById('editorChoiceCheck').checked;
         const options = getEditorOptions('editorOptionsList');
@@ -3063,6 +3460,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
         const orderSetting = document.querySelector('input[name="orderSetting"]:checked')?.value || 'none';
         
         const editData = loadPracticeEdit();
+        const existingConfig = editData[rawQ.q]?.partialOrderConfig || null;
+        
         editData[rawQ.q] = {
             customQuestion: customQuestion || rawQ.q,
             customAnswer: customAnswer || rawQ.a,
@@ -3070,6 +3469,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
             options: isChoice ? options : null,
             correct: isChoice ? correct : null,
             orderSetting: orderSetting,
+            partialOrderConfig: orderSetting === 'partial' ? existingConfig : null,
             updatedAt: nowTs()
         };
         savePracticeEdit(editData);
@@ -3268,11 +3668,9 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
         renderPracticeList('fill', document.getElementById('practiceSearch').value);
         showToast(item.hidden ? '🔕 已设为隐藏（保存后生效）' : '🔔 已取消隐藏（保存后生效）');
     });
-    document.getElementById('pePreview').addEventListener('click', async ()=>{
-        const html = await getFullPageHTML();
-        const previewItem = { q: document.getElementById('peQ').value.trim() || '（空）', a: document.getElementById('peA').value.trim() || '（空）', e: document.getElementById('peE').value.trim() || '', highlight: true, hidden: questionBank[practiceSelectedIdx]?.hidden || false, isChoice: false };
-        const listItems = questionBank.map((x,i)=>{ if(i === practiceSelectedIdx) return previewItem; return x; });
-        showPreviewModal('练习预览', listItems, 'list', html || '（无法获取代码）', true);
+    document.getElementById('pePreview').addEventListener('click', ()=>{
+        if(practiceSelectedIdx < 0) return;
+        showPracticePreview(practiceSelectedIdx);
     });
     document.getElementById('peCode').addEventListener('click', async ()=>{
         const html = await getFullPageHTML();
@@ -3334,11 +3732,9 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
         renderPracticeList('single', document.getElementById('practiceSingleSearch').value);
         showToast('已删除（未保存）');
     });
-    document.getElementById('psePreview').addEventListener('click', async ()=>{
-        const html = await getFullPageHTML();
-        const previewItem = { q: document.getElementById('pseQ').value.trim() || '（空）', a: document.getElementById('pseCorrect').value.trim() || '（空）', e: document.getElementById('pseE').value.trim() || '', highlight: true, hidden: false, isChoice: true };
-        const listItems = questionBank.map((x,i)=>{ if(i === practiceSelectedIdx) return previewItem; return x; });
-        showPreviewModal('练习预览', listItems, 'list', html || '（无法获取代码）', true);
+    document.getElementById('psePreview').addEventListener('click', ()=>{
+        if(practiceSelectedIdx < 0) return;
+        showPracticePreview(practiceSelectedIdx);
     });
     document.getElementById('pseCode').addEventListener('click', async ()=>{
         const html = await getFullPageHTML();
@@ -3400,11 +3796,9 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
         renderPracticeList('multi', document.getElementById('practiceMultiSearch').value);
         showToast('已删除（未保存）');
     });
-    document.getElementById('pmePreview').addEventListener('click', async ()=>{
-        const html = await getFullPageHTML();
-        const previewItem = { q: document.getElementById('pmeQ').value.trim() || '（空）', a: document.getElementById('pmeCorrect').value.trim() || '（空）', e: document.getElementById('pmeE').value.trim() || '', highlight: true, hidden: false, isChoice: true };
-        const listItems = questionBank.map((x,i)=>{ if(i === practiceSelectedIdx) return previewItem; return x; });
-        showPreviewModal('练习预览', listItems, 'list', html || '（无法获取代码）', true);
+    document.getElementById('pmePreview').addEventListener('click', ()=>{
+        if(practiceSelectedIdx < 0) return;
+        showPracticePreview(practiceSelectedIdx);
     });
     document.getElementById('pmeCode').addEventListener('click', async ()=>{
         const html = await getFullPageHTML();
@@ -3461,11 +3855,28 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
                 <div class="bi-idx">#${idx+1}</div>
                 ${item.hidden ? '<div class="bi-hidden-tag">🔕 已隐藏</div>' : ''}
                 ${item.isChoice ? '<div class="bi-choice-tag">🔘 选择题</div>' : ''}
-                <div class="bi-q">${escapeHTML(item.q)}</div>
-                <div class="bi-a">答案：${escapeHTML(item.a.substring(0,80))}${item.a.length>80?'…':''}</div>
-                ${item.e && item.e.trim() ? `<div class="bi-a" style="color:#475569;margin-top:3px;">解析：${escapeHTML(item.e.substring(0,60))}${item.e.length>60?'…':''}</div>` : ''}
+                <div class="bi-content">
+                    <div class="bi-q">${escapeHTML(item.q)}</div>
+                    <div class="bi-a">答案：${escapeHTML(item.a.substring(0,80))}${item.a.length>80?'…':''}</div>
+                    ${item.e && item.e.trim() ? `<div class="bi-a" style="color:#475569;margin-top:3px;">解析：${escapeHTML(item.e.substring(0,60))}${item.e.length>60?'…':''}</div>` : ''}
+                </div>
+                <button class="bi-edit-btn" data-idx="${idx}">✏️ 去编辑</button>
             `;
-            div.addEventListener('click', ()=>{ selectedIdx = idx; renderBankList(bankSearch.value); showEditForm(idx); });
+            div.addEventListener('click', (e)=>{
+                if(e.target.classList.contains('bi-edit-btn')) return;
+                selectedIdx = idx;
+                renderBankList(bankSearch.value);
+                showEditForm(idx);
+            });
+            div.querySelector('.bi-edit-btn').addEventListener('click', (e)=>{
+                e.stopPropagation();
+                selectedIdx = idx;
+                renderBankList(bankSearch.value);
+                showEditForm(idx);
+                setTimeout(() => {
+                    editForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            });
             bankList.appendChild(div);
         });
         if(!bankList.children.length){ bankList.innerHTML = '<div style="font-size:12px;color:#8aa2c0;text-align:center;padding:20px;">未找到匹配题目</div>'; }
