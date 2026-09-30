@@ -6750,6 +6750,20 @@
       "orderSetting": "all",
       "updatedAt": 1790798267461,
       "customExplanation": ""
+    },
+    "有限空间作业审批表(作业票)有效期最长一般不超过（）": {
+      "customQuestion": "有限空间作业审批表(作业票)有效期最长一般不超过",
+      "customAnswer": "有限空间作业审批表(作业票)有效期最长一般不超过",
+      "isChoice": true,
+      "options": [
+        "A. 4小时",
+        "B. 8小时",
+        "C. 12小时",
+        "D. 24小时"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790798406125
     }
   }
 }
