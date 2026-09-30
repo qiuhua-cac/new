@@ -6,6 +6,23 @@
 <meta name="format-detection" content="telephone=no">
 <title>中控测验答题器</title>
 <style>
+.practice-feedback .answer-highlight{
+    color:#dc2626;
+    font-weight:700;
+    font-size:15px;
+    display:inline;
+    padding:0 2px;
+}
+.practice-feedback .answer-sep{
+    color:#60a5fa;
+    font-weight:400;
+    font-size:14px;
+    padding:0 4px;
+}
+@media (max-width: 600px){
+    .practice-feedback .answer-highlight{font-size:14px;}
+    .practice-feedback .answer-sep{font-size:13px;}
+}
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft Yahei",-apple-system,BlinkMacSystemFont,sans-serif;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;}
 body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-items:center;}
@@ -202,112 +219,23 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .revive-popup-actions .rp-btn-copy:hover{background:#d1fae5;}
 .revive-popup-actions .rp-btn-download{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;flex:0 0 auto;padding:12px 14px;}
 .revive-popup-actions .rp-btn-download:hover{background:#dbeafe;}
-.history-list{
-    max-height:300px;
-    overflow-y:auto;
-    padding:4px 2px;
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:8px;
-}
-.history-item{
-    padding:10px 8px;
-    border:1.5px solid #d0e0f0;
-    border-radius:12px;
-    cursor:pointer;
-    font-size:12px;
-    color:#1e3a5f;
-    transition:0.15s;
-    word-break:break-word;
-    background:#fafdff;
-    box-shadow:0 1px 3px rgba(0,0,0,0.02);
-    text-align:center;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:44px;
-}
+.history-list{max-height:300px;overflow-y:auto;padding:4px 2px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.history-item{padding:10px 8px;border:1.5px solid #d0e0f0;border-radius:12px;cursor:pointer;font-size:12px;color:#1e3a5f;transition:0.15s;word-break:break-word;background:#fafdff;box-shadow:0 1px 3px rgba(0,0,0,0.02);text-align:center;display:flex;align-items:center;justify-content:center;min-height:44px;}
 .history-item:hover{background:#eef6ff;border-color:#9bbde0;transform:translateY(-1px);box-shadow:0 3px 8px rgba(30,64,175,0.08);}
 .history-item:active{background:#dbeafe;transform:scale(0.98);}
 .history-empty{text-align:center;color:#8aa2c0;font-size:12px;padding:20px;grid-column:1/-1;}
-
-/* 搜索隐藏按钮样式 */
-.btn-search-hide {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
-    color: #475569;
-    transition: 0.2s;
-}
-.btn-search-hide.active {
-    background: #fef3c7;
-    border-color: #f59e0b;
-    color: #92400e;
-    font-weight: 600;
-    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
-}
-.btn-search-hide.active::before {
-    content: '🔕 ';
-}
-.btn-practice-hide {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
-    color: #475569;
-    transition: 0.2s;
-}
-.btn-practice-hide.active {
-    background: #dbeafe;
-    border-color: #3b82f6;
-    color: #1e40af;
-    font-weight: 600;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
-}
-.btn-practice-hide.active::before {
-    content: '📝 ';
-}
-.btn-practice-edit {
-    background: #ede9fe;
-    border-color: #a78bfa;
-    color: #5b21b6;
-    transition: 0.2s;
-    font-weight: 600;
-}
-.btn-practice-edit:hover {
-    background: #ddd6fe;
-    border-color: #8b5cf6;
-}
-
-/* 复选框样式 */
-.checkbox-wrap {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 13px;
-    color: #334155;
-    transition: 0.15s;
-}
-.checkbox-wrap:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
-}
-.checkbox-wrap input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: #3b82f6;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-.checkbox-wrap.checked {
-    background: #eff6ff;
-    border-color: #93c5fd;
-}
-
-/* ====== 练习界面 - 固定高度 ====== */
+.btn-search-hide {background: #f1f5f9;border-color: #cbd5e1;color: #475569;transition: 0.2s;}
+.btn-search-hide.active {background: #fef3c7;border-color: #f59e0b;color: #92400e;font-weight: 600;box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);}
+.btn-search-hide.active::before {content: '🔕 ';}
+.btn-practice-hide {background: #f1f5f9;border-color: #cbd5e1;color: #475569;transition: 0.2s;}
+.btn-practice-hide.active {background: #dbeafe;border-color: #3b82f6;color: #1e40af;font-weight: 600;box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);}
+.btn-practice-hide.active::before {content: '👁 ';}
+.btn-practice-edit {background: #ede9fe;border-color: #a78bfa;color: #5b21b6;transition: 0.2s;font-weight: 600;}
+.btn-practice-edit:hover {background: #ddd6fe;border-color: #8b5cf6;}
+.checkbox-wrap {display: flex;align-items: center;gap: 8px;padding: 8px 12px;background: #f8fafc;border: 1px solid #e2e8f0;border-radius: 10px;margin-bottom: 12px;cursor: pointer;font-size: 13px;color: #334155;transition: 0.15s;}
+.checkbox-wrap:hover {background: #f1f5f9;border-color: #cbd5e1;}
+.checkbox-wrap input[type="checkbox"] {width: 18px;height: 18px;accent-color: #3b82f6;cursor: pointer;flex-shrink: 0;}
+.checkbox-wrap.checked {background: #eff6ff;border-color: #93c5fd;}
 .practice-container{display:flex;flex-direction:column;height:100%;background:#f8fcff;overflow:hidden;}
 .practice-header{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;border-radius:12px 12px 0 0;}
 .practice-header .ph-title{font-size:15px;font-weight:600;}
@@ -317,35 +245,34 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .practice-progress{background:#fff;padding:6px 16px;font-size:12px;color:#4a6a8a;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e2ecf7;flex-shrink:0;}
 .practice-progress .pp-bar{flex:1;height:6px;background:#e2ecf7;border-radius:3px;margin:0 12px;overflow:hidden;}
 .practice-progress .pp-bar-inner{height:100%;background:linear-gradient(90deg,#3b82f6,#2563eb);border-radius:3px;transition:width 0.3s;}
-/* 固定高度练习主体 */
 .practice-body{flex:1;overflow-y:auto;padding:14px 16px;min-height:0;max-height:calc(94vh - 160px);}
-.practice-question-card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 12px rgba(30,64,175,0.08);margin-bottom:12px;border-left:5px solid #f59e0b;}
-.practice-question-card .pq-type{display:inline-block;font-size:10px;background:#fef3c7;color:#92400e;padding:2px 10px;border-radius:10px;margin-bottom:8px;font-weight:600;}
-.practice-question-card .pq-text{font-size:15px;line-height:1.9;color:#1e293b;font-weight:600;margin-bottom:12px;word-break:break-word;}
-/* 内嵌答题框 - 美化版（移动端长度缩减） */
+.practice-question-card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 12px rgba(30,64,175,0.08);margin-bottom:12px;border-left:5px solid #f59e0b;min-height:180px;display:flex;flex-direction:column;justify-content:center;}
+.practice-question-card .pq-type{display:inline-block;font-size:10px;background:#fef3c7;color:#92400e;padding:2px 10px;border-radius:10px;margin-bottom:8px;font-weight:600;align-self:flex-start;}
+.practice-question-card .pq-text{font-size:15px;line-height:2.2;color:#1e293b;font-weight:600;margin-bottom:12px;word-break:break-word;}
 .inline-blank{
     display:inline-block;
-    min-width:60px;
-    max-width:120px;
-    padding:3px 8px;
+    width:90px;
+    height:30px;
+    padding:0 8px;
     border:1.5px solid #f59e0b;
-    border-radius:8px;
+    border-radius:6px;
     background:#fffbeb;
     margin:2px 3px;
     text-align:center;
-    font-size:13px;
+    font-size:15px;
+    font-weight:600;
     color:#1e293b;
     vertical-align:middle;
-    line-height:1.4;
+    line-height:30px;
     transition:0.2s;
     box-shadow:0 1px 2px rgba(245,158,11,0.1);
+    box-sizing:border-box;
 }
 .inline-blank:focus{border-color:#3b82f6;background:#eff6ff;outline:none;box-shadow:0 0 0 2px rgba(59,130,246,0.15);}
 .inline-blank.correct{border-color:#22c55e;background:#f0fdf4;}
 .inline-blank.wrong{border-color:#ef4444;background:#fef2f2;}
 .inline-blank:disabled{opacity:0.9;cursor:default;}
 .inline-blank::placeholder{color:#b8a88a;font-size:11px;}
-/* 选择题选项 */
 .practice-options{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
 .practice-option{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid #c8d9ec;border-radius:10px;cursor:pointer;transition:0.15s;background:#f9fcff;}
 .practice-option:hover{background:#e8f2fe;border-color:#9bbde0;}
@@ -357,11 +284,9 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .practice-option.correct .opt-label{background:#22c55e;color:#fff;}
 .practice-option.wrong .opt-label{background:#ef4444;color:#fff;}
 .practice-option .opt-text{font-size:14px;color:#1e293b;line-height:1.5;}
-/* 反馈 */
 .practice-feedback{background:#f8fafc;border-radius:10px;padding:12px 14px;margin-top:10px;font-size:13px;line-height:1.7;border-left:4px solid #94a3b8;}
 .practice-feedback.ok{border-left-color:#22c55e;background:#f0fdf4;}
 .practice-feedback.no{border-left-color:#ef4444;background:#fef2f2;}
-/* 底部固定 */
 .practice-footer{background:#fff;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid #e2ecf7;flex-shrink:0;flex-wrap:wrap;}
 .practice-footer .pf-left{display:flex;gap:8px;flex-wrap:wrap;}
 .practice-footer .pf-right{display:flex;gap:8px;flex-wrap:wrap;}
@@ -373,12 +298,11 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .practice-footer button.success{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;}
 .practice-footer button.success:hover{background:linear-gradient(135deg,#16a34a,#15803d);}
 .practice-footer button:disabled{opacity:0.5;cursor:not-allowed;}
-/* 结果页 */
 .practice-result-card{background:#fff;border-radius:16px;padding:20px;text-align:center;box-shadow:0 4px 20px rgba(30,64,175,0.1);}
 .practice-result-card .pr-score{font-size:48px;font-weight:800;color:#f59e0b;margin-bottom:8px;}
 .practice-result-card .pr-total{font-size:16px;color:#4a6a8a;margin-bottom:16px;}
 .practice-result-card .pr-detail{font-size:13px;color:#64748b;line-height:1.8;margin-bottom:20px;}
-.practice-result-card .pr-breakdown{text-align:left;background:#f8fafc;border-radius:10px;padding:12px 16px;margin-bottom:16px;max-height:300px;overflow-y:auto;}
+.practice-result-card .pr-breakdown{text-align:left;background:#f8fafc;border-radius:10px;padding:12px 16px;margin-bottom:16px;overflow:visible;}
 .practice-result-card .pr-breakdown .pb-item{padding:10px 0;border-bottom:1px solid #eef2f8;font-size:13px;}
 .practice-result-card .pr-breakdown .pb-item:last-child{border-bottom:none;}
 .practice-result-card .pr-breakdown .pb-item .pb-q{color:#1e293b;font-weight:600;margin-bottom:4px;word-break:break-word;}
@@ -393,274 +317,36 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .practice-result-card .pr-breakdown .pb-item .pb-result.ok{color:#16a34a;}
 .practice-result-card .pr-breakdown .pb-item .pb-result.no{color:#dc2626;}
 .practice-result-card .pr-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
-
-/* ====== 练习编辑弹窗 ====== */
-.practice-editor-toolbar {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    padding: 8px 0;
-    border-bottom: 1px solid #eef2f8;
-    margin-bottom: 12px;
-}
-.practice-editor-toolbar button {
-    font-size: 12px;
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 1px solid #c8d9ec;
-    background: #fff;
-    color: #1e3a5f;
-    cursor: pointer;
-    font-weight: 500;
-    transition: 0.15s;
-}
-.practice-editor-toolbar button:hover {
-    background: #e8f2fe;
-    border-color: #9bbde0;
-}
-.practice-editor-toolbar button.active {
-    background: #dbeafe;
-    border-color: #2563eb;
-    color: #1d4ed8;
-    font-weight: 600;
-}
-.editor-content {
-    min-height: 120px;
-    padding: 14px 16px;
-    border: 1.5px solid #c8d9ec;
-    border-radius: 12px;
-    background: #f9fcff;
-    font-size: 14px;
-    line-height: 1.9;
-    word-break: break-word;
-    outline: none;
-    transition: 0.2s;
-}
-.editor-content:focus {
-    border-color: #3b82f6;
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
-}
-.editor-content .editor-blank {
-    display: inline-block;
-    min-width: 60px;
-    padding: 3px 10px;
-    border: 1.5px solid #f59e0b;
-    border-radius: 8px;
-    background: #fffbeb;
-    margin: 2px 4px;
-    text-align: center;
-    font-size: 13px;
-    color: #92400e;
-    font-weight: 600;
-    cursor: pointer;
-    user-select: none;
-    vertical-align: middle;
-}
-.editor-content .editor-blank:hover {
-    background: #fde68a;
-}
-.editor-content .editor-option {
-    display: inline-block;
-    padding: 3px 12px;
-    background: #ede9fe;
-    border: 1px solid #a78bfa;
-    border-radius: 6px;
-    margin: 2px 4px;
-    color: #5b21b6;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    user-select: none;
-    vertical-align: middle;
-}
-.editor-content .editor-option:hover {
-    background: #ddd6fe;
-}
-.editor-content .editor-option.single {
-    background: #dbeafe;
-    border-color: #93c5fd;
-    color: #1e40af;
-}
-.editor-content .editor-option.multi {
-    background: #ede9fe;
-    border-color: #a78bfa;
-    color: #5b21b6;
-}
-/* 乱序标记样式（编辑时显示，练习时隐藏） */
-.editor-content .editor-fixed-start,
-.editor-content .editor-fixed-end,
-.editor-content .editor-order-start,
-.editor-content .editor-order-end {
-    display: inline-block;
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 700;
-    margin: 0 2px;
-    cursor: pointer;
-    user-select: none;
-    vertical-align: middle;
-}
-.editor-content .editor-fixed-start,
-.editor-content .editor-fixed-end {
-    background: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #fecaca;
-}
-.editor-content .editor-order-start,
-.editor-content .editor-order-end {
-    background: #dcfce7;
-    color: #166534;
-    border: 1px solid #86efac;
-}
-.editor-help {
-    font-size: 11px;
-    color: #8aa2c0;
-    line-height: 1.6;
-    margin-top: 8px;
-}
-.editor-section {
-    margin-bottom: 16px;
-}
-.editor-section h4 {
-    font-size: 13px;
-    color: #1e40af;
-    margin-bottom: 8px;
-    font-weight: 600;
-}
-/* 横向排列的练习标签 */
-.practice-tab-switch {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-}
-.practice-tab-switch .pts {
-    padding: 8px 20px;
-    font-size: 13px;
-    color: #6a8aad;
-    cursor: pointer;
-    border: 1.5px solid #e2ecf7;
-    border-radius: 10px;
-    font-weight: 500;
-    transition: 0.15s;
-    background: #fff;
-    flex: 1;
-    text-align: center;
-}
-.practice-tab-switch .pts:hover {
-    color: #3b82f6;
-    border-color: #93c5fd;
-    background: #f0f7ff;
-}
-.practice-tab-switch .pts.active {
-    color: #fff;
-    background: linear-gradient(135deg,#3b82f6,#2563eb);
-    border-color: #2563eb;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(59,130,246,0.3);
-}
-
-/* 乱序设置 */
-.order-setting {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-    margin-top: 8px;
-    padding: 8px 12px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-}
-.order-setting label {
-    font-size: 12px;
-    color: #475569;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-.order-setting input[type="radio"] {
-    accent-color: #3b82f6;
-}
-.order-setting .order-partial-btn {
-    font-size: 12px;
-    padding: 5px 14px;
-    border-radius: 8px;
-    border: 1px solid #a78bfa;
-    background: #ede9fe;
-    color: #5b21b6;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.15s;
-}
-.order-setting .order-partial-btn:hover {
-    background: #ddd6fe;
-}
-
-/* 预览弹窗中的练习界面预览 */
-.practice-preview-box {
-    background: #f8fcff;
-    border-radius: 12px;
-    padding: 16px;
-    border: 1px solid #e2ecf7;
-}
-
-/* 统一编辑框样式（图三风格） */
-.unified-edit-form .form-group textarea {
-    width: 100%;
-    padding: 12px 16px;
-    font-size: 13px;
-    border: 1.5px solid #c8d9ec;
-    border-radius: 12px;
-    outline: none;
-    background: #f9fcff;
-    min-height: 70px;
-    resize: vertical;
-    font-family: inherit;
-    line-height: 1.6;
-    transition: 0.2s;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-}
-.unified-edit-form .form-group textarea:focus {
-    border-color: #3b82f6;
-    background: #fff;
-    box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
-}
-.unified-edit-form .form-group textarea.e-textarea {
-    background: #f8fafc;
-    border-color: #cbd5e1;
-    color: #334155;
-}
-.unified-edit-form .form-group textarea.e-textarea:focus {
-    border-color: #94a3b8;
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(148,163,184,0.15);
-}
-.unified-edit-form .form-group label {
-    display: block;
-    font-size: 12px;
-    color: #4a6a8a;
-    margin-bottom: 5px;
-    font-weight: 500;
-}
-.unified-edit-form .form-group input[type="text"] {
-    width: 100%;
-    padding: 11px 14px;
-    font-size: 14px;
-    border: 1.5px solid #c8d9ec;
-    border-radius: 10px;
-    outline: none;
-    background: #f9fcff;
-    transition: 0.2s;
-}
-.unified-edit-form .form-group input[type="text"]:focus {
-    border-color: #3b82f6;
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
-}
+.practice-editor-toolbar{display:flex;gap:6px;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid #eef2f8;margin-bottom:12px;}
+.practice-editor-toolbar button{font-size:12px;padding:6px 12px;border-radius:8px;border:1px solid #c8d9ec;background:#fff;color:#1e3a5f;cursor:pointer;font-weight:500;transition:0.15s;}
+.practice-editor-toolbar button:hover{background:#e8f2fe;border-color:#9bbde0;}
+.practice-editor-toolbar button.active{background:#dbeafe;border-color:#2563eb;color:#1d4ed8;font-weight:600;}
+.editor-content{min-height:120px;padding:14px 16px;border:1.5px solid #c8d9ec;border-radius:12px;background:#f9fcff;font-size:14px;line-height:2.5;word-break:break-word;outline:none;transition:0.2s;white-space:pre-wrap;}
+.editor-content:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
+.editor-help{font-size:11px;color:#8aa2c0;line-height:1.6;margin-top:8px;}
+.editor-section{margin-bottom:16px;}
+.editor-section h4{font-size:13px;color:#1e40af;margin-bottom:8px;font-weight:600;}
+.order-setting{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px;padding:8px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;}
+.order-setting label{font-size:12px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:4px;}
+.order-setting input[type="radio"]{accent-color:#3b82f6;}
+.unified-edit-form .form-group textarea{width:100%;padding:12px 16px;font-size:13px;border:1.5px solid #c8d9ec;border-radius:12px;outline:none;background:#f9fcff;min-height:70px;resize:vertical;font-family:inherit;line-height:1.6;transition:0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.02);}
+.unified-edit-form .form-group textarea:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 4px rgba(59,130,246,0.1);}
+.unified-edit-form .form-group textarea.e-textarea{background:#f8fafc;border-color:#cbd5e1;color:#334155;}
+.unified-edit-form .form-group textarea.e-textarea:focus{border-color:#94a3b8;background:#fff;box-shadow:0 0 0 3px rgba(148,163,184,0.15);}
+.unified-edit-form .form-group label{display:block;font-size:12px;color:#4a6a8a;margin-bottom:5px;font-weight:500;}
+.unified-edit-form .form-group input[type="text"]{width:100%;padding:11px 14px;font-size:14px;border:1.5px solid #c8d9ec;border-radius:10px;outline:none;background:#f9fcff;transition:0.2s;}
+.unified-edit-form .form-group input[type="text"]:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
+.practice-tab-switch{display:flex !important;flex-direction:row !important;gap:8px !important;margin-bottom:12px !important;flex-wrap:wrap !important;align-items:center !important;}
+.practice-tab-switch .pts{flex:1 1 0 !important;min-width:0 !important;text-align:center !important;padding:8px 14px !important;font-size:13px !important;color:#6a8aad !important;cursor:pointer !important;border:1.5px solid #e2ecf7 !important;border-radius:10px !important;background:#fff !important;font-weight:500 !important;transition:0.15s !important;white-space:nowrap !important;box-sizing:border-box !important;}
+.practice-tab-switch .pts:hover{color:#3b82f6 !important;border-color:#93c5fd !important;background:#f0f7ff !important;}
+.practice-tab-switch .pts.active{color:#fff !important;background:linear-gradient(135deg,#3b82f6,#2563eb) !important;border-color:#2563eb !important;font-weight:600 !important;box-shadow:0 2px 8px rgba(59,130,246,0.3) !important;}
+.practice-preview-box{background:#f8fcff;border-radius:12px;padding:16px;border:1px solid #e2ecf7;}
+.pe-opt-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+.pe-opt-row .pe-opt-label{width:22px;height:22px;border-radius:50%;background:#e2e8f0;color:#475569;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.pe-opt-row input{flex:1;padding:7px 10px;font-size:12px;border:1.5px solid #c8d9ec;border-radius:8px;outline:none;background:#f9fcff;}
+.pe-opt-row input:focus{border-color:#3b82f6;background:#fff;}
+.pe-opt-row .pe-opt-del{cursor:pointer;color:#c0392b;font-size:14px;width:20px;text-align:center;flex-shrink:0;}
+.pe-opt-row .pe-opt-del:hover{color:#e74c3c;}
 
 @media (max-width: 600px) {
     body{padding:6px;}
@@ -694,9 +380,9 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
     .toast{font-size:13px;padding:10px 20px;}
     .history-list{grid-template-columns:repeat(3,1fr);gap:5px;}
     .history-item{padding:8px 4px;font-size:11px;min-height:38px;}
-    .btn-search-hide { font-size: 11px; padding: 5px 8px; }
-    .btn-practice-hide { font-size: 11px; padding: 5px 8px; }
-    .btn-practice-edit { font-size: 11px; padding: 5px 8px; }
+    .btn-search-hide{font-size:11px;padding:5px 8px;}
+    .btn-practice-hide{font-size:11px;padding:5px 8px;}
+    .btn-practice-edit{font-size:11px;padding:5px 8px;}
     .practice-header .ph-title{font-size:13px;}
     .practice-header .ph-timer{font-size:14px;padding:3px 10px;}
     .practice-question-card .pq-text{font-size:14px;}
@@ -705,17 +391,23 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
     .practice-footer button{font-size:12px;padding:8px 14px;}
     .practice-result-card .pr-score{font-size:36px;}
     .practice-editor-toolbar button{font-size:11px;padding:5px 10px;}
-    .editor-content{font-size:13px;padding:10px 12px;min-height:100px;}
+    .editor-content{font-size:13px;padding:10px 12px;min-height:100px;line-height:2.2;}
     .practice-body{max-height:calc(94vh - 150px);}
-    .inline-blank{min-width:45px;max-width:90px;padding:2px 6px;font-size:12px;margin:1px 2px;}
-    .practice-tab-switch .pts { font-size: 11px; padding: 6px 10px; }
-    .bank-item { flex-wrap: wrap; }
-    .bank-item .bi-edit-btn { font-size: 10px; padding: 3px 8px; }
-    .unified-edit-form .form-group textarea { padding: 10px 12px; font-size: 12px; }
-    .unified-edit-form .form-group input[type="text"] { padding: 10px 12px; font-size: 13px; }
+    .inline-blank{width:78px;height:26px;line-height:26px;padding:0 6px;font-size:14px;font-weight:600;margin:1px 2px;border-radius:5px;}
+    .bank-item{flex-wrap:wrap;}
+    .bank-item .bi-edit-btn{font-size:10px;padding:3px 8px;}
+    .unified-edit-form .form-group textarea{padding:10px 12px;font-size:12px;}
+    .unified-edit-form .form-group input[type="text"]{padding:10px 12px;font-size:13px;}
+    .practice-tab-switch .pts{font-size:11px !important;padding:7px 6px !important;}
 }
+
+/* ===== 练习编辑：纯文本标记高亮 ===== */
+.marker-answer{display:inline-block;padding:2px 8px;border-radius:6px;font-size:12px;font-weight:700;margin:0 2px;user-select:none;vertical-align:middle;background:#fee2e2;border:1.5px solid #ef4444;color:#b91c1c;font-family:'Consolas','Monaco',monospace;}
+.marker-fixed{display:inline-block;padding:2px 8px;border-radius:6px;font-size:12px;font-weight:700;margin:0 2px;user-select:none;vertical-align:middle;background:#fef9c3;border:1.5px solid #eab308;color:#854d0e;font-family:'Consolas','Monaco',monospace;}
+.marker-order{display:inline-block;padding:2px 8px;border-radius:6px;font-size:12px;font-weight:700;margin:0 2px;user-select:none;vertical-align:middle;background:#dbeafe;border:1.5px solid #3b82f6;color:#1d4ed8;font-family:'Consolas','Monaco',monospace;}
 </style>
 </head>
+<body>
 <body>
 
 <div class="header-row">
@@ -914,7 +606,6 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
                 </div>
             </div>
 
-            <!-- ===== 练习管理 ===== -->
             <div class="tab-content" id="tab-practice">
                 <div class="practice-tab-switch">
                     <div class="pts active" data-ptab="ptab-fill">📝 填空题</div>
@@ -937,19 +628,15 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
                     <div class="bank-list" id="practiceFillList" style="max-height:260px;"></div>
                     <div class="practice-edit-area unified-edit-form" id="practiceEditForm" style="display:none;">
                         <div class="form-group">
-                            <label>题目</label>
-                            <textarea id="peQ" placeholder="题目内容"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>答案（多空请用 ‖ 分隔）</label>
-                            <textarea id="peA" placeholder="答案内容，多个答案用 ‖ 分隔"></textarea>
+                            <label>题目与答案（在题目中直接用 </答案>答案内容<答案\> 格式填写）</label>
+                            <textarea id="peQ" placeholder="示例：消毒池两台提升泵的作用是</答案>将超标水回抽至事故池重新处理<答案\>"></textarea>
                         </div>
                         <div class="form-group">
                             <label>解析（选填）</label>
                             <textarea id="peE" class="e-textarea" placeholder="题目解析内容"></textarea>
                         </div>
                         <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">
-                            <button class="btn btn-sm btn-practice-hide" id="pePracticeHide">📝 练习隐藏</button>
+                            <button class="btn btn-sm btn-practice-hide" id="pePracticeHide">👁 练习隐藏</button>
                             <button class="btn btn-sm btn-practice-edit" id="pePracticeEdit">✏️ 练习编辑</button>
                             <button class="btn btn-sm" id="pePreview">👁 练习预览</button>
                             <button class="btn btn-sm" id="peCode">💻 代码查询</button>
@@ -1166,9 +853,8 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
         </div>
     </div>
 </div>
-
 <script>
-// ====================== 题库数据 ======================
+// ====================== 题库数据（完整版） ======================
 const defaultBank = [{"q":"凡在高地面（）的地点进行的工作都应视作高处作业","a":"2米及以上","e":"","hidden":false,"isChoice":false},{"q":"有限空间作业时，气体检测应在作业前（）分钟内完成，作业中至少每（）分钟重复检测一次","a":"30｜30","e":"","hidden":false,"isChoice":false},{"q":"粉末活性炭主要用于","a":"去除COD","e":"","hidden":false,"isChoice":false},{"q":"厌氧区溶解氧控制在","a":"0.2mg/L以下","e":"","hidden":false,"isChoice":false},{"q":"有机物去除的途径包括（）和（）","a":"活性污泥合成代谢（污泥增殖）｜活性污泥分解代谢（将有机物分解为二氧化碳和水）","e":"","hidden":false,"isChoice":false},{"q":"潜水泵的由上到下的结构是","a":"吊环｜电缆｜定子转子｜叶轮｜轴承｜泵壳｜底座","e":"","hidden":false,"isChoice":false},{"q":"以下哪种化学品不属于污水处理厂的腐蚀性化学品","a":"乙醇","e":"","hidden":false,"isChoice":false},{"q":"发现有人硫化氢中毒晕倒在有限空间内，施救者应","a":"佩戴正压式空气呼吸器确认安全后进入施救，切勿盲目进入","e":"","hidden":false,"isChoice":false},{"q":"NaClO具有","a":"碱性｜强氧化性｜强腐蚀性｜不稳定性","e":"","hidden":false,"isChoice":false},{"q":"废气处理中氢氧化钠洗涤的作用是（）次氯酸钠的作用是（）活性炭吸附的作用是（）","a":"中和酸性气体如硫化氢等｜氧化分析有毒气体如硫化氢、胺类、硫醇类去除恶臭类物质｜去除有毒、有异味的气体挥发性的有机物（VOCS）","e":"","hidden":false,"isChoice":false},{"q":"厌氧处理的主要产物是","a":"甲烷和二氧化碳","e":"","hidden":false,"isChoice":false},{"q":"下列哪种个体防护装备不能用于硫化氢环境作业","a":"半面罩防毒面具配A型滤盒","e":"","hidden":false,"isChoice":false},{"q":"污泥料仓发生“架桥”坍塌事故导致人员被埋，现场第一响应人首先应?","a":"停止进料、切断电源","e":"","hidden":false,"isChoice":false},{"q":"COD;NH3-N;TP;TN;氟化物的纳管标准分别是","a":"500mg/L｜45mg/L｜3mg/L｜50mg/L｜15mg/L","e":"","hidden":false,"isChoice":false},{"q":"NaClO含量是指","a":"有效氯含量10%","e":"","hidden":false,"isChoice":false},{"q":"曝气池中需要消耗氧气的有（）三个过程","a":"氧化｜硝化｜内源呼吸","e":"","hidden":false,"isChoice":false},{"q":"进入有限空间（如阀门井、污水井）作业，必须遵循的原则是（）","a":"先通风、再检测、后作业","e":"本题为选择题答案(填空题看另外一题)","hidden":false,"isChoice":true},{"q":"水泵的运行频率单位是","a":"Hz","e":"","hidden":false,"isChoice":false},{"q":"硫化氢浓度超过（）时，数秒内就可致人闪电型死亡。","a":"1000mg/m³","e":"","hidden":false,"isChoice":false},{"q":"机械设备（如细格栅、压滤机）卡阻或检修时，正确操作是（）","a":"切断电源并悬挂“禁止合闸 有人工作”标示牌（上锁挂牌）后清理","e":"","hidden":false,"isChoice":false},{"q":"影响活性污泥法处理效果的因素包括","a":"污泥负荷｜污泥泥龄｜溶解氧｜营养物质｜pH值｜水温｜有毒物质｜污泥回流比","e":"","hidden":false,"isChoice":false},{"q":"次氯酸钠（漂白水/消毒液）储存时，下列做法错误的是（）","a":"用铁桶密封保存","e":"","hidden":false,"isChoice":false},{"q":"一期AAO生物反应池有效深度为（）m，二期生物反应池好氧区有效深度为（）","a":"6.2｜4","e":"","hidden":false,"isChoice":false},{"q":"污水处理厂发生化学品紧急泄漏时，首选处置措施是?","a":"封堵泄漏点","e":"","hidden":false,"isChoice":false},{"q":"ORP表征的是","a":"来水中的氧化性物质和还原性物质的多少","e":"","hidden":false,"isChoice":false},{"q":"生化池上有那些仪表","a":"污泥浓度计｜氧化还原电位｜溶解氧｜硝氮仪","e":"","hidden":false,"isChoice":false},{"q":"厌氧池可能会产生的主要有毒有害的气体包括","a":"硫化氢｜甲烷｜一氧化碳","e":"","hidden":false,"isChoice":false},{"q":"在废气处理工艺中主要是包括","a":"氢氧化钠洗涤｜次氯酸钠洗涤｜活性炭吸附","e":"","hidden":false,"isChoice":false},{"q":"和次氯酸钠卸料等个人防护必须佩戴","a":"护目镜｜防酸碱手套｜防护服","e":"","hidden":false,"isChoice":false},{"q":"SRT是指（）HRT是指（）MLSS是指（）MLVSS是指（）DO是指（）","a":"泥龄｜停留时间｜污泥浓度｜挥发性活性污泥浓度｜溶解氧","e":"","hidden":false,"isChoice":false},{"q":"电压的单位是","a":"V","e":"","hidden":false,"isChoice":false},{"q":"污水处理厂中，污泥消化池的主要功能是?","a":"减少污泥体积","e":"","hidden":false,"isChoice":false},{"q":"二级处理中氮的转化过程包括","a":"氨化｜硝化｜异养反硝化｜同化反硝化","e":"","hidden":false,"isChoice":false},{"q":"废气处理主要使用（）作为吸附剂","a":"柱状活性炭","e":"","hidden":false,"isChoice":false},{"q":"化学需氧量衡量水中的（）和（）","a":"无机还原性物质｜有机物","e":"","hidden":false,"isChoice":false},{"q":"出水执行的标准是","a":"GB18918-2002《城镇污水处理厂污染物排放标准》","e":"","hidden":false,"isChoice":false},{"q":"压力容器安全附件中压力表检定周期为","a":"半年","e":"","hidden":false,"isChoice":false},{"q":"次氯酸钠/PAC卸料过程，卸料操作人员及监护人必须规范穿戴","a":"安全帽｜护目镜｜耐酸碱手套｜防护鞋｜防护服","e":"","hidden":false,"isChoice":false},{"q":"厌氧池的作用是","a":"氨化，有机氮转变成氨氮｜生物除磷聚磷菌释磷场所｜水解酸化，产酸，产甲烷脱氮反硝化","e":"","hidden":false,"isChoice":false},{"q":"NaAc作用是","a":"补充碳源","e":"","hidden":false,"isChoice":false},{"q":"活性污泥法中，微生物代谢有机物所需的氧主要来自（）","a":"水中溶解氧","e":"","hidden":false,"isChoice":false},{"q":"NaAc投加点位在","a":"厌氧区｜缺氧区","e":"","hidden":false,"isChoice":false},{"q":"生物滤池单元冷干机的主要作用是","a":"干燥空气","e":"","hidden":false,"isChoice":false},{"q":"有限空间作业“三不进入”原则不包含以下哪项（）","a":"无培训不进入","e":"","hidden":false,"isChoice":false},{"q":"二沉池的作用是（）","a":"污泥浓缩｜污泥回流｜泥水分离","e":"","hidden":false,"isChoice":false},{"q":"活性炭按照原材料分类主要分为（）","a":"煤质｜木质","e":"","hidden":false,"isChoice":false},{"q":"生物滤池的填料为","a":"陶粒","e":"","hidden":false,"isChoice":false},{"q":"额定起重量大于（）t 且提升高度大于（）m的各类起重机视为特种设备","a":"3｜2","e":"","hidden":false,"isChoice":false},{"q":"NaClO的作用（）","a":"强氧化｜消毒","e":"","hidden":false,"isChoice":false},{"q":"活性炭罐采用（）作为吸附剂。","a":"颗粒活性炭","e":"","hidden":false,"isChoice":false},{"q":"公司内部活性炭主要用了（）三种","a":"粉末活性炭｜柱状活性炭｜颗粒活性炭","e":"","hidden":false,"isChoice":false},{"q":"滤池出水阀由（）组成。","a":"阀体｜执行器｜气缸","e":"","hidden":false,"isChoice":false},{"q":"压力单位是（）","a":"kpa","e":"","hidden":false,"isChoice":false},{"q":"AAO工艺中，混合液回流(内回流)的主要目的是（）","a":"将硝化液送回缺氧段","e":"","hidden":false,"isChoice":false},{"q":"操作人员应定期排放曝气系统空气管路中的存水，并应及时关闭放水阀，一般时间设定为（）","a":"一周一次","e":"","hidden":false,"isChoice":false},{"q":"调节池的的作用是（）","a":"调节水量｜调节水质","e":"","hidden":false,"isChoice":false},{"q":"鼓风机巡检过程中需要留意的参数包括（）","a":"电压｜风量｜电流｜温度","e":"","hidden":false,"isChoice":false},{"q":"活性污泥法中的“曝气”主要目的是什么?","a":"提供氧气供微生物代谢","e":"","hidden":false,"isChoice":false},{"q":"检维修的操作流程包括（）","a":"工单生产｜作业前准备｜作业前最后安全检查｜开始作业｜试机｜现场清理｜工单闭环","e":"","hidden":false,"isChoice":false},{"q":"废水中TN(总氮)包括（），mg/L","a":"有机氮｜氨氮｜硝酸盐氮｜亚硝酸盐氮","e":"","hidden":false,"isChoice":false},{"q":"二期滤池反洗风机采用的是（）品牌是（）","a":"罗茨风机｜百事德","e":"","hidden":false,"isChoice":false},{"q":"NaClO的中文学名是（）","a":"次氯酸钠","e":"","hidden":false,"isChoice":false},{"q":"PAC呈（）","a":"酸","e":"","hidden":false,"isChoice":false},{"q":"污水厂高空作业(>2m，如池上栏杆外作业)必须（）","a":"系好安全带(高挂低用)，设专人监护","e":"","hidden":false,"isChoice":false},{"q":"高密池瞬时进水量为180 m3/h.12%含量纯PAC投加浓度为30 mg/L,瞬时PAC母液投加量应为（）","a":"45kg/h","e":"","hidden":false,"isChoice":false},{"q":"活性炭罐的设计规模是（）","a":"10000m³/d","e":"","hidden":false,"isChoice":false},{"q":"高密池的设计进水水质是 COD（）","a":"60","e":"","hidden":false,"isChoice":false},{"q":"ORP越高说明（）","a":"氧化性越强","e":"","hidden":false,"isChoice":false},{"q":"传统 A2O 工艺中污泥回流主要目的（）","a":"维持厌氧池污泥浓度水平","e":"","hidden":false,"isChoice":false},{"q":"厌氧池可能会产生的主要有毒有害的气体包括（）","a":"硫化氢｜甲烷｜一氧化碳","e":"","hidden":false,"isChoice":false},{"q":"水泵的功率单位是（）","a":"kw","e":"","hidden":false,"isChoice":false},{"q":"在好氧脱碳工艺中，好氧微生物代谢营养比例是需求为C:N:P=（）其中C为（）","a":"100:5:1｜BOD5","e":"","hidden":false,"isChoice":false},{"q":"高密池瞬时进水量为120 m3/h.8%含量PAC母液投加浓度为100mg/L,瞬时PAC母液投加量应为（）","a":"150L/h","e":"","hidden":false,"isChoice":false},{"q":"污水处理厂安全培训中，以下哪项不属于“三违”行为?","a":"遵守操作规程","e":"","hidden":false,"isChoice":false},{"q":"水泵的扬程单位是（）","a":"m","e":"","hidden":false,"isChoice":false},{"q":"PAC作用是","a":"混凝","e":"","hidden":false,"isChoice":false},{"q":"厂区流量计共计有（）三种","a":"电磁流量计｜超声波流量计｜浮子流量计","e":"","hidden":false,"isChoice":false},{"q":"职安健公正文化三要素（）","a":"事故事件报告｜优秀做法分享｜奖惩措施","e":"","hidden":false,"isChoice":false},{"q":"电量的单位是（）","a":"kwh","e":"","hidden":false,"isChoice":false},{"q":"污水厂配电室发生电气火灾，应首选的灭火器是（）","a":"二氧化碳(CO₂)灭火器","e":"","hidden":false,"isChoice":false},{"q":"好氧池COD去除率低的原因有以下哪几点（）","a":"好氧池污泥老化泥龄长｜好氧池溶解氧不足｜原水含有有毒物质污泥中毒｜好氧池冲击负荷大或者好氧池出现污泥膨胀","e":"","hidden":false,"isChoice":false},{"q":"水里的COD是指什么?（）","a":"水体中有机物和还原性无机物污染程度的综合指标","e":"","hidden":false,"isChoice":false},{"q":"公司上游来水主要包括（）","a":"生物制药废水｜纺织印染废水｜氟化工废水｜其他精细化工废水","e":"","hidden":false,"isChoice":false},{"q":"进入有限空间作业时需要遵守的十大救命法则为（）","a":"进入可能存在有害气体的场所前，进行气体检测并在作业过程中持续监测","e":"","hidden":false,"isChoice":false},{"q":"当发现有人硫化氢中毒晕倒，施救者必须佩戴（）方可进入现场施救","a":"正压式SCBA","e":"","hidden":false,"isChoice":false},{"q":"1m³=（）dm3=（）L","a":"1000｜1000","e":"","hidden":false,"isChoice":false},{"q":"发现污水厂内有人触电，以下哪种做法是正确的?（）","a":"切断电源","e":"","hidden":false,"isChoice":false},{"q":"二沉池出水氨氮升高的原因包括（）","a":"硝化反应不足","e":"","hidden":false,"isChoice":false},{"q":"缺氧池的作用是（）","a":"反硝化反应场所","e":"","hidden":false,"isChoice":false},{"q":"和下图相关的十大救命法则是?","a":"远离吊装作业和任何存在坠物风险的区域","e":"","hidden":false,"isChoice":false},{"q":"皮肤或眼睛不慎溅入次氯酸钠或酸碱药液，第一时间应（）","a":"立即用大量流动清水冲洗至少15分钟，并就医","e":"","hidden":false,"isChoice":false},{"q":"一般情况下，污水的可生化性取决于（）","a":"BOD5/COD的值","e":"","hidden":false,"isChoice":false},{"q":"新压力容器投用后（）年内应进行首次定期检验，后续检验周期根据安全状况等级确定，一般为每（）年一次","a":"3｜3-6","e":"","hidden":false,"isChoice":false},{"q":"NaAc的中文学名是","a":"乙酸钠","e":"","hidden":false,"isChoice":false},{"q":"反硝化脱氮过程中，C:N理论为（），实际生产过程中控制在（）其中C为","a":"2.865:1｜4:1｜BOD5","e":"","hidden":false,"isChoice":false},{"q":"活性炭罐的设计进水水质是COD（）SS（）","a":"80mg/L｜30mg/L","e":"","hidden":false,"isChoice":false},{"q":"避雷针及易燃易爆场所(如沼气柜)的防雷接地电阻应不大于（）","a":"4Ω","e":"","hidden":false,"isChoice":false},{"q":"臭氧接触氧化系统包括（）","a":"尾气破坏装置｜臭氧发生装置｜自动化控制系统｜氧气制备装置｜臭氧投加装置","e":"","hidden":false,"isChoice":false},{"q":"一期技改AAO生物反应池曝气风机采用的是（）品牌是（）","a":"磁悬浮风机｜亿昇","e":"","hidden":false,"isChoice":false},{"q":"ORP越低说明（）","a":"还原性越强","e":"","hidden":false,"isChoice":false},{"q":"活性炭在废水处理中可用于（）等","a":"去除异味｜脱色｜去除有机物","e":"","hidden":false,"isChoice":false},{"q":"臭氧的作用是（）","a":"将带有不饱和键的大分子有机物开环断链转化成小分子有机物提高可生化性｜将小分子有机物直接氧化成水和二氧化碳｜去除色度｜消毒","e":"","hidden":false,"isChoice":false},{"q":"溶解氧突然变低的可能有（）","a":"进水氨氮高｜进水COD高｜仪表故障｜设备故障","e":"","hidden":false,"isChoice":false},{"q":"缺氧区溶解氧控制在（）","a":"0.2-0.5 mg/L","e":"","hidden":false,"isChoice":false},{"q":"出水流量计采用的是（）","a":"巴氏计量槽","e":"","hidden":false,"isChoice":false},{"q":"公司内部涉及到的特种设备包括（）","a":"叉车｜压力容器｜起重机","e":"","hidden":false,"isChoice":false},{"q":"高密池堰口出水混浊的原因包括（）","a":"絮凝区比例过小｜絮凝区污泥浓度过高｜絮凝区发生故障｜混凝剂故障","e":"","hidden":false,"isChoice":false},{"q":"活性炭罐采用的是（）设计","a":"下流式","e":"","hidden":false,"isChoice":false},{"q":"水泵的流量单位是（）","a":"m³/h","e":"","hidden":false,"isChoice":false},{"q":"COD;NH3-N;TP;TN;氟化物;悬浮物的排水标准分别是（）","a":"50｜5(8)｜0.5｜15｜6｜10","e":"","hidden":false,"isChoice":false},{"q":"厌氧池溶解氧一般控制在0.2 mg/L以下，其目的是（）","a":"反硝化反应顺利进行","e":"","hidden":false,"isChoice":false},{"q":"污水处理中，调节池的作用是（）","a":"调节水量和水质","e":"","hidden":false,"isChoice":false},{"q":"下列哪项不属于生化池内的推流器的功能（）","a":"硝化","e":"","hidden":false,"isChoice":false},{"q":"污泥浓度计数据突然出现下降的原因有（）","a":"回流异常｜污泥浓度计故障","e":"","hidden":false,"isChoice":false},{"q":"在污水厂的日常运行中，运行人员需要对曝气池内的（）进行日常巡检","a":"曝气情况｜搅拌混合情况｜剩余污泥排放情况","e":"","hidden":false,"isChoice":false},{"q":"以下哪种物质是污水中的氮源（）","a":"以上都是","e":"","hidden":false,"isChoice":false},{"q":"压力容器安全附件中安全阀检定周期为（）","a":"一年","e":"","hidden":false,"isChoice":false},{"q":"消毒池两台提升泵的作用是（）","a":"将超标水回抽至事故池重新处理","e":"","hidden":false,"isChoice":false},{"q":"PAC的中文学名是","a":"聚合氯化铝","e":"","hidden":false,"isChoice":false},{"q":"有限空间作业审批表(作业票)有效期最长一般不超过（）","a":"8小时","e":"","hidden":false,"isChoice":false},{"q":"污水处理厂安全检查中，以下哪项属于“五查”内容（）","a":"以上都是","e":"","hidden":false,"isChoice":false},{"q":"活性炭罐进水流量计采用的是（）","a":"电磁流量计","e":"","hidden":false,"isChoice":false},{"q":"特种设备投入使用之前30天内须办理（）","a":"使用登记证","e":"","hidden":false,"isChoice":false},{"q":"以下哪种行为属于污水处理厂的安全操作?（）","a":"正确佩戴绝缘手套","e":"","hidden":false,"isChoice":false},{"q":"生物滤池的作用是（）","a":"去除悬浮物｜去除cod","e":"","hidden":false,"isChoice":false},{"q":"污水厂防雷接地电阻值每年雨季前检测一次，要求不大于（）Ω","a":"4","e":"","hidden":false,"isChoice":false},{"q":"进入缺氧密闭空间作业必须使用（）","a":"空气呼吸器","e":"","hidden":false,"isChoice":false},{"q":"下列哪些装置不算污泥的来源（）","a":"二沉池","e":"","hidden":false,"isChoice":false},{"q":"高密池混凝区的投加的药剂英文缩写是（）中文名称是（）","a":"pac｜聚合氯化铝","e":"","hidden":false,"isChoice":false},{"q":"水泵的基本参数包括（）","a":"流量｜扬程｜转速｜功率｜效率｜汽蚀余量","e":"","hidden":false,"isChoice":false},{"q":"二沉池巡检过程中需要遵守的十大救命法则为（）","a":"远离车辆和设备的行驶路径","e":"","hidden":false,"isChoice":false},{"q":"1 mg/L=（）kg/m³=（）g/m³","a":"0.001｜1","e":"","hidden":false,"isChoice":false},{"q":"污水处理厂安全培训中，“三级安全教育”的内容包括（）","a":"以上都是","e":"","hidden":false,"isChoice":false},{"q":"污水厂中常见的危险因素不包括以哪项?（）","a":"良好的工作环境","e":"","hidden":false,"isChoice":false},{"q":"进入可能产生缺氧或高浓度硫化氢的污水井作业，必须使用的呼吸防护装备是（）","a":"自给式空气呼吸器(SCBA)或长管呼吸器","e":"","hidden":false,"isChoice":false},{"q":"生化池上仪表的缩写（）","a":"DO｜ORP｜MLSS｜NT3","e":"","hidden":false,"isChoice":false},{"q":"活性污泥法处理系统主要由以下几个关键部分组成（）","a":"曝气池｜二沉池｜回流系统｜剩余污泥排放系统","e":"","hidden":false,"isChoice":false},{"q":"压力容器操作人员必须持相应的（）方可独立操作。","a":"特种设备作业证","e":"","hidden":false,"isChoice":false},{"q":"化验室稀释浓硫酸的正确操作是（）","a":"将浓硫酸缓慢沿器壁倒入水中，并不断搅拌","e":"","hidden":false,"isChoice":false},{"q":"臭氧尾气处理的方式是（）和（）","a":"催化剂｜高温","e":"","hidden":false,"isChoice":false},{"q":"高密池的主要作用是（）","a":"去除SS｜总磷","e":"","hidden":false,"isChoice":false},{"q":"高密池絮凝区的投加的药剂英文缩写是（）中文名称是（）","a":"APAM｜阴离子聚丙烯酰胺","e":"","hidden":false,"isChoice":false},{"q":"水泵的泵壳铭牌上简明列出了水泵在设计转速下运转，（）时的流量、扬程、轴功率及允许吸上真空高度或气蚀余量值。","a":"效率为最高","e":"本题为选择题答案(填空题看另外一个)","hidden":false,"isChoice":true},{"q":"好氧末端溶解氧控制在","a":"2-4 mg/L","e":"","hidden":false,"isChoice":false},{"q":"实际生产过程中，次氯酸钠的消毒作用主要体现在（）","a":"去除出水中的病毒、大肠杆菌等","e":"","hidden":false,"isChoice":false},{"q":"污水处理厂最常见的易燃易爆有毒气体是（）","a":"硫化氢","e":"","hidden":false,"isChoice":false},{"q":"大气排放执行的标准是（）","a":"恶臭污染物排放标准GB14554-93","e":"","hidden":false,"isChoice":false},{"q":"在污染物指标中凯氏氮TKN是氨氮和（）的总和。","a":"有机氮","e":"","hidden":false,"isChoice":false},{"q":"内回流的作用为（）","a":"为缺氧反硝化过程提供氮源","e":"","hidden":false,"isChoice":false},{"q":"污水中 SS 指的是（）","a":"悬浮固体","e":"","hidden":false,"isChoice":false},{"q":"将1 g氨氮氧化成硝酸盐氮需要（）g氧气","a":"4.67","e":"N（氮）的摩尔质量 = 14 g/mol\nO₂（氧气）的摩尔质量 = 32 g/mol\n从方程式看：\n1 mol NH₄⁺-N（即14 g氨氮）需要 2 mol O₂（即64 g氧气）\n比例换算\n需氧量=1 g N×（64 gO₂/14 g N）=4.57 gO ₂≈​4.67gO ₂","hidden":false,"isChoice":false},{"q":"污水处理厂应急预案演练，专项或综合演练至少应（）组织一次","a":"每半年","e":"","hidden":false,"isChoice":false},{"q":"实际生产过程中，次氯酸钠的强氧化性主要体现在（）","a":"用于降低出水氨氮","e":"","hidden":false,"isChoice":false},{"q":"在缺氧环境中作业时，必须佩戴的个人防护装备是（）","a":"氧气面罩","e":"","hidden":false,"isChoice":false},{"q":"鼓风机房噪声强度达98dB（），操作工每日暴露不得超过（）分钟","a":"30","e":"","hidden":false,"isChoice":false},{"q":"大气监测的指标主要包含（）","a":"臭气浓度｜氨｜硫化氢","e":"","hidden":false,"isChoice":false},{"q":"PAC的含量是指（）","a":"AI2O3含量[Al₂O₃]","e":"","hidden":false,"isChoice":false},{"q":"污水处理厂中，以下哪种气体浓度超标时，必须立即启动应急预案? （）","a":"硫化氢","e":"","hidden":false,"isChoice":false},{"q":"高密池瞬时进水量为150 m3/h,12%含量纯PAC投加浓度为30 mg/L,瞬时PAC母液投加量应为（）(PAC母液密度按照1.2kg/L计)","a":"31.25 L/h","e":"Q=(150x30x1000)/0.12x1.2=\n4,500,000/0.144=\n31,250ml/h=1.25 L/h","hidden":false,"isChoice":false},{"q":"高密池瞬时进水量为100m3/h.8%含量PAC母液投加浓度为100mg/L,瞬时PAC母液投加量应为（）。(PAC母液密度按照1.2kg/L计)","a":"104.17 L/h（注：原题答案8.3 L/h疑似有误）","e":"100 m³/h = 100,000 L/h[纯PAC需要量 = 流量 × 投加浓度]\n即100,000 L/h×100 mg/L=10,000,000 mg/h=10 kg/h\n换算成8%母液的质量\n(10 kg/h除8%)=10除0.08=125 kg/h\n换算成母液的体积\n125 kg/h除1.2kg/L=104.17 L/h[正确答案]","hidden":false,"isChoice":false},{"q":"好氧池的作用是（）","a":"硝化：反应将氨氮转化为硝酸盐氮｜碳化：将有机物转化成水和二氧化碳｜吸磷：聚磷菌在好氧环境下过量摄取磷并储存在体内｜氨化，有机氮转变成氨氮｜同化:合成细胞物质","e":"","hidden":false,"isChoice":false},{"q":"高密池的作用是（）","a":"去除SS｜总磷","e":"","hidden":false,"isChoice":false},{"q":"高密度沉淀池的组成包括（）","a":"混凝区｜絮凝区｜沉淀区","e":"","hidden":false,"isChoice":false},{"q":"《GBZ 2.1-2019工作场所有害因素职业接触限值 第1部分：化学有害因素》中规定臭氧的最高职业接触限值为（）mg/m³","a":"0.3","e":"","hidden":false,"isChoice":false},{"q":"NaClO的作用是（）","a":"消毒｜强氧化","e":"","hidden":false,"isChoice":false},{"q":"凯氏氮包括（）","a":"有机氮｜氨氮","e":"","hidden":false,"isChoice":false},{"q":"污泥回流比是指（）和（）之间的比值","a":"回流量｜进水量","e":"","hidden":false,"isChoice":false},{"q":"滤池反洗主要过程分为（）","a":"汽洗｜水洗｜汽水洗","e":"","hidden":false,"isChoice":false},{"q":"二期生物反应池曝气风机采用的是（）品牌是（）","a":"空气悬浮风机｜海拓滨","e":"","hidden":false,"isChoice":false},{"q":"一期滤池反洗风机采用的是（）品牌是（）","a":"罗茨风机｜AERZEN","e":"","hidden":false,"isChoice":false},{"q":"二沉池出水总氮升高的原因包括（）","a":"反硝化反应不足","e":"","hidden":false,"isChoice":false},{"q":"二沉池巡检过程中，巡检内容包括（）","a":"设备运行情况｜出水情况｜污泥回流情况｜排渣情况","e":"","hidden":false,"isChoice":false},{"q":"活性炭罐的设计出水水水质是COD（）SS（）","a":"50mg/L｜10mg/L","e":"","hidden":false,"isChoice":false},{"q":"磁悬浮风机出口流量计采用的是（）","a":"热式质量流量计","e":"","hidden":false,"isChoice":false},{"q":"臭氧具有（）遇到（）会发生剧烈反应，（）等甚至可能会发生爆炸","a":"强氧化性｜有机物｜易燃物｜静电｜明火｜撞击摩擦｜受热","e":"","hidden":false,"isChoice":false},{"q":"BOD 表示的是（）","a":"生化需氧量","e":"","hidden":false,"isChoice":false},{"q":"有防护罩的运行设备应悬挂（）","a":"机械伤人，禁止接触","e":"","hidden":false,"isChoice":false},{"q":"在A2O工艺中，沉淀池的作用包括（）","a":"泥水分离｜污泥浓缩｜回流控制｜减少污泥损失","e":"","hidden":false,"isChoice":false},{"q":"可能引起出水氨氮超标的原因（）","a":"曝气量不足导致溶解氧下降｜排泥未控制导致污泥浓度过低｜进水 COD、氨氮负荷变化，未及时调整工艺｜进水存在对硝化作用的有毒有害物质","e":"","hidden":false,"isChoice":false},{"q":"哪些参数是硝化反应的主要控制参数（）","a":"溶解氧、pH 值、水温","e":"","hidden":false,"isChoice":false},{"q":"污水厂调节池、格栅间等有限空间，进入前必须重点检测的有毒气体是（）","a":"硫化氢(H₂S)","e":"","hidden":false,"isChoice":false},{"q":"次氯酸钠与酸性清洗剂混合会产生什么有毒气体（）","a":"氯气","e":"","hidden":false,"isChoice":false},{"q":"有限空间作业前气体检测，氧含量(O₂)合格的安全范围是（）","a":"19.5%~23.5%","e":"","hidden":false,"isChoice":false},{"q":"发生危险化学品事故后，应该向（）方向疏散。","a":"上风","e":"","hidden":false,"isChoice":false},{"q":"进入格栅间（有限空间）前必须强制执行的步骤是（）","a":"检测硫化氢浓度","e":"","hidden":false,"isChoice":false},{"q":"进行腐蚀品的装卸作业应该戴（）手套","a":"橡胶","e":"","hidden":false,"isChoice":false},{"q":"带式脱水机紧急停机拉绳开关属于（）保护","a":"急停","e":"","hidden":false,"isChoice":false},{"q":"二沉池巡检内容包括（）","a":"减速机是否异响或漏油｜走道板是否有障碍物｜走道轮是否转动正常｜出水是否均匀｜出水悬浮物是否在合理范围之内｜堰口出水是否均匀｜查看已填｜浮渣积累情况｜排渣是否通畅｜污泥回流情况｜吸泥孔是否堵塞","e":"","hidden":false,"isChoice":false},{"q":"表示污水中可被微生物分解的有机污染物浓度，常用什么表示？","a":"BOD5","e":"","hidden":false,"isChoice":false},{"q":"污泥龄过短时，对硝化作用最直接的影响是？","a":"硝化菌难以维持，氨氮去除率下降","e":"","hidden":false,"isChoice":false},{"q":"硝化反应的主要产物是？","a":"硝酸盐氮","e":"","hidden":false,"isChoice":false},{"q":"反硝化过程通常需要什么条件？","a":"缺氧环境","e":"","hidden":false,"isChoice":false},{"q":"活性污泥系统中SVI主要用于评价？","a":"污泥沉降性能","e":"","hidden":false,"isChoice":false},{"q":"污泥膨胀时，二沉池最常见的现象是？","a":"出水悬浮物升高","e":"","hidden":false,"isChoice":false},{"q":"生物除磷系统中，聚磷菌通常在什么条件下释放磷？","a":"厌氧条件","e":"","hidden":false,"isChoice":false},{"q":"生物除磷系统中，聚磷菌通常在什么条件下吸收磷？","a":"好氧条件","e":"","hidden":false,"isChoice":false},{"q":"影响活性污泥微生物活性的关键因素包括()、()等？","a":"pH｜DO｜温度","e":"","hidden":false,"isChoice":false},{"q":"如果缺氧池溶解氧为0.05毫克每升，硝酸盐氮为10毫克每升，补充乙酸钠后，脱硝速率升高3倍，主控因素是？","a":"可利用碳源不足","e":"","hidden":false,"isChoice":false},{"q":"如果出水总氮为10 mg/L，其中氨氮0.1 mg/L、硝酸盐氮0.2 mg/L、溶解性有机氮9.7 mg/L，应优先？","a":"分析溶解性有机氮来源，避免盲目加碳","e":"","hidden":false,"isChoice":false},{"q":"SRT的计算方法是？","a":"系统内的活性污泥的量/(每天排放的剩余污泥的量+每天二沉池出水带走的悬浮物的量)","e":"","hidden":false,"isChoice":false},{"q":"如果计算污泥龄时未计入出水悬浮物，而出水跑泥突然加重，计算污泥龄较实际污泥龄会？","a":"偏大","e":"","hidden":false,"isChoice":false},{"q":"如果系统里剩余氨氮为30 mg/L，硝酸盐氮为20 mg/L，按消化耗碱系数7.14、反消化回补系数3.57计算，净消耗碱度约为？","a":"142.8 mg/L（以碳酸钙计）","e":"硝化消耗碱度：剩余氨氮 30 mg/L × 7.14 = 214.2 mg/L\n· 反硝化回补碱度：硝酸盐氮 20 mg/L × 3.57 = 71.4 mg/L\n· 净消耗碱度：214.2 − 71.4 = 142.8 mg/L\n\n答案：142.8 mg/L（以碳酸钙计）","hidden":false,"isChoice":false},{"q":"如果厌氧段溶解氧低于0.1毫克每升，挥发性脂肪酸充足，但硝酸盐氮为2.5毫克每升，释磷不足，应优先？","a":"控制硝酸盐回流进入厌氧段","e":"","hidden":false,"isChoice":false},{"q":"如果二沉池污泥成团上浮，污泥指数正常，进水硝酸盐氮偏高，最可能的原因是？","a":"二沉池反硝化产气导致污泥上浮","e":"","hidden":false,"isChoice":false},{"q":"如果氨氮接近0，亚硝酸盐持续积累，溶解氧为2 mg/L，酸碱度为6.7，碱度接近0，应优先？","a":"补充碱度并恢复适宜的酸碱度","e":"","hidden":false,"isChoice":false},{"q":"如果暴雨使流量增加100%，氨氮浓度下降40%，氨氮负荷会？","a":"增加20%","e":"","hidden":false,"isChoice":false},{"q":"如果耗氧速率突然下降35%，溶解氧上升，残余化学需氧量和氨氮同步上升，但酸碱度和温度正常，最可能的原因是？","a":"有有毒物质进入","e":"","hidden":false,"isChoice":false},{"q":"生化系统氨氮超标的原因有？","a":"有机负荷偏高｜氨氮负荷偏高｜水温过低或过高｜溶解氧异常｜污泥龄过短｜pH/碱度不异常｜有毒有害物质冲击","e":"","hidden":false,"isChoice":false},{"q":"调整生化系统碱度一般通过投加？","a":"碳酸钠/碳酸氢钠","e":"","hidden":false,"isChoice":false},{"q":"生化系统pH最佳范围是？","a":"7-8.5","e":"","hidden":false,"isChoice":false},{"q":"SV30是？","a":"污泥沉降比","e":"","hidden":false,"isChoice":false},{"q":"SVI是，正常范围是，表征的是污泥的","a":"污泥容积指数｜50-150｜污泥的沉降性能","e":"","hidden":false,"isChoice":false},{"q":"突然有一股高氨氮废水进入到生化池第一步需要？","a":"降低进水量，关注溶解氧变化","e":"","hidden":false,"isChoice":false},{"q":"污泥泥龄过长会导致？","a":"污泥老化，污泥活性下降","e":"","hidden":false,"isChoice":false},{"q":"污泥龄过短会导致？","a":"硝化细菌流失，硝化过程异常","e":"","hidden":false,"isChoice":false},{"q":"污泥颜色发黑的原因是？","a":"缺氧或者厌氧时间过长","e":"","hidden":false,"isChoice":false},{"q":"冬天氨氮处理难度较大的原因是？","a":"水温较低会降低硝化活性","e":"","hidden":false,"isChoice":false},{"q":"硝化过程需要消耗？","a":"碱度","e":"","hidden":false,"isChoice":false},{"q":"硝化的最佳pH范围是在？","a":"7.5-8.5","e":"","hidden":false,"isChoice":false},{"q":"生化末端的碱度最低不低于多少mg/L？","a":"100","e":"","hidden":false,"isChoice":false},{"q":"反硝化过程产生碱度？","a":"3.57","e":"NO₃⁻ + 1.25 CH₃OH → 0.5 N₂ + 1.25 CO₂ + 1.75 H₂O + OH⁻\n\n从该反应式可以看出，每还原 1 mol NO₃⁻-N（14 g），会产生 1 mol OH⁻。在碱度计算中，1 mol OH⁻ 相当于 1 mol CaCO₃（100 g）。\n\n因此，每还原 1 mg NO₃⁻-N，理论产生碱度 = (100 / 14) ≈ 7.14 mg（以 CaCO₃ 计）\n硝化耗碱 7.14，反硝化补 3.57，刚好一半","hidden":false,"isChoice":false},{"q":"硝化细菌喜欢的环境是","a":"高溶解氧｜长泥龄｜低有机物含量","e":"","hidden":false,"isChoice":false},{"q":"生化池产生棕褐色粘性泡沫原因是？","a":"污泥老化","e":"","hidden":false,"isChoice":false},{"q":"生化池产生大量白色粘性泡沫、堆叠较高原因是？","a":"负荷过高","e":"","hidden":false,"isChoice":false},{"q":"氨化的作用是将转化成？","a":"有机氮｜氨氮","e":"","hidden":false,"isChoice":false},{"q":"硝化反应的作用是将转化成？","a":"氨氮｜硝酸盐氮","e":"","hidden":false,"isChoice":false},{"q":"反硝化的作用是将还原成？","a":"硝酸盐氮｜氮气","e":"","hidden":false,"isChoice":false},{"q":"氨氮的同化作用是将转化为？","a":"有机氮（细胞物质）","e":"","hidden":false,"isChoice":false},{"q":"硝化细菌是微生物，需要的碳源是、等碳无机物？","a":"化能自养型，CO2、碳酸盐","e":"","hidden":false,"isChoice":false},{"q":"反硝化细菌大多为是微生物，常用的碳源有、等？","a":"化能异养型｜乙酸｜乙酸钠｜甲醇","e":"","hidden":false,"isChoice":false},{"q":"总磷的去除途径包括？","a":"生物除磷｜化学除磷","e":"","hidden":false,"isChoice":false},{"q":"危险废物的特性包括？","a":"毒性｜腐蚀性｜易燃性｜感染性｜化学反应性","e":"","hidden":false,"isChoice":false},{"q":"危废管理全过程管理包括？","a":"产生｜收集｜储存｜转移｜运输｜利用｜处置","e":"","hidden":false,"isChoice":false},{"q":"贮存设施应根据危险废物的形态、物理化学性质、包装形式和污染物迁移途径，采取必要6防措施包括？","a":"防风｜防晒｜防雨｜防漏｜防渗｜防腐","e":"","hidden":false,"isChoice":false},{"q":"贮存点应及时清运贮存的危险废物，实时贮存量不应超过多少吨？","a":"3","e":"","hidden":false,"isChoice":false},{"q":"厌氧池溶解氧一般控制在0.2 mg/L以下，其目的是？","a":"更好的释磷","e":"","hidden":false,"isChoice":false},{"q":"进入有限空间（如阀门井、污水井）作业，必须遵循的原则是？","a":"先通风｜后检测｜再作业","e":"","hidden":false,"isChoice":false},{"q":"309、206二沉池巡检内容包括","a":"减速机是否有异响、漏油｜走道板是否有障碍物｜走道轮是否转动正常和轮胎磨损｜出水是否均匀｜悬浮物是否在合理范围之内｜浮渣的积累情况、排渣是否通畅｜污泥回流情况｜吸泥孔是否堵塞","e":"","hidden":false,"isChoice":false},{"q":"水泵的泵壳铭牌上简明列出了水泵在设计转速下运转，时的流量、扬程、轴功率及允许吸上真空高度或气蚀余量值？","a":"效率最高","e":"","hidden":false,"isChoice":false},{"q":"在污染物指标中凯氏氮TKN是和的总和？","a":"氨氮｜有机氮","e":"","hidden":false,"isChoice":false},{"q":"活性污泥法中的“曝气”主要目的是？","a":"为微生物代谢提供氧气","e":"","hidden":false,"isChoice":false},{"q":"硫化氢浓度超过多少时，数秒内就可致人闪电型死亡？","a":"1000 mg/m³","e":"","hidden":false,"isChoice":false},{"q":"凡在高地面多少米的地点进行的工作，都应视作高处作业？","a":"2m","e":"","hidden":false,"isChoice":false},{"q":"有限空间作业“三不进入”原则是？","a":"无作业票不进入｜监护人员不到位不进入｜安全措施不落实不进入","e":"","hidden":false,"isChoice":false},{"q":"污水厂高压配电室发生火警，首选灭火剂为？","a":"二氧化碳","e":"","hidden":false,"isChoice":false},{"q":"污水厂防雷接地电阻值每年雨季前检测一次，避雷针及易燃易爆场所防雷接地电阻要求不大于多少Ω？","a":"4","e":"","hidden":false,"isChoice":false},{"q":"次氯酸钠与酸性清洗剂混合会产生什么有毒气体？","a":"氯气","e":"","hidden":false,"isChoice":false},{"q":"污水处理厂安全培训中，“三级安全教育”的内容包括？","a":"公司级｜部门级｜班组级","e":"","hidden":false,"isChoice":false},{"q":"有限空间作业前气体检测，氧含量（O₂）合格的安全范围是？","a":"19.5%~23.5%","e":"","hidden":false,"isChoice":false},{"q":"有限空间作业前气体检测，硫化氢含量（H2S）容许的浓度上限值是多少mg/m3或ppm（20℃）？","a":"10｜7","e":"","hidden":false,"isChoice":false},{"q":"低浓度的硫化氢有什么气味？","a":"臭鸡蛋","e":"","hidden":false,"isChoice":false},{"q":"硫化氢，与空气混合能形成爆炸性混合气体，遇明火、高热等点火源将引发燃烧爆炸","a":"暂无","e":"","hidden":false,"isChoice":false},{"q":"根据《有限空间作业安全技术规范》及相关安全标准，在进入有限空间进行作业前，必须进行气体检测。为了确保安全，防止发生爆炸事故，作业环境中可燃气体的浓度应低于其爆炸下限(LEL)的多少？","a":"10%","e":"","hidden":false,"isChoice":false},{"q":"污水厂高空作业（≥2m，如池上栏杆外作业）必须？","a":"系好安全带","e":"","hidden":false,"isChoice":false},{"q":"有限空间作业审批表（作业票）有效期最长一般不超过？","a":"8h","e":"","hidden":false,"isChoice":false},{"q":"皮肤或眼睛不慎溅入次氯酸钠或酸碱药液，第一时间应？","a":"立即用大量流动清水冲洗至少15分钟，并就医","e":"","hidden":false,"isChoice":false},{"q":"电流的单位是","a":"A","e":"","hidden":false,"isChoice":false}];
 
 // ====================== 常量 ======================
@@ -1198,7 +884,6 @@ let isLoggedIn = false;
 let hasUnsavedChanges = false;
 let preciseSearchEnabled = true;
 
-// 练习相关状态
 let practiceQuestions = [];
 let practiceAnswers = [];
 let practiceCurrentIndex = 0;
@@ -1207,21 +892,17 @@ let practiceStartTime = 0;
 let practiceTimerInterval = null;
 let practiceTotalScore = 0;
 let practiceTimeLimit = 20 * 60;
-let practiceThreshold = 75;
 let practiceFinished = false;
 let practiceResultViewed = false;
 
-// 练习管理状态
 let practiceSelectedIdx = -1;
 let practiceSelectedType = 'fill';
 
-// 置顶隐藏题目状态
 let pinHiddenSearch = false;
 let pinHiddenPracticeFill = false;
 let pinHiddenPracticeSingle = false;
 let pinHiddenPracticeMulti = false;
 
-// 练习编辑状态
 let editingPracticeIdx = -1;
 
 // ====================== 练习状态保存 ======================
@@ -1323,7 +1004,7 @@ function saveReviveBackup(content, extra){
 function checkPageIntegrity() {
     const coreFunctions = ['matchQuestions', 'getFullPageHTML', 'pushContentToGitHub', 'loadBank', 'renderResults'];
     for (let fn of coreFunctions) {
-        if (typeof window[fn] !== 'function' && typeof eval(fn) !== 'function') {
+        if (typeof window[fn] !== 'function') {
             console.error(`[完整性检测] 核心函数 ${fn} 丢失`);
             return { ok: false, reason: `核心函数 ${fn} 丢失` };
         }
@@ -1595,8 +1276,14 @@ function isGhConfigured(cfg){
 // ====================== 生成完整页面代码 ======================
 async function getFullPageHTML(){
     try{
-        const resp = await fetch(location.href, { cache: 'no-cache' });
-        let html = await resp.text();
+        let html;
+        try{
+            const resp = await fetch(location.href, { cache: 'no-cache' });
+            html = await resp.text();
+        }catch(fetchErr){
+            // file:// 协议下降级
+            html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+        }
         const newBankJSON = JSON.stringify(questionBank, null, 0);
         const regex = /const\s+defaultBank\s*=\s*\[[\s\S]*?\];/;
         if(regex.test(html)){
@@ -1930,7 +1617,7 @@ async function testGitHubConnection(silent){
     }
 }
 
-// ====================== 🎯 模糊拼音相似度算法 ======================
+// ====================== 模糊拼音相似度算法 ======================
 const PINYIN_MAP = {
     '糖':'tang','碳':'tan','炭':'tan','汤':'tang','烫':'tang',
     '罐':'guan','灌':'guan','贯':'guan','观':'guan','冠':'guan',
@@ -2150,81 +1837,6 @@ function showPreviewModal(titleText, items, mode, htmlContent, readonly){
     return overlay;
 }
 
-// ====================== 练习预览（真实界面） ======================
-function showPracticePreview(idx){
-    const rawQ = questionBank[idx];
-    if(!rawQ) return;
-    const q = getPracticeQuestion(rawQ);
-    const isChoice = isQuestionChoice(rawQ);
-    const cfg = loadPracticeCfg();
-    const editData = loadPracticeEdit();
-    const ed = editData[rawQ.q];
-    
-    const overlay = document.createElement('div');
-    overlay.className = 'modal-overlay active';
-    overlay.style.zIndex = 1400;
-    
-    let answerHTML = '';
-    let typeLabel = '';
-    
-    if(isChoice){
-        let opts = [];
-        let correctAnswer = '';
-        if(ed && ed.options){
-            opts = ed.options;
-            correctAnswer = ed.correct || '';
-        }else{
-            opts = cfg.singleOptions[rawQ.q] || cfg.multiOptions[rawQ.q] || ['A. 选项A','B. 选项B','C. 选项C','D. 选项D'];
-            correctAnswer = cfg.singleCorrect[rawQ.q] || cfg.multiCorrect[rawQ.q] || 'A';
-        }
-        const isMulti = ed ? (ed.correct && ed.correct.length > 1) : (cfg.multiCorrect[rawQ.q] !== undefined);
-        typeLabel = isMulti ? '☑️ 多选题' : '🔘 单选题';
-        
-        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        answerHTML = `<div class="practice-options">`;
-        opts.forEach((opt, i)=>{
-            const letter = letters[i];
-            const optText = opt.replace(/^[A-Z]\.\s*/, '');
-            answerHTML += `<div class="practice-option">
-                <div class="opt-label">${letter}</div>
-                <div class="opt-text">${escapeHTML(optText)}</div>
-            </div>`;
-        });
-        answerHTML += `</div>`;
-    }else{
-        typeLabel = '📝 填空题';
-        const correctParts = (ed && ed.customAnswer ? ed.customAnswer : rawQ.a).split(/[｜|‖]/).map(s=>s.trim()).filter(Boolean);
-        answerHTML = `<div class="practice-answer-area">`;
-        answerHTML += buildFillQuestionHTML(q.q, correctParts, null, false, idx);
-        answerHTML += `</div>`;
-    }
-    
-    overlay.innerHTML = `
-        <div class="modal" style="max-width:720px;">
-            <div class="modal-header">
-                <h3>👁 练习预览（真实界面）</h3>
-                <button class="modal-close" data-close="1">✕</button>
-            </div>
-            <div class="modal-body">
-                <div style="font-size:11px;color:#8aa2c0;margin-bottom:10px;">以下是本题在练习模式中的真实显示效果（不可作答）</div>
-                <div class="practice-preview-box">
-                    <div class="practice-question-card">
-                        <div class="pq-type">${typeLabel}</div>
-                        <div class="pq-text">${isChoice ? escapeHTML(q.q) : answerHTML}</div>
-                        ${isChoice ? answerHTML : ''}
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer"><button class="btn" data-close="1">关闭</button></div>
-        </div>
-    `;
-    document.body.appendChild(overlay);
-    overlay.querySelectorAll('[data-close]').forEach(b=>{
-        b.addEventListener('click', ()=> overlay.remove());
-    });
-    overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
-}
-
 // ====================== 复活弹窗 ======================
 function showRevivePopup(){
     const popup = document.getElementById('revivePopup');
@@ -2303,9 +1915,9 @@ function bindRevivePopup(){
         const backup = loadReviveBackup();
         if(!backup){ showToast('暂无复活备份'); return; }
         const cfg = loadGhCfg();
-        if(!isGhConfigured(cfg)){ 
-            showToast('GitHub 未配置，无法自动恢复。请先下载或复制代码手动上传。'); 
-            return; 
+        if(!isGhConfigured(cfg)){
+            showToast('GitHub 未配置，无法自动恢复。请先下载或复制代码手动上传。');
+            return;
         }
         const ok = await askConfirm('确认使用复活备份覆盖GitHub仓库？');
         if(!ok) return;
@@ -2331,7 +1943,13 @@ function bindRevivePopup(){
 
 // ====================== 练习功能 ======================
 function startPractice(){
-    // 先检查是否有保存的进度
+    // 刷新后首次进入 → 清空进度，全新开始
+    // 之后（点 ✕ 关闭再打开）→ 保留进度
+    if(window._practiceResumeMode === 'fresh'){
+        clearPracticeState();
+        window._practiceResumeMode = null;   // 用掉了，置空
+    }
+
     const savedState = loadPracticeState();
     if(savedState){
         practiceQuestions = savedState.practiceQuestions;
@@ -2343,7 +1961,7 @@ function startPractice(){
         practiceTimeLimit = savedState.practiceTimeLimit;
         practiceFinished = false;
         practiceResultViewed = false;
-        
+
         document.getElementById('practiceModal').classList.add('active');
         document.getElementById('practiceProgressBar').style.display = 'flex';
         document.getElementById('practiceFooter').style.display = 'flex';
@@ -2353,7 +1971,7 @@ function startPractice(){
         showToast('已恢复上次练习进度');
         return;
     }
-    
+
     const available = questionBank.filter(item => !item.hidden);
     if(available.length < 20){
         showToast(`题库中仅有 ${available.length} 道可用题目（已隐藏的不计入），无法抽取20题`);
@@ -2369,7 +1987,7 @@ function startPractice(){
     practiceTimeLimit = 20 * 60;
     practiceFinished = false;
     practiceResultViewed = false;
-    
+
     document.getElementById('practiceModal').classList.add('active');
     document.getElementById('practiceProgressBar').style.display = 'flex';
     document.getElementById('practiceFooter').style.display = 'flex';
@@ -2412,15 +2030,148 @@ function updatePracticeTimer(){
     if(remaining <= 60) document.getElementById('practiceTimer').classList.add('warning');
 }
 
-// 获取题目的练习版本
+// ====== 解析带标记的题目 ======
+function parseQuestionWithAnswers(text, orderSetting){
+    orderSetting = orderSetting || 'all';
+    const answers = [];
+    const orderRules = [];
+    let currentRule = (orderSetting === 'none') ? 'fixed' : 'order';
+    let displayText = '';
+    let i = 0;
+    const len = text.length;
+
+    function matchAnswerStart(pos){
+        if(text.startsWith('</答案>', pos)) return '</答案>';
+        if(text.startsWith('<答案>', pos))  return '<答案>';
+        if(text.startsWith('【答案】', pos)) return '【答案】';
+        return null;
+    }
+
+    while(i < len){
+        if(text.startsWith('</固>', i)){
+            currentRule = 'fixed'; i += '</固>'.length; continue;
+        }
+        if(text.startsWith('<固\\>', i) || text.startsWith('<固>', i)){
+            currentRule = (orderSetting === 'none') ? 'fixed' : 'order';
+            i += text.startsWith('<固\\>', i) ? '<固\\>'.length : '<固>'.length;
+            continue;
+        }
+        if(text.startsWith('</乱序>', i)){
+            currentRule = 'order'; i += '</乱序>'.length; continue;
+        }
+        if(text.startsWith('<乱序\\>', i) || text.startsWith('<乱序>', i)){
+            currentRule = (orderSetting === 'none') ? 'fixed' : 'order';
+            i += text.startsWith('<乱序\\>', i) ? '<乱序\\>'.length : '<乱序>'.length;
+            continue;
+        }
+
+        const startTag = matchAnswerStart(i);
+        if(startTag){
+            const afterStart = i + startTag.length;
+            let endPos = -1;
+            let endTagLen = 0;
+            const candidates = ['<答案\\>', '<答案>', '</答案>', '【/答案】'];
+            for(const c of candidates){
+                const p = text.indexOf(c, afterStart);
+                if(p !== -1 && (endPos === -1 || p < endPos)){
+                    endPos = p;
+                    endTagLen = c.length;
+                }
+            }
+            if(endPos === -1){
+                displayText += text[i];
+                i++;
+                continue;
+            }
+            const ansText = text.slice(afterStart, endPos).trim();
+            answers.push(ansText);
+            orderRules.push(currentRule);
+            displayText += '⬜';
+            i = endPos + endTagLen;
+            continue;
+        }
+
+        displayText += text[i];
+        i++;
+    }
+
+    if(answers.length === 0){
+        const rawAnswers = (text || '').split(/[｜|‖]/).map(s=>s.trim()).filter(Boolean);
+        if(rawAnswers.length > 1 || (rawAnswers.length === 1 && text.indexOf('｜') !== -1)){
+            let q = text;
+            let ai = 0;
+            q = q.replace(/（\s*）|\(\s*\)|_{2,}|＿{2,}/g, ()=>{
+                if(ai < rawAnswers.length){
+                    answers.push(rawAnswers[ai]);
+                    orderRules.push(currentRule);
+                    ai++;
+                    return '⬜';
+                }
+                return '（）';
+            });
+            while(ai < rawAnswers.length){
+                answers.push(rawAnswers[ai]);
+                orderRules.push(currentRule);
+                ai++;
+                q += ' ⬜';
+            }
+            displayText = q;
+        }else{
+            if(rawAnswers.length === 1){
+                displayText = text + ' ⬜';
+                answers.push(rawAnswers[0]);
+                orderRules.push(currentRule);
+            }
+        }
+    }
+
+    return { displayText, answers, orderRules, originalText: text };
+}
+
+function buildFillQuestionHTMLFromParsed(parsed, answerData, submitted){
+    let html = escapeHTML(parsed.displayText);
+    const answers = parsed.answers;
+    let blankIndex = 0;
+
+    function makeInput(idx){
+        return `<input type="text" class="inline-blank" data-blank="${idx}" value="${answerData && answerData[idx] ? escapeHTML(answerData[idx]) : ''}" ${submitted?'disabled':''} placeholder="">`;
+    }
+
+    html = html.replace(/⬜/g, ()=>{
+        if(blankIndex < answers.length){
+            return makeInput(blankIndex++);
+        }
+        return '⬜';
+    });
+
+    html = html.replace(/（\s*）|\(\s*\)|_{2,}|＿{2,}/g, ()=>{
+        if(blankIndex < answers.length){
+            return makeInput(blankIndex++);
+        }
+        return '（）';
+    });
+
+    while(blankIndex < answers.length){
+        html += ' ' + makeInput(blankIndex++);
+    }
+
+    return html;
+}
+
+// ====== 练习编辑产物只从 practiceEdit 读，优先用 customAnswer ======
 function getPracticeQuestion(q){
     const editData = loadPracticeEdit();
     const key = q.q;
     if(editData[key]){
         const ed = editData[key];
+        let answerStr = ed.customAnswer || '';
+        if(!answerStr && ed.customQuestion){
+            const parsed = parseQuestionWithAnswers(ed.customQuestion, ed.orderSetting || 'all');
+            answerStr = parsed.answers.join('｜');
+        }
         return {
             q: ed.customQuestion || q.q,
-            a: ed.customAnswer || q.a,
+            a: answerStr || q.a,
             e: q.e,
             isChoice: ed.isChoice !== undefined ? ed.isChoice : (q.isChoice === true),
             options: ed.options || null,
@@ -2448,7 +2199,6 @@ function isQuestionChoice(q){
     return q.isChoice === true;
 }
 
-// 获取乱序设置（默认全部允许乱序）
 function getOrderSetting(q){
     const editData = loadPracticeEdit();
     const key = q.q;
@@ -2458,140 +2208,45 @@ function getOrderSetting(q){
     return 'all';
 }
 
-// 获取部分乱序配置
-function getPartialOrderConfig(q){
+// ====== 从 practiceEdit 读取解析结果（优先 customAnswer） ======
+function getParsedForQuestion(rawQ){
     const editData = loadPracticeEdit();
-    const key = q.q;
-    if(editData[key] && editData[key].partialOrderConfig){
-        return editData[key].partialOrderConfig;
-    }
-    return null;
-}
+    const ed = editData[rawQ.q];
+    const orderSetting = getOrderSetting(rawQ);
 
-// 构建内嵌填空HTML（带乱序支持，练习时隐藏标记）
-function buildFillQuestionHTML(qText, correctParts, answerData, submitted, currentIdx){
-    // 从练习编辑中获取自定义题目文本
-    const rawQ = practiceQuestions[currentIdx];
-    let displayText = qText;
-    if(rawQ){
-        const editData = loadPracticeEdit();
-        const ed = editData[rawQ.q];
-        if(ed && ed.customQuestion){
-            displayText = ed.customQuestion;
+    // 情况 1：练习编辑里有 customAnswer → 优先用它
+    if(ed && ed.customAnswer){
+        const answers = ed.customAnswer.split(/[｜|‖]/).map(s=>s.trim()).filter(Boolean);
+        const questionText = ed.customQuestion || rawQ.q;
+        // 如果 customQuestion 里有 </答案> 标记，用它生成 displayText
+        if(questionText.includes('</答案>')){
+            const full = parseQuestionWithAnswers(questionText, orderSetting);
+            return {
+                displayText: full.displayText,
+                answers: full.answers.length ? full.answers : answers,
+                orderRules: full.orderRules.length ? full.orderRules : new Array(answers.length).fill((orderSetting === 'none') ? 'fixed' : 'order')
+            };
         }
+        // 没有标记，直接用 customQuestion 做题干，customAnswer 做答案
+        return {
+            displayText: questionText,
+            answers: answers,
+            orderRules: new Array(answers.length).fill((orderSetting === 'none') ? 'fixed' : 'order')
+        };
     }
-    
-    // 移除乱序标记（练习时不显示）
-    let html = escapeHTML(displayText);
-    html = html.replace(/<\\固>/g, '').replace(/<\\固\/>/g, '');
-    html = html.replace(/<\\乱序>/g, '').replace(/<\\乱序\/>/g, '');
-    
-    const blankCount = correctParts.length;
-    let blankIndex = 0;
-    
-    const placeholderRegex = /（\s*）|\(\s*\)|_{2,}|＿{2,}/g;
-    html = html.replace(placeholderRegex, (match)=>{
-        if(blankIndex < blankCount){
-            const idx = blankIndex;
-            blankIndex++;
-            return `<input type="text" class="inline-blank" data-blank="${idx}" value="${answerData && answerData[idx] ? escapeHTML(answerData[idx]) : ''}" ${submitted?'disabled':''} placeholder="">`;
-        }
-        return match;
-    });
-    while(blankIndex < blankCount){
-        const idx = blankIndex;
-        blankIndex++;
-        html += ` <input type="text" class="inline-blank" data-blank="${idx}" value="${answerData && answerData[idx] ? escapeHTML(answerData[idx]) : ''}" ${submitted?'disabled':''} placeholder="">`;
-    }
-    return html;
-}
 
-// 检查乱序答案是否匹配
-function checkOrderedAnswer(studentAns, correctParts, orderSetting, qText, rawQ){
-    if(!Array.isArray(studentAns)) return 0;
-    
-    // 如果orderSetting为all，则允许全部乱序
-    if(orderSetting === 'all'){
-        const studentSet = studentAns.map(a => (a || '').trim()).filter(Boolean);
-        const correctSet = correctParts.map(a => a.trim());
-        if(studentSet.length !== correctSet.length) return 0;
-        let matchCount = 0;
-        const usedCorrect = new Array(correctSet.length).fill(false);
-        for(let i = 0; i < studentSet.length; i++){
-            for(let j = 0; j < correctSet.length; j++){
-                if(!usedCorrect[j] && answerSimilarity(studentSet[i], correctSet[j]) >= (practiceThreshold / 100)){
-                    matchCount++;
-                    usedCorrect[j] = true;
-                    break;
-                }
-            }
-        }
-        return matchCount / correctSet.length;
+    // 情况 2：练习编辑里有 customQuestion（有标记）→ 从标记解析
+    if(ed && ed.customQuestion && ed.customQuestion.includes('</答案>')){
+        return parseQuestionWithAnswers(ed.customQuestion, orderSetting);
     }
-    
-    // 如果orderSetting为partial，则根据部分乱序配置
-    if(orderSetting === 'partial'){
-        const config = getPartialOrderConfig(rawQ);
-        if(!config || !config.groups || config.groups.length === 0){
-            // 没有配置，按默认顺序匹配
-            let totalScore = 0;
-            const perBlank = 5 / correctParts.length;
-            for(let i = 0; i < correctParts.length; i++){
-                const sim = answerSimilarity(studentAns[i] || '', correctParts[i] || '');
-                if(sim >= (practiceThreshold / 100)){
-                    totalScore += perBlank;
-                }
-            }
-            return totalScore / 5;
-        }
-        
-        // 根据配置的分组进行匹配
-        const studentSet = studentAns.map(a => (a || '').trim());
-        const correctSet = correctParts.map(a => a.trim());
-        let matchCount = 0;
-        
-        // 处理固定组（按顺序匹配）
-        config.groups.forEach(group => {
-            if(group.type === 'fixed'){
-                group.indices.forEach(idx => {
-                    if(idx < studentSet.length && idx < correctSet.length){
-                        if(answerSimilarity(studentSet[idx], correctSet[idx]) >= (practiceThreshold / 100)){
-                            matchCount++;
-                        }
-                    }
-                });
-            } else if(group.type === 'order'){
-                // 乱序组：在这组索引内匹配
-                const groupIndices = group.indices;
-                const studentGroup = groupIndices.map(idx => studentSet[idx] || '');
-                const correctGroup = groupIndices.map(idx => correctSet[idx] || '');
-                
-                const usedCorrect = new Array(correctGroup.length).fill(false);
-                for(let i = 0; i < studentGroup.length; i++){
-                    for(let j = 0; j < correctGroup.length; j++){
-                        if(!usedCorrect[j] && answerSimilarity(studentGroup[i], correctGroup[j]) >= (practiceThreshold / 100)){
-                            matchCount++;
-                            usedCorrect[j] = true;
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-        
-        return matchCount / correctParts.length;
-    }
-    
-    // 默认：按顺序匹配
-    let totalScore = 0;
-    const perBlank = 5 / correctParts.length;
-    for(let i = 0; i < correctParts.length; i++){
-        const sim = answerSimilarity(studentAns[i] || '', correctParts[i] || '');
-        if(sim >= (practiceThreshold / 100)){
-            totalScore += perBlank;
-        }
-    }
-    return totalScore / 5;
+
+    // 情况 3：没有练习编辑 → 用原始题库：题目用 rawQ.q，答案用 rawQ.a
+    const rawAnswers = (rawQ.a || '').split(/[｜|‖]/).map(s=>s.trim()).filter(Boolean);
+    return {
+        displayText: rawQ.q,
+        answers: rawAnswers,
+        orderRules: new Array(rawAnswers.length).fill((orderSetting === 'none') ? 'fixed' : 'order')
+    };
 }
 
 function renderPracticeQuestion(){
@@ -2603,16 +2258,16 @@ function renderPracticeQuestion(){
     const idx = practiceCurrentIndex;
     const submitted = practiceSubmitted[idx];
     const answerData = practiceAnswers[idx];
-    
+
     const isChoice = isQuestionChoice(rawQ);
     const cfg = loadPracticeCfg();
     const editData = loadPracticeEdit();
     const ed = editData[rawQ.q];
     const orderSetting = getOrderSetting(rawQ);
-    
+
     let answerHTML = '';
     let typeLabel = '';
-    
+
     if(isChoice){
         let opts = [];
         let correctAnswer = '';
@@ -2625,7 +2280,7 @@ function renderPracticeQuestion(){
         }
         const isMulti = ed ? (ed.correct && ed.correct.length > 1) : (cfg.multiCorrect[rawQ.q] !== undefined);
         typeLabel = isMulti ? '☑️ 多选题' : '🔘 单选题';
-        
+
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         answerHTML = `<div class="practice-options" id="practiceOptions">`;
         opts.forEach((opt, i)=>{
@@ -2647,22 +2302,22 @@ function renderPracticeQuestion(){
         answerHTML += `</div>`;
     }else{
         typeLabel = '📝 填空题';
-        const correctParts = (ed && ed.customAnswer ? ed.customAnswer : rawQ.a).split(/[｜|‖]/).map(s=>s.trim()).filter(Boolean);
+        const parsed = getParsedForQuestion(rawQ);
         answerHTML = `<div class="practice-answer-area" id="practiceAnswerArea">`;
-        answerHTML += buildFillQuestionHTML(q.q, correctParts, answerData, submitted, idx);
+        answerHTML += buildFillQuestionHTMLFromParsed(parsed, answerData, submitted);
         answerHTML += `</div>`;
     }
-    
+
     let feedbackHTML = '';
     if(submitted){
         const score = getQuestionScore(idx);
         const isCorrect = score >= 5;
-        const correctParts = (ed && ed.customAnswer ? ed.customAnswer : rawQ.a).split(/[｜|‖]/).map(s=>s.trim()).filter(Boolean);
         let correctDisplay = '';
         if(isChoice){
             correctDisplay = ed && ed.correct ? ed.correct : rawQ.a;
         }else{
-            correctDisplay = correctParts.map((p,i)=>`${i+1}. ${escapeHTML(p)}`).join('　');
+            const parsed = getParsedForQuestion(rawQ);
+            correctDisplay = parsed.answers.map(p=>`<span class="answer-highlight">${escapeHTML(p)}</span>`).join('<span class="answer-sep">｜</span>');
         }
         feedbackHTML = `
             <div class="practice-feedback ${isCorrect ? 'ok' : 'no'}">
@@ -2672,7 +2327,7 @@ function renderPracticeQuestion(){
             </div>
         `;
     }
-    
+
     body.innerHTML = `
         <div class="practice-question-card">
             <div class="pq-type">${typeLabel}</div>
@@ -2681,7 +2336,7 @@ function renderPracticeQuestion(){
             ${feedbackHTML}
         </div>
     `;
-    
+
     if(!isChoice && !submitted){
         const inputs = body.querySelectorAll('.inline-blank');
         inputs.forEach(inp=>{
@@ -2693,7 +2348,7 @@ function renderPracticeQuestion(){
             });
         });
     }
-    
+
     if(isChoice && !submitted){
         const optionEls = body.querySelectorAll('.practice-option');
         const cfg2 = loadPracticeCfg();
@@ -2720,16 +2375,16 @@ function renderPracticeQuestion(){
             });
         });
     }
-    
+
     document.getElementById('practiceProgressText').textContent = `第 ${idx+1} / 20 题`;
     document.getElementById('practiceProgressInner').style.width = ((idx+1)/20*100) + '%';
     document.getElementById('practiceProgressScore').textContent = `得分：${practiceTotalScore}`;
-    
+
     document.getElementById('practicePrevBtn').disabled = idx === 0;
-    
+
     const nextBtn = document.getElementById('practiceNextBtn');
     const finishBtn = document.getElementById('practiceFinishBtn');
-    
+
     if(submitted){
         nextBtn.disabled = idx === 19;
         nextBtn.style.display = 'inline-block';
@@ -2743,8 +2398,7 @@ function renderPracticeQuestion(){
         nextBtn.style.display = 'inline-block';
         finishBtn.style.display = 'none';
     }
-    
-    // 合并后的按钮文字
+
     if(submitted){
         nextBtn.textContent = idx === 19 ? '已是最后一题' : '下一题 ▶';
         nextBtn.className = 'primary';
@@ -2754,17 +2408,18 @@ function renderPracticeQuestion(){
     }
 }
 
+// ====== 评分：按 orderRules 分段，优先 customAnswer ======
 function getQuestionScore(idx){
     const rawQ = practiceQuestions[idx];
     const answer = practiceAnswers[idx];
     if(!rawQ || !answer) return 0;
-    
-    const q = getPracticeQuestion(rawQ);
+
     const isChoice = isQuestionChoice(rawQ);
     const cfg = loadPracticeCfg();
     const editData = loadPracticeEdit();
     const ed = editData[rawQ.q];
-    
+    const threshold = (cfg.threshold || 75) / 100;
+
     if(isChoice){
         let correctAnswer = '';
         if(ed && ed.correct){
@@ -2781,12 +2436,85 @@ function getQuestionScore(idx){
         }else{
             return (answer || '').toUpperCase() === correctAnswer.toUpperCase() ? 5 : 0;
         }
-    }else{
-        const correctParts = (ed && ed.customAnswer ? ed.customAnswer : rawQ.a).split(/[｜|‖]/).map(s=>s.trim()).filter(Boolean);
-        const orderSetting = getOrderSetting(rawQ);
-        const ratio = checkOrderedAnswer(answer, correctParts, orderSetting, rawQ.q, rawQ);
-        return ratio * 5;
     }
+
+    const orderSetting = getOrderSetting(rawQ);
+    const parsed = getParsedForQuestion(rawQ);
+    const correctParts = parsed.answers;
+    const rules = parsed.orderRules;
+    if(correctParts.length === 0) return 0;
+    if(!Array.isArray(answer)) return 0;
+
+    const perBlank = 5 / correctParts.length;
+
+    if(orderSetting === 'all'){
+        const studentSet = answer.map(a => (a || '').trim()).filter(Boolean);
+        const correctSet = correctParts.map(a => a.trim());
+        if(studentSet.length !== correctSet.length) return 0;
+        let matchCount = 0;
+        const usedCorrect = new Array(correctSet.length).fill(false);
+        for(let i = 0; i < studentSet.length; i++){
+            for(let j = 0; j < correctSet.length; j++){
+                if(!usedCorrect[j] && answerSimilarity(studentSet[i], correctSet[j]) >= threshold){
+                    matchCount++;
+                    usedCorrect[j] = true;
+                    break;
+                }
+            }
+        }
+        return (matchCount / correctSet.length) * 5;
+    }
+
+    if(orderSetting === 'none'){
+        let total = 0;
+        for(let i = 0; i < correctParts.length; i++){
+            const sim = answerSimilarity(answer[i] || '', correctParts[i] || '');
+            if(sim >= threshold) total += perBlank;
+        }
+        return total;
+    }
+
+    const groups = [];
+    let cur = null;
+    for(let i = 0; i < correctParts.length; i++){
+        const r = rules[i] || 'order';
+        if(!cur || cur.rule !== r){
+            cur = { rule: r, indices: [i] };
+            groups.push(cur);
+        }else{
+            cur.indices.push(i);
+        }
+    }
+
+    let totalScore = 0;
+    let cursor = 0;
+    for(const g of groups){
+        const n = g.indices.length;
+        if(g.rule === 'fixed'){
+            for(let k = 0; k < n; k++){
+                const ci = g.indices[k];
+                const si = cursor + k;
+                const sim = answerSimilarity(answer[si] || '', correctParts[ci] || '');
+                if(sim >= threshold) totalScore += perBlank;
+            }
+        }else{
+            const studentSlice = [];
+            for(let k = 0; k < n; k++) studentSlice.push(answer[cursor + k] || '');
+            const correctSlice = g.indices.map(ci => correctParts[ci]);
+            const used = new Array(n).fill(false);
+            for(let k = 0; k < n; k++){
+                for(let j = 0; j < n; j++){
+                    if(!used[j] && answerSimilarity(studentSlice[k], correctSlice[j]) >= threshold){
+                        totalScore += perBlank;
+                        used[j] = true;
+                        break;
+                    }
+                }
+            }
+        }
+        cursor += n;
+    }
+    return totalScore;
 }
 
 function submitPracticeAnswer(){
@@ -2795,7 +2523,7 @@ function submitPracticeAnswer(){
     const rawQ = practiceQuestions[idx];
     const answer = practiceAnswers[idx];
     const isChoice = isQuestionChoice(rawQ);
-    
+
     if(isChoice){
         if(!answer || (typeof answer === 'string' && answer.trim() === '')){
             showToast('请至少选择一个选项');
@@ -2807,7 +2535,7 @@ function submitPracticeAnswer(){
             return false;
         }
     }
-    
+
     practiceSubmitted[idx] = true;
     const score = getQuestionScore(idx);
     practiceTotalScore += score;
@@ -2823,18 +2551,18 @@ function finishPractice(){
     clearInterval(practiceTimerInterval);
     practiceTimerInterval = null;
     clearPracticeState();
-    
+
     let total = 0;
     for(let i=0;i<20;i++){
         total += getQuestionScore(i);
     }
     total = Math.round(total * 10) / 10;
-    
+
     const elapsed = Math.floor((Date.now() - practiceStartTime) / 1000);
     const usedMin = Math.floor(elapsed / 60);
     const usedSec = elapsed % 60;
-    const usedTimeStr = `${usedMin}分${usedSec}秒`;
-    
+    const usedTimeStr = `${String(usedMin).padStart(2,'0')}分${String(usedSec).padStart(2,'0')}秒`;
+
     let correctCount = 0;
     let wrongCount = 0;
     for(let i=0;i<20;i++){
@@ -2842,11 +2570,11 @@ function finishPractice(){
         if(s >= 5) correctCount++;
         else wrongCount++;
     }
-    
+
     const body = document.getElementById('practiceBody');
     document.getElementById('practiceProgressBar').style.display = 'none';
     document.getElementById('practiceFooter').style.display = 'none';
-    
+
     let breakdownHTML = '';
     for(let i=0;i<20;i++){
         const rawQ = practiceQuestions[i];
@@ -2856,7 +2584,13 @@ function finishPractice(){
         const isCorrect = score >= 5;
         const editData = loadPracticeEdit();
         const ed = editData[rawQ.q];
-        const correctParts = (ed && ed.customAnswer ? ed.customAnswer : rawQ.a).split(/[｜|‖]/).map(s=>s.trim()).filter(Boolean);
+        let correctParts = [];
+        if(isQuestionChoice(rawQ)){
+            correctParts = ed && ed.correct ? [ed.correct] : [rawQ.a];
+        }else{
+            const parsed = getParsedForQuestion(rawQ);
+            correctParts = parsed.answers;
+        }
         const studentAns = practiceAnswers[i];
         let studentDisplay = '';
         if(isQuestionChoice(rawQ)){
@@ -2871,11 +2605,11 @@ function finishPractice(){
         breakdownHTML += `<div class="pb-item">
             <div class="pb-q">${i+1}. ${escapeHTML(q.q)}</div>
             <div class="pb-row"><span class="pb-label">你的答案：</span><span class="pb-val">${escapeHTML(studentDisplay)}</span><span class="pb-result ${isCorrect?'ok':'no'}">${isCorrect?'✔':'✘'}</span></div>
-            <div class="pb-row"><span class="pb-label">正确答案：</span><span class="pb-val" style="color:#16a34a;font-weight:600;">${escapeHTML(correctParts.join('　'))}</span><span class="pb-score ${cls}">${score.toFixed(1)}分</span></div>
+            <div class="pb-row"><span class="pb-label">正确答案：</span><span class="pb-val">${correctParts.map(p=>`<span class="answer-highlight">${escapeHTML(p)}</span>`).join('<span class="answer-sep">｜</span>')}</span><span class="pb-score ${cls}">${score.toFixed(1)}分</span></div>
             ${rawQ.e ? `<div class="pb-row"><span class="pb-label">解析：</span><span class="pb-val" style="color:#64748b;">${escapeHTML(rawQ.e)}</span></div>` : ''}
         </div>`;
     }
-    
+
     body.innerHTML = `
         <div class="practice-result-card">
             <div class="pr-score">${total}</div>
@@ -2894,7 +2628,7 @@ function finishPractice(){
             </div>
         </div>
     `;
-    
+
     document.getElementById('practiceRestartBtn').addEventListener('click', ()=>{
         resetPractice();
         document.getElementById('practiceModal').classList.remove('active');
@@ -2925,50 +2659,53 @@ function resetPractice(){
     document.getElementById('practiceTimer').classList.remove('warning');
 }
 
-// ====================== 练习编辑弹窗 ======================
+// ====================== 练习编辑器 ======================
 function openPracticeEditor(idx){
     editingPracticeIdx = idx;
     const rawQ = questionBank[idx];
     if(!rawQ) return;
-    
+    const modal = document.getElementById('practiceEditorModal');
+    const body = document.getElementById('practiceEditorBody');
     const editData = loadPracticeEdit();
     const ed = editData[rawQ.q] || {};
     const cfg = loadPracticeCfg();
-    
-    const modal = document.getElementById('practiceEditorModal');
-    const body = document.getElementById('practiceEditorBody');
-    
+
     const isChoice = ed.isChoice !== undefined ? ed.isChoice : (rawQ.isChoice === true);
-    const customQuestion = ed.customQuestion || rawQ.q;
-    const customAnswer = ed.customAnswer || rawQ.a;
+    let customQuestion = ed.customQuestion || rawQ.q;
+    if(!customQuestion.includes('</答案>')){
+        const answers = (rawQ.a || '').split(/[｜|‖]/).map(s=>s.trim()).filter(Boolean);
+        let ai = 0;
+        customQuestion = customQuestion.replace(/（\s*）|\(\s*\)/g, ()=>{
+            const ans = answers[ai++] || '';
+            return `</答案>${ans}<答案\\>`;
+        });
+        while(ai < answers.length){
+            customQuestion += `</答案>${answers[ai]}<答案\\>`;
+            ai++;
+        }
+    }
     const options = ed.options || cfg.singleOptions[rawQ.q] || cfg.multiOptions[rawQ.q] || ['A. 选项A','B. 选项B','C. 选项C','D. 选项D'];
     const correct = ed.correct || cfg.singleCorrect[rawQ.q] || cfg.multiCorrect[rawQ.q] || 'A';
-    const orderSetting = ed.orderSetting || 'all'; // 默认全部允许乱序
-    
+    const orderSetting = ed.orderSetting || 'all';
+
     body.innerHTML = `
         <div class="editor-section">
             <h4>📝 题目编辑</h4>
             <div class="practice-editor-toolbar" id="editorToolbar">
-                <button data-action="blank" title="在光标处插入答题框">⬜ 答题框</button>
-                <button data-action="fixed-start" title="插入固定起始标记">🔒 固定开始</button>
-                <button data-action="fixed-end" title="插入固定结束标记">🔓 固定结束</button>
-                <button data-action="order-start" title="插入乱序起始标记">🔀 乱序开始</button>
-                <button data-action="order-end" title="插入乱序结束标记">🔀 乱序结束</button>
+                <button type="button" data-action="answer-start">📥 答案开始 (&lt;/答案&gt;)</button>
+                <button type="button" data-action="answer-end">📤 答案结束 (&lt;答案\\&gt;)</button>
+                <button type="button" data-action="fixed-start">🔒 固定开始 (&lt;/固&gt;)</button>
+                <button type="button" data-action="fixed-end">🔓 固定结束 (&lt;固\\&gt;)</button>
+                <button type="button" data-action="order-start">🔀 乱序开始 (&lt;/乱序&gt;)</button>
+                <button type="button" data-action="order-end">🔀 乱序结束 (&lt;乱序\\&gt;)</button>
             </div>
-            <div class="editor-content" id="editorContent" contenteditable="true">${escapeHTML(customQuestion)}</div>
+            <div class="editor-content" id="editorContent" contenteditable="true"></div>
             <div class="editor-help">
-                💡 点击上方工具按钮在光标位置插入答题框或乱序标记。答题框数量对应答案数量。<br>
+                💡 点击上方工具按钮在光标位置插入标记。<br>
+                📥 答案开始：&lt;/答案&gt;　　📤 答案结束：&lt;答案\\&gt;<br>
                 🔒 固定开始/结束：标记之间的答案不允许乱序。<br>
-                🔀 乱序开始/结束：标记之间的答案允许乱序。
-            </div>
-        </div>
-        <div class="editor-section">
-            <h4>📋 答案编辑（仅练习模式生效）</h4>
-            <div class="unified-edit-form">
-                <div class="form-group">
-                    <label>答案（多空请用 ‖ 分隔）</label>
-                    <textarea id="editorAnswer" placeholder="答案内容，多个答案用 ‖ 分隔">${escapeHTML(customAnswer)}</textarea>
-                </div>
+                🔀 乱序开始/结束：标记之间的答案允许乱序。<br>
+                <b style="color:#b91c1c;">注意：这些标记只用于评分规则，不会显示在练习界面。</b>
             </div>
         </div>
         <div class="editor-section">
@@ -2977,10 +2714,10 @@ function openPracticeEditor(idx){
                 <label><input type="radio" name="orderSetting" value="all" ${orderSetting==='all'?'checked':''}> 全部允许乱序（默认）</label>
                 <label><input type="radio" name="orderSetting" value="none" ${orderSetting==='none'?'checked':''}> 不允许乱序</label>
                 <label><input type="radio" name="orderSetting" value="partial" ${orderSetting==='partial'?'checked':''}> 部分乱序</label>
-                <button class="order-partial-btn" id="orderPartialBtn" style="${orderSetting==='partial'?'':'display:none;'}">⚙️ 设置部分乱序</button>
             </div>
             <div class="editor-help" style="margin-top:4px;">
-                💡 全部允许乱序：所有答案框可任意交换。不允许乱序：必须按顺序填写。部分乱序：需在题目中用 🔒 和 🔀 标记范围。
+                💡 全部允许乱序：所有答案框可任意交换。不允许乱序：必须按顺序填写。<br>
+                部分乱序：<b>必须</b>在题目中用 🔒 和 🔀 标记圈定范围，否则无法保存。
             </div>
         </div>
         <div class="editor-section">
@@ -3002,38 +2739,29 @@ function openPracticeEditor(idx){
             </div>
         </div>
     `;
-    
+
+    renderEditorContent('editorContent', customQuestion);
     renderEditorOptions('editorOptionsList', options);
-    
+
     document.getElementById('editorToolbar').addEventListener('click', (e)=>{
         const btn = e.target.closest('button');
         if(!btn) return;
+        e.preventDefault();
         const action = btn.dataset.action;
-        const editor = document.getElementById('editorContent');
-        editor.focus();
-        
-        let insertHTML = '';
-        if(action === 'blank'){
-            insertHTML = '<span class="editor-blank" contenteditable="false">⬜</span>';
-        }else if(action === 'fixed-start'){
-            insertHTML = '<span class="editor-fixed-start" contenteditable="false">&lt;\\固&gt;</span>';
-        }else if(action === 'fixed-end'){
-            insertHTML = '<span class="editor-fixed-end" contenteditable="false">&lt;\\固/&gt;</span>';
-        }else if(action === 'order-start'){
-            insertHTML = '<span class="editor-order-start" contenteditable="false">&lt;\\乱序&gt;</span>';
-        }else if(action === 'order-end'){
-            insertHTML = '<span class="editor-order-end" contenteditable="false">&lt;\\乱序/&gt;</span>';
-        }
-        
-        if(insertHTML){
-            document.execCommand('insertHTML', false, insertHTML);
-        }
+        let text = '';
+        if(action === 'answer-start')      text = '</答案>';
+        else if(action === 'answer-end')   text = '<答案\\>';
+        else if(action === 'fixed-start')  text = '</固>';
+        else if(action === 'fixed-end')    text = '<固\\>';
+        else if(action === 'order-start')  text = '</乱序>';
+        else if(action === 'order-end')    text = '<乱序\\>';
+        if(text) insertTextAtCursor(document.getElementById('editorContent'), text);
     });
-    
+
     document.getElementById('editorChoiceCheck').addEventListener('change', (e)=>{
         document.getElementById('editorOptionsArea').style.display = e.target.checked ? 'block' : 'none';
     });
-    
+
     document.getElementById('editorAddOpt').addEventListener('click', ()=>{
         const container = document.getElementById('editorOptionsList');
         const count = container.querySelectorAll('.pe-opt-row').length;
@@ -3048,107 +2776,39 @@ function openPracticeEditor(idx){
         row.querySelector('.pe-opt-del').addEventListener('click', ()=>{ row.remove(); });
         container.appendChild(row);
     });
-    
-    // 部分乱序设置按钮
-    document.getElementById('orderPartialBtn').addEventListener('click', ()=>{
-        const editor = document.getElementById('editorContent');
-        const text = editor.innerText;
-        
-        const groups = [];
-        const regex = /<\\固>(.*?)<\\固\/>|<\\乱序>(.*?)<\\乱序\/>/gs;
-        let match;
-        let groupIndex = 0;
-        
-        while((match = regex.exec(text)) !== null){
-            const type = match[1] !== undefined ? 'fixed' : 'order';
-            const content = match[1] !== undefined ? match[1] : match[2];
-            groups.push({ type, content, index: groupIndex });
-            groupIndex++;
-        }
-        
-        if(groups.length === 0){
-            showToast('请先在题目中用 🔒 和 🔀 标记乱序范围');
-            return;
-        }
-        
-        const overlay = document.createElement('div');
-        overlay.className = 'modal-overlay active';
-        overlay.style.zIndex = 1500;
-        overlay.innerHTML = `
-            <div class="modal" style="max-width:500px;">
-                <div class="modal-header">
-                    <h3>⚙️ 设置部分乱序</h3>
-                    <button class="modal-close" data-close="1">✕</button>
-                </div>
-                <div class="modal-body">
-                    <div style="font-size:12px;color:#4a6a8a;margin-bottom:12px;line-height:1.6;">
-                        系统已识别到以下分组，请为每个分组设置是否允许乱序：
-                    </div>
-                    <div id="partialOrderGroups">
-                        ${groups.map((g, i) => `
-                            <div style="padding:8px 12px;margin-bottom:8px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
-                                <div style="font-size:12px;color:#475569;margin-bottom:4px;">
-                                    <b>分组 ${i+1}</b>：${g.type === 'fixed' ? '🔒 固定' : '🔀 乱序'}
-                                </div>
-                                <div style="font-size:13px;color:#1e293b;">${escapeHTML(g.content)}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                    <div class="editor-help">
-                        💡 标记为 🔒 的分组将按顺序匹配，标记为 🔀 的分组允许内部乱序。
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-close="1">取消</button>
-                    <button class="btn btn-primary" id="savePartialOrder">保存设置</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-        
-        overlay.querySelectorAll('[data-close]').forEach(b=>{
-            b.addEventListener('click', ()=> overlay.remove());
-        });
-        overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
-        
-        document.getElementById('savePartialOrder').addEventListener('click', ()=>{
-            const editData = loadPracticeEdit();
-            if(!editData[rawQ.q]) editData[rawQ.q] = {};
-            
-            const allBlanks = [];
-            let blankIdx = 0;
-            text.replace(/<\\固>(.*?)<\\固\/>|<\\乱序>(.*?)<\\乱序\/>/gs, (m, fixed, order) => {
-                const content = fixed || order;
-                const type = fixed ? 'fixed' : 'order';
-                const blankCount = (content.match(/⬜/g) || []).length;
-                const indices = [];
-                for(let i = 0; i < blankCount; i++){
-                    indices.push(blankIdx++);
-                }
-                allBlanks.push({ type, indices, content });
-                return '';
-            });
-            
-            editData[rawQ.q].partialOrderConfig = {
-                groups: allBlanks,
-                updatedAt: nowTs()
-            };
-            editData[rawQ.q].orderSetting = 'partial';
-            savePracticeEdit(editData);
-            
-            overlay.remove();
-            showToast('✅ 部分乱序设置已保存');
-        });
-    });
-    
-    document.querySelectorAll('input[name="orderSetting"]').forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            const btn = document.getElementById('orderPartialBtn');
-            if(btn) btn.style.display = e.target.value === 'partial' ? 'inline-block' : 'none';
-        });
-    });
-    
+
     modal.classList.add('active');
+}
+
+function renderEditorContent(containerId, text){
+    const el = document.getElementById(containerId);
+    if(!el) return;
+    let html = escapeHTML(text);
+    html = html
+        .replace(/&lt;\/答案&gt;/g, '<span class="marker-answer">&lt;/答案&gt;</span>')
+        .replace(/&lt;答案\\&gt;/g, '<span class="marker-answer">&lt;答案\\&gt;</span>')
+        .replace(/&lt;\/固&gt;/g, '<span class="marker-fixed">&lt;/固&gt;</span>')
+        .replace(/&lt;固\\&gt;/g, '<span class="marker-fixed">&lt;固\\&gt;</span>')
+        .replace(/&lt;\/乱序&gt;/g, '<span class="marker-order">&lt;/乱序&gt;</span>')
+        .replace(/&lt;乱序\\&gt;/g, '<span class="marker-order">&lt;乱序\\&gt;</span>');
+    el.innerHTML = html;
+}
+
+function insertTextAtCursor(editor, text){
+    editor.focus();
+    const sel = window.getSelection();
+    if(sel.rangeCount > 0){
+        const range = sel.getRangeAt(0);
+        range.deleteContents();
+        const node = document.createTextNode(text);
+        range.insertNode(node);
+        range.setStartAfter(node);
+        range.setEndAfter(node);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    } else {
+        editor.appendChild(document.createTextNode(text));
+    }
 }
 
 function renderEditorOptions(containerId, options){
@@ -3203,12 +2863,12 @@ function renderPracticeList(type, keyword){
         searchEl = document.getElementById('practiceMultiSearch');
         pinCheck = document.getElementById('pinHiddenMultiCheck');
     }
-    
+
     const pin = pinCheck ? pinCheck.checked : false;
     const kw = (keyword || searchEl.value || '').trim().toLowerCase();
     listEl.innerHTML = '';
     let count = 0;
-    
+
     let items = [];
     questionBank.forEach((item, idx)=>{
         const isChoice = isQuestionChoice(item);
@@ -3220,14 +2880,14 @@ function renderPracticeList(type, keyword){
         if(type === 'fill' && itemType !== 'fill') return;
         if(type === 'single' && itemType !== 'single') return;
         if(type === 'multi' && itemType !== 'multi') return;
-        
+
         if(kw){
             const hay = (item.q + ' ' + item.a + ' ' + (item.e||'')).toLowerCase();
             if(hay.indexOf(kw) === -1) return;
         }
         items.push({ item, idx });
     });
-    
+
     if(pin){
         items.sort((a,b)=>{
             if(a.item.hidden && !b.item.hidden) return -1;
@@ -3235,9 +2895,9 @@ function renderPracticeList(type, keyword){
             return 0;
         });
     }
-    
+
     count = items.length;
-    
+
     items.forEach(({item, idx})=>{
         const div = document.createElement('div');
         div.className = 'bank-item' + (idx === practiceSelectedIdx && practiceSelectedType === type ? ' selected':'');
@@ -3253,7 +2913,7 @@ function renderPracticeList(type, keyword){
             ${item.isChoice?'<div class="bi-choice-tag">🔘 选择题</div>':''}
             <div class="bi-content">
                 <div class="bi-q">${escapeHTML(item.q)}</div>
-                <div class="bi-a">答案：${escapeHTML(item.a.substring(0,60))}${item.a.length>60?'…':''}</div>
+                <div class="bi-a">答案：${escapeHTML((item.a||'').substring(0,60))}${(item.a||'').length>60?'…':''}</div>
                 ${extra}
             </div>
             <button class="bi-edit-btn" data-idx="${idx}">✏️ 去编辑</button>
@@ -3281,7 +2941,7 @@ function renderPracticeList(type, keyword){
         });
         listEl.appendChild(div);
     });
-    
+
     if(!listEl.children.length){
         listEl.innerHTML = '<div style="font-size:12px;color:#8aa2c0;text-align:center;padding:20px;">未找到匹配题目</div>';
     }
@@ -3293,13 +2953,29 @@ function showPracticeEditForm(idx, type){
     const form = document.getElementById(formId);
     if(!form) return;
     if(idx < 0 || !questionBank[idx]){ form.style.display = 'none'; return; }
-    
+
     const item = questionBank[idx];
     form.style.display = 'block';
-    
+
     if(type === 'fill'){
-        document.getElementById('peQ').value = item.q;
-        document.getElementById('peA').value = item.a;
+        const editData = loadPracticeEdit();
+        const ed = editData[item.q] || {};
+        let customQuestion = ed.customQuestion || item.q;
+        if(!customQuestion.includes('</答案>')){
+            const answers = item.a.split(/[｜|‖]/).map(s=>s.trim()).filter(Boolean);
+            if(customQuestion.includes('（）') || customQuestion.includes('()')){
+                customQuestion = customQuestion.replace(/（\s*）|\(\s*\)/g, ()=>{
+                    const ans = answers.shift() || '';
+                    return `</答案>${ans}<答案\\>`;
+                });
+                if(answers.length > 0){
+                    customQuestion += answers.map(a => `</答案>${a}<答案\\>`).join('');
+                }
+            }else{
+                customQuestion += answers.map(a => `</答案>${a}<答案\\>`).join('');
+            }
+        }
+        document.getElementById('peQ').value = customQuestion;
         document.getElementById('peE').value = item.e || '';
         document.getElementById('pePracticeHide').classList.toggle('active', item.hidden === true);
     }else if(type === 'single'){
@@ -3332,9 +3008,7 @@ function renderOptionsEditor(containerId, options){
             <input type="text" value="${escapeHTML(opt.replace(/^[A-Z]\.\s*/, ''))}" placeholder="选项内容">
             <span class="pe-opt-del" title="删除">✕</span>
         `;
-        row.querySelector('.pe-opt-del').addEventListener('click', ()=>{
-            row.remove();
-        });
+        row.querySelector('.pe-opt-del').addEventListener('click', ()=>{ row.remove(); });
         container.appendChild(row);
     });
 }
@@ -3353,8 +3027,84 @@ function getOptionsFromEditor(containerId){
     return opts;
 }
 
+// ====================== 练习预览（真实界面） ======================
+function showPracticePreview(idx){
+    const rawQ = questionBank[idx];
+    if(!rawQ) return;
+    const q = getPracticeQuestion(rawQ);
+    const isChoice = isQuestionChoice(rawQ);
+    const cfg = loadPracticeCfg();
+    const editData = loadPracticeEdit();
+    const ed = editData[rawQ.q];
+    const orderSetting = getOrderSetting(rawQ);
+
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay active';
+    overlay.style.zIndex = 1400;
+
+    let answerHTML = '';
+    let typeLabel = '';
+
+    if(isChoice){
+        let opts = [];
+        if(ed && ed.options){
+            opts = ed.options;
+        }else{
+            opts = cfg.singleOptions[rawQ.q] || cfg.multiOptions[rawQ.q] || ['A. 选项A','B. 选项B','C. 选项C','D. 选项D'];
+        }
+        const isMulti = ed ? (ed.correct && ed.correct.length > 1) : (cfg.multiCorrect[rawQ.q] !== undefined);
+        typeLabel = isMulti ? '☑️ 多选题' : '🔘 单选题';
+
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        answerHTML = `<div class="practice-options">`;
+        opts.forEach((opt, i)=>{
+            const letter = letters[i];
+            const optText = opt.replace(/^[A-Z]\.\s*/, '');
+            answerHTML += `<div class="practice-option">
+                <div class="opt-label">${letter}</div>
+                <div class="opt-text">${escapeHTML(optText)}</div>
+            </div>`;
+        });
+        answerHTML += `</div>`;
+    }else{
+        typeLabel = '📝 填空题';
+        const parsed = getParsedForQuestion(rawQ);
+        answerHTML = `<div class="practice-answer-area">`;
+        answerHTML += buildFillQuestionHTMLFromParsed(parsed, null, false);
+        answerHTML += `</div>`;
+    }
+
+    overlay.innerHTML = `
+        <div class="modal" style="max-width:720px;">
+            <div class="modal-header">
+                <h3>👁 练习预览（真实界面）</h3>
+                <button class="modal-close" data-close="1">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="font-size:11px;color:#8aa2c0;margin-bottom:10px;">以下是本题在练习模式中的真实显示效果（不可作答）</div>
+                <div class="practice-preview-box">
+                    <div class="practice-question-card">
+                        <div class="pq-type">${typeLabel}</div>
+                        <div class="pq-text">${isChoice ? escapeHTML(q.q) : answerHTML}</div>
+                        ${isChoice ? answerHTML : ''}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"><button class="btn" data-close="1">关闭</button></div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    overlay.querySelectorAll('[data-close]').forEach(b=>{
+        b.addEventListener('click', ()=> overlay.remove());
+    });
+    overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
+}
+
 // ====================== DOM初始化 ======================
 document.addEventListener('DOMContentLoaded', ()=>{
+    // 刷新后，标记为"刷新后首次进入练习"
+    window._practiceResumeMode = 'fresh';
+
     loadBank();
     const chatArea      = document.getElementById('chatArea');
     const questionInput = document.getElementById('questionInput');
@@ -3421,28 +3171,26 @@ document.addEventListener('DOMContentLoaded', ()=>{
         showToast('对话已清空');
     });
 
-    // ===== 练习按钮 =====
     document.getElementById('practiceBtn').addEventListener('click', ()=>{
-        if(practiceFinished){
-            resetPractice();
-        }
-        startPractice();
-    });
+    if(practiceFinished){
+        resetPractice();
+    }
+    startPractice();
+});
 
-    // ===== 练习弹窗关闭 =====
     document.getElementById('practiceClose').addEventListener('click', ()=>{
-        if(practiceFinished){
-            if(confirm('是否关闭？关闭后不可查阅。')){
-                resetPractice();
-                document.getElementById('practiceModal').classList.remove('active');
-            }
-        }else{
-            savePracticeState();
-            document.getElementById('practiceModal').classList.remove('active');
-        }
-    });
+    if(practiceFinished){
+        // 已完成 → 关闭就是重置
+        resetPractice();
+        document.getElementById('practiceModal').classList.remove('active');
+    }else{
+        // 未完成 → 保存进度，关闭后重开继续
+        savePracticeState();
+        document.getElementById('practiceModal').classList.remove('active');
+        showToast('练习进度已保留，重新打开可继续');
+    }
+});
 
-    // ===== 练习导航 =====
     document.getElementById('practicePrevBtn').addEventListener('click', ()=>{
         if(practiceCurrentIndex > 0){
             practiceCurrentIndex--;
@@ -3451,7 +3199,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }
     });
 
-    // 合并的按钮：提交答案 / 下一题
     document.getElementById('practiceNextBtn').addEventListener('click', ()=>{
         if(!practiceSubmitted[practiceCurrentIndex]){
             const ok = submitPracticeAnswer();
@@ -3473,55 +3220,82 @@ document.addEventListener('DOMContentLoaded', ()=>{
         finishPractice();
     });
 
-    // ===== 练习编辑弹窗 =====
     document.getElementById('practiceEditorClose').addEventListener('click', ()=>{
         document.getElementById('practiceEditorModal').classList.remove('active');
     });
     document.getElementById('practiceEditorCancel').addEventListener('click', ()=>{
         document.getElementById('practiceEditorModal').classList.remove('active');
     });
+
+    // ===== 保存练习编辑：只写 practiceEdit，绝不碰 questionBank =====
     document.getElementById('practiceEditorSave').addEventListener('click', ()=>{
         if(editingPracticeIdx < 0) return;
         const rawQ = questionBank[editingPracticeIdx];
         if(!rawQ) return;
-        
+
         const editorContent = document.getElementById('editorContent');
-        let customQuestion = editorContent.innerHTML;
-        customQuestion = customQuestion.replace(/<span class="editor-blank"[^>]*>⬜<\/span>/g, '⬜');
-        customQuestion = customQuestion.replace(/<span class="editor-fixed-start"[^>]*>&lt;\\固&gt;<\/span>/g, '<\\固>');
-        customQuestion = customQuestion.replace(/<span class="editor-fixed-end"[^>]*>&lt;\\固\/&gt;<\/span>/g, '<\\固/>');
-        customQuestion = customQuestion.replace(/<span class="editor-order-start"[^>]*>&lt;\\乱序&gt;<\/span>/g, '<\\乱序>');
-        customQuestion = customQuestion.replace(/<span class="editor-order-end"[^>]*>&lt;\\乱序\/&gt;<\/span>/g, '<\\乱序/>');
-        customQuestion = customQuestion.replace(/<[^>]+>/g, '');
-        customQuestion = customQuestion.trim();
-        
-        const customAnswer = document.getElementById('editorAnswer').value.trim();
+        let customQuestion = (editorContent.innerText || editorContent.textContent || '')
+            .replace(/\u00a0/g, ' ')
+            .replace(/\r\n/g, '\n')
+            .trim();
+
+        // 归一化：把各种变体统一成标准写法
+        customQuestion = customQuestion.replace(/<答案\s*>/g, '<答案\\>');
+        customQuestion = customQuestion.replace(/<\/答案\s*>/g, '</答案>');
+        customQuestion = customQuestion.replace(/<\/固\s*>/g, '</固>');
+        customQuestion = customQuestion.replace(/<固\s*>/g, '<固\\>');
+        customQuestion = customQuestion.replace(/<\/乱序\s*>/g, '</乱序>');
+        customQuestion = customQuestion.replace(/<乱序\s*>/g, '<乱序\\>');
+
         const isChoice = document.getElementById('editorChoiceCheck').checked;
         const options = getEditorOptions('editorOptionsList');
         const correct = document.getElementById('editorCorrect').value.trim().toUpperCase();
         const orderSetting = document.querySelector('input[name="orderSetting"]:checked')?.value || 'all';
-        
+
+        if(orderSetting === 'partial'){
+            const hasFixed = customQuestion.includes('</固>');
+            const hasOrder = customQuestion.includes('</乱序>');
+            if(!hasFixed && !hasOrder){
+                showToast('部分乱序模式下必须包含 🔒 固定 或 🔀 乱序 标记');
+                return;
+            }
+            if((customQuestion.match(/<\/固>/g) || []).length !== (customQuestion.match(/<固\\>/g) || []).length){
+                showToast('固定标记不成对：</固> 与 <固\\> 数量必须一致');
+                return;
+            }
+            if((customQuestion.match(/<\/乱序>/g) || []).length !== (customQuestion.match(/<乱序\\>/g) || []).length){
+                showToast('乱序标记不成对：</乱序> 与 <乱序\\> 数量必须一致');
+                return;
+            }
+        }
+
+        // 解析出答案，存成 customAnswer，这样练习时直接读
+        let customAnswer = '';
+        try{
+            const parsed = parseQuestionWithAnswers(customQuestion, orderSetting);
+            customAnswer = parsed.answers.join('｜');
+        }catch(e){ customAnswer = ''; }
+
         const editData = loadPracticeEdit();
-        const existingConfig = editData[rawQ.q]?.partialOrderConfig || null;
-        
         editData[rawQ.q] = {
             customQuestion: customQuestion || rawQ.q,
-            customAnswer: customAnswer || rawQ.a,
+            customAnswer: customAnswer,
             isChoice: isChoice,
             options: isChoice ? options : null,
             correct: isChoice ? correct : null,
             orderSetting: orderSetting,
-            partialOrderConfig: orderSetting === 'partial' ? existingConfig : null,
             updatedAt: nowTs()
         };
         savePracticeEdit(editData);
-        
+
         document.getElementById('practiceEditorModal').classList.remove('active');
-        showToast('✅ 练习编辑已保存（仅练习模式生效），请点"保存并上传"同步到GitHub');
+        showToast('✅ 练习编辑已保存（仅练习模式生效，不影响总题库）');
         hasUnsavedChanges = true;
+        if(practiceSelectedType === 'fill') renderPracticeList('fill', document.getElementById('practiceSearch').value);
+        else if(practiceSelectedType === 'single') renderPracticeList('single', document.getElementById('practiceSingleSearch').value);
+        else renderPracticeList('multi', document.getElementById('practiceMultiSearch').value);
     });
 
-    // ===== 登录 =====
     const loginBtn    = document.getElementById('loginBtn');
     const loginModal  = document.getElementById('loginModal');
     const loginClose  = document.getElementById('loginClose');
@@ -3554,64 +3328,64 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }else{ showToast('账号或密码错误'); }
     }
 
-function openBank(){
-    bankModal.classList.add('active');
-    renderBankList();
-    renderBackups();
-    renderReviveStatus();
-    renderGhCfg();
-    switchTab('tab-search');
-    const cfg = loadPracticeCfg();
-    document.getElementById('practiceThreshold').value = cfg.threshold || 75;
-    practiceThreshold = cfg.threshold || 75;
-    renderPracticeList('fill', '');
-    renderPracticeList('single', '');
-    renderPracticeList('multi', '');
-}
-bankClose.addEventListener('click', ()=>{
-    if(hasUnsavedChanges){
-        if(!confirm('有未保存的修改，确定关闭吗？关闭后修改将丢失。')) return;
-        hasUnsavedChanges = false;
-    }
-    bankModal.classList.remove('active');
-});
-bankCancel.addEventListener('click', ()=>{
-    if(hasUnsavedChanges){
-        if(!confirm('有未保存的修改，确定关闭吗？关闭后修改将丢失。')) return;
-        hasUnsavedChanges = false;
-    }
-    bankModal.classList.remove('active');
-});
-document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=>{
-    if(!hasUnsavedChanges){
-        showToast('没有需要保存的修改');
-        return;
-    }
-    const ok = await askConfirm('确认保存并上传到云端？（输入确认代码）');
-    if(!ok) return;
-
-    try{
-        showToast('正在保存…');
-        backupCurrentBank();
-        persistBank();
-        saveBankUpdatedAt(nowTs());
+    function openBank(){
+        bankModal.classList.add('active');
+        renderBankList();
+        renderBackups();
+        renderReviveStatus();
+        renderGhCfg();
+        switchTab('tab-search');
         const cfg = loadPracticeCfg();
-        cfg.threshold = parseInt(document.getElementById('practiceThreshold').value) || 75;
-        savePracticeCfg(cfg);
-        savePracticeEdit(loadPracticeEdit());
-
-        showToast('正在同步到 GitHub…');
-        await syncFullPageToGitHub(true);
-        await pushSyncData(true);
-
-        hasUnsavedChanges = false;
-        showToast('✅ 保存成功，正在刷新…');
-        setTimeout(()=>{ location.reload(); }, 1500);
-    }catch(e){
-        console.warn(e);
-        showToast('❌ 保存失败：' + e.message);
+        document.getElementById('practiceThreshold').value = cfg.threshold || 75;
+        renderPracticeList('fill', '');
+        renderPracticeList('single', '');
+        renderPracticeList('multi', '');
     }
-});
+    bankClose.addEventListener('click', ()=>{
+        if(hasUnsavedChanges){
+            if(!confirm('有未保存的修改，确定关闭吗？关闭后修改将丢失。')) return;
+            hasUnsavedChanges = false;
+        }
+        bankModal.classList.remove('active');
+    });
+    bankCancel.addEventListener('click', ()=>{
+        if(hasUnsavedChanges){
+            if(!confirm('有未保存的修改，确定关闭吗？关闭后修改将丢失。')) return;
+            hasUnsavedChanges = false;
+        }
+        bankModal.classList.remove('active');
+    });
+
+    document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=>{
+        if(!hasUnsavedChanges){
+            showToast('没有需要保存的修改');
+            return;
+        }
+        const ok = await askConfirm('确认保存并上传到云端？（输入确认代码）');
+        if(!ok) return;
+
+        try{
+            showToast('正在保存…');
+            backupCurrentBank();
+            persistBank();
+            saveBankUpdatedAt(nowTs());
+            const cfg = loadPracticeCfg();
+            cfg.threshold = parseInt(document.getElementById('practiceThreshold').value) || 75;
+            savePracticeCfg(cfg);
+            savePracticeEdit(loadPracticeEdit());
+
+            showToast('正在同步到 GitHub…');
+            await syncFullPageToGitHub(true);
+            await pushSyncData(true);
+
+            hasUnsavedChanges = false;
+            showToast('✅ 保存成功，正在刷新…');
+            setTimeout(()=>{ location.reload(); }, 1500);
+        }catch(e){
+            console.warn(e);
+            showToast('❌ 保存失败：' + e.message);
+        }
+    });
 
     function switchTab(tabId){
         document.querySelectorAll('.tab').forEach(t=> t.classList.toggle('active', t.dataset.tab === tabId));
@@ -3619,7 +3393,6 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
     }
     document.querySelectorAll('.tab').forEach(t=>{ t.addEventListener('click', ()=> switchTab(t.dataset.tab)); });
 
-    // ===== 练习管理标签 =====
     document.querySelectorAll('.pts').forEach(t=>{
         t.addEventListener('click', ()=>{
             document.querySelectorAll('.pts').forEach(x=>x.classList.remove('active'));
@@ -3634,7 +3407,6 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
         });
     });
 
-    // 练习搜索
     document.getElementById('practiceSearch').addEventListener('input', ()=>{ renderPracticeList('fill', document.getElementById('practiceSearch').value); });
     document.getElementById('practiceClearSearch').addEventListener('click', ()=>{ document.getElementById('practiceSearch').value = ''; renderPracticeList('fill', ''); });
     document.getElementById('practiceSingleSearch').addEventListener('input', ()=>{ renderPracticeList('single', document.getElementById('practiceSingleSearch').value); });
@@ -3642,7 +3414,6 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
     document.getElementById('practiceMultiSearch').addEventListener('input', ()=>{ renderPracticeList('multi', document.getElementById('practiceMultiSearch').value); });
     document.getElementById('practiceMultiClearSearch').addEventListener('click', ()=>{ document.getElementById('practiceMultiSearch').value = ''; renderPracticeList('multi', ''); });
 
-    // 置顶隐藏题目复选框
     document.getElementById('pinHiddenCheck').addEventListener('change', (e)=>{
         pinHiddenSearch = e.target.checked;
         renderBankList(document.getElementById('bankSearch').value);
@@ -3660,18 +3431,16 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
         renderPracticeList('multi', document.getElementById('practiceMultiSearch').value);
     });
 
-    // 阈值调整
     document.getElementById('practiceThreshold').addEventListener('change', ()=>{
         const val = parseInt(document.getElementById('practiceThreshold').value) || 75;
-        practiceThreshold = Math.max(1, Math.min(100, val));
-        document.getElementById('practiceThreshold').value = practiceThreshold;
+        const safe = Math.max(1, Math.min(100, val));
+        document.getElementById('practiceThreshold').value = safe;
         const cfg = loadPracticeCfg();
-        cfg.threshold = practiceThreshold;
+        cfg.threshold = safe;
         savePracticeCfg(cfg);
-        showToast(`正确率阈值已设为 ${practiceThreshold}%`);
+        showToast(`正确率阈值已设为 ${safe}%`);
     });
 
-    // ===== 填空题编辑 =====
     document.getElementById('peCancel').addEventListener('click', ()=>{
         practiceSelectedIdx = -1;
         document.getElementById('practiceEditForm').style.display = 'none';
@@ -3680,20 +3449,37 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
     document.getElementById('peSave').addEventListener('click', ()=>{
         if(practiceSelectedIdx < 0) return;
         const q = document.getElementById('peQ').value.trim();
-        const a = document.getElementById('peA').value.trim();
         const e = document.getElementById('peE').value.trim();
-        if(!q || !a){ showToast('题目和答案不能为空'); return; }
-        questionBank[practiceSelectedIdx].q = q;
-        questionBank[practiceSelectedIdx].a = a;
+        if(!q){ showToast('题目不能为空'); return; }
+        const parsed = parseQuestionWithAnswers(q, 'all');
+        if(parsed.answers.length === 0){ showToast('请至少添加一个答案框（</答案>答案<答案\\>）'); return; }
+
+        const rawQ = questionBank[practiceSelectedIdx];
+        const editData = loadPracticeEdit();
+        const prev = editData[rawQ.q] || {};
+        editData[rawQ.q] = Object.assign({}, prev, {
+            customQuestion: q,
+            customAnswer: parsed.answers.join('｜'),
+            orderSetting: prev.orderSetting || 'all',
+            isChoice: false,
+            options: null,
+            correct: null,
+            updatedAt: nowTs()
+        });
+        savePracticeEdit(editData);
+
         questionBank[practiceSelectedIdx].e = e;
-        questionBank[practiceSelectedIdx].isChoice = false;
         hasUnsavedChanges = true;
-        showToast('已修改（未保存），请点右上角"保存并上传"');
+        showToast('已保存练习编辑（不影响总题库），请点右上角"保存并上传"同步');
         renderPracticeList('fill', document.getElementById('practiceSearch').value);
     });
     document.getElementById('peDelete').addEventListener('click', ()=>{
         if(practiceSelectedIdx < 0) return;
         if(!confirm('确认删除该题目？（尚未保存到云端，需点右上角"保存并上传"才生效）')) return;
+        const rawQ = questionBank[practiceSelectedIdx];
+        const editData = loadPracticeEdit();
+        delete editData[rawQ.q];
+        savePracticeEdit(editData);
         questionBank.splice(practiceSelectedIdx, 1);
         hasUnsavedChanges = true;
         practiceSelectedIdx = -1;
@@ -3708,7 +3494,7 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
         hasUnsavedChanges = true;
         document.getElementById('pePracticeHide').classList.toggle('active', item.hidden);
         renderPracticeList('fill', document.getElementById('practiceSearch').value);
-        showToast(item.hidden ? '🔕 已设为隐藏（保存后生效）' : '🔔 已取消隐藏（保存后生效）');
+        showToast(item.hidden ? '🔕 已设为隐藏（保存后生效）' : '👁 已取消隐藏（保存后生效）');
     });
     document.getElementById('pePreview').addEventListener('click', ()=>{
         if(practiceSelectedIdx < 0) return;
@@ -3723,7 +3509,6 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
         openPracticeEditor(practiceSelectedIdx);
     });
 
-    // ===== 单选题编辑 =====
     document.getElementById('pseCancel').addEventListener('click', ()=>{
         practiceSelectedIdx = -1;
         document.getElementById('practiceSingleEditForm').style.display = 'none';
@@ -3787,7 +3572,6 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
         openPracticeEditor(practiceSelectedIdx);
     });
 
-    // ===== 多选题编辑 =====
     document.getElementById('pmeCancel').addEventListener('click', ()=>{
         practiceSelectedIdx = -1;
         document.getElementById('practiceMultiEditForm').style.display = 'none';
@@ -3851,7 +3635,6 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
         openPracticeEditor(practiceSelectedIdx);
     });
 
-    // ===== 题库列表渲染 =====
     const bankSearch    = document.getElementById('bankSearch');
     const bankList      = document.getElementById('bankList');
     const bankClearSearch = document.getElementById('bankClearSearch');
@@ -3880,7 +3663,7 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
             }
             items.push({ item, idx });
         });
-        
+
         if(pin){
             items.sort((a,b)=>{
                 if(a.item.hidden && !b.item.hidden) return -1;
@@ -3888,7 +3671,7 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
                 return 0;
             });
         }
-        
+
         items.forEach(({item, idx})=>{
             const div = document.createElement('div');
             div.className = 'bank-item' + (idx === selectedIdx ? ' selected':'');
@@ -3899,7 +3682,7 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
                 ${item.isChoice ? '<div class="bi-choice-tag">🔘 选择题</div>' : ''}
                 <div class="bi-content">
                     <div class="bi-q">${escapeHTML(item.q)}</div>
-                    <div class="bi-a">答案：${escapeHTML(item.a.substring(0,80))}${item.a.length>80?'…':''}</div>
+                    <div class="bi-a">答案：${escapeHTML((item.a||'').substring(0,80))}${(item.a||'').length>80?'…':''}</div>
                     ${item.e && item.e.trim() ? `<div class="bi-a" style="color:#475569;margin-top:3px;">解析：${escapeHTML(item.e.substring(0,60))}${item.e.length>60?'…':''}</div>` : ''}
                 </div>
                 <button class="bi-edit-btn" data-idx="${idx}">✏️ 去编辑</button>
@@ -3923,6 +3706,8 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
         });
         if(!bankList.children.length){ bankList.innerHTML = '<div style="font-size:12px;color:#8aa2c0;text-align:center;padding:20px;">未找到匹配题目</div>'; }
     }
+    window.renderBankList = renderBankList;
+
     function showEditForm(idx){
         const item = questionBank[idx];
         if(!item){ editForm.style.display = 'none'; return; }
@@ -3946,7 +3731,7 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
         editSearchHide.classList.toggle('active', item.hidden === true);
         renderBankList(bankSearch.value);
         showEditForm(selectedIdx);
-        showToast(item.hidden ? '🔕 已设为搜索隐藏（保存后生效）' : '🔔 已取消搜索隐藏（保存后生效）');
+        showToast(item.hidden ? '🔕 已设为搜索隐藏（保存后生效）' : '👁 已取消搜索隐藏（保存后生效）');
     });
 
     editChoiceCheck.addEventListener('change', ()=>{
@@ -3968,32 +3753,31 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
     });
 
     editSave.addEventListener('click', async ()=>{
-    if(selectedIdx < 0 || !questionBank[selectedIdx]) return;
-    const newQ = editQ.value.trim();
-    const newA = editA.value.trim();
-    const newE = editE.value.trim();
-    if(!newQ || !newA){ showToast('题目和答案不能为空'); return; }
-    const hidden = questionBank[selectedIdx].hidden === true;
-    const isChoice = editChoiceCheck.checked;
-    questionBank[selectedIdx] = { q: newQ, a: newA, e: newE, hidden, isChoice };
-    hasUnsavedChanges = true;
-    showToast('已修改（未保存），请点右上角"保存并上传"');
-    renderBankList(bankSearch.value);
-    showEditForm(selectedIdx);
-});
+        if(selectedIdx < 0 || !questionBank[selectedIdx]) return;
+        const newQ = editQ.value.trim();
+        const newA = editA.value.trim();
+        const newE = editE.value.trim();
+        if(!newQ || !newA){ showToast('题目和答案不能为空'); return; }
+        const hidden = questionBank[selectedIdx].hidden === true;
+        const isChoice = editChoiceCheck.checked;
+        questionBank[selectedIdx] = { q: newQ, a: newA, e: newE, hidden, isChoice };
+        hasUnsavedChanges = true;
+        showToast('已修改（未保存），请点右上角"保存并上传"');
+        renderBankList(bankSearch.value);
+        showEditForm(selectedIdx);
+    });
 
     editDelete.addEventListener('click', async ()=>{
-    if(selectedIdx < 0) return;
-    if(!confirm('确认删除该题目？（尚未保存到云端，需点右上角"保存并上传"才生效）')) return;
-    questionBank.splice(selectedIdx, 1);
-    hasUnsavedChanges = true;
-    selectedIdx = -1;
-    editForm.style.display = 'none';
-    renderBankList(bankSearch.value);
-    showToast('已删除（未保存），请点右上角"保存并上传"');
-});
+        if(selectedIdx < 0) return;
+        if(!confirm('确认删除该题目？（尚未保存到云端，需点右上角"保存并上传"才生效）')) return;
+        questionBank.splice(selectedIdx, 1);
+        hasUnsavedChanges = true;
+        selectedIdx = -1;
+        editForm.style.display = 'none';
+        renderBankList(bankSearch.value);
+        showToast('已删除（未保存），请点右上角"保存并上传"');
+    });
 
-    // ===== 新增题目 =====
     const addQ       = document.getElementById('addQ');
     const addA       = document.getElementById('addA');
     const addE       = document.getElementById('addE');
@@ -4028,20 +3812,19 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
     });
 
     addSave.addEventListener('click', async ()=>{
-    const q = addQ.value.trim();
-    const a = addA.value.trim();
-    const e = addE.value.trim();
-    const isChoice = addChoiceCheck.checked;
-    if(!q || !a){ showToast('请填写题目和答案'); return; }
-    questionBank.push({ q, a, e, hidden: false, isChoice });
-    hasUnsavedChanges = true;
-    addQ.value = ''; addA.value = ''; addE.value = '';
-    addChoiceCheck.checked = false;
-    addChoiceWrap.classList.remove('checked');
-    showToast(`已新增（共${questionBank.length}题，未保存），请点右上角"保存并上传"`);
-});
+        const q = addQ.value.trim();
+        const a = addA.value.trim();
+        const e = addE.value.trim();
+        const isChoice = addChoiceCheck.checked;
+        if(!q || !a){ showToast('请填写题目和答案'); return; }
+        questionBank.push({ q, a, e, hidden: false, isChoice });
+        hasUnsavedChanges = true;
+        addQ.value = ''; addA.value = ''; addE.value = '';
+        addChoiceCheck.checked = false;
+        addChoiceWrap.classList.remove('checked');
+        showToast(`已新增（共${questionBank.length}题，未保存），请点右上角"保存并上传"`);
+    });
 
-    // ===== 备份面板 =====
     function renderBackups(){
         const b = loadBackups();
         const el = document.getElementById('backupList');
@@ -4139,7 +3922,6 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
         manualBackup();
     });
 
-    // ===== 复活备份 =====
     const reviveUploadBtn = document.getElementById('reviveUploadBtn');
     const reviveDownloadBtn = document.getElementById('reviveDownloadBtn');
     const revivePreviewBtn = document.getElementById('revivePreviewBtn');
@@ -4249,7 +4031,6 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
         if(success){ showToast('✅ 复活备份已推送至GitHub'); }
     });
 
-    // ===== GitHub 配置 =====
     const githubSection = document.getElementById('githubSection');
     const githubHeader  = document.getElementById('githubHeader');
     const ghStatus      = document.getElementById('ghStatus');
@@ -4265,6 +4046,7 @@ document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=
         document.getElementById('ghToken').value = cfg.token || '';
         updateGhStatus();
     }
+    window.renderGhCfg = renderGhCfg;
     function updateGhStatus(){
         const cfg = loadGhCfg();
         if(isGhConfigured(cfg)){ ghStatus.textContent = '已配置'; ghStatus.className = 'gh-status configured'; }
