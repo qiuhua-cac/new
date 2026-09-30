@@ -6576,8 +6576,8 @@
       "customExplanation": ""
     },
     "避雷针及易燃易爆场所(如沼气柜)的防雷接地电阻应不大于（）": {
-      "customQuestion": "避雷针及易燃易爆场所(如沼气柜)的防雷接地电阻应不大于",
-      "customAnswer": "避雷针及易燃易爆场所(如沼气柜)的防雷接地电阻应不大于",
+      "customQuestion": "避雷针及易燃易爆场所(如沼气柜)的防雷接地电阻应不大于</答案>4Ω<答案\\>",
+      "customAnswer": "4Ω",
       "isChoice": true,
       "options": [
         "A. 4Ω",
@@ -6587,7 +6587,8 @@
       ],
       "correct": "A",
       "orderSetting": "all",
-      "updatedAt": 1790797879853
+      "updatedAt": 1790797881465,
+      "customExplanation": ""
     }
   }
 }
