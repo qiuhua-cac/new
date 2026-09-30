@@ -6772,6 +6772,20 @@
       "orderSetting": "all",
       "updatedAt": 1790798407857,
       "customExplanation": "单选题"
+    },
+    "污水厂中常见的危险因素不包括以哪项?（）": {
+      "customQuestion": "污水厂中常见的危险因素不包括以哪项?",
+      "customAnswer": "污水厂中常见的危险因素不包括以哪项?",
+      "isChoice": true,
+      "options": [
+        "A. 化学药品",
+        "B. 机械设备",
+        "C. 噪音污染",
+        "D. 良好的工作环"
+      ],
+      "correct": "D",
+      "orderSetting": "all",
+      "updatedAt": 1790798442074
     }
   }
 }
