@@ -6347,6 +6347,20 @@
       "orderSetting": "all",
       "updatedAt": 1790793499449,
       "customExplanation": ""
+    },
+    "水里的COD是指什么?（）": {
+      "customQuestion": "水里的COD是指什么?",
+      "customAnswer": "水里的COD是指什么?",
+      "isChoice": true,
+      "options": [
+        "A. 水体中溶解氧的含量",
+        "B. 水体中有机物和还原性无机物污染程度的综合指标",
+        "C. 水体中微生物分解有机物所消耗的溶解氧量",
+        "D. 水体中无机盐的含量"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790793573195
     }
   }
 }
