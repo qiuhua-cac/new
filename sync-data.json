@@ -17,7 +17,7 @@
   "backups": {
     "list": [
       {
-        "time": "2026/10/1 02:12:51",
+        "time": "2026/10/1 02:14:36",
         "data": [
           {
             "q": "凡在高地面（）的地点进行的工作都应视作高处作业",
@@ -4428,7 +4428,7 @@
         "name": "C"
       }
     ],
-    "updatedAt": 1790791985538,
+    "updatedAt": 1790792076635,
     "device": "pc"
   },
   "history": {
@@ -6264,7 +6264,7 @@
         "isChoice": false
       }
     ],
-    "updatedAt": 1790791971350,
+    "updatedAt": 1790792076643,
     "device": "pc"
   },
   "practiceCfg": {
