@@ -6020,14 +6020,14 @@
     "updatedAt": 0,
     "device": "pc",
     "公司内部活性炭主要用了（）三种": {
-      "customQuestion": "公司内部活性炭主要用了（）三种（）（）（）（）",
+      "customQuestion": "公司内部活性炭主要用了（）三种（⬜）（⬜）（⬜）（⬜）",
       "customAnswer": "粉末活性炭｜柱状活性炭｜颗粒活性炭",
       "isChoice": false,
       "options": null,
       "correct": null,
       "orderSetting": "all",
       "partialOrderConfig": null,
-      "updatedAt": 1790779872656
+      "updatedAt": 1790779892196
     }
   }
 }
