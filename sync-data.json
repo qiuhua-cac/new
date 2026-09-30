@@ -6323,6 +6323,20 @@
       "orderSetting": "all",
       "updatedAt": 1790793334894,
       "customExplanation": ""
+    },
+    "以下哪种行为属于污水处理厂的安全操作?（）": {
+      "customQuestion": "以下哪种行为属于污水处理厂的安全操作?",
+      "customAnswer": "以下哪种行为属于污水处理厂的安全操作?",
+      "isChoice": true,
+      "options": [
+        "A. 在高压设备旁吸烟",
+        "B. 正确佩戴绝缘手套",
+        "C. 随意触碰电气设备",
+        "D. 以上都不是"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790793497941
     }
   }
 }
