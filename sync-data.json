@@ -6457,6 +6457,20 @@
       "orderSetting": "all",
       "updatedAt": 1790793815563,
       "customExplanation": ""
+    },
+    "和下图相关的十大救命法则是?": {
+      "customQuestion": "和下图相关的十大救命法则是?",
+      "customAnswer": "和下图相关的十大救命法则是?",
+      "isChoice": true,
+      "options": [
+        "A. 不挡在车辆或者机概设备行驶的路径上",
+        "B. 远离吊装作业和任何存在坠物风险的区域",
+        "C. 直接下井作业，快速完成",
+        "D. 必须佩戴防毒面具即可"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790793855086
     }
   }
 }
