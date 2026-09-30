@@ -7162,6 +7162,20 @@
       "orderSetting": "all",
       "updatedAt": 1790799674323,
       "customExplanation": ""
+    },
+    "机械设备（如细格栅、压滤机）卡阻或检修时，正确操作是（）": {
+      "customQuestion": "机械设备（如细格栅、压滤机）卡阻或检修时，正确操作是</答案><答案\\>",
+      "customAnswer": "",
+      "isChoice": true,
+      "options": [
+        "A. 直接用手清理异物",
+        "B. 切断电源并悬挂“禁止合闸 有人工作”标示牌（上锁挂牌）后清理",
+        "C. 戴手套徒手清理",
+        "D. 加大功率强行启动"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790799760700
     }
   }
 }
