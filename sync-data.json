@@ -6699,6 +6699,20 @@
       "orderSetting": "all",
       "updatedAt": 1790798112132,
       "customExplanation": ""
+    },
+    "在污染物指标中凯氏氮TKN是氨氮和（）的总和。": {
+      "customQuestion": "在污染物指标中凯氏氮TKN是氨氮和（）的总和。",
+      "customAnswer": "在污染物指标中凯氏氮TKN是氨氮和（）的总和。",
+      "isChoice": true,
+      "options": [
+        "A. 无机氮",
+        "B. 总氮",
+        "C. 有机氮",
+        "D. 硝氮"
+      ],
+      "correct": "C",
+      "orderSetting": "all",
+      "updatedAt": 1790798204254
     }
   }
 }
