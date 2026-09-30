@@ -7030,6 +7030,20 @@
       "orderSetting": "all",
       "updatedAt": 1790799335122,
       "customExplanation": ""
+    },
+    "污水处理厂安全培训中，以下哪项不属于“三违”行为?": {
+      "customQuestion": "污水处理厂安全培训中，以下哪项不属于“三违”行为?",
+      "customAnswer": "污水处理厂安全培训中，以下哪项不属于“三违”行为?",
+      "isChoice": true,
+      "options": [
+        "A. 违章指挥",
+        "B. 违规操作",
+        "C. 违反劳动纪律",
+        "D. 遵守操作规程"
+      ],
+      "correct": "D",
+      "orderSetting": "all",
+      "updatedAt": 1790799386185
     }
   }
 }
