@@ -6545,6 +6545,20 @@
         "practiceDeleted": false,
         "__practiceOnly": true
       }
-    ]
+    ],
+    "污水处理厂中，污泥消化池的主要功能是?": {
+      "customQuestion": "污水处理厂中，污泥消化池的主要功能是?",
+      "customAnswer": "污水处理厂中，污泥消化池的主要功能是?",
+      "isChoice": true,
+      "options": [
+        "A. 去除油脂",
+        "B. 减少污泥体积",
+        "C. 去除重金属",
+        "D. 增加污泥湿度"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790797808726
+    }
   }
 }
