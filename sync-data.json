@@ -6633,6 +6633,20 @@
       "orderSetting": "all",
       "updatedAt": 1790797972144,
       "customExplanation": ""
+    },
+    "污水处理厂应急预案演练，专项或综合演练至少应（）组织一次": {
+      "customQuestion": "污水处理厂应急预案演练，专项或综合演练至少应（）组织一次",
+      "customAnswer": "污水处理厂应急预案演练，专项或综合演练至少应（）组织一次",
+      "isChoice": true,
+      "options": [
+        "A. 每季度",
+        "B. 每半年",
+        "C. 每年",
+        "D. 每两年"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790798011238
     }
   }
 }
