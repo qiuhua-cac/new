@@ -6527,6 +6527,24 @@
     "厌氧池溶解氧一般控制在0.2 mg/L以下，其目的是（）": {
       "practiceHidden": true,
       "updatedAt": 1790794090599
-    }
+    },
+    "__practice_only__": [
+      {
+        "q": "1",
+        "a": "B",
+        "e": "",
+        "isChoice": true,
+        "options": [
+          "A. 反硝化反应顺利进行",
+          "B. 反硝化反应顺利进行",
+          "C. 提高活性污泥沉降性能",
+          "D. 促进污泥增长"
+        ],
+        "correct": "B",
+        "hidden": false,
+        "practiceDeleted": false,
+        "__practiceOnly": true
+      }
+    ]
   }
 }
