@@ -6589,6 +6589,20 @@
       "orderSetting": "all",
       "updatedAt": 1790797881465,
       "customExplanation": ""
+    },
+    "污水处理厂安全检查中，以下哪项属于“五查”内容（）": {
+      "customQuestion": "污水处理厂安全检查中，以下哪项属于“五查”内容",
+      "customAnswer": "污水处理厂安全检查中，以下哪项属于“五查”内容",
+      "isChoice": true,
+      "options": [
+        "A. 查隐患",
+        "B. 查证件",
+        "C. 查记录",
+        "D. 以上都是"
+      ],
+      "correct": "D",
+      "orderSetting": "all",
+      "updatedAt": 1790797921338
     }
   }
 }
