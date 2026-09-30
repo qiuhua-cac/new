@@ -6280,6 +6280,12 @@
         "B. 正确佩戴绝缘手套",
         "C. 随意触碰电气设备",
         "D. 以上都不是"
+      ],
+      "水里的COD是指什么?（）": [
+        "A. 水体中溶解氧的含量",
+        "B. 水体中有机物和还原性无机物污染程度的综合指标",
+        "C. 水体中微生物分解有机物所消耗的溶解氧量",
+        "D. 水体中无机盐的含量"
       ]
     },
     "multiOptions": {
@@ -6297,7 +6303,8 @@
       ]
     },
     "singleCorrect": {
-      "以下哪种行为属于污水处理厂的安全操作?（）": "B"
+      "以下哪种行为属于污水处理厂的安全操作?（）": "B",
+      "水里的COD是指什么?（）": "B"
     },
     "multiCorrect": {
       "二沉池巡检内容包括（）": "ABCDEFGHIJ"
@@ -6349,8 +6356,8 @@
       "customExplanation": ""
     },
     "水里的COD是指什么?（）": {
-      "customQuestion": "水里的COD是指什么?",
-      "customAnswer": "水里的COD是指什么?",
+      "customQuestion": "水里的COD是指什么?</答案>水体中有机物和还原性无机物污染程度的综合指标<答案\\>",
+      "customAnswer": "水体中有机物和还原性无机物污染程度的综合指标",
       "isChoice": true,
       "options": [
         "A. 水体中溶解氧的含量",
@@ -6360,7 +6367,8 @@
       ],
       "correct": "B",
       "orderSetting": "all",
-      "updatedAt": 1790793573195
+      "updatedAt": 1790793575513,
+      "customExplanation": ""
     }
   }
 }
