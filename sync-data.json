@@ -2772,6 +2772,15 @@
       "orderSetting": "all",
       "updatedAt": 1790799761448,
       "customExplanation": ""
+    },
+    "SRT是指（）HRT是指（）MLSS是指（）MLVSS是指（）DO是指（）": {
+      "customQuestion": "SRT是指</固></答案>泥龄<答案\\><固\\>HRT是指</固></答案>停留时间<答案\\><固\\>MLSS是指</固></答案>污泥浓度<答案\\><固\\>MLVSS是指</固></答案><固\\>挥发性活性污泥浓度</固><答案\\><固\\>DO是指</固></答案>溶解氧<答案\\><固\\>",
+      "customAnswer": "泥龄｜停留时间｜污泥浓度｜<固\\>挥发性活性污泥浓度</固>｜溶解氧",
+      "isChoice": false,
+      "options": null,
+      "correct": null,
+      "orderSetting": "none",
+      "updatedAt": 1790806139450
     }
   }
 }
