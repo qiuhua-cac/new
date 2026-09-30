@@ -7096,6 +7096,20 @@
       "orderSetting": "all",
       "updatedAt": 1790799502683,
       "customExplanation": ""
+    },
+    "以下哪种化学品不属于污水处理厂的腐蚀性化学品": {
+      "customQuestion": "以下哪种化学品不属于污水处理厂的腐蚀性化学品",
+      "customAnswer": "以下哪种化学品不属于污水处理厂的腐蚀性化学品",
+      "isChoice": true,
+      "options": [
+        "A. 氯气",
+        "B. 乙醇",
+        "C. 氢氧化钠",
+        "D. 盐酸"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790799561263
     }
   }
 }
