@@ -7140,6 +7140,20 @@
       "orderSetting": "all",
       "updatedAt": 1790799609655,
       "customExplanation": ""
+    },
+    "下列哪种个体防护装备不能用于硫化氢环境作业": {
+      "customQuestion": "下列哪种个体防护装备不能用于硫化氢环境作业",
+      "customAnswer": "下列哪种个体防护装备不能用于硫化氢环境作业",
+      "isChoice": true,
+      "options": [
+        "A. 全面罩正压式呼吸器",
+        "B. 半面罩防毒面具配A型滤盒",
+        "C. 送风长管呼吸器",
+        "D. 携气式SCBA"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790799673137
     }
   }
 }
