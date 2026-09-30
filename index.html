@@ -1972,7 +1972,14 @@ function startPractice(){
         return;
     }
 
-    const available = questionBank.filter(item => !item.hidden);
+       const editData = loadPracticeEdit();
+    const available = questionBank.filter(item => {
+        if(item.hidden) return false;   // 总题库隐藏 → 练习也不显示
+        const ed = editData[item.q];
+        if(ed && ed.practiceDeleted) return false;   // 练习级删除
+        if(ed && ed.practiceHidden) return false;    // 练习级隐藏
+        return true;
+    });
     if(available.length < 20){
         showToast(`题库中仅有 ${available.length} 道可用题目（已隐藏的不计入），无法抽取20题`);
         return;
@@ -2240,12 +2247,13 @@ function getParsedForQuestion(rawQ){
         return parseQuestionWithAnswers(ed.customQuestion, orderSetting);
     }
 
-    // 情况 3：没有练习编辑 → 用原始题库：题目用 rawQ.q，答案用 rawQ.a
+        // 情况 3：没有练习编辑 → 用原始题库：题目用 rawQ.q，答案用 rawQ.a
     const rawAnswers = (rawQ.a || '').split(/[｜|‖]/).map(s=>s.trim()).filter(Boolean);
     return {
         displayText: rawQ.q,
         answers: rawAnswers,
-        orderRules: new Array(rawAnswers.length).fill((orderSetting === 'none') ? 'fixed' : 'order')
+        orderRules: new Array(rawAnswers.length).fill((orderSetting === 'none') ? 'fixed' : 'order'),
+        explanation: (ed && ed.customExplanation) || rawQ.e
     };
 }
 
@@ -2323,7 +2331,11 @@ function renderPracticeQuestion(){
             <div class="practice-feedback ${isCorrect ? 'ok' : 'no'}">
                 <b>${isCorrect ? '✅ 回答正确' : '❌ 回答错误'}</b>　得分：${score.toFixed(1)}/5<br>
                 <b>标准答案：</b>${correctDisplay}<br>
-                ${rawQ.e ? '<b>解析：</b>' + escapeHTML(rawQ.e) : ''}
+                               ${(()=>{
+                    const ed2 = editData[rawQ.q];
+                    const expl = (ed2 && ed2.customExplanation) || rawQ.e;
+                    return expl ? '<b>解析：</b>' + escapeHTML(expl) : '';
+                })()}
             </div>
         `;
     }
@@ -2606,7 +2618,11 @@ function finishPractice(){
             <div class="pb-q">${i+1}. ${escapeHTML(q.q)}</div>
             <div class="pb-row"><span class="pb-label">你的答案：</span><span class="pb-val">${escapeHTML(studentDisplay)}</span><span class="pb-result ${isCorrect?'ok':'no'}">${isCorrect?'✔':'✘'}</span></div>
             <div class="pb-row"><span class="pb-label">正确答案：</span><span class="pb-val">${correctParts.map(p=>`<span class="answer-highlight">${escapeHTML(p)}</span>`).join('<span class="answer-sep">｜</span>')}</span><span class="pb-score ${cls}">${score.toFixed(1)}分</span></div>
-            ${rawQ.e ? `<div class="pb-row"><span class="pb-label">解析：</span><span class="pb-val" style="color:#64748b;">${escapeHTML(rawQ.e)}</span></div>` : ''}
+                       ${(()=>{
+                const ed2 = editData[rawQ.q];
+                const expl = (ed2 && ed2.customExplanation) || rawQ.e;
+                return expl ? `<div class="pb-row"><span class="pb-label">解析：</span><span class="pb-val" style="color:#64748b;">${escapeHTML(expl)}</span></div>` : '';
+            })()}
         </div>`;
     }
 
@@ -2870,7 +2886,12 @@ function renderPracticeList(type, keyword){
     let count = 0;
 
     let items = [];
+        const editDataForList = loadPracticeEdit();
     questionBank.forEach((item, idx)=>{
+        // 练习级删除的题不在练习管理列表里显示
+        const edForList = editDataForList[item.q];
+        if(edForList && edForList.practiceDeleted) return;
+
         const isChoice = isQuestionChoice(item);
         let itemType = 'fill';
         if(isChoice){
@@ -3447,55 +3468,58 @@ document.addEventListener('DOMContentLoaded', ()=>{
         renderPracticeList('fill', document.getElementById('practiceSearch').value);
     });
     document.getElementById('peSave').addEventListener('click', ()=>{
-        if(practiceSelectedIdx < 0) return;
-        const q = document.getElementById('peQ').value.trim();
-        const e = document.getElementById('peE').value.trim();
-        if(!q){ showToast('题目不能为空'); return; }
-        const parsed = parseQuestionWithAnswers(q, 'all');
-        if(parsed.answers.length === 0){ showToast('请至少添加一个答案框（</答案>答案<答案\\>）'); return; }
+    if(practiceSelectedIdx < 0) return;
+    const q = document.getElementById('peQ').value.trim();
+    const e = document.getElementById('peE').value.trim();
+    if(!q){ showToast('题目不能为空'); return; }
+    const parsed = parseQuestionWithAnswers(q, 'all');
+    if(parsed.answers.length === 0){ showToast('请至少添加一个答案框（</答案>答案<答案\\>）'); return; }
 
         const rawQ = questionBank[practiceSelectedIdx];
-        const editData = loadPracticeEdit();
-        const prev = editData[rawQ.q] || {};
-        editData[rawQ.q] = Object.assign({}, prev, {
-            customQuestion: q,
-            customAnswer: parsed.answers.join('｜'),
-            orderSetting: prev.orderSetting || 'all',
-            isChoice: false,
-            options: null,
-            correct: null,
-            updatedAt: nowTs()
-        });
-        savePracticeEdit(editData);
+    const editData = loadPracticeEdit();
+    if(!editData[rawQ.q]) editData[rawQ.q] = {};
+    // 只更新 customQuestion / customAnswer / customExplanation，保留 isChoice/options/correct
+    editData[rawQ.q].customQuestion = q;
+    editData[rawQ.q].customAnswer = parsed.answers.join('｜');
+    editData[rawQ.q].customExplanation = e;
+    if(!editData[rawQ.q].orderSetting) editData[rawQ.q].orderSetting = 'all';
+    if(editData[rawQ.q].isChoice === undefined) editData[rawQ.q].isChoice = false;
+    editData[rawQ.q].updatedAt = nowTs();
+    savePracticeEdit(editData);
 
-        questionBank[practiceSelectedIdx].e = e;
-        hasUnsavedChanges = true;
-        showToast('已保存练习编辑（不影响总题库），请点右上角"保存并上传"同步');
-        renderPracticeList('fill', document.getElementById('practiceSearch').value);
-    });
+    hasUnsavedChanges = true;
+    showToast('已保存修改（不影响总题库），请点右上角"保存并上传"同步');
+    renderPracticeList('fill', document.getElementById('practiceSearch').value);
+});
     document.getElementById('peDelete').addEventListener('click', ()=>{
-        if(practiceSelectedIdx < 0) return;
-        if(!confirm('确认删除该题目？（尚未保存到云端，需点右上角"保存并上传"才生效）')) return;
-        const rawQ = questionBank[practiceSelectedIdx];
-        const editData = loadPracticeEdit();
-        delete editData[rawQ.q];
-        savePracticeEdit(editData);
-        questionBank.splice(practiceSelectedIdx, 1);
-        hasUnsavedChanges = true;
-        practiceSelectedIdx = -1;
-        document.getElementById('practiceEditForm').style.display = 'none';
-        renderPracticeList('fill', document.getElementById('practiceSearch').value);
-        showToast('已删除（未保存）');
-    });
+    if(practiceSelectedIdx < 0) return;
+    if(!confirm('确认在练习模式中移除该题目？（总题库不受影响，只是练习时不再出现）')) return;
+    const rawQ = questionBank[practiceSelectedIdx];
+    const editData = loadPracticeEdit();
+    if(!editData[rawQ.q]) editData[rawQ.q] = {};
+    editData[rawQ.q].practiceDeleted = true;
+    editData[rawQ.q].updatedAt = nowTs();
+    savePracticeEdit(editData);
+    hasUnsavedChanges = true;
+    practiceSelectedIdx = -1;
+    document.getElementById('practiceEditForm').style.display = 'none';
+    renderPracticeList('fill', document.getElementById('practiceSearch').value);
+    showToast('已在练习模式中移除该题（不影响总题库），请点右上角"保存并上传"同步');
+});	
     document.getElementById('pePracticeHide').addEventListener('click', ()=>{
-        if(practiceSelectedIdx < 0) return;
-        const item = questionBank[practiceSelectedIdx];
-        item.hidden = !item.hidden;
-        hasUnsavedChanges = true;
-        document.getElementById('pePracticeHide').classList.toggle('active', item.hidden);
-        renderPracticeList('fill', document.getElementById('practiceSearch').value);
-        showToast(item.hidden ? '🔕 已设为隐藏（保存后生效）' : '👁 已取消隐藏（保存后生效）');
-    });
+    if(practiceSelectedIdx < 0) return;
+    const rawQ = questionBank[practiceSelectedIdx];
+    const editData = loadPracticeEdit();
+    if(!editData[rawQ.q]) editData[rawQ.q] = {};
+    const newHidden = !editData[rawQ.q].practiceHidden;
+    editData[rawQ.q].practiceHidden = newHidden;
+    editData[rawQ.q].updatedAt = nowTs();
+    savePracticeEdit(editData);
+    hasUnsavedChanges = true;
+    document.getElementById('pePracticeHide').classList.toggle('active', newHidden);
+    renderPracticeList('fill', document.getElementById('practiceSearch').value);
+    showToast(newHidden ? '🔕 已在练习模式中隐藏（不影响总题库）' : '👁 已取消练习隐藏');
+});
     document.getElementById('pePreview').addEventListener('click', ()=>{
         if(practiceSelectedIdx < 0) return;
         showPracticePreview(practiceSelectedIdx);
@@ -3529,36 +3553,42 @@ document.addEventListener('DOMContentLoaded', ()=>{
         container.appendChild(row);
     });
     document.getElementById('pseSave').addEventListener('click', ()=>{
-        if(practiceSelectedIdx < 0) return;
-        const q = document.getElementById('pseQ').value.trim();
-        const e = document.getElementById('pseE').value.trim();
-        const correct = document.getElementById('pseCorrect').value.trim().toUpperCase();
-        const opts = getOptionsFromEditor('pseOptions');
-        if(!q || !correct || opts.length < 2){ showToast('请填写题目、选项和正确答案'); return; }
-        questionBank[practiceSelectedIdx].q = q;
-        questionBank[practiceSelectedIdx].a = correct;
-        questionBank[practiceSelectedIdx].e = e || '单选题';
-        questionBank[practiceSelectedIdx].isChoice = true;
-        const cfg = loadPracticeCfg();
-        cfg.singleOptions[q] = opts;
-        cfg.singleCorrect[q] = correct;
-        delete cfg.multiOptions[q];
-        delete cfg.multiCorrect[q];
-        savePracticeCfg(cfg);
-        hasUnsavedChanges = true;
-        showToast('已修改（未保存），请点右上角"保存并上传"');
-        renderPracticeList('single', document.getElementById('practiceSingleSearch').value);
-    });
+    if(practiceSelectedIdx < 0) return;
+    const rawQ = questionBank[practiceSelectedIdx];
+    const q = document.getElementById('pseQ').value.trim();
+    const e = document.getElementById('pseE').value.trim();
+    const correct = document.getElementById('pseCorrect').value.trim().toUpperCase();
+    const opts = getOptionsFromEditor('pseOptions');
+    if(!q || !correct || opts.length < 2){ showToast('请填写题目、选项和正确答案'); return; }
+    const editData = loadPracticeEdit();
+    if(!editData[rawQ.q]) editData[rawQ.q] = {};
+    editData[rawQ.q].customQuestion = q;
+    editData[rawQ.q].customAnswer = correct;
+    editData[rawQ.q].customExplanation = e;
+    editData[rawQ.q].isChoice = true;
+    editData[rawQ.q].options = opts;
+    editData[rawQ.q].correct = correct;
+    editData[rawQ.q].updatedAt = nowTs();
+    savePracticeEdit(editData);
+    hasUnsavedChanges = true;
+    showToast('已保存练习选择题（不影响总题库），请点右上角"保存并上传"');
+    renderPracticeList('single', document.getElementById('practiceSingleSearch').value);
+});
     document.getElementById('pseDelete').addEventListener('click', ()=>{
-        if(practiceSelectedIdx < 0) return;
-        if(!confirm('确认删除该题目？')) return;
-        questionBank.splice(practiceSelectedIdx, 1);
-        hasUnsavedChanges = true;
-        practiceSelectedIdx = -1;
-        document.getElementById('practiceSingleEditForm').style.display = 'none';
-        renderPracticeList('single', document.getElementById('practiceSingleSearch').value);
-        showToast('已删除（未保存）');
-    });
+    if(practiceSelectedIdx < 0) return;
+    if(!confirm('确认在练习模式中移除该题目？（总题库不受影响）')) return;
+    const rawQ = questionBank[practiceSelectedIdx];
+    const editData = loadPracticeEdit();
+    if(!editData[rawQ.q]) editData[rawQ.q] = {};
+    editData[rawQ.q].practiceDeleted = true;
+    editData[rawQ.q].updatedAt = nowTs();
+    savePracticeEdit(editData);
+    hasUnsavedChanges = true;
+    practiceSelectedIdx = -1;
+    document.getElementById('practiceSingleEditForm').style.display = 'none';
+    renderPracticeList('single', document.getElementById('practiceSingleSearch').value);
+    showToast('已在练习模式中移除该题（不影响总题库）');
+});
     document.getElementById('psePreview').addEventListener('click', ()=>{
         if(practiceSelectedIdx < 0) return;
         showPracticePreview(practiceSelectedIdx);
@@ -3592,36 +3622,42 @@ document.addEventListener('DOMContentLoaded', ()=>{
         container.appendChild(row);
     });
     document.getElementById('pmeSave').addEventListener('click', ()=>{
-        if(practiceSelectedIdx < 0) return;
-        const q = document.getElementById('pmeQ').value.trim();
-        const e = document.getElementById('pmeE').value.trim();
-        const correct = document.getElementById('pmeCorrect').value.trim().toUpperCase();
-        const opts = getOptionsFromEditor('pmeOptions');
-        if(!q || !correct || opts.length < 2){ showToast('请填写题目、选项和正确答案'); return; }
-        questionBank[practiceSelectedIdx].q = q;
-        questionBank[practiceSelectedIdx].a = correct;
-        questionBank[practiceSelectedIdx].e = e || '多选题';
-        questionBank[practiceSelectedIdx].isChoice = true;
-        const cfg = loadPracticeCfg();
-        cfg.multiOptions[q] = opts;
-        cfg.multiCorrect[q] = correct;
-        delete cfg.singleOptions[q];
-        delete cfg.singleCorrect[q];
-        savePracticeCfg(cfg);
-        hasUnsavedChanges = true;
-        showToast('已修改（未保存），请点右上角"保存并上传"');
-        renderPracticeList('multi', document.getElementById('practiceMultiSearch').value);
-    });
+    if(practiceSelectedIdx < 0) return;
+    const rawQ = questionBank[practiceSelectedIdx];
+    const q = document.getElementById('pmeQ').value.trim();
+    const e = document.getElementById('pmeE').value.trim();
+    const correct = document.getElementById('pmeCorrect').value.trim().toUpperCase();
+    const opts = getOptionsFromEditor('pmeOptions');
+    if(!q || !correct || opts.length < 2){ showToast('请填写题目、选项和正确答案'); return; }
+    const editData = loadPracticeEdit();
+    if(!editData[rawQ.q]) editData[rawQ.q] = {};
+    editData[rawQ.q].customQuestion = q;
+    editData[rawQ.q].customAnswer = correct;
+    editData[rawQ.q].customExplanation = e;
+    editData[rawQ.q].isChoice = true;
+    editData[rawQ.q].options = opts;
+    editData[rawQ.q].correct = correct;
+    editData[rawQ.q].updatedAt = nowTs();
+    savePracticeEdit(editData);
+    hasUnsavedChanges = true;
+    showToast('已保存练习多选题（不影响总题库），请点右上角"保存并上传"');
+    renderPracticeList('multi', document.getElementById('practiceMultiSearch').value);
+});
     document.getElementById('pmeDelete').addEventListener('click', ()=>{
-        if(practiceSelectedIdx < 0) return;
-        if(!confirm('确认删除该题目？')) return;
-        questionBank.splice(practiceSelectedIdx, 1);
-        hasUnsavedChanges = true;
-        practiceSelectedIdx = -1;
-        document.getElementById('practiceMultiEditForm').style.display = 'none';
-        renderPracticeList('multi', document.getElementById('practiceMultiSearch').value);
-        showToast('已删除（未保存）');
-    });
+    if(practiceSelectedIdx < 0) return;
+    if(!confirm('确认在练习模式中移除该题目？（总题库不受影响）')) return;
+    const rawQ = questionBank[practiceSelectedIdx];
+    const editData = loadPracticeEdit();
+    if(!editData[rawQ.q]) editData[rawQ.q] = {};
+    editData[rawQ.q].practiceDeleted = true;
+    editData[rawQ.q].updatedAt = nowTs();
+    savePracticeEdit(editData);
+    hasUnsavedChanges = true;
+    practiceSelectedIdx = -1;
+    document.getElementById('practiceMultiEditForm').style.display = 'none';
+    renderPracticeList('multi', document.getElementById('practiceMultiSearch').value);
+    showToast('已在练习模式中移除该题（不影响总题库）');
+});
     document.getElementById('pmePreview').addEventListener('click', ()=>{
         if(practiceSelectedIdx < 0) return;
         showPracticePreview(practiceSelectedIdx);
@@ -3734,10 +3770,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
         showToast(item.hidden ? '🔕 已设为搜索隐藏（保存后生效）' : '👁 已取消搜索隐藏（保存后生效）');
     });
 
-    editChoiceCheck.addEventListener('change', ()=>{
+            editChoiceCheck.addEventListener('change', ()=>{
         if(selectedIdx < 0 || !questionBank[selectedIdx]) return;
         const item = questionBank[selectedIdx];
         item.isChoice = editChoiceCheck.checked;
+        // 父改了 isChoice → 清掉子对该题的覆盖
+        const editData = loadPracticeEdit();
+        if(editData[item.q]){ delete editData[item.q]; savePracticeEdit(editData); }
         hasUnsavedChanges = true;
         editChoiceWrap.classList.toggle('checked', item.isChoice);
         renderBankList(bankSearch.value);
@@ -3752,7 +3791,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         showPreviewModal('编辑预览', listItems, 'list', html || '（无法获取代码）', true);
     });
 
-    editSave.addEventListener('click', async ()=>{
+       editSave.addEventListener('click', async ()=>{
         if(selectedIdx < 0 || !questionBank[selectedIdx]) return;
         const newQ = editQ.value.trim();
         const newA = editA.value.trim();
@@ -3760,16 +3799,24 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if(!newQ || !newA){ showToast('题目和答案不能为空'); return; }
         const hidden = questionBank[selectedIdx].hidden === true;
         const isChoice = editChoiceCheck.checked;
+        const oldQ = questionBank[selectedIdx].q;
         questionBank[selectedIdx] = { q: newQ, a: newA, e: newE, hidden, isChoice };
+        // 父改了 → 清掉子对该题的覆盖，让练习继承父的新内容
+        const editData = loadPracticeEdit();
+        if(editData[oldQ]){ delete editData[oldQ]; savePracticeEdit(editData); }
+        if(newQ !== oldQ && editData[newQ]){ delete editData[newQ]; savePracticeEdit(editData); }
         hasUnsavedChanges = true;
         showToast('已修改（未保存），请点右上角"保存并上传"');
         renderBankList(bankSearch.value);
         showEditForm(selectedIdx);
     });
 
-    editDelete.addEventListener('click', async ()=>{
+        editDelete.addEventListener('click', async ()=>{
         if(selectedIdx < 0) return;
         if(!confirm('确认删除该题目？（尚未保存到云端，需点右上角"保存并上传"才生效）')) return;
+        const rawQ = questionBank[selectedIdx];
+        const editData = loadPracticeEdit();
+        if(rawQ && editData[rawQ.q]){ delete editData[rawQ.q]; savePracticeEdit(editData); }
         questionBank.splice(selectedIdx, 1);
         hasUnsavedChanges = true;
         selectedIdx = -1;
