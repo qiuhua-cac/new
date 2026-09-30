@@ -6942,6 +6942,20 @@
     "硫化氢浓度超过多少时，数秒内就可致人闪电型死亡？": {
       "practiceHidden": true,
       "updatedAt": 1790798911633
+    },
+    "以下哪种物质是污水中的氮源（）": {
+      "customQuestion": "以下哪种物质是污水中的氮源",
+      "customAnswer": "以下哪种物质是污水中的氮源",
+      "isChoice": true,
+      "options": [
+        "A. 氨氮",
+        "B. 硝酸盐",
+        "C. 亚硝酸盐",
+        "D. 以上都是"
+      ],
+      "correct": "D",
+      "orderSetting": "all",
+      "updatedAt": 1790799157130
     }
   }
 }
