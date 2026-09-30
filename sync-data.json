@@ -6633,8 +6633,8 @@
       "customExplanation": ""
     },
     "污水处理厂发生化学品紧急泄漏时，首选处置措施是?": {
-      "customQuestion": "污水处理厂发生化学品紧急泄漏时，首选处置措施是?</答案>封堵泄漏点<答案\\>",
-      "customAnswer": "封堵泄漏点",
+      "customQuestion": "污水处理厂发生化学品紧急泄漏时，首选处置措施是?",
+      "customAnswer": "污水处理厂发生化学品紧急泄漏时，首选处置措施是?",
       "isChoice": true,
       "options": [
         "A. 立即撤离",
@@ -6644,8 +6644,7 @@
       ],
       "correct": "B",
       "orderSetting": "all",
-      "updatedAt": 1790793680562,
-      "customExplanation": ""
+      "updatedAt": 1790800005912
     },
     "皮肤或眼睛不慎溅入次氯酸钠或酸碱药液，第一时间应（）": {
       "customQuestion": "皮肤或眼睛不慎溅入次氯酸钠或酸碱药液，第一时间应</答案>立即用大量流动清水冲洗至少15分钟并就医<答案\\>",
