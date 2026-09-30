@@ -322,20 +322,21 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .practice-question-card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 12px rgba(30,64,175,0.08);margin-bottom:12px;border-left:5px solid #f59e0b;}
 .practice-question-card .pq-type{display:inline-block;font-size:10px;background:#fef3c7;color:#92400e;padding:2px 10px;border-radius:10px;margin-bottom:8px;font-weight:600;}
 .practice-question-card .pq-text{font-size:15px;line-height:1.9;color:#1e293b;font-weight:600;margin-bottom:12px;word-break:break-word;}
-/* 内嵌答题框 - 美化版 */
+/* 内嵌答题框 - 美化版（移动端长度缩减） */
 .inline-blank{
     display:inline-block;
-    min-width:70px;
-    padding:4px 10px;
+    min-width:60px;
+    max-width:120px;
+    padding:3px 8px;
     border:1.5px solid #f59e0b;
     border-radius:8px;
     background:#fffbeb;
-    margin:2px 4px;
+    margin:2px 3px;
     text-align:center;
-    font-size:14px;
+    font-size:13px;
     color:#1e293b;
     vertical-align:middle;
-    line-height:1.5;
+    line-height:1.4;
     transition:0.2s;
     box-shadow:0 1px 2px rgba(245,158,11,0.1);
 }
@@ -343,7 +344,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .inline-blank.correct{border-color:#22c55e;background:#f0fdf4;}
 .inline-blank.wrong{border-color:#ef4444;background:#fef2f2;}
 .inline-blank:disabled{opacity:0.9;cursor:default;}
-.inline-blank::placeholder{color:#b8a88a;font-size:12px;}
+.inline-blank::placeholder{color:#b8a88a;font-size:11px;}
 /* 选择题选项 */
 .practice-options{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
 .practice-option{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid #c8d9ec;border-radius:10px;cursor:pointer;transition:0.15s;background:#f9fcff;}
@@ -607,6 +608,60 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
     border: 1px solid #e2ecf7;
 }
 
+/* 统一编辑框样式（图三风格） */
+.unified-edit-form .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 13px;
+    border: 1.5px solid #c8d9ec;
+    border-radius: 12px;
+    outline: none;
+    background: #f9fcff;
+    min-height: 70px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.6;
+    transition: 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.unified-edit-form .form-group textarea:focus {
+    border-color: #3b82f6;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+}
+.unified-edit-form .form-group textarea.e-textarea {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #334155;
+}
+.unified-edit-form .form-group textarea.e-textarea:focus {
+    border-color: #94a3b8;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(148,163,184,0.15);
+}
+.unified-edit-form .form-group label {
+    display: block;
+    font-size: 12px;
+    color: #4a6a8a;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+.unified-edit-form .form-group input[type="text"] {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 14px;
+    border: 1.5px solid #c8d9ec;
+    border-radius: 10px;
+    outline: none;
+    background: #f9fcff;
+    transition: 0.2s;
+}
+.unified-edit-form .form-group input[type="text"]:focus {
+    border-color: #3b82f6;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+
 @media (max-width: 600px) {
     body{padding:6px;}
     .header-row{margin-bottom:6px;flex-wrap:wrap;gap:4px;}
@@ -652,10 +707,12 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
     .practice-editor-toolbar button{font-size:11px;padding:5px 10px;}
     .editor-content{font-size:13px;padding:10px 12px;min-height:100px;}
     .practice-body{max-height:calc(94vh - 150px);}
-    .inline-blank{min-width:55px;padding:3px 8px;font-size:13px;}
+    .inline-blank{min-width:45px;max-width:90px;padding:2px 6px;font-size:12px;margin:1px 2px;}
     .practice-tab-switch .pts { font-size: 11px; padding: 6px 10px; }
     .bank-item { flex-wrap: wrap; }
     .bank-item .bi-edit-btn { font-size: 10px; padding: 3px 8px; }
+    .unified-edit-form .form-group textarea { padding: 10px 12px; font-size: 12px; }
+    .unified-edit-form .form-group input[type="text"] { padding: 10px 12px; font-size: 13px; }
 }
 </style>
 </head>
@@ -804,7 +861,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
                     <span>📌 置顶隐藏题目</span>
                 </div>
                 <div class="bank-list" id="bankList"></div>
-                <div class="edit-form" id="editForm" style="display:none;">
+                <div class="edit-form unified-edit-form" id="editForm" style="display:none;">
                     <div class="form-group">
                         <label>题目</label>
                         <textarea id="editQ" placeholder="题目内容"></textarea>
@@ -832,26 +889,28 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
             </div>
 
             <div class="tab-content" id="tab-add">
-                <div class="form-group">
-                    <label>题目</label>
-                    <textarea id="addQ" placeholder="输入题目内容"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>答案（多段请用 ‖ 分隔）</label>
-                    <textarea id="addA" placeholder="输入答案内容，多个答案用 ‖ 分隔"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>解析（选填，留空则不显示）</label>
-                    <textarea id="addE" class="e-textarea" placeholder="题目解析内容，留空则不显示解析"></textarea>
-                </div>
-                <div class="checkbox-wrap" id="addChoiceWrap">
-                    <input type="checkbox" id="addChoiceCheck">
-                    <span>🔘 作为选择题进入练习</span>
-                </div>
-                <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">
-                    <button class="btn btn-sm" id="addPreview">👁 预览</button>
-                    <button class="btn btn-sm" id="addClear">清空</button>
-                    <button class="btn btn-sm btn-primary" id="addSave">保存新增</button>
+                <div class="unified-edit-form">
+                    <div class="form-group">
+                        <label>题目</label>
+                        <textarea id="addQ" placeholder="输入题目内容"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>答案（多段请用 ‖ 分隔）</label>
+                        <textarea id="addA" placeholder="输入答案内容，多个答案用 ‖ 分隔"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>解析（选填，留空则不显示）</label>
+                        <textarea id="addE" class="e-textarea" placeholder="题目解析内容，留空则不显示解析"></textarea>
+                    </div>
+                    <div class="checkbox-wrap" id="addChoiceWrap">
+                        <input type="checkbox" id="addChoiceCheck">
+                        <span>🔘 作为选择题进入练习</span>
+                    </div>
+                    <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">
+                        <button class="btn btn-sm" id="addPreview">👁 预览</button>
+                        <button class="btn btn-sm" id="addClear">清空</button>
+                        <button class="btn btn-sm btn-primary" id="addSave">保存新增</button>
+                    </div>
                 </div>
             </div>
 
@@ -876,7 +935,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
                         <span>正确率阈值：<input type="number" id="practiceThreshold" min="1" max="100" value="75" style="width:50px;padding:2px 4px;font-size:11px;border:1px solid #c8d9ec;border-radius:4px;text-align:center;">%</span>
                     </div>
                     <div class="bank-list" id="practiceFillList" style="max-height:260px;"></div>
-                    <div class="practice-edit-area" id="practiceEditForm" style="display:none;">
+                    <div class="practice-edit-area unified-edit-form" id="practiceEditForm" style="display:none;">
                         <div class="form-group">
                             <label>题目</label>
                             <textarea id="peQ" placeholder="题目内容"></textarea>
@@ -911,7 +970,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
                     </div>
                     <div style="font-size:11px;color:#8aa2c0;margin-bottom:8px;">共 <b id="practiceSingleCount">0</b> 道单选题</div>
                     <div class="bank-list" id="practiceSingleList" style="max-height:260px;"></div>
-                    <div class="practice-edit-area" id="practiceSingleEditForm" style="display:none;">
+                    <div class="practice-edit-area unified-edit-form" id="practiceSingleEditForm" style="display:none;">
                         <div class="form-group">
                             <label>题目</label>
                             <textarea id="pseQ" placeholder="题目内容"></textarea>
@@ -923,7 +982,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
                         </div>
                         <div class="form-group">
                             <label>正确答案（选项字母）</label>
-                            <input type="text" id="pseCorrect" placeholder="如：A" style="width:100%;padding:11px 14px;font-size:14px;border:1.5px solid #c8d9ec;border-radius:10px;outline:none;background:#f9fcff;">
+                            <input type="text" id="pseCorrect" placeholder="如：A">
                         </div>
                         <div class="form-group">
                             <label>解析（选填）</label>
@@ -950,7 +1009,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
                     </div>
                     <div style="font-size:11px;color:#8aa2c0;margin-bottom:8px;">共 <b id="practiceMultiCount">0</b> 道多选题</div>
                     <div class="bank-list" id="practiceMultiList" style="max-height:260px;"></div>
-                    <div class="practice-edit-area" id="practiceMultiEditForm" style="display:none;">
+                    <div class="practice-edit-area unified-edit-form" id="practiceMultiEditForm" style="display:none;">
                         <div class="form-group">
                             <label>题目</label>
                             <textarea id="pmeQ" placeholder="题目内容"></textarea>
@@ -962,7 +1021,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
                         </div>
                         <div class="form-group">
                             <label>正确答案（选项字母，多选如：ABC）</label>
-                            <input type="text" id="pmeCorrect" placeholder="如：ABC" style="width:100%;padding:11px 14px;font-size:14px;border:1.5px solid #c8d9ec;border-radius:10px;outline:none;background:#f9fcff;">
+                            <input type="text" id="pmeCorrect" placeholder="如：ABC">
                         </div>
                         <div class="form-group">
                             <label>解析（选填）</label>
@@ -1089,8 +1148,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
                     <button id="practicePrevBtn" disabled>◀ 上一题</button>
                 </div>
                 <div class="pf-right">
-                    <button id="practiceSubmitBtn" class="primary">提交答案</button>
-                    <button id="practiceNextBtn" disabled>下一题 ▶</button>
+                    <button id="practiceNextBtn" class="primary">下一题 ▶</button>
                     <button id="practiceFinishBtn" class="success" style="display:none;">查看总分</button>
                 </div>
             </div>
@@ -1166,7 +1224,7 @@ let pinHiddenPracticeMulti = false;
 // 练习编辑状态
 let editingPracticeIdx = -1;
 
-// ====================== 练习状态保存（关闭保留进度） ======================
+// ====================== 练习状态保存 ======================
 function savePracticeState(){
     if(practiceFinished || practiceQuestions.length === 0) return;
     const state = {
@@ -2367,7 +2425,7 @@ function getPracticeQuestion(q){
             isChoice: ed.isChoice !== undefined ? ed.isChoice : (q.isChoice === true),
             options: ed.options || null,
             correct: ed.correct || null,
-            orderSetting: ed.orderSetting || 'none'
+            orderSetting: ed.orderSetting || 'all'
         };
     }
     return {
@@ -2377,7 +2435,7 @@ function getPracticeQuestion(q){
         isChoice: q.isChoice === true,
         options: null,
         correct: null,
-        orderSetting: 'none'
+        orderSetting: 'all'
     };
 }
 
@@ -2390,14 +2448,14 @@ function isQuestionChoice(q){
     return q.isChoice === true;
 }
 
-// 获取乱序设置
+// 获取乱序设置（默认全部允许乱序）
 function getOrderSetting(q){
     const editData = loadPracticeEdit();
     const key = q.q;
     if(editData[key] && editData[key].orderSetting){
         return editData[key].orderSetting;
     }
-    return 'none';
+    return 'all';
 }
 
 // 获取部分乱序配置
@@ -2670,11 +2728,9 @@ function renderPracticeQuestion(){
     document.getElementById('practicePrevBtn').disabled = idx === 0;
     
     const nextBtn = document.getElementById('practiceNextBtn');
-    const submitBtn = document.getElementById('practiceSubmitBtn');
     const finishBtn = document.getElementById('practiceFinishBtn');
     
     if(submitted){
-        submitBtn.style.display = 'none';
         nextBtn.disabled = idx === 19;
         nextBtn.style.display = 'inline-block';
         if(practiceSubmitted.every(s=>s)){
@@ -2683,18 +2739,17 @@ function renderPracticeQuestion(){
             finishBtn.style.display = 'none';
         }
     }else{
-        submitBtn.style.display = 'inline-block';
-        nextBtn.disabled = true;
+        nextBtn.disabled = false;
         nextBtn.style.display = 'inline-block';
         finishBtn.style.display = 'none';
     }
     
-    // 合并后的按钮文字：未提交显示"提交答案"，已提交显示"下一题"
+    // 合并后的按钮文字
     if(submitted){
         nextBtn.textContent = idx === 19 ? '已是最后一题' : '下一题 ▶';
         nextBtn.className = 'primary';
     } else {
-        nextBtn.textContent = idx === 19 ? '提交并完成' : '提交答案';
+        nextBtn.textContent = idx === 19 ? '提交并完成' : '下一题 ▶';
         nextBtn.className = 'primary';
     }
 }
@@ -2735,7 +2790,7 @@ function getQuestionScore(idx){
 }
 
 function submitPracticeAnswer(){
-    if(practiceSubmitted[practiceCurrentIndex]) return;
+    if(practiceSubmitted[practiceCurrentIndex]) return false;
     const idx = practiceCurrentIndex;
     const rawQ = practiceQuestions[idx];
     const answer = practiceAnswers[idx];
@@ -2888,7 +2943,7 @@ function openPracticeEditor(idx){
     const customAnswer = ed.customAnswer || rawQ.a;
     const options = ed.options || cfg.singleOptions[rawQ.q] || cfg.multiOptions[rawQ.q] || ['A. 选项A','B. 选项B','C. 选项C','D. 选项D'];
     const correct = ed.correct || cfg.singleCorrect[rawQ.q] || cfg.multiCorrect[rawQ.q] || 'A';
-    const orderSetting = ed.orderSetting || 'none';
+    const orderSetting = ed.orderSetting || 'all'; // 默认全部允许乱序
     
     body.innerHTML = `
         <div class="editor-section">
@@ -2909,21 +2964,23 @@ function openPracticeEditor(idx){
         </div>
         <div class="editor-section">
             <h4>📋 答案编辑（仅练习模式生效）</h4>
-            <div class="form-group">
-                <label>答案（多空请用 ‖ 分隔）</label>
-                <textarea id="editorAnswer" placeholder="答案内容，多个答案用 ‖ 分隔">${escapeHTML(customAnswer)}</textarea>
+            <div class="unified-edit-form">
+                <div class="form-group">
+                    <label>答案（多空请用 ‖ 分隔）</label>
+                    <textarea id="editorAnswer" placeholder="答案内容，多个答案用 ‖ 分隔">${escapeHTML(customAnswer)}</textarea>
+                </div>
             </div>
         </div>
         <div class="editor-section">
             <h4>🔄 乱序设置</h4>
             <div class="order-setting">
+                <label><input type="radio" name="orderSetting" value="all" ${orderSetting==='all'?'checked':''}> 全部允许乱序（默认）</label>
                 <label><input type="radio" name="orderSetting" value="none" ${orderSetting==='none'?'checked':''}> 不允许乱序</label>
-                <label><input type="radio" name="orderSetting" value="all" ${orderSetting==='all'?'checked':''}> 全部允许乱序</label>
                 <label><input type="radio" name="orderSetting" value="partial" ${orderSetting==='partial'?'checked':''}> 部分乱序</label>
                 <button class="order-partial-btn" id="orderPartialBtn" style="${orderSetting==='partial'?'':'display:none;'}">⚙️ 设置部分乱序</button>
             </div>
             <div class="editor-help" style="margin-top:4px;">
-                💡 乱序仅适用于答案之间无上下文的情况。部分乱序需在题目中用 🔒 和 🔀 标记范围。
+                💡 全部允许乱序：所有答案框可任意交换。不允许乱序：必须按顺序填写。部分乱序：需在题目中用 🔒 和 🔀 标记范围。
             </div>
         </div>
         <div class="editor-section">
@@ -2940,7 +2997,7 @@ function openPracticeEditor(idx){
                 </div>
                 <div class="form-group">
                     <label>正确答案（选项字母，多选如：ABC）</label>
-                    <input type="text" id="editorCorrect" value="${escapeHTML(correct)}" placeholder="如：A 或 ABC" style="width:100%;padding:11px 14px;font-size:14px;border:1.5px solid #c8d9ec;border-radius:10px;outline:none;background:#f9fcff;">
+                    <input type="text" id="editorCorrect" value="${escapeHTML(correct)}" placeholder="如：A 或 ABC">
                 </div>
             </div>
         </div>
@@ -2997,7 +3054,6 @@ function openPracticeEditor(idx){
         const editor = document.getElementById('editorContent');
         const text = editor.innerText;
         
-        // 解析 <\固>...</固/> 和 <\乱序>...</乱序/>
         const groups = [];
         const regex = /<\\固>(.*?)<\\固\/>|<\\乱序>(.*?)<\\乱序\/>/gs;
         let match;
@@ -3015,7 +3071,6 @@ function openPracticeEditor(idx){
             return;
         }
         
-        // 弹出配置窗口
         const overlay = document.createElement('div');
         overlay.className = 'modal-overlay active';
         overlay.style.zIndex = 1500;
@@ -3057,17 +3112,14 @@ function openPracticeEditor(idx){
         overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
         
         document.getElementById('savePartialOrder').addEventListener('click', ()=>{
-            // 保存配置到editData
             const editData = loadPracticeEdit();
             if(!editData[rawQ.q]) editData[rawQ.q] = {};
             
-            // 计算每个分组对应的答案索引
             const allBlanks = [];
             let blankIdx = 0;
-            const tempText = text.replace(/<\\固>(.*?)<\\固\/>|<\\乱序>(.*?)<\\乱序\/>/gs, (m, fixed, order) => {
+            text.replace(/<\\固>(.*?)<\\固\/>|<\\乱序>(.*?)<\\乱序\/>/gs, (m, fixed, order) => {
                 const content = fixed || order;
                 const type = fixed ? 'fixed' : 'order';
-                // 统计这个分组内的答题框数量
                 const blankCount = (content.match(/⬜/g) || []).length;
                 const indices = [];
                 for(let i = 0; i < blankCount; i++){
@@ -3089,7 +3141,6 @@ function openPracticeEditor(idx){
         });
     });
     
-    // 监听单选按钮变化
     document.querySelectorAll('input[name="orderSetting"]').forEach(radio => {
         radio.addEventListener('change', (e) => {
             const btn = document.getElementById('orderPartialBtn');
@@ -3132,7 +3183,7 @@ function getEditorOptions(containerId){
     return opts;
 }
 
-// ====================== 练习管理列表渲染（横向按钮 + 去编辑） ======================
+// ====================== 练习管理列表渲染 ======================
 function renderPracticeList(type, keyword){
     const cfg = loadPracticeCfg();
     let listEl, countEl, searchEl, pinCheck;
@@ -3216,12 +3267,10 @@ function renderPracticeList(type, keyword){
         });
         div.querySelector('.bi-edit-btn').addEventListener('click', (e)=>{
             e.stopPropagation();
-            // 跳转到编辑处
             practiceSelectedIdx = idx;
             practiceSelectedType = type;
             renderPracticeList(type, searchEl.value);
             showPracticeEditForm(idx, type);
-            // 滚动到编辑区域
             setTimeout(() => {
                 const formId = type === 'fill' ? 'practiceEditForm' : type === 'single' ? 'practiceSingleEditForm' : 'practiceMultiEditForm';
                 const form = document.getElementById(formId);
@@ -3388,7 +3437,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 document.getElementById('practiceModal').classList.remove('active');
             }
         }else{
-            // 保存进度并直接关闭
             savePracticeState();
             document.getElementById('practiceModal').classList.remove('active');
         }
@@ -3406,16 +3454,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
     // 合并的按钮：提交答案 / 下一题
     document.getElementById('practiceNextBtn').addEventListener('click', ()=>{
         if(!practiceSubmitted[practiceCurrentIndex]){
-            // 未提交，先提交
             const ok = submitPracticeAnswer();
             if(ok){
-                // 提交成功后，如果是最后一题且所有题都已提交，显示查看总分
                 if(practiceCurrentIndex === 19 && practiceSubmitted.every(s=>s)){
                     document.getElementById('practiceFinishBtn').style.display = 'inline-block';
                 }
             }
         } else {
-            // 已提交，进入下一题
             if(practiceCurrentIndex < 19){
                 practiceCurrentIndex++;
                 renderPracticeQuestion();
@@ -3441,15 +3486,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if(!rawQ) return;
         
         const editorContent = document.getElementById('editorContent');
-        // 提取纯文本，保留乱序标记
         let customQuestion = editorContent.innerHTML;
-        // 将span标记转换回纯文本标记
-        customQuestion = customQuestion.replace(/<span class="editor-blank"[^>]*>⬜<\/span>/g, '（）');
+        customQuestion = customQuestion.replace(/<span class="editor-blank"[^>]*>⬜<\/span>/g, '⬜');
         customQuestion = customQuestion.replace(/<span class="editor-fixed-start"[^>]*>&lt;\\固&gt;<\/span>/g, '<\\固>');
         customQuestion = customQuestion.replace(/<span class="editor-fixed-end"[^>]*>&lt;\\固\/&gt;<\/span>/g, '<\\固/>');
         customQuestion = customQuestion.replace(/<span class="editor-order-start"[^>]*>&lt;\\乱序&gt;<\/span>/g, '<\\乱序>');
         customQuestion = customQuestion.replace(/<span class="editor-order-end"[^>]*>&lt;\\乱序\/&gt;<\/span>/g, '<\\乱序/>');
-        // 清理其他HTML
         customQuestion = customQuestion.replace(/<[^>]+>/g, '');
         customQuestion = customQuestion.trim();
         
@@ -3457,7 +3499,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         const isChoice = document.getElementById('editorChoiceCheck').checked;
         const options = getEditorOptions('editorOptionsList');
         const correct = document.getElementById('editorCorrect').value.trim().toUpperCase();
-        const orderSetting = document.querySelector('input[name="orderSetting"]:checked')?.value || 'none';
+        const orderSetting = document.querySelector('input[name="orderSetting"]:checked')?.value || 'all';
         
         const editData = loadPracticeEdit();
         const existingConfig = editData[rawQ.q]?.partialOrderConfig || null;
