@@ -6413,6 +6413,20 @@
       "orderSetting": "all",
       "updatedAt": 1790793680562,
       "customExplanation": ""
+    },
+    "皮肤或眼睛不慎溅入次氯酸钠或酸碱药液，第一时间应（）": {
+      "customQuestion": "皮肤或眼睛不慎溅入次氯酸钠或酸碱药液，第一时间应（）",
+      "customAnswer": "皮肤或眼睛不慎溅入次氯酸钠或酸碱药液，第一时间应（）",
+      "isChoice": true,
+      "options": [
+        "A. 涂抹药膏",
+        "B. 用干布擦拭",
+        "C. 立即用大量流动清水冲洗至少15分钟，并就医",
+        "D. 等待观察"
+      ],
+      "correct": "C",
+      "orderSetting": "all",
+      "updatedAt": 1790793747039
     }
   }
 }
