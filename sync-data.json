@@ -4,7 +4,7 @@
     "repo": "new",
     "path": "index.html",
     "token": "",
-    "updatedAt": 1790767718834,
+    "updatedAt": 1790769749375,
     "device": "pc"
   },
   "reviveBackup": {
@@ -4172,7 +4172,9 @@
     "device": "pc"
   },
   "history": {
-    "list": [],
+    "list": [
+      "臭氧"
+    ],
     "updatedAt": 0,
     "device": "pc"
   },
