@@ -6479,6 +6479,20 @@
       "orderSetting": "all",
       "updatedAt": 1790793856254,
       "customExplanation": ""
+    },
+    "污水厂调节池、格栅间等有限空间，进入前必须重点检测的有毒气体是（）": {
+      "customQuestion": "污水厂调节池、格栅间等有限空间，进入前必须重点检测的有毒气体是",
+      "customAnswer": "污水厂调节池、格栅间等有限空间，进入前必须重点检测的有毒气体是",
+      "isChoice": true,
+      "options": [
+        "A. 以氧化碳(CO)",
+        "B. 硫化氢(H₂S)",
+        "C. 氯气(Cl₂)",
+        "D. 二氧化碳(CO₂)"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790793922610
     }
   }
 }
