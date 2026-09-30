@@ -7008,6 +7008,20 @@
       "orderSetting": "all",
       "updatedAt": 1790799262897,
       "customExplanation": "单选题"
+    },
+    "污水处理中，调节池的作用是（）": {
+      "customQuestion": "污水处理中，调节池的作用是",
+      "customAnswer": "污水处理中，调节池的作用是",
+      "isChoice": true,
+      "options": [
+        "A. 调节水量和水质",
+        "B. 去除杂质",
+        "C. 进行生物处理",
+        "D. 进行生物处理"
+      ],
+      "correct": "A",
+      "orderSetting": "all",
+      "updatedAt": 1790799334351
     }
   }
 }
