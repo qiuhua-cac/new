@@ -4,7 +4,7 @@
     "repo": "new",
     "path": "index.html",
     "token": "",
-    "updatedAt": 1790773572399,
+    "updatedAt": 1790774629390,
     "device": "pc"
   },
   "reviveBackup": {
@@ -4173,6 +4173,7 @@
   },
   "history": {
     "list": [
+      "发现有人",
       "cod",
       "kwh",
       "功率",
@@ -4180,8 +4181,7 @@
       "流量",
       "可以",
       "高处作业",
-      "必须遵循的",
-      "有限空间"
+      "必须遵循的"
     ],
     "updatedAt": 0,
     "device": "pc"
