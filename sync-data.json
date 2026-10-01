@@ -5512,7 +5512,7 @@
         "isChoice": false
       }
     ],
-    "updatedAt": 1790836259783,
+    "updatedAt": 1790839878602,
     "device": "pc"
   },
   "practiceCfg": {
@@ -5727,7 +5727,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1790839837715,
+    "updatedAt": 1790839978187,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -6162,6 +6162,20 @@
       "orderSetting": "all",
       "updatedAt": 1790839699715,
       "customExplanation": "本题为选择题答案"
+    },
+    "凡在高地面（）的地点进行的工作都应视作高处作业": {
+      "customQuestion": "凡在高地面（）的地点进行的工作都应视作高处作业",
+      "customAnswer": "B",
+      "customExplanation": "本题为选择题的答案",
+      "isChoice": true,
+      "options": [
+        "A. 1.5米以上",
+        "B. 2米以上",
+        "C. 3米以上",
+        "D. 2.5米以上"
+      ],
+      "correct": "B",
+      "updatedAt": 1790839978187
     }
   }
 }
