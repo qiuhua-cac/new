@@ -7828,6 +7828,22 @@
         "hidden": false,
         "practiceDeleted": false,
         "__practiceOnly": true
+      },
+      {
+        "q": "格式",
+        "a": "A",
+        "e": "",
+        "isChoice": true,
+        "options": [
+          "A. 2",
+          "B. 3",
+          "C. 4",
+          "D. 5"
+        ],
+        "correct": "A",
+        "hidden": false,
+        "practiceDeleted": false,
+        "__practiceOnly": true
       }
     ],
     "污水处理厂中，污泥消化池的主要功能是?": {
@@ -8271,12 +8287,12 @@
       "isChoice": true,
       "options": [
         "A. 选项A",
-        "B. 2米以上",
+        "B. 选项B",
         "C. 选项C",
         "D. 选项D"
       ],
       "correct": "A",
-      "updatedAt": 1790828264774
+      "updatedAt": 1790828344157
     }
   }
 }
