@@ -1867,8 +1867,8 @@
       {
         "q": "凡在高地面（）的地点进行的工作都应视作高处作业",
         "a": "2米及以上",
-        "e": "单选题答案",
-        "hidden": true,
+        "e": "本题为选择题的答案",
+        "hidden": false,
         "isChoice": true
       },
       {
@@ -2638,7 +2638,7 @@
         "q": "厌氧池溶解氧一般控制在0.2 mg/L以下，其目的是（）",
         "a": "反硝化反应顺利进行",
         "e": "",
-        "hidden": true,
+        "hidden": false,
         "isChoice": false
       },
       {
@@ -3778,7 +3778,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1790838645355,
+    "updatedAt": 1790838787055,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -3822,22 +3822,6 @@
           "B. 提供氧气供微生物代谢",
           "C. 去除水中的悬浮物",
           "D. 降低水温"
-        ],
-        "correct": "B",
-        "hidden": false,
-        "practiceDeleted": false,
-        "__practiceOnly": true
-      },
-      {
-        "q": "厌氧池溶解氧一般控制在0.2 mg/L以下，其目的是",
-        "a": "B",
-        "e": "",
-        "isChoice": true,
-        "options": [
-          "A. 硝化反应顺利进行",
-          "B. 反硝化反应顺利进行",
-          "C. 提高活性污泥沉降性能",
-          "D. 促进污泥增长"
         ],
         "correct": "B",
         "hidden": false,
