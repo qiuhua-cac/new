@@ -3834,7 +3834,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1790839180586,
+    "updatedAt": 1790839251232,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -4161,6 +4161,20 @@
       "orderSetting": "all",
       "updatedAt": 1790839127571,
       "customExplanation": ""
+    },
+    "有限空间作业时，气体检测应在作业前（）分钟内完成，作业中至少每（）分钟重复检测一次": {
+      "customQuestion": "有限空间作业时，气体检测应在作业前（）分钟内完成，作业中至少每（）分钟重复检测一次",
+      "customAnswer": "有限空间作业时，气体检测应在作业前（）分钟内完成，作业中至少每（）分钟重复检测一次",
+      "isChoice": true,
+      "options": [
+        "A. 60;60",
+        "B. 30;30",
+        "C. 15;60",
+        "D. 45;45"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790839251231
     }
   }
 }
