@@ -378,6 +378,10 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .marker-answer{display:inline-block;padding:2px 8px;border-radius:6px;font-size:12px;font-weight:700;margin:0 2px;user-select:none;vertical-align:middle;background:#fee2e2;border:1.5px solid #ef4444;color:#b91c1c;font-family:'Consolas','Monaco',monospace;}
 .marker-fixed{display:inline-block;padding:2px 8px;border-radius:6px;font-size:12px;font-weight:700;margin:0 2px;user-select:none;vertical-align:middle;background:#fef9c3;border:1.5px solid #eab308;color:#854d0e;font-family:'Consolas','Monaco',monospace;}
 .marker-order{display:inline-block;padding:2px 8px;border-radius:6px;font-size:12px;font-weight:700;margin:0 2px;user-select:none;vertical-align:middle;background:#dbeafe;border:1.5px solid #3b82f6;color:#1d4ed8;font-family:'Consolas','Monaco',monospace;}
+#editChoiceWrap,
+#addChoiceWrap {
+    display: none !important;
+}
 </style>
 </head>
 <body>
@@ -535,9 +539,9 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
                         <textarea id="editE" class="e-textarea" placeholder="题目解析内容，留空则不显示解析"></textarea>
                     </div>
                     <div class="checkbox-wrap" id="editChoiceWrap">
-                        <input type="checkbox" id="editChoiceCheck">
-                        <span>🔘 作为选择题进入练习</span>
-                    </div>
+    <input type="checkbox" id="editChoiceCheck">
+    <span>🔘 作为选择题进入练习</span>
+</div>
                     <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">
                         <button class="btn btn-sm btn-search-hide" id="editSearchHide">🔍 搜索隐藏</button>
                         <button class="btn btn-sm" id="editCodePreview">👁 代码预览</button>
@@ -563,9 +567,9 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
                         <textarea id="addE" class="e-textarea" placeholder="题目解析内容，留空则不显示解析"></textarea>
                     </div>
                     <div class="checkbox-wrap" id="addChoiceWrap">
-                        <input type="checkbox" id="addChoiceCheck">
-                        <span>🔘 作为选择题进入练习</span>
-                    </div>
+    <input type="checkbox" id="addChoiceCheck">
+    <span>🔘 作为选择题进入练习</span>
+</div>
                     <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">
                         <button class="btn btn-sm" id="addPreview">👁 预览</button>
                         <button class="btn btn-sm" id="addClear">清空</button>
@@ -1497,6 +1501,7 @@ function getSyncPath(cfg){
 let _pushSyncRunning = false;
 let _pushSyncPending = false;
 async function pushSyncData(silent = true){
+if(DEVICE === 'mobile'){ return false; }
     if(_pushSyncRunning){ _pushSyncPending = true; return true; }
     _pushSyncRunning = true;
     try{
@@ -1675,6 +1680,7 @@ function saveBankUpdatedAt(ts){ localStorage.setItem(BANK_TS_KEY, String(ts || n
 
 // ====================== 同步完整页面 ======================
 async function syncFullPageToGitHub(silent = false){
+if(DEVICE === 'mobile'){ return false; }
     const cfg = loadGhCfg();
     if(!isGhConfigured(cfg)){
         if(!silent) showToast('请先完整配置 GitHub 信息');
@@ -4159,8 +4165,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
         bankModal.classList.remove('active');
     });
     document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=>{
-        if(!hasUnsavedChanges){ showToast('没有需要保存的修改'); return; }
-        const ok = await askConfirm('确认保存并上传到云端？（输入确认代码）');
+    if(DEVICE === 'mobile'){ showToast('📖 移动端为只读模式，请到 PC 端修改并上传'); return; }
+    if(!hasUnsavedChanges){ showToast('没有需要保存的修改'); return; }
+    const ok = await askConfirm('确认保存并上传到云端？（输入确认代码）');
         if(!ok) return;
         try{
             showToast('正在保存…');
@@ -4606,8 +4613,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const editDelete    = document.getElementById('editDelete');
     const editCodePreview = document.getElementById('editCodePreview');
     const editSearchHide = document.getElementById('editSearchHide');
-    const editChoiceCheck = document.getElementById('editChoiceCheck');
-    const editChoiceWrap = document.getElementById('editChoiceWrap');
+        const editChoiceCheck = document.getElementById('editChoiceCheck');
+const editChoiceWrap = document.getElementById('editChoiceWrap');
     let selectedIdx = -1;
     function renderBankList(keyword){
         const kw = (keyword || '').trim().toLowerCase();
