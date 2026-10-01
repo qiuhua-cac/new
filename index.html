@@ -506,13 +506,36 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .study-card .sc-answer{
     background:#fef2f2;
     border-left:3px solid #ef4444;
-    color:#b91c1c;
-    font-weight:600;
+    color:#dc2626;
+    font-weight:800;
+    font-size:14px;
+    line-height:1.65;
 }
 .study-card .sc-answer .sc-label{
     color:#dc2626;
     font-weight:700;
     margin-right:4px;
+}
+/* 学习模式 - 答案分隔样式（与查询结果一致） */
+.study-card .sc-answer .ans-line{
+    display:block;
+    padding:3px 0 3px 16px;
+    position:relative;
+}
+.study-card .sc-answer .ans-line::before{
+    content:'▲';
+    position:absolute;
+    left:0;
+    top:3px;
+    color:#ef4444;
+    font-size:11px;
+    font-weight:normal;
+}
+.study-card .sc-answer .ans-sep{
+    display:inline-block;
+    color:#f87171;
+    font-weight:normal;
+    padding:0 2px;
 }
 .study-card .sc-explain{
     background:#f8fafc;
@@ -523,6 +546,52 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
     color:#475569;
     font-weight:700;
     margin-right:4px;
+}
+
+/* 学习模式 - 已会标记 */
+.study-card.mastered{
+    background:linear-gradient(135deg,#f0fdf4,#dcfce7);
+    border-left-color:#22c55e;
+}
+.study-card .sc-master-btn{
+    position:absolute;
+    top:10px;
+    right:10px;
+    font-size:11px;
+    padding:4px 10px;
+    border-radius:8px;
+    border:1.5px solid #c8d9ec;
+    background:#fff;
+    color:#4a6a8a;
+    cursor:pointer;
+    font-weight:600;
+    transition:0.15s;
+    white-space:nowrap;
+}
+.study-card .sc-master-btn:hover{
+    background:#eff6ff;
+    border-color:#93c5fd;
+    color:#1d4ed8;
+}
+.study-card .sc-master-btn.active{
+    background:#22c55e;
+    border-color:#16a34a;
+    color:#fff;
+    box-shadow:0 2px 6px rgba(34,197,94,0.3);
+}
+.study-card .sc-master-btn.active::before{
+    content:'✅ ';
+}
+.study-card{
+    position:relative;
+}
+@media (max-width:600px){
+    .study-card .sc-master-btn{
+        font-size:10px;
+        padding:3px 8px;
+        top:8px;
+        right:8px;
+    }
 }
 .study-empty{
     text-align:center;
@@ -539,6 +608,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
     .study-card{padding:10px 12px;border-left-width:3px;}
     .study-card .sc-q{font-size:13px;}
     .study-card .sc-block{font-size:12px;padding:6px 10px;}
+    .study-card .sc-answer{font-size:13px;padding:6px 10px;}
 }
 /* ====================== 帘子（设置与练习） ====================== */
 .drawer-overlay{
@@ -592,7 +662,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 
 <div class="header-row">
     <div class="header-left">
-        <button class="btn-practice" id="practiceBtn">⚙️ 设置与练习</button>
+        <button class="btn-practice" id="practiceBtn"><span style="display:block;line-height:1.3;">⚙️ 设置</span><span style="display:block;line-height:1.3;">📝 练习</span></button>
     </div>
     <div class="header-center">
         <div class="app-header">
@@ -607,7 +677,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 <div class="drawer-overlay" id="drawerOverlay"></div>
 <div class="drawer" id="drawer">
     <div class="drawer-header">
-        <span>⚙️ 设置与练习</span>
+        <span>⚙️ 设置</span>
         <button class="drawer-close" id="drawerClose">✕</button>
     </div>
     <div class="drawer-body">
@@ -627,6 +697,14 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
             </div>
             <div class="drawer-item-arrow">▶</div>
         </div>
+<div class="drawer-item" id="drawerUserBtn">
+    <div class="drawer-item-icon">👤</div>
+    <div class="drawer-item-content">
+        <div class="drawer-item-title">用户登录 / 注册</div>
+        <div class="drawer-item-desc">登录后可标记「已会」题目</div>
+    </div>
+    <div class="drawer-item-arrow">▶</div>
+</div>
     </div>
 </div>
 <div class="app-container">
@@ -727,12 +805,41 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn" id="loginCancel">取消</button>
-            <button class="btn btn-primary" id="loginSubmit">登录</button>
+    <button class="btn" id="loginCancel">取消</button>
+    <button class="btn" id="loginGoRegister">注册新账号</button>
+    <button class="btn btn-primary" id="loginSubmit">登录</button>
+</div>
+    </div>
+</div>
+<div class="modal-overlay" id="registerModal">
+    <div class="modal" style="max-width:380px;">
+        <div class="modal-header">
+            <h3>📝 注册新账号</h3>
+            <button class="modal-close" id="registerClose">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" id="registerUser" autocomplete="off" placeholder="请设置用户名">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" id="registerPass" autocomplete="off" placeholder="请设置密码">
+            </div>
+            <div class="form-group">
+                <label>确认密码</label>
+                <input type="password" id="registerPass2" autocomplete="off" placeholder="请再输入一次密码">
+            </div>
+            <div style="font-size:11px;color:#8aa2c0;line-height:1.6;">
+                ⚠️ 用户名一旦注册不可更改；密码请勿使用真实常用密码。
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" id="registerCancel">取消</button>
+            <button class="btn btn-primary" id="registerSubmit">注册</button>
         </div>
     </div>
 </div>
-
 <div class="modal-overlay" id="bankModal">
     <div class="modal" style="max-width:680px;">
         <div class="modal-header">
@@ -1079,7 +1186,15 @@ const PRACTICE_EDIT_KEY = 'zktest_practice_edit_v1';
 const PRACTICE_STATE_KEY = 'zktest_practice_state_v1';
 const CONFIRM_CODE = 'qiuhua';
 const SYNC_FILE = 'sync-data.json';
-const SYNC_KEYS = ['ghConfig','reviveBackup','backups','history','bank','practiceCfg','practiceEdit'];
+const SYNC_KEYS = ['ghConfig','reviveBackup','backups','history','bank','practiceCfg','practiceEdit','userMastered'];
+
+// ====================== 数据仓库配置（zk-data） ======================
+// 这 4 个值是用来读写 users.json 的，用户看不到
+const ZK_DATA_OWNER = 'qiuhua-cac';
+const ZK_DATA_REPO  = 'zk-data';
+const ZK_DATA_PATH  = 'users.json';
+const ZK_DATA_TOKEN = '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';
+// ====================================================================
 
 function detectDevice(){
     const ua = navigator.userAgent || '';
@@ -1118,6 +1233,260 @@ let pinHiddenPracticeMulti = false;
 
 let editingPracticeIdx = -1;
 
+// ====================== 用户数据（zk-data / users.json） ======================
+const USER_SESSION_KEY = 'zktest_user_session_v1';
+const USER_MASTERED_KEY = 'zktest_study_mastered_v1';
+
+// ---------- 读取 users.json ----------
+async function fetchUsersJson(){
+    const apiBase = `https://api.github.com/repos/${ZK_DATA_OWNER}/${ZK_DATA_REPO}/contents/${ZK_DATA_PATH}`;
+    try{
+        const resp = await fetch(apiBase + '?t=' + Date.now(), {
+            method: 'GET',
+            headers: {
+                'Authorization': `token ${ZK_DATA_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json'
+            },
+            cache: 'no-store'
+        });
+        if(!resp.ok){
+            if(resp.status === 404){
+                return { users: {}, _sha: null };
+            }
+            console.warn('fetchUsersJson 失败', resp.status);
+            return null;
+        }
+        const data = await resp.json();
+        let text = '';
+        if(!data.content && data.download_url){
+            const rawResp = await fetch(data.download_url, { cache: 'no-store' });
+            text = await rawResp.text();
+        }else{
+            text = base64ToUtf8(data.content);
+        }
+        const obj = JSON.parse(text);
+        if(!obj.users) obj.users = {};
+        obj._sha = data.sha || null;
+        return obj;
+    }catch(e){
+        console.warn('fetchUsersJson 异常', e);
+        return null;
+    }
+}
+
+// ---------- 写入 users.json（带冲突重试） ----------
+async function pushUsersJson(usersObj, sha, commitMsg){
+    const apiBase = `https://api.github.com/repos/${ZK_DATA_OWNER}/${ZK_DATA_REPO}/contents/${ZK_DATA_PATH}`;
+    const clean = { users: usersObj };
+    const content = JSON.stringify(clean, null, 2);
+    const contentB64 = utf8ToBase64(content);
+    for(let attempt = 0; attempt < 5; attempt++){
+        const body = {
+            message: commitMsg || `users.json ${new Date().toLocaleString('zh-CN',{hour12:false})}`,
+            content: contentB64,
+            branch: 'main'
+        };
+        if(sha) body.sha = sha;
+        try{
+            const putResp = await fetch(apiBase, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${ZK_DATA_TOKEN}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+            if(putResp.ok){
+                return true;
+            }
+            if(putResp.status === 409){
+                await new Promise(r => setTimeout(r, 200 + attempt * 200));
+                const latest = await fetchUsersJson();
+                if(latest && latest._sha){
+                    sha = latest._sha;
+                    continue;
+                }
+            }
+            console.warn('pushUsersJson 失败', putResp.status, await putResp.text());
+            return false;
+        }catch(e){
+            console.warn('pushUsersJson 异常', e);
+            return false;
+        }
+    }
+    return false;
+}
+
+// ---------- 本地保存 / 读取当前登录用户 ----------
+function saveUserSession(user){
+    try{
+        const obj = {
+            username: user.username,
+            password: user.password,
+            loginAt: nowTs()
+        };
+        localStorage.setItem(USER_SESSION_KEY, JSON.stringify(obj));
+    }catch(e){}
+}
+function loadUserSession(){
+    try{
+        const raw = localStorage.getItem(USER_SESSION_KEY);
+        if(!raw) return null;
+        const obj = JSON.parse(raw);
+        if(!obj || !obj.username) return null;
+        return obj;
+    }catch(e){ return null; }
+}
+function clearUserSession(){
+    try{ localStorage.removeItem(USER_SESSION_KEY); }catch(e){}
+}
+
+// ---------- 注册（含重名检查） ----------
+async function registerUser_api(username, password){
+    if(!username || !password) return { ok:false, msg:'用户名和密码不能为空' };
+    const data = await fetchUsersJson();
+    if(!data) return { ok:false, msg:'无法连接数据仓库，请稍后重试' };
+    if(data.users[username]){
+        return { ok:false, msg:'用户名已存在，请更换' };
+    }
+    data.users[username] = {
+        password: password,
+        mastered: [],
+        createdAt: nowTs(),
+        lastLogin: nowTs()
+    };
+    const ok = await pushUsersJson(data.users, data._sha, `注册用户 ${username}`);
+    if(!ok) return { ok:false, msg:'注册失败，请稍后重试' };
+    return { ok:true, msg:'注册成功', user: data.users[username] };
+}
+
+// ---------- 登录校验 ----------
+async function loginUser_api(username, password){
+    if(!username || !password) return { ok:false, msg:'用户名和密码不能为空' };
+    const data = await fetchUsersJson();
+    if(!data) return { ok:false, msg:'无法连接数据仓库，请稍后重试' };
+    const u = data.users[username];
+    if(!u) return { ok:false, msg:'用户名不存在，请先注册' };
+    if(u.password !== password) return { ok:false, msg:'密码错误' };
+    u.lastLogin = nowTs();
+    await pushUsersJson(data.users, data._sha, `登录 ${username}`);
+    return { ok:true, msg:'登录成功', user: u };
+}
+
+// ---------- 已会标记：本地读写 ----------
+function loadMasteredMap(){
+    try{
+        const raw = localStorage.getItem(USER_MASTERED_KEY);
+        if(raw) return JSON.parse(raw);
+    }catch(e){}
+    return {};
+}
+function saveMasteredMap(map){
+    try{ localStorage.setItem(USER_MASTERED_KEY, JSON.stringify(map)); }catch(e){}
+}
+// ====================================================================
+// ====================== 用户系统 UI 逻辑 ======================
+let currentUser = null;
+
+function refreshUserDrawerBtn(){
+    const btn = document.getElementById('drawerUserBtn');
+    if(!btn) return;
+    const icon = btn.querySelector('.drawer-item-icon');
+    const title = btn.querySelector('.drawer-item-title');
+    const desc = btn.querySelector('.drawer-item-desc');
+    if(!icon || !title || !desc) return;
+    if(currentUser && currentUser.username){
+        icon.textContent = '👤';
+        title.textContent = '我的账号：' + currentUser.username;
+        desc.textContent = '点击退出登录';
+    }else{
+        icon.textContent = '👤';
+        title.textContent = '用户登录 / 注册';
+        desc.textContent = '登录后可标记「已会」题目';
+    }
+}
+
+function openLoginModal(){
+    const loginModal = document.getElementById('loginModal');
+    const loginUser = document.getElementById('loginUser');
+    const loginPass = document.getElementById('loginPass');
+    if(!loginModal) return;
+    loginUser.value = '';
+    loginPass.value = '';
+    loginModal.classList.add('active');
+    setTimeout(()=>loginUser.focus(), 100);
+}
+
+function openRegisterModal(){
+    const registerModal = document.getElementById('registerModal');
+    const u = document.getElementById('registerUser');
+    const p1 = document.getElementById('registerPass');
+    const p2 = document.getElementById('registerPass2');
+    if(!registerModal) return;
+    u.value = ''; p1.value = ''; p2.value = '';
+    registerModal.classList.add('active');
+    setTimeout(()=>u.focus(), 100);
+}
+
+async function doUserLogin(){
+    const loginUser = document.getElementById('loginUser');
+    const loginPass = document.getElementById('loginPass');
+    const loginModal = document.getElementById('loginModal');
+    const u = loginUser.value.trim();
+    const p = loginPass.value.trim();
+    if(!u || !p){ showToast('请输入用户名和密码'); return; }
+    showToast('正在登录…');
+    const res = await loginUser_api(u, p);
+    if(!res.ok){ showToast(res.msg); return; }
+        currentUser = { username: u, password: p };
+    saveUserSession(currentUser);
+    loginModal.classList.remove('active');
+    showToast('✅ 登录成功，欢迎 ' + u);
+    refreshUserDrawerBtn();
+    await loadMasteredFromCloud();
+    if(typeof renderStudyList === 'function' && isStudyMode){
+        renderStudyList(document.getElementById('studySearch').value || '');
+    }
+}
+
+async function doUserRegister(){
+    const u = document.getElementById('registerUser').value.trim();
+    const p1 = document.getElementById('registerPass').value.trim();
+    const p2 = document.getElementById('registerPass2').value.trim();
+    const registerModal = document.getElementById('registerModal');
+    if(!u || !p1){ showToast('用户名和密码不能为空'); return; }
+    if(p1 !== p2){ showToast('两次输入的密码不一致'); return; }
+    showToast('正在注册…');
+    const res = await registerUser_api(u, p1);
+    if(!res.ok){ showToast(res.msg); return; }
+    currentUser = { username: u, password: p1 };
+    saveUserSession(currentUser);
+    registerModal.classList.remove('active');
+    showToast('✅ 注册成功，已自动登录');
+    refreshUserDrawerBtn();
+}
+
+async function doUserLogout(){
+    if(!currentUser){ return; }
+    const ok = confirm('确定退出登录吗？退出后「已会」标记将不再同步。');
+    if(!ok) return;
+    currentUser = null;
+    clearUserSession();
+    showToast('已退出登录');
+    refreshUserDrawerBtn();
+    if(typeof renderStudyList === 'function' && isStudyMode){
+        renderStudyList(document.getElementById('studySearch').value || '');
+    }
+}
+
+async function tryRestoreUserSession(){
+    const s = loadUserSession();
+    if(!s || !s.username){ return; }
+    currentUser = { username: s.username, password: s.password };
+    refreshUserDrawerBtn();
+}
+// ====================================================================
 // ====================== 练习状态保存 ======================
 function savePracticeState(){
     if(practiceFinished || practiceQuestions.length === 0) return;
@@ -4157,6 +4526,78 @@ function closeTestMode(){
     document.getElementById('practiceFinishBtn').style.display = 'none';
     document.getElementById('practicePrevBtn').style.display = '';
 }
+// ====================== 已会标记（mastered） ======================
+function getMasteredListForCurrentUser(){
+    if(!currentUser || !currentUser.username) return [];
+    const map = loadMasteredMap();
+    const list = map[currentUser.username];
+    return Array.isArray(list) ? list : [];
+}
+
+function saveMasteredListForCurrentUser(list){
+    if(!currentUser || !currentUser.username) return;
+    const map = loadMasteredMap();
+    map[currentUser.username] = list;
+    saveMasteredMap(map);
+}
+
+async function syncMasteredToCloud(){
+    if(!currentUser || !currentUser.username) return false;
+    const uname = currentUser.username;
+    const localList = getMasteredListForCurrentUser();
+    for(let attempt = 0; attempt < 5; attempt++){
+        const data = await fetchUsersJson();
+        if(!data) return false;
+        if(!data.users[uname]){
+            return false;
+        }
+        data.users[uname].mastered = localList;
+        data.users[uname].lastLogin = nowTs();
+        const ok = await pushUsersJson(data.users, data._sha, `更新 ${uname} 已会标记`);
+        if(ok) return true;
+        await new Promise(r => setTimeout(r, 200 + attempt * 200));
+    }
+    return false;
+}
+
+async function onToggleMastered(questionText, btnEl){
+    if(!currentUser || !currentUser.username){
+        showToast('请先登录后再标记「已会」');
+        setTimeout(()=>{ openLoginModal(); }, 400);
+        return;
+    }
+    const list = getMasteredListForCurrentUser();
+    const idx = list.indexOf(questionText);
+    const willAdd = idx === -1;
+    if(willAdd) list.push(questionText);
+    else list.splice(idx, 1);
+    saveMasteredListForCurrentUser(list);
+    if(btnEl){
+        btnEl.classList.toggle('active', willAdd);
+        const card = btnEl.closest('.study-card');
+        if(card) card.classList.toggle('mastered', willAdd);
+    }
+    showToast(willAdd ? '✅ 已标记为已会' : '已取消已会');
+    const ok = await syncMasteredToCloud();
+    if(!ok){
+        showToast('⚠️ 云端同步失败，稍后重试');
+    }
+}
+
+async function loadMasteredFromCloud(){
+    if(!currentUser || !currentUser.username) return;
+    const data = await fetchUsersJson();
+    if(!data) return;
+    const u = data.users[currentUser.username];
+    if(!u) return;
+    const cloudList = Array.isArray(u.mastered) ? u.mastered : [];
+    const localMap = loadMasteredMap();
+    const localList = Array.isArray(localMap[currentUser.username]) ? localMap[currentUser.username] : [];
+    if(cloudList.length >= localList.length){
+        localMap[currentUser.username] = cloudList;
+        saveMasteredMap(localMap);
+    }
+}
 // ====================== 学习模式 ======================
 let isStudyMode = false;
 
@@ -4229,15 +4670,23 @@ function renderStudyList(keyword){
         const explainHTML = (item.e && item.e.trim())
             ? `<div class="sc-block sc-explain"><span class="sc-label">解析：</span>${escapeHTML(item.e)}</div>`
             : '';
+                const masteredList = getMasteredListForCurrentUser();
+        const isMastered = masteredList.indexOf(item.q) !== -1;
+        if(isMastered) div.classList.add('mastered');
         div.innerHTML = `
             <div class="sc-header">
                 <span class="sc-num">#${idx+1}</span>
                 ${choiceTag}
             </div>
+            <button class="sc-master-btn ${isMastered?'active':''}" data-q="${escapeHTML(item.q)}">已会</button>
             <div class="sc-q">${escapeHTML(item.q)}</div>
             <div class="sc-block sc-answer"><span class="sc-label">答案：</span>${formatAnswerHTML(item.a)}</div>
             ${explainHTML}
         `;
+        div.querySelector('.sc-master-btn').addEventListener('click', (e)=>{
+            e.stopPropagation();
+            onToggleMastered(item.q, e.currentTarget);
+        });
         listEl.appendChild(div);
     });
     countEl.textContent = `共 ${items.length} 题`;
@@ -4347,7 +4796,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
             }
         }, 300);
     });
-
+document.getElementById('drawerUserBtn').addEventListener('click', ()=>{
+    requestCloseDrawer();
+    setTimeout(()=>{
+        if(currentUser && currentUser.username){
+            doUserLogout();
+        }else{
+            openLoginModal();
+        }
+    }, 300);
+});
     document.getElementById('studySearch').addEventListener('input', (e)=>{
         renderStudyList(e.target.value);
     });
@@ -4512,8 +4970,35 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
     loginClose.addEventListener('click', ()=> loginModal.classList.remove('active'));
     loginCancel.addEventListener('click', ()=> loginModal.classList.remove('active'));
-    loginSubmit.addEventListener('click', doLogin);
-    loginPass.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') doLogin(); });
+    loginSubmit.addEventListener('click', async ()=>{
+    // 优先走新的用户系统
+    const loginUser = document.getElementById('loginUser');
+    const loginPass = document.getElementById('loginPass');
+    const u = loginUser.value.trim();
+    const p = loginPass.value.trim();
+    // 老的 A/A 兜底
+    if(u === 'A' && p === 'A'){
+        isLoggedIn = true;
+        document.getElementById('loginModal').classList.remove('active');
+        loginBtn.textContent = '📚 题库';
+        loginBtn.classList.add('logged-in');
+        showToast('登录成功');
+        setTimeout(openBank, 200);
+        return;
+    }
+    // 其余走新用户系统
+    await doUserLogin();
+});
+document.getElementById('loginGoRegister').addEventListener('click', ()=>{
+    document.getElementById('loginModal').classList.remove('active');
+    openRegisterModal();
+});
+    loginPass.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter'){
+        e.preventDefault();
+        document.getElementById('loginSubmit').click();
+    }
+});
     function doLogin(){
         const u = loginUser.value.trim();
         const p = loginPass.value.trim();
@@ -5410,7 +5895,18 @@ const editChoiceWrap = document.getElementById('editChoiceWrap');
         const ok = await syncFullPageToGitHub(false);
         if(ok){ ghSyncInfo.style.display = 'block'; ghSyncInfo.textContent = `✅ 已同步完整页面代码（含${questionBank.length}题）`; }
     });
-
+// ===== 用户系统（新） =====
+document.getElementById('registerSubmit').addEventListener('click', doUserRegister);
+document.getElementById('registerCancel').addEventListener('click', ()=>{
+    document.getElementById('registerModal').classList.remove('active');
+});
+document.getElementById('registerClose').addEventListener('click', ()=>{
+    document.getElementById('registerModal').classList.remove('active');
+});
+document.getElementById('registerPass2').addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter') doUserRegister();
+});
+tryRestoreUserSession();
     questionInput.focus();
 });
 </script>
