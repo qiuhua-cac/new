@@ -7338,7 +7338,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1790842045033,
+    "updatedAt": 1790842070850,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -7796,6 +7796,16 @@
       "correct": null,
       "orderSetting": "all",
       "updatedAt": 1790842045033,
+      "customExplanation": ""
+    },
+    "公司内部活性炭主要用了（）三种": {
+      "customQuestion": "公司内部活性炭主要用了</答案>粉末活性炭<答案\\>三种</答案>柱状活性炭<答案\\></答案>颗粒活性炭<答案\\>",
+      "customAnswer": "粉末活性炭｜柱状活性炭｜颗粒活性炭",
+      "isChoice": false,
+      "options": null,
+      "correct": null,
+      "orderSetting": "all",
+      "updatedAt": 1790842070850,
       "customExplanation": ""
     }
   }
