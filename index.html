@@ -3306,11 +3306,19 @@ function renderPracticeList(type, keyword){
         div.dataset.idx = idx;
         div.dataset.pIdx = (pIdx === undefined ? -1 : pIdx);
         div.dataset.source = source;
-        let extra = '';
+                let extra = '';
         if(type === 'single' || type === 'multi'){
             let opts = [];
-            if(source === 'practice_only'){ opts = item.options || []; }
-            else { opts = type === 'single' ? (cfg.singleOptions[item.q] || []) : (cfg.multiOptions[item.q] || []); }
+            if(source === 'practice_only'){
+                opts = item.options || [];
+            } else {
+                const ed = editDataForList[item.q] || {};
+                if(ed.options && ed.options.length){
+                    opts = ed.options;
+                } else {
+                    opts = type === 'single' ? (cfg.singleOptions[item.q] || []) : (cfg.multiOptions[item.q] || []);
+                }
+            }
             extra = `<div class="bi-a" style="color:#6a8aad;font-size:11px;">选项：${opts.map(o=>escapeHTML(o.substring(0,30))).join(' | ')}</div>`;
         }
         const practiceTag = source === 'practice_only' ? '<div class="bi-practice-tag">📝 练习专属</div>' : '';
