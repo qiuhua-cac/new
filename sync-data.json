@@ -3820,7 +3820,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1790839029481,
+    "updatedAt": 1790839088527,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -4101,6 +4101,20 @@
       "orderSetting": "all",
       "updatedAt": 1790839029481,
       "customExplanation": ""
+    },
+    "进入有限空间（如阀门井、污水井）作业，必须遵循的原则是（）": {
+      "customQuestion": "进入有限空间（如阀门井、污水井）作业，必须遵循的原则是",
+      "customAnswer": "进入有限空间（如阀门井、污水井）作业，必须遵循的原则是",
+      "isChoice": true,
+      "options": [
+        "A. 边通风边作业",
+        "B. 先通风、再检测、后作业",
+        "C. 直接下井作业，快速完成",
+        "D. 必须佩戴防毒面具即可"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790839088527
     }
   }
 }
