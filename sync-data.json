@@ -4,7 +4,7 @@
     "repo": "new",
     "path": "index.html",
     "token": "",
-    "updatedAt": 1790841738301,
+    "updatedAt": 1790842137769,
     "device": "pc"
   },
   "reviveBackup": {
@@ -17,7 +17,7 @@
   "backups": {
     "list": [
       {
-        "time": "2026/10/1 16:01:41",
+        "time": "2026/10/1 16:08:08",
         "data": [
           {
             "q": "凡在高地面（）的地点进行的工作都应视作高处作业",
@@ -5491,7 +5491,7 @@
         "name": "C"
       }
     ],
-    "updatedAt": 1790841738360,
+    "updatedAt": 1790842088993,
     "device": "pc"
   },
   "history": {
@@ -7325,7 +7325,7 @@
         "isChoice": false
       }
     ],
-    "updatedAt": 1790841701599,
+    "updatedAt": 1790842089000,
     "device": "pc"
   },
   "practiceCfg": {
@@ -7338,7 +7338,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1790842070850,
+    "updatedAt": 1790842089001,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
