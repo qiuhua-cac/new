@@ -5498,8 +5498,8 @@
         "name": "C"
       }
     ],
-    "updatedAt": 1790833025834,
-    "device": "pc"
+    "updatedAt": 1790833055471,
+    "device": "mobile"
   },
   "history": {
     "list": [
@@ -5514,7 +5514,7 @@
       "水泵"
     ],
     "updatedAt": 0,
-    "device": "pc"
+    "device": "mobile"
   },
   "bank": {
     "list": [
@@ -7340,7 +7340,7 @@
       }
     ],
     "updatedAt": 1790832864030,
-    "device": "pc"
+    "device": "mobile"
   },
   "practiceCfg": {
     "threshold": 75,
@@ -7349,10 +7349,10 @@
     "singleCorrect": {},
     "multiCorrect": {},
     "updatedAt": 0,
-    "device": "pc"
+    "device": "mobile"
   },
   "practiceEdit": {
-    "updatedAt": 1790833025840,
+    "updatedAt": 1790832876151,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
