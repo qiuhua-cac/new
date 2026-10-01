@@ -7345,9 +7345,24 @@
   "practiceCfg": {
     "threshold": 75,
     "singleOptions": {},
-    "multiOptions": {},
+    "multiOptions": {
+      "二沉池巡检内容包括（）": [
+        "A. 减速机是否异响或漏油",
+        "B. 走道板是否有障碍物",
+        "C. 走道轮是否转动正常",
+        "D. 出水是否均匀",
+        "E. 出水悬浮物是否在合理范围之内",
+        "F. 堰口出水是否均匀",
+        "G. 浮渣积累情况",
+        "H. 排渣是否通畅",
+        "I. 污泥回流情况",
+        "J. 吸泥孔是否堵塞"
+      ]
+    },
     "singleCorrect": {},
-    "multiCorrect": {},
+    "multiCorrect": {
+      "二沉池巡检内容包括（）": "ABCDEFGHIJ"
+    },
     "updatedAt": 0,
     "device": "pc"
   },
