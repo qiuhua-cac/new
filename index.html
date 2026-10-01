@@ -1512,7 +1512,7 @@ if(DEVICE === 'mobile'){ return false; }
         const sync = loadLocalSync();
         const content = JSON.stringify(sync, null, 2);
         const contentB64 = utf8ToBase64(content);
-        for(let attempt = 0; attempt < 3; attempt++){
+        for(let attempt = 0; attempt < 6; attempt++){
             let sha = null;
             const getResp = await fetch(apiBase + '?t=' + Date.now(), {
                 method:'GET',
@@ -1562,7 +1562,7 @@ async function pullSyncData(){
     const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${syncPath}`;
 
     // ★ 重试 3 次，每次间隔递增
-    for(let attempt = 0; attempt < 3; attempt++){
+    for(let attempt = 0; attempt < 6; attempt++){
         try{
             const resp = await fetch(apiBase, {
                 method:'GET',
@@ -1593,7 +1593,7 @@ async function pullSyncData(){
             return JSON.parse(text);
         }catch(e){
             console.warn(`pullSyncData 第 ${attempt+1} 次失败:`, e.message);
-            if(attempt < 2){
+            if(attempt < 5){
                 await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
             }
         }
@@ -3199,7 +3199,6 @@ function openPracticeAddForm(type){
         });
     }
     overlay.querySelectorAll('[data-close]').forEach(b=>{ b.addEventListener('click', ()=> overlay.remove()); });
-    overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
     document.getElementById('addPracticeSave').addEventListener('click', ()=>{
         const q = document.getElementById('addPracticeQ').value.trim();
         const e = document.getElementById('addPracticeE').value.trim();
