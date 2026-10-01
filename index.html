@@ -1464,9 +1464,31 @@ function pickNewer(localRec, remoteRec){
 function mergeSync(localSync, remoteSync){
     const merged = {};
     SYNC_KEYS.forEach(k=>{
-        merged[k] = pickNewer(localSync[k], remoteSync ? remoteSync[k] : null);
+        if(k === 'practiceEdit'){
+            merged[k] = mergePracticeEdit(localSync[k], remoteSync ? remoteSync[k] : null);
+        }else{
+            merged[k] = pickNewer(localSync[k], remoteSync ? remoteSync[k] : null);
+        }
     });
     return merged;
+}
+
+function mergePracticeEdit(local, remote){
+    if(!local) return remote || {};
+    if(!remote) return local;
+    const base = pickNewer(local, remote);
+    const other = (base === local) ? remote : local;
+    const result = Object.assign({}, base);
+    const baseList = Array.isArray(base.__practice_only__) ? base.__practice_only__ : [];
+    const otherList = Array.isArray(other.__practice_only__) ? other.__practice_only__ : [];
+    const map = new Map();
+    otherList.forEach(it => { if(it && it.q) map.set(it.q, it); });
+    baseList.forEach(it => { if(it && it.q) map.set(it.q, it); });
+    result.__practice_only__ = [...map.values()];
+    if(result.__practice_only__.length > 0){
+        result.updatedAt = Date.now();
+    }
+    return result;
 }
 function getSyncPath(cfg){
     const dir = cfg.path.includes('/') ? cfg.path.replace(/\/[^/]+$/, '/') : '';
