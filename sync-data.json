@@ -2651,7 +2651,7 @@
       {
         "q": "下列哪项不属于生化池内的推流器的功能（）",
         "a": "硝化",
-        "e": "",
+        "e": "本题为选择题答案",
         "hidden": false,
         "isChoice": false
       },
@@ -3893,7 +3893,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1790839735202,
+    "updatedAt": 1790839749009,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -4343,21 +4343,6 @@
       "orderSetting": "all",
       "updatedAt": 1790839699715,
       "customExplanation": "本题为选择题答案"
-    },
-    "下列哪项不属于生化池内的推流器的功能（）": {
-      "customQuestion": "下列哪项不属于生化池内的推流器的功能</答案>硝化<答案\\>",
-      "customAnswer": "硝化",
-      "isChoice": true,
-      "options": [
-        "A. 推流",
-        "B. 搅拌",
-        "C. 防止泥沙堆积",
-        "D. 硝化"
-      ],
-      "correct": "D",
-      "orderSetting": "all",
-      "updatedAt": 1790839735202,
-      "customExplanation": ""
     }
   }
 }
