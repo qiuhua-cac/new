@@ -3389,20 +3389,24 @@ function showPracticeEditForm(idx, type, source, pIdx){
         document.getElementById('peQ').value = customQuestion;
         document.getElementById('peE').value = item.e || '';
         document.getElementById('pePracticeHide').classList.toggle('active', item.hidden === true);
-    }else if(type === 'single'){
+       }else if(type === 'single'){
         document.getElementById('pseQ').value = item.q;
         document.getElementById('pseE').value = item.e || '';
         const cfg = loadPracticeCfg();
-        const opts = cfg.singleOptions[item.q] || ['A. 选项A','B. 选项B','C. 选项C','D. 选项D'];
+        const editData = loadPracticeEdit();
+        const ed = editData[item.q] || {};
+        const opts = ed.options || cfg.singleOptions[item.q] || ['A. 选项A','B. 选项B','C. 选项C','D. 选项D'];
         renderOptionsEditor('pseOptions', opts);
-        document.getElementById('pseCorrect').value = cfg.singleCorrect[item.q] || 'A';
-    }else{
+        document.getElementById('pseCorrect').value = ed.correct || cfg.singleCorrect[item.q] || 'A';
+        }else{
         document.getElementById('pmeQ').value = item.q;
         document.getElementById('pmeE').value = item.e || '';
         const cfg = loadPracticeCfg();
-        const opts = cfg.multiOptions[item.q] || ['A. 选项A','B. 选项B','C. 选项C','D. 选项D'];
+        const editData = loadPracticeEdit();
+        const ed = editData[item.q] || {};
+        const opts = ed.options || cfg.multiOptions[item.q] || ['A. 选项A','B. 选项B','C. 选项C','D. 选项D'];
         renderOptionsEditor('pmeOptions', opts);
-        document.getElementById('pmeCorrect').value = cfg.multiCorrect[item.q] || 'ABC';
+        document.getElementById('pmeCorrect').value = ed.correct || cfg.multiCorrect[item.q] || 'ABC';
     }
 }
 function showPracticeOnlyEditForm(pIdx, type){
