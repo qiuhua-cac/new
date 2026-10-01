@@ -1194,6 +1194,11 @@ const ZK_DATA_OWNER = 'qiuhua-cac';
 const ZK_DATA_REPO  = 'zk-data';
 const ZK_DATA_PATH  = 'users.json';
 const ZK_DATA_TOKEN = 'github_pat_11BJT3CJY0gKRXFmudFIDY_'+'Ee1YFxKL0o4LYmHHvyjSRSCUj7ca4Nz4YZOpfrHQdDsTDAXVLOPJ1yCRPez';
+// ====================== YesApi 配置（用户已会标记） ======================
+const YESAPI_BASE   = 'http://hn.api.yesapi.net/';
+const YESAPI_APP_KEY = '1FC09C038370C9B75E8478D16107DAF4';
+const YESAPI_MODEL   = 'user_mastered';
+// ====================================================================
 // ====================================================================
 
 function detectDevice(){
@@ -1385,6 +1390,80 @@ function loadMasteredMap(){
 function saveMasteredMap(map){
     try{ localStorage.setItem(USER_MASTERED_KEY, JSON.stringify(map)); }catch(e){}
 }
+
+// ====================== YesApi：已会标记读写 ======================
+// 说明：每个用户一条记录，uuid = 用户名，ext_data = 已会列表 JSON
+
+async function yesapiSaveMastered(username, masteredList){
+    if(!username) return false;
+    const url = YESAPI_BASE + '?s=App.Table.CheckCreateOrUpdate';
+    const dataObj = {
+        uuid: username,
+        mastered: JSON.stringify(masteredList || [])
+    };
+    const body = new URLSearchParams();
+    body.append('app_key', YESAPI_APP_KEY);
+    body.append('model_name', YESAPI_MODEL);
+    body.append('check_field', 'uuid');
+    body.append('data', JSON.stringify(dataObj));
+    try{
+        const resp = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+            body: body.toString()
+        });
+        if(!resp.ok){
+            console.warn('yesapiSaveMastered HTTP 失败', resp.status);
+            return false;
+        }
+        const json = await resp.json();
+        if(json && json.ret === 200 && json.data && json.data.err_code === 0){
+            return true;
+        }
+        console.warn('yesapiSaveMastered 业务失败', json);
+        return false;
+    }catch(e){
+        console.warn('yesapiSaveMastered 异常', e);
+        return false;
+    }
+}
+
+async function yesapiLoadMastered(username){
+    if(!username) return null;
+    const url = YESAPI_BASE + '?s=App.Table.FreeFindOne';
+    const params = new URLSearchParams();
+    params.append('app_key', YESAPI_APP_KEY);
+    params.append('model_name', YESAPI_MODEL);
+    params.append('uuid', username);
+    try{
+        const resp = await fetch(url + '&' + params.toString(), {
+            method: 'GET',
+            cache: 'no-store'
+        });
+        if(!resp.ok){
+            console.warn('yesapiLoadMastered HTTP 失败', resp.status);
+            return null;
+        }
+        const json = await resp.json();
+        if(!json || json.ret !== 200 || !json.data || json.data.err_code !== 0){
+            console.warn('yesapiLoadMastered 业务失败', json);
+            return null;
+        }
+        const row = json.data.data;
+        if(!row || !row.mastered) return [];
+        try{
+            const list = JSON.parse(row.mastered);
+            return Array.isArray(list) ? list : [];
+        }catch(e){
+            console.warn('yesapiLoadMastered 解析 mastered 失败', e);
+            return [];
+        }
+    }catch(e){
+        console.warn('yesapiLoadMastered 异常', e);
+        return null;
+    }
+}
+// ====================================================================
 // ====================================================================
 // ====================== 用户系统 UI 逻辑 ======================
 let currentUser = null;
@@ -4556,19 +4635,23 @@ async function syncMasteredToCloud(){
     if(!currentUser || !currentUser.username) return false;
     const uname = currentUser.username;
     const localList = getMasteredListForCurrentUser();
-    for(let attempt = 0; attempt < 5; attempt++){
-        const data = await fetchUsersJson();
-        if(!data) return false;
-        if(!data.users[uname]){
-            return false;
+    // 先推 YesApi（快）
+    const yesOk = await yesapiSaveMastered(uname, localList);
+    // 后台慢慢推 GitHub，不等待
+    (async ()=>{
+        for(let attempt = 0; attempt < 3; attempt++){
+            try{
+                const data = await fetchUsersJson();
+                if(!data || !data.users[uname]) return;
+                data.users[uname].mastered = localList;
+                data.users[uname].lastLogin = nowTs();
+                const ok = await pushUsersJson(data.users, data._sha, `更新 ${uname} 已会标记`);
+                if(ok) return;
+            }catch(e){}
+            await new Promise(r => setTimeout(r, 500 + attempt * 500));
         }
-        data.users[uname].mastered = localList;
-        data.users[uname].lastLogin = nowTs();
-        const ok = await pushUsersJson(data.users, data._sha, `更新 ${uname} 已会标记`);
-        if(ok) return true;
-        await new Promise(r => setTimeout(r, 200 + attempt * 200));
-    }
-    return false;
+    })();
+    return yesOk;
 }
 
 async function onToggleMastered(questionText, btnEl){
@@ -4600,17 +4683,29 @@ async function onToggleMastered(questionText, btnEl){
 
 async function loadMasteredFromCloud(){
     if(!currentUser || !currentUser.username) return;
-    const data = await fetchUsersJson();
-    if(!data) return;
-    const u = data.users[currentUser.username];
-    if(!u) return;
-    const cloudList = Array.isArray(u.mastered) ? u.mastered : [];
-    const localMap = loadMasteredMap();
-    const localList = Array.isArray(localMap[currentUser.username]) ? localMap[currentUser.username] : [];
-    if(cloudList.length >= localList.length){
-        localMap[currentUser.username] = cloudList;
-        saveMasteredMap(localMap);
+    const uname = currentUser.username;
+    // 先拉 YesApi（快）
+    let cloudList = await yesapiLoadMastered(uname);
+    // YesApi 拉不到，回退 GitHub（慢但兜底）
+    if(cloudList === null){
+        console.warn('YesApi 拉取失败，回退 GitHub');
+        const data = await fetchUsersJson();
+        if(!data || !data.users[uname]) return;
+        const u = data.users[uname];
+        cloudList = Array.isArray(u.mastered) ? u.mastered : [];
     }
+    // 取并集：云端 + 本地，去重
+    const localMap = loadMasteredMap();
+    const localList = Array.isArray(localMap[uname]) ? localMap[uname] : [];
+    const merged = Array.from(new Set([...cloudList, ...localList]));
+    // 如果本地有云端没有的，顺便推回云端
+    if(merged.length > cloudList.length){
+        yesapiSaveMastered(uname, merged).then(ok=>{
+            if(!ok) console.warn('并集推回 YesApi 失败');
+        });
+    }
+    localMap[uname] = merged;
+    saveMasteredMap(localMap);
 }
 // ====================== 学习模式 ======================
 let isStudyMode = false;
