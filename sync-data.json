@@ -4,7 +4,7 @@
     "repo": "new",
     "path": "index.html",
     "token": "",
-    "updatedAt": 1790828300187,
+    "updatedAt": 1790828394763,
     "device": "pc"
   },
   "reviveBackup": {
@@ -17,7 +17,7 @@
   "backups": {
     "list": [
       {
-        "time": "2026/10/1 12:17:49",
+        "time": "2026/10/1 12:19:21",
         "data": [
           {
             "q": "凡在高地面（）的地点进行的工作都应视作高处作业",
@@ -5498,7 +5498,7 @@
         "name": "C"
       }
     ],
-    "updatedAt": 1790828300250,
+    "updatedAt": 1790828361885,
     "device": "pc"
   },
   "history": {
@@ -7339,7 +7339,7 @@
         "isChoice": false
       }
     ],
-    "updatedAt": 1790828269613,
+    "updatedAt": 1790828361889,
     "device": "pc"
   },
   "practiceCfg": {
