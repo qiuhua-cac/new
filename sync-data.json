@@ -2707,7 +2707,7 @@
       {
         "q": "污水处理厂安全检查中，以下哪项属于“五查”内容（）",
         "a": "以上都是",
-        "e": "",
+        "e": "本题为选择题答案",
         "hidden": false,
         "isChoice": false
       },
@@ -3900,7 +3900,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1790839814428,
+    "updatedAt": 1790839837715,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -4166,21 +4166,6 @@
       "correct": "A",
       "orderSetting": "all",
       "updatedAt": 1790838905082,
-      "customExplanation": ""
-    },
-    "污水处理厂安全检查中，以下哪项属于“五查”内容（）": {
-      "customQuestion": "污水处理厂安全检查中，以下哪项属于“五查”内容</答案>以上都是<答案\\>",
-      "customAnswer": "以上都是",
-      "isChoice": true,
-      "options": [
-        "A. 查隐患",
-        "B. 查证件",
-        "C. 查记录",
-        "D. 以上都是"
-      ],
-      "correct": "D",
-      "orderSetting": "all",
-      "updatedAt": 1790838945684,
       "customExplanation": ""
     },
     "水泵的泵壳铭牌上简明列出了水泵在设计转速下运转，（）时的流量、扬程、轴功率及允许吸上真空高度或气蚀余量值。": {
