@@ -2672,7 +2672,7 @@
       {
         "q": "以下哪种物质是污水中的氮源（）",
         "a": "以上都是",
-        "e": "",
+        "e": "本题为选择题答案",
         "hidden": false,
         "isChoice": false
       },
@@ -3879,7 +3879,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1790839631110,
+    "updatedAt": 1790839698989,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -4314,6 +4314,20 @@
       "orderSetting": "all",
       "updatedAt": 1790839563517,
       "customExplanation": ""
+    },
+    "以下哪种物质是污水中的氮源（）": {
+      "customQuestion": "以下哪种物质是污水中的氮源",
+      "customAnswer": "以下哪种物质是污水中的氮源",
+      "isChoice": true,
+      "options": [
+        "A. 氨氮",
+        "B. 硝酸盐",
+        "C. 亚硝酸盐",
+        "D. 以上都是"
+      ],
+      "correct": "D",
+      "orderSetting": "all",
+      "updatedAt": 1790839698989
     }
   }
 }
