@@ -7404,7 +7404,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1790835824503,
+    "updatedAt": 1790835884347,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -7550,6 +7550,20 @@
       "orderSetting": "all",
       "updatedAt": 1790835795598,
       "customExplanation": ""
+    },
+    "污泥料仓发生“架桥”坍塌事故导致人员被埋，现场第一响应人首先应?": {
+      "customQuestion": "污泥料仓发生“架桥”坍塌事故导致人员被埋，现场第一响应人首先应?",
+      "customAnswer": "污泥料仓发生“架桥”坍塌事故导致人员被埋，现场第一响应人首先应?",
+      "isChoice": true,
+      "options": [
+        "A. 立即跳入仓内救人",
+        "B. 停止进料、切断电源",
+        "C. 拨打120",
+        "D. 开启仓底滑"
+      ],
+      "correct": "B",
+      "orderSetting": "all",
+      "updatedAt": 1790835884346
     }
   }
 }
