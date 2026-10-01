@@ -3841,7 +3841,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1790839252649,
+    "updatedAt": 1790839384101,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -4183,6 +4183,23 @@
       "orderSetting": "all",
       "updatedAt": 1790839252649,
       "customExplanation": ""
+    },
+    "影响活性污泥法处理效果的因素包括": {
+      "customQuestion": "影响活性污泥法处理效果的因素包括",
+      "customAnswer": "影响活性污泥法处理效果的因素包括",
+      "isChoice": true,
+      "options": [
+        "A. 污泥负荷",
+        "B. 溶解氧",
+        "C. 营养物质",
+        "D. pH值",
+        "E. 水温",
+        "F. 有毒物质",
+        "G. 污泥回流比"
+      ],
+      "correct": "ABCDEFG",
+      "orderSetting": "all",
+      "updatedAt": 1790839384101
     }
   }
 }
