@@ -1249,7 +1249,7 @@ async function fetchUsersJson(){
         const resp = await fetch(apiBase + '?t=' + Date.now(), {
             method: 'GET',
             headers: {
-                'Authorization': `token ${ZK_DATA_TOKEN}`,
+                'Authorization': `Bearer ${ZK_DATA_TOKEN}`,
                 'Accept': 'application/vnd.github.v3+json'
             },
             cache: 'no-store'
@@ -1296,7 +1296,7 @@ async function pushUsersJson(usersObj, sha, commitMsg){
             const putResp = await fetch(apiBase, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `token ${ZK_DATA_TOKEN}`,
+                    'Authorization': `Bearer ${ZK_DATA_TOKEN}`,
                     'Accept': 'application/vnd.github.v3+json',
                     'Content-Type': 'application/json'
                 },
