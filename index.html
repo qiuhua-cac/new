@@ -1406,11 +1406,11 @@ function simpleHash(str){
 // ---------- 按 uuid 删除单条记录 ----------
 async function yesapiDeleteByUuid(uuid){
     if(!uuid) return false;
-    const url = YESAPI_BASE + '?s=App.Table.Delete';
+    const url = YESAPI_BASE + '?s=App.Table.FreeDelete';
     const body = new URLSearchParams();
     body.append('app_key', YESAPI_APP_KEY);
     body.append('model_name', YESAPI_MODEL);
-    body.append('uuid', uuid);
+    body.append('where', JSON.stringify([["uuid","=",uuid]]));
     try{
         const resp = await fetch(url, {
             method: 'POST',
