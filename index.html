@@ -1437,17 +1437,28 @@ async function doUserLogin(){
     const p = loginPass.value.trim();
     if(!u || !p){ showToast('请输入用户名和密码'); return; }
     showToast('正在登录…');
-    const res = await loginUser_api(u, p);
-    if(!res.ok){ showToast(res.msg); return; }
-        currentUser = { username: u, password: p };
+    // 首次用本地缓存兜底，立刻进入"已登录"状态
+    currentUser = { username: u, password: p };
     saveUserSession(currentUser);
+    refreshUserDrawerBtn();
+    // 后台请求云端校验
+    const res = await loginUser_api(u, p);
+    if(!res.ok){
+        // 校验失败，回滚登录状态
+        currentUser = null;
+        clearUserSession();
+        refreshUserDrawerBtn();
+        showToast(res.msg);
+        return;
+    }
     loginModal.classList.remove('active');
     showToast('✅ 登录成功，欢迎 ' + u);
-    refreshUserDrawerBtn();
-    await loadMasteredFromCloud();
-    if(typeof renderStudyList === 'function' && isStudyMode){
-        renderStudyList(document.getElementById('studySearch').value || '');
-    }
+    // 后台拉取已会记录，不阻塞 UI
+    loadMasteredFromCloud().then(()=>{
+        if(typeof renderStudyList === 'function' && isStudyMode){
+            renderStudyList(document.getElementById('studySearch').value || '');
+        }
+    });
 }
 
 async function doUserRegister(){
@@ -4578,10 +4589,13 @@ async function onToggleMastered(questionText, btnEl){
         if(card) card.classList.toggle('mastered', willAdd);
     }
     showToast(willAdd ? '✅ 已标记为已会' : '已取消已会');
-    const ok = await syncMasteredToCloud();
-    if(!ok){
-        showToast('⚠️ 云端同步失败，稍后重试');
-    }
+    // 后台异步同步，不阻塞 UI
+    syncMasteredToCloud().then(ok=>{
+        if(!ok){
+            // 静默失败，不弹窗打断用户
+            console.warn('后台同步失败');
+        }
+    });
 }
 
 async function loadMasteredFromCloud(){
