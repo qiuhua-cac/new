@@ -7338,7 +7338,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1790842031845,
+    "updatedAt": 1790842045033,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -7789,13 +7789,14 @@
       "updatedAt": 1790839978187
     },
     "厂区流量计共计有（）三种": {
-      "customQuestion": "厂区流量计共计有</答案>电磁流量计<答案\\></答案>超声波流量计<答案\\></答案>浮子流量计<答案\\>三种",
+      "customQuestion": "厂区流量计共计有</答案>电磁流量计<答案\\>三种</答案>超声波流量计<答案\\></答案>浮子流量计<答案\\>",
       "customAnswer": "电磁流量计｜超声波流量计｜浮子流量计",
       "isChoice": false,
       "options": null,
       "correct": null,
       "orderSetting": "all",
-      "updatedAt": 1790842031845
+      "updatedAt": 1790842045033,
+      "customExplanation": ""
     }
   }
 }
