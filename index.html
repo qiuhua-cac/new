@@ -1451,53 +1451,6 @@ async function yesapiCleanTestData(){
     }
 }
 
-// ---------- 清理测试数据（只删 uuid 以 test1_ 开头的记录） ----------
-async function yesapiCleanTestData(){
-    const url = YESAPI_BASE + '?s=App.Table.FreeQuery';
-    const params = new URLSearchParams();
-    params.append('app_key', YESAPI_APP_KEY);
-    params.append('model_name', YESAPI_MODEL);
-    params.append('where', JSON.stringify([["uuid","LIKE","test1_%"]]));
-    params.append('perpage', '100');
-    try{
-        const resp = await fetch(url + '&' + params.toString(), { method: 'GET', cache: 'no-store' });
-        if(!resp.ok) return false;
-        const json = await resp.json();
-        if(!json || json.ret !== 200 || !json.data || !json.data.list) return false;
-        const list = json.data.list;
-        console.log('准备清理', list.length, '条测试数据');
-        for(const row of list){
-            await yesapiDeleteByUuid(row.uuid);
-        }
-        return true;
-    }catch(e){
-        console.warn('清理测试数据失败', e);
-        return false;
-    }
-}
-
-// ---------- 按 uuid 删除单条记录 ----------
-async function yesapiDeleteByUuid(uuid){
-    if(!uuid) return false;
-    const url = YESAPI_BASE + '?s=App.Table.Delete';
-    const body = new URLSearchParams();
-    body.append('app_key', YESAPI_APP_KEY);
-    body.append('model_name', YESAPI_MODEL);
-    body.append('uuid', uuid);
-    try{
-        const resp = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-            body: body.toString()
-        });
-        if(!resp.ok) return false;
-        const json = await resp.json();
-        return json && json.ret === 200;
-    }catch(e){
-        console.warn('yesapiDeleteByUuid 异常', e);
-        return false;
-    }
-}
 // ---------- 添加一条已会记录（一道题） ----------
 async function yesapiAddOneMastered(username, questionText){
     if(!username || !questionText) return false;
@@ -4796,7 +4749,7 @@ async function onToggleMastered(questionText, btnEl){
     });
 }
 
-aasync function loadMasteredFromCloud(){
+async function loadMasteredFromCloud(){
     if(!currentUser || !currentUser.username) return;
     const uname = currentUser.username;
     let cloudList = await yesapiLoadMastered(uname);
