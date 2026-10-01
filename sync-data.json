@@ -2168,7 +2168,7 @@
       {
         "q": "有限空间作业“三不进入”原则不包含以下哪项（）",
         "a": "无培训不进入",
-        "e": "单选题",
+        "e": "本题为选择题答案",
         "hidden": false,
         "isChoice": false
       },
@@ -3900,7 +3900,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1790839785971,
+    "updatedAt": 1790839814428,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -4350,20 +4350,6 @@
       "orderSetting": "all",
       "updatedAt": 1790839699715,
       "customExplanation": "本题为选择题答案"
-    },
-    "有限空间作业“三不进入”原则不包含以下哪项（）": {
-      "customQuestion": "有限空间作业“三不进入”原则不包含以下哪项",
-      "customAnswer": "有限空间作业“三不进入”原则不包含以下哪项",
-      "isChoice": true,
-      "options": [
-        "A. 无审批不进入",
-        "B. 无监护不进入",
-        "C. 无方案不进入",
-        "D. 无培训不进入"
-      ],
-      "correct": "D",
-      "orderSetting": "all",
-      "updatedAt": 1790839785971
     }
   }
 }
