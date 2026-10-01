@@ -3879,7 +3879,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1790839563517,
+    "updatedAt": 1790839631110,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -3941,6 +3941,21 @@
           "D. 硝氮"
         ],
         "correct": "C",
+        "hidden": false,
+        "practiceDeleted": false,
+        "__practiceOnly": true
+      },
+      {
+        "q": "硫化氢浓度超过（）时，数秒内就可致人闪电型死亡",
+        "a": "A",
+        "e": "",
+        "isChoice": true,
+        "options": [
+          "A. 1000mg/m3",
+          "B. 10mg/m3",
+          "C. 7PPm"
+        ],
+        "correct": "A",
         "hidden": false,
         "practiceDeleted": false,
         "__practiceOnly": true
