@@ -382,13 +382,217 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 #addChoiceWrap {
     display: none !important;
 }
+/* ====================== 学习模式 ====================== */
+.study-area{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    background:#f8fcff;
+    min-height:0;
+    overflow:hidden;
+}
+.study-toolbar{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    padding:10px 14px;
+    background:#fff;
+    border-bottom:1px solid #e2ecf7;
+    flex-shrink:0;
+    flex-wrap:wrap;
+}
+.study-toolbar input{
+    flex:1;
+    min-width:120px;
+    padding:9px 12px;
+    font-size:13px;
+    border:1.5px solid #c8d9ec;
+    border-radius:10px;
+    outline:none;
+    background:#f9fcff;
+    transition:0.15s;
+}
+.study-toolbar input:focus{
+    border-color:#3b82f6;
+    background:#fff;
+    box-shadow:0 0 0 3px rgba(59,130,246,0.1);
+}
+.study-toolbar button{
+    font-size:12px;
+    padding:8px 14px;
+    border:1px solid #c8d9ec;
+    border-radius:10px;
+    background:#fff;
+    color:#1e3a5f;
+    cursor:pointer;
+    font-weight:500;
+    transition:0.15s;
+}
+.study-toolbar button:hover{
+    background:#e8f2fe;
+    border-color:#9bbde0;
+}
+.study-count{
+    font-size:12px;
+    color:#6a8aad;
+    white-space:nowrap;
+    margin-left:auto;
+}
+.study-list{
+    flex:1;
+    overflow-y:auto;
+    padding:12px 14px;
+    -webkit-overflow-scrolling:touch;
+}
+.study-card{
+    background:#fff;
+    border-radius:12px;
+    padding:12px 14px;
+    margin-bottom:10px;
+    border-left:4px solid #3b82f6;
+    box-shadow:0 2px 8px rgba(30,64,175,0.06);
+    transition:0.15s;
+}
+.study-card:hover{
+    box-shadow:0 4px 14px rgba(30,64,175,0.1);
+}
+.study-card .sc-header{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-bottom:8px;
+    flex-wrap:wrap;
+}
+.study-card .sc-num{
+    font-size:10px;
+    color:#8aa2c0;
+    background:#eef4fb;
+    padding:2px 8px;
+    border-radius:8px;
+    font-weight:600;
+}
+.study-card .sc-tag-choice{
+    font-size:10px;
+    color:#7c3aed;
+    background:#ede9fe;
+    padding:2px 8px;
+    border-radius:8px;
+    font-weight:600;
+}
+.study-card .sc-tag-hidden{
+    font-size:10px;
+    color:#b45309;
+    background:#fef3c7;
+    padding:2px 8px;
+    border-radius:8px;
+    font-weight:600;
+}
+.study-card .sc-q{
+    font-size:14px;
+    line-height:1.6;
+    color:#1e293b;
+    font-weight:600;
+    margin-bottom:8px;
+    word-break:break-word;
+}
+.study-card .sc-block{
+    margin-top:6px;
+    padding:8px 12px;
+    border-radius:8px;
+    font-size:13px;
+    line-height:1.65;
+    word-break:break-word;
+}
+.study-card .sc-answer{
+    background:#fef2f2;
+    border-left:3px solid #ef4444;
+    color:#b91c1c;
+    font-weight:600;
+}
+.study-card .sc-answer .sc-label{
+    color:#dc2626;
+    font-weight:700;
+    margin-right:4px;
+}
+.study-card .sc-explain{
+    background:#f8fafc;
+    border-left:3px solid #94a3b8;
+    color:#334155;
+}
+.study-card .sc-explain .sc-label{
+    color:#475569;
+    font-weight:700;
+    margin-right:4px;
+}
+.study-empty{
+    text-align:center;
+    color:#8aa2c0;
+    font-size:13px;
+    padding:40px 20px;
+}
+@media (max-width:600px){
+    .study-toolbar{padding:8px 10px;gap:6px;}
+    .study-toolbar input{font-size:13px;padding:8px 10px;}
+    .study-toolbar button{font-size:11px;padding:7px 10px;}
+    .study-count{font-size:11px;}
+    .study-list{padding:10px;}
+    .study-card{padding:10px 12px;border-left-width:3px;}
+    .study-card .sc-q{font-size:13px;}
+    .study-card .sc-block{font-size:12px;padding:6px 10px;}
+}
+/* ====================== 帘子（设置与练习） ====================== */
+.drawer-overlay{
+    position:fixed;inset:0;background:rgba(15,30,50,0.45);
+    z-index:1500;opacity:0;visibility:hidden;transition:0.2s;
+    backdrop-filter:blur(2px);
+}
+.drawer-overlay.active{opacity:1;visibility:visible;}
+.drawer{
+    position:fixed;top:0;left:0;width:300px;max-width:85vw;height:100%;
+    background:#fff;z-index:1501;box-shadow:4px 0 24px rgba(0,0,0,0.2);
+    transform:translateX(-100%);transition:transform 0.28s ease-out;
+    display:flex;flex-direction:column;
+}
+.drawer.active{transform:translateX(0);}
+.drawer-header{
+    padding:16px 20px;background:linear-gradient(135deg,#3b82f6,#2563eb);
+    color:#fff;display:flex;justify-content:space-between;align-items:center;
+    font-size:16px;font-weight:600;flex-shrink:0;
+}
+.drawer-close{
+    background:rgba(255,255,255,0.2);border:none;color:#fff;
+    width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;
+    display:flex;align-items:center;justify-content:center;transition:0.15s;
+}
+.drawer-close:hover{background:rgba(255,255,255,0.35);}
+.drawer-body{flex:1;overflow-y:auto;padding:12px;}
+.drawer-item{
+    display:flex;align-items:center;gap:12px;padding:14px 16px;
+    border:1.5px solid #e2ecf7;border-radius:12px;margin-bottom:10px;
+    cursor:pointer;transition:0.15s;background:#fafdff;
+}
+.drawer-item:hover{background:#eff6ff;border-color:#93c5fd;transform:translateX(2px);}
+.drawer-item:active{transform:translateX(2px) scale(0.98);}
+.drawer-item-icon{font-size:24px;flex-shrink:0;}
+.drawer-item-content{flex:1;min-width:0;}
+.drawer-item-title{font-size:14px;color:#1e40af;font-weight:600;margin-bottom:2px;}
+.drawer-item-desc{font-size:12px;color:#6a8aad;}
+.drawer-item-arrow{font-size:14px;color:#8aa2c0;flex-shrink:0;transition:0.15s;}
+.drawer-item:hover .drawer-item-arrow{color:#3b82f6;transform:translateX(2px);}
+@media (max-width:600px){
+    .drawer{width:82vw;}
+    .drawer-item{padding:12px 14px;}
+    .drawer-item-icon{font-size:22px;}
+    .drawer-item-title{font-size:13px;}
+    .drawer-item-desc{font-size:11px;}
+}
 </style>
 </head>
 <body>
 
 <div class="header-row">
     <div class="header-left">
-        <button class="btn-practice" id="practiceBtn">📝 练习</button>
+        <button class="btn-practice" id="practiceBtn">⚙️ 设置与练习</button>
     </div>
     <div class="header-center">
         <div class="app-header">
@@ -400,13 +604,45 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
         <button class="login-btn" id="loginBtn">🔑 登录</button>
     </div>
 </div>
-
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+    <div class="drawer-header">
+        <span>⚙️ 设置与练习</span>
+        <button class="drawer-close" id="drawerClose">✕</button>
+    </div>
+    <div class="drawer-body">
+        <div class="drawer-item" id="drawerPracticeBtn">
+            <div class="drawer-item-icon">📝</div>
+            <div class="drawer-item-content">
+                <div class="drawer-item-title">练习模式</div>
+                <div class="drawer-item-desc">20题随机抽题，限时作答</div>
+            </div>
+            <div class="drawer-item-arrow">▶</div>
+        </div>
+        <div class="drawer-item" id="drawerStudyBtn">
+            <div class="drawer-item-icon">📚</div>
+            <div class="drawer-item-content">
+                <div class="drawer-item-title">学习模式</div>
+                <div class="drawer-item-desc">浏览全部题库（含答案与解析）</div>
+            </div>
+            <div class="drawer-item-arrow">▶</div>
+        </div>
+    </div>
+</div>
 <div class="app-container">
     <div class="chat-area" id="chatArea">
         <div class="empty-state" id="emptyState">
             <div class="empty-icon">💬</div>
             <div class="empty-text">输入题目关键词开始查询<br>支持文字查询</div>
         </div>
+    </div>
+    <div class="study-area" id="studyArea" style="display:none;">
+        <div class="study-toolbar">
+            <input type="text" id="studySearch" placeholder="🔍 搜索题目/答案/解析…">
+            <button id="studyClearSearch">清空</button>
+            <span class="study-count" id="studyCount">共 0 题</span>
+        </div>
+        <div class="study-list" id="studyList"></div>
     </div>
     <div class="bottom-fixed">
         <div class="toolbar">
@@ -921,7 +1157,7 @@ function loadPracticeEdit(){
     return {};
 }
 function savePracticeEdit(data){
-    data.updatedAt = nowTs();      // ★ 关键：顶层时间戳
+    data.updatedAt = nowTs();
     data.device = DEVICE;
     try{ localStorage.setItem(PRACTICE_EDIT_KEY, JSON.stringify(data)); }catch(e){}
     if(typeof pushSyncData === 'function') pushSyncData(true);
@@ -1041,22 +1277,16 @@ function escapeHTML(str){
     }[m]));
 }
 
-// ★ 新增：剥掉题干里的答案标记（</答案>xxx<答案\>），用于选择题显示干净题干
 function stripAnswerMarkers(text){
     if(!text) return '';
     let s = String(text);
-    // 去掉 </答案> ... <答案\> 之间的内容（连同标记）
     s = s.replace(/<\/答案>[\s\S]*?<答案\\>/g, '');
-    // 去掉乱序/固定标记
     s = s.replace(/<\/固>|<固\\>|<\/乱序>|<乱序\\>/g, '');
-    // 去掉残留的半截标记
     s = s.replace(/<\/答案>|<答案\\>/g, '');
-    // 压缩多余空白
     s = s.replace(/\s{2,}/g, ' ').trim();
     return s;
 }
 
-// UTF-8 安全 Base64（替代废弃的 unescape）
 function utf8ToBase64(str){
     const bytes = new TextEncoder().encode(str);
     let binary = '';
@@ -1283,7 +1513,6 @@ function saveGhCfg(cfg){
 function isGhConfigured(cfg){
     return cfg && cfg.owner && cfg.repo && cfg.path && cfg.token;
 }
-
 // ====================== 生成完整页面代码 ======================
 async function getFullPageHTML(){
     try{
@@ -1565,7 +1794,6 @@ async function pullSyncData(){
     const syncPath = getSyncPath(cfg);
     const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${syncPath}`;
 
-    // ★ 重试 6 次，每次间隔递增
     for(let attempt = 0; attempt < 6; attempt++){
         try{
             const resp = await fetch(apiBase, {
@@ -1575,15 +1803,12 @@ async function pullSyncData(){
             });
             if(!resp.ok){
                 console.warn(`pullSyncData 第 ${attempt+1} 次状态码异常:`, resp.status);
-                // 404/403/401 不用重试
                 if(resp.status === 404 || resp.status === 403 || resp.status === 401) return null;
-                // 其它情况（5xx / 429）等一会儿再试
                 if(attempt < 5) await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
                 continue;
             }
             const data = await resp.json();
 
-            // 情况 1：文件 > 1MB，content 为空，走 download_url
             if(!data.content && data.download_url){
                 console.log('文件 > 1MB，走 download_url 下载');
                 const rawResp = await fetch(data.download_url, { cache: 'no-store' });
@@ -1592,7 +1817,6 @@ async function pullSyncData(){
                 return JSON.parse(text);
             }
 
-            // 情况 2：正常小文件
             const text = base64ToUtf8(data.content);
             return JSON.parse(text);
         }catch(e){
@@ -1609,9 +1833,7 @@ async function syncFromCloud(){
     const remote = await pullSyncData();
     if(!remote) return;
 
-    // ================= 移动端：单向同步，云端优先 =================
     if(DEVICE === 'mobile'){
-        // 1. 总题库
         if(remote.bank && Array.isArray(remote.bank.list) && remote.bank.list.length){
             questionBank = remote.bank.list.map(item => ({
                 q: item.q || '',
@@ -1623,15 +1845,12 @@ async function syncFromCloud(){
             try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(questionBank)); }catch(e){}
             saveBankUpdatedAt(remote.bank.updatedAt || nowTs());
         }
-        // 2. 练习编辑（含 __practice_only__ 练习专属题）
         if(remote.practiceEdit){
             try{ localStorage.setItem(PRACTICE_EDIT_KEY, JSON.stringify(remote.practiceEdit)); }catch(e){}
         }
-        // 3. 练习配置（阈值、选项、正确答案）
         if(remote.practiceCfg){
             try{ localStorage.setItem(PRACTICE_CFG_KEY, JSON.stringify(remote.practiceCfg)); }catch(e){}
         }
-        // 4. 历史、备份、复活备份
         if(remote.backups)      saveBackups(remote.backups);
         if(remote.history)      saveHistory(remote.history.list || []);
         if(remote.reviveBackup && remote.reviveBackup.content){
@@ -1640,15 +1859,11 @@ async function syncFromCloud(){
 
         loadBank();
 
-        // ============ ★★★ 这里就是"修复3"要加的东西 ★★★ ============
-        // 如果题库管理弹窗正开着，就重新画一遍列表
         if(document.getElementById('bankModal') && document.getElementById('bankModal').classList.contains('active')){
-            // 刷新"搜索编辑"里的题库列表
             if(typeof renderBankList === 'function'){
                 const kw = document.getElementById('bankSearch') ? document.getElementById('bankSearch').value : '';
                 renderBankList(kw);
             }
-            // 刷新"练习管理"里三个列表
             if(typeof renderPracticeList === 'function'){
                 const kwFill   = document.getElementById('practiceSearch')       ? document.getElementById('practiceSearch').value       : '';
                 const kwSingle = document.getElementById('practiceSingleSearch') ? document.getElementById('practiceSingleSearch').value : '';
@@ -1659,12 +1874,10 @@ async function syncFromCloud(){
             }
             showToast('✅ 已从云端同步最新数据');
         }
-        // ============ ★★★ 修复3 结束 ★★★ ============
 
-        return;   // 移动端不 push，避免回写覆盖 PC
+        return;
     }
 
-    // ================= PC 端：保持原逻辑 =================
     const local = loadLocalSync();
     const merged = mergeSync(local, remote);
     saveLocalSync(merged);
@@ -2228,8 +2441,6 @@ function buildFillQuestionHTMLFromParsed(parsed, answerData, submitted, showMark
     const rules = parsed.orderRules || [];
     let blankIndex = 0;
 
-    // ★ 预计算每个空的 ✔/✘（完全按 orderSetting 与 orderRules 判定，与 getQuestionScore 一致）
-    // matchedCorrectIndex[用户空索引] = 匹配到的标准答案索引，-1 表示未匹配
     let matchedCorrectIndex = [];
         if(submitted && showMarks && Array.isArray(answerData)){
         const cfg = loadPracticeCfg();
@@ -2247,7 +2458,6 @@ function buildFillQuestionHTMLFromParsed(parsed, answerData, submitted, showMark
         matchedCorrectIndex = new Array(answerData.length).fill(-1);
 
         if(orderSetting === 'none'){
-            // ========== 固定顺序：逐空同位置比对 ==========
             for(let i = 0; i < answers.length; i++){
                 const studentAns = (answerData[i] || '').trim();
                 if(!studentAns) continue;
@@ -2256,8 +2466,6 @@ function buildFillQuestionHTMLFromParsed(parsed, answerData, submitted, showMark
                 }
             }
         }else if(orderSetting === 'partial'){
-            // ========== 部分乱序：按 orderRules 分组 ==========
-            // 把标准答案按"相邻同规则"分组
             const groups = [];
             let cur = null;
             for(let i = 0; i < answers.length; i++){
@@ -2273,7 +2481,6 @@ function buildFillQuestionHTMLFromParsed(parsed, answerData, submitted, showMark
             for(const g of groups){
                 const n = g.indices.length;
                 if(g.rule === 'fixed'){
-                    // 固定组：同位置比对
                     for(let k = 0; k < n; k++){
                         const ci = g.indices[k];
                         const si = cursor + k;
@@ -2284,20 +2491,17 @@ function buildFillQuestionHTMLFromParsed(parsed, answerData, submitted, showMark
                         }
                     }
                 }else{
-                    // 乱序组：组内任意跨位置匹配
                     const used = new Array(n).fill(false);
                     for(let k = 0; k < n; k++){
                         const si = cursor + k;
                         const studentAns = (answerData[si] || '').trim();
                         if(!studentAns) continue;
-                        // 先尝试同位置
                         const sameIdx = k;
                         if(!used[sameIdx] && answerSimilarity(studentAns, answers[g.indices[sameIdx]] || '') >= threshold){
                             matchedCorrectIndex[si] = g.indices[sameIdx];
                             used[sameIdx] = true;
                             continue;
                         }
-                        // 再跨位置
                         for(let j = 0; j < n; j++){
                             if(!used[j] && answerSimilarity(studentAns, answers[g.indices[j]] || '') >= threshold){
                                 matchedCorrectIndex[si] = g.indices[j];
@@ -2310,18 +2514,15 @@ function buildFillQuestionHTMLFromParsed(parsed, answerData, submitted, showMark
                 cursor += n;
             }
         }else{
-            // ========== 全乱序（默认）：所有空之间任意跨位置匹配 ==========
             const usedCorrect = new Array(answers.length).fill(false);
             for(let i = 0; i < answerData.length; i++){
                 const studentAns = (answerData[i] || '').trim();
                 if(!studentAns) continue;
-                // 先尝试同位置
                 if(i < answers.length && !usedCorrect[i] && answerSimilarity(studentAns, answers[i] || '') >= threshold){
                     matchedCorrectIndex[i] = i;
                     usedCorrect[i] = true;
                     continue;
                 }
-                // 再跨位置
                 for(let j = 0; j < answers.length; j++){
                     if(!usedCorrect[j] && answerSimilarity(studentAns, answers[j] || '') >= threshold){
                         matchedCorrectIndex[i] = j;
@@ -2521,7 +2722,6 @@ function renderPracticeQuestion(){
         }
         const explSource = rawQ.__practiceOnly === true ? rawQ.e : ((editData[rawQ.q] && editData[rawQ.q].customExplanation) || rawQ.e);
 
-        // ★ 新增：判断是否"部分答对"
         let isPartial = false;
         if(!isChoice && !isCorrect){
             isPartial = isPartiallyCorrect(rawQ, idx);
@@ -2688,15 +2888,13 @@ function getQuestionScore(idx){
     if(!Array.isArray(answer)) return 0;
     const perBlank = 5 / correctParts.length;
     if(orderSetting === 'all'){
-    // 不要求填写数量和答案数量相等，逐空评分
     const studentSlots = Array.isArray(answer) ? answer.map(a => (a || '').trim()) : [];
     const correctSet = correctParts.map(a => a.trim());
     if(correctSet.length === 0) return 0;
     let matchCount = 0;
     const usedCorrect = new Array(correctSet.length).fill(false);
-    // 遍历学生每一个已填答案，去匹配尚未被匹配的正确答案
     for(let i = 0; i < studentSlots.length; i++){
-        if(!studentSlots[i]) continue; // 空答案跳过
+        if(!studentSlots[i]) continue;
         for(let j = 0; j < correctSet.length; j++){
             if(!usedCorrect[j] && answerSimilarity(studentSlots[i], correctSet[j]) >= threshold){
                 matchCount++;
@@ -2705,7 +2903,6 @@ function getQuestionScore(idx){
             }
         }
     }
-    // 得分 = 已匹配数 / 正确答案总数 * 5
     return (matchCount / correctSet.length) * 5;
 }
     if(orderSetting === 'none'){
@@ -2757,9 +2954,6 @@ function getQuestionScore(idx){
     }
     return totalScore;
 }
-// 判断填空题是否为"部分答对"（有些空对、有些空错/未填）
-// 返回 true：部分答对（应显示 ✔/✘ 标记）
-// 返回 false：全对 或 全错（不显示标记）
 function isPartiallyCorrect(rawQ, idx){
     if(isQuestionChoice(rawQ)) return false;
     const answer = practiceAnswers[idx];
@@ -2969,7 +3163,6 @@ function resetPractice(){
     document.getElementById('practiceFooter').style.display = 'flex';
     document.getElementById('practiceTimer').classList.remove('warning');
 }
-
 // ====================== 练习编辑器 ======================
 function openPracticeEditor(idx){
     editingPracticeIdx = idx;
@@ -3508,7 +3701,6 @@ function getOptionsFromEditor(containerId){
 }
 
 // ====================== 练习预览（总题库） ======================
-// ====================== 练习预览（总题库） ======================
 function showPracticePreview(idx){
     const rawQ = questionBank[idx];
     if(!rawQ) return;
@@ -3582,8 +3774,7 @@ function showPracticePreview(idx){
     });
 }
 
-// ====================== 练习预览（练习专属题，不走 questionBank） ======================
-// ====================== 练习预览（练习专属题，不走 questionBank） ======================
+// ====================== 练习预览（练习专属题） ======================
 function showPracticeOnlyPreview(item){
     const isChoice = item.isChoice === true;
     const overlay = document.createElement('div');
@@ -3801,7 +3992,6 @@ function renderTestQuestion(){
         }
         const explSource = rawQ.__practiceOnly === true ? rawQ.e : ((editData[rawQ.q] && editData[rawQ.q].customExplanation) || rawQ.e);
 
-        // ★ 新增：判断是否"部分答对"
         let isPartial = false;
         if(!isChoice && !isCorrect){
             isPartial = isPartiallyCorrect(rawQ, idx);
@@ -3897,7 +4087,6 @@ function renderTestQuestion(){
     finishBtn.style.display = 'none';
     oldNextBtn.style.display = 'inline-block';
 
-    // 用新按钮替换旧按钮，彻底摆脱原有的 addEventListener 绑定
     const nextBtn = oldNextBtn.cloneNode(true);
     oldNextBtn.parentNode.replaceChild(nextBtn, oldNextBtn);
 
@@ -3968,6 +4157,91 @@ function closeTestMode(){
     document.getElementById('practiceFinishBtn').style.display = 'none';
     document.getElementById('practicePrevBtn').style.display = '';
 }
+// ====================== 学习模式 ======================
+let isStudyMode = false;
+
+function enterStudyMode(){
+    isStudyMode = true;
+    document.getElementById('chatArea').style.display = 'none';
+    document.getElementById('studyArea').style.display = 'flex';
+    document.querySelector('.bottom-fixed').style.display = 'none';
+    document.querySelector('.app-header h1').textContent = '📚 学习模式';
+    document.querySelector('.app-header .subtitle').textContent = '全部题库 · 题目 / 答案 / 解析';
+    renderStudyList('');
+    const sl = document.getElementById('studyList');
+    if(sl) sl.scrollTop = 0;
+    updateDrawerStudyBtn();
+}
+
+function exitStudyMode(){
+    isStudyMode = false;
+    document.getElementById('chatArea').style.display = '';
+    document.getElementById('studyArea').style.display = 'none';
+    document.querySelector('.bottom-fixed').style.display = '';
+    document.querySelector('.app-header h1').textContent = '🔍 中控测验答题器';
+    document.querySelector('.app-header .subtitle').textContent = '输入题目关键词，自动提取题目与答案';
+    updateDrawerStudyBtn();
+    showToast('已退出学习模式');
+}
+
+function updateDrawerStudyBtn(){
+    const btn = document.getElementById('drawerStudyBtn');
+    if(!btn) return;
+    const icon = btn.querySelector('.drawer-item-icon');
+    const title = btn.querySelector('.drawer-item-title');
+    const desc = btn.querySelector('.drawer-item-desc');
+    if(!icon || !title || !desc) return;
+    if(isStudyMode){
+        icon.textContent = '🚪';
+        title.textContent = '退出学习模式';
+        desc.textContent = '返回查询界面';
+    }else{
+        icon.textContent = '📚';
+        title.textContent = '学习模式';
+        desc.textContent = '浏览全部题库（含答案与解析）';
+    }
+}
+
+function renderStudyList(keyword){
+    const listEl = document.getElementById('studyList');
+    const countEl = document.getElementById('studyCount');
+    if(!listEl) return;
+    const kw = (keyword || '').trim().toLowerCase();
+    const items = [];
+    questionBank.forEach((item, idx)=>{
+        if(item.hidden === true) return;
+        if(kw){
+            const hay = (item.q + ' ' + item.a + ' ' + (item.e || '')).toLowerCase();
+            if(hay.indexOf(kw) === -1) return;
+        }
+        items.push({ item, idx });
+    });
+    listEl.innerHTML = '';
+    if(!items.length){
+        listEl.innerHTML = '<div class="study-empty">未找到匹配题目</div>';
+        countEl.textContent = '共 0 题';
+        return;
+    }
+    items.forEach(({ item, idx })=>{
+        const div = document.createElement('div');
+        div.className = 'study-card';
+        const choiceTag = item.isChoice ? '<span class="sc-tag-choice">🔘 选择题</span>' : '';
+        const explainHTML = (item.e && item.e.trim())
+            ? `<div class="sc-block sc-explain"><span class="sc-label">解析：</span>${escapeHTML(item.e)}</div>`
+            : '';
+        div.innerHTML = `
+            <div class="sc-header">
+                <span class="sc-num">#${idx+1}</span>
+                ${choiceTag}
+            </div>
+            <div class="sc-q">${escapeHTML(item.q)}</div>
+            <div class="sc-block sc-answer"><span class="sc-label">答案：</span>${formatAnswerHTML(item.a)}</div>
+            ${explainHTML}
+        `;
+        listEl.appendChild(div);
+    });
+    countEl.textContent = `共 ${items.length} 题`;
+}
 
 // ====================== DOM初始化 ======================
 document.addEventListener('DOMContentLoaded', ()=>{
@@ -4026,10 +4300,76 @@ document.addEventListener('DOMContentLoaded', ()=>{
         chatArea.appendChild(empty);
         showToast('对话已清空');
     });
-    document.getElementById('practiceBtn').addEventListener('click', ()=>{
-        if(practiceFinished){ resetPractice(); }
-        startPractice();
+        // ===== 设置与练习 - 帘子 =====
+    const drawer = document.getElementById('drawer');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+
+    function openDrawer(){
+        drawer.classList.add('active');
+        drawerOverlay.classList.add('active');
+        try{ history.pushState({ drawer: true }, ''); }catch(e){}
+    }
+    function closeDrawer(){
+        drawer.classList.remove('active');
+        drawerOverlay.classList.remove('active');
+    }
+    function requestCloseDrawer(){
+        if(history.state && history.state.drawer){
+            history.back();
+        }else{
+            closeDrawer();
+        }
+    }
+
+    document.getElementById('practiceBtn').addEventListener('click', openDrawer);
+    document.getElementById('drawerClose').addEventListener('click', requestCloseDrawer);
+    drawerOverlay.addEventListener('click', requestCloseDrawer);
+
+    window.addEventListener('popstate', ()=>{
+        if(drawer.classList.contains('active')){
+            closeDrawer();
+        }
     });
+
+    document.getElementById('drawerPracticeBtn').addEventListener('click', ()=>{
+        requestCloseDrawer();
+        if(practiceFinished){ resetPractice(); }
+        setTimeout(()=>{ startPractice(); }, 300);
+    });
+
+    document.getElementById('drawerStudyBtn').addEventListener('click', ()=>{
+        requestCloseDrawer();
+        setTimeout(()=>{
+            if(isStudyMode){
+                exitStudyMode();
+            }else{
+                enterStudyMode();
+            }
+        }, 300);
+    });
+
+    document.getElementById('studySearch').addEventListener('input', (e)=>{
+        renderStudyList(e.target.value);
+    });
+    document.getElementById('studyClearSearch').addEventListener('click', ()=>{
+        document.getElementById('studySearch').value = '';
+        renderStudyList('');
+        document.getElementById('studySearch').focus();
+    });
+
+    let _drawerTouchStartX = 0;
+    let _drawerTouchStartY = 0;
+    drawer.addEventListener('touchstart', (e)=>{
+        _drawerTouchStartX = e.touches[0].clientX;
+        _drawerTouchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    drawer.addEventListener('touchend', (e)=>{
+        const dx = e.changedTouches[0].clientX - _drawerTouchStartX;
+        const dy = e.changedTouches[0].clientY - _drawerTouchStartY;
+        if(dx < -60 && Math.abs(dx) > Math.abs(dy) * 1.5){
+            requestCloseDrawer();
+        }
+    }, { passive: true });
     document.getElementById('practiceClose').addEventListener('click', ()=>{
     if(testQuestions.length > 0 && !practiceFinished){
         closeTestMode();
@@ -4056,7 +4396,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }
     });
     document.getElementById('practiceNextBtn').addEventListener('click', ()=>{
-    // ★ 测试模式下，按钮由 renderTestQuestion 重新绑定，这里不处理
     if(testQuestions.length > 0) return;
 
     if(!practiceSubmitted[practiceCurrentIndex]){
