@@ -5514,7 +5514,7 @@
       "水泵"
     ],
     "updatedAt": 0,
-    "device": "mobile"
+    "device": "pc"
   },
   "bank": {
     "list": [
@@ -7340,7 +7340,7 @@
       }
     ],
     "updatedAt": 1790832864030,
-    "device": "mobile"
+    "device": "pc"
   },
   "practiceCfg": {
     "threshold": 75,
@@ -7349,7 +7349,7 @@
     "singleCorrect": {},
     "multiCorrect": {},
     "updatedAt": 0,
-    "device": "mobile"
+    "device": "pc"
   },
   "practiceEdit": {
     "updatedAt": 1790832876151,
