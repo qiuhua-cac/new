@@ -1629,6 +1629,14 @@ async function tryRestoreUserSession(){
     if(!s || !s.username){ return; }
     currentUser = { username: s.username, password: s.password };
     refreshUserDrawerBtn();
+    // 恢复会话后，主动从 YesApi 拉一次最新已会数据
+    loadMasteredFromCloud().then(()=>{
+        if(typeof renderStudyList === 'function' && isStudyMode){
+            renderStudyList(document.getElementById('studySearch').value || '');
+        }
+    }).catch(e=>{
+        console.warn('恢复会话后拉取已会数据失败', e);
+    });
 }
 // ====================================================================
 // ====================== 练习状态保存 ======================
