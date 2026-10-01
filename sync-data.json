@@ -4,7 +4,7 @@
     "repo": "new",
     "path": "index.html",
     "token": "",
-    "updatedAt": 1790867779339,
+    "updatedAt": 1790867936592,
     "device": "pc"
   },
   "reviveBackup": {
@@ -1842,6 +1842,7 @@
   },
   "history": {
     "list": [
+      "dd",
       "溶解氧",
       "水中溶解氧",
       "pp",
@@ -1849,8 +1850,7 @@
       "orp",
       "高处",
       "沉淀池的作用",
-      "测试",
-      "好氧池的作用是"
+      "测试"
     ],
     "updatedAt": 0,
     "device": "pc"
