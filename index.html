@@ -402,8 +402,9 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
     flex-wrap:wrap;
 }
 .study-toolbar input{
-    flex:1;
-    min-width:120px;
+    flex:1 1 0;
+    width:auto;
+    min-width:0;
     padding:9px 12px;
     font-size:13px;
     border:1.5px solid #c8d9ec;
@@ -431,6 +432,29 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .study-toolbar button:hover{
     background:#e8f2fe;
     border-color:#9bbde0;
+}
+#studyMasteredToggle{
+    font-size:12px;
+    padding:8px 12px;
+    border:1.5px solid #c8d9ec;
+    border-radius:10px;
+    background:#fff;
+    color:#1e3a5f;
+    cursor:pointer;
+    font-weight:500;
+    transition:0.15s;
+    white-space:nowrap;
+}
+#studyMasteredToggle:hover{
+    background:#e8f2fe;
+    border-color:#9bbde0;
+}
+#studyMasteredToggle.active{
+    background:#dcfce7;
+    border-color:#22c55e;
+    color:#166534;
+    font-weight:700;
+    box-shadow:0 0 0 2px rgba(34,197,94,0.2);
 }
 .study-count{
     font-size:12px;
@@ -601,7 +625,8 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 }
 @media (max-width:600px){
     .study-toolbar{padding:8px 10px;gap:6px;}
-    .study-toolbar input{font-size:13px;padding:8px 10px;}
+        .study-toolbar input{font-size:13px;padding:8px 10px;flex:1 1 0;width:auto;min-width:0;}
+    #studyMasteredToggle{font-size:11px;padding:7px 8px;}
     .study-toolbar button{font-size:11px;padding:7px 10px;}
     .study-count{font-size:11px;}
     .study-list{padding:10px;}
@@ -715,9 +740,10 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
         </div>
     </div>
     <div class="study-area" id="studyArea" style="display:none;">
-        <div class="study-toolbar">
-            <input type="text" id="studySearch" placeholder="🔍 搜索题目/答案/解析…">
+             <div class="study-toolbar">
+            <input type="text" id="studySearch" placeholder="🔍 搜索…">
             <button id="studyClearSearch">清空</button>
+            <button id="studyMasteredToggle">前往已会题库</button>
             <span class="study-count" id="studyCount">共 0 题</span>
         </div>
         <div class="study-list" id="studyList"></div>
@@ -4747,7 +4773,11 @@ async function onToggleMastered(questionText, btnEl){
         const card = btnEl.closest('.study-card');
         if(card) card.classList.toggle('mastered', willAdd);
     }
-    showToast(willAdd ? '✅ 已标记为已会' : '已取消已会');
+        showToast(willAdd ? '✅ 已标记为已会' : '已取消已会');
+    if(isStudyMode){
+        const searchVal = document.getElementById('studySearch').value || '';
+        renderStudyList(searchVal);
+    }
     // 后台异步同步，不阻塞 UI
     syncMasteredToCloud().then(ok=>{
         if(!ok){
@@ -4774,9 +4804,16 @@ async function loadMasteredFromCloud(){
 }
 // ====================== 学习模式 ======================
 let isStudyMode = false;
+let studyMasteredOnly = false;   // 是否只看已会题库
 
 function enterStudyMode(){
     isStudyMode = true;
+    studyMasteredOnly = false;
+    const toggleBtn = document.getElementById('studyMasteredToggle');
+    if(toggleBtn){
+        toggleBtn.classList.remove('active');
+        toggleBtn.textContent = '前往已会题库';
+    }
     document.getElementById('chatArea').style.display = 'none';
     document.getElementById('studyArea').style.display = 'flex';
     document.querySelector('.bottom-fixed').style.display = 'none';
@@ -4822,9 +4859,17 @@ function renderStudyList(keyword){
     const countEl = document.getElementById('studyCount');
     if(!listEl) return;
     const kw = (keyword || '').trim().toLowerCase();
+    const masteredList = getMasteredListForCurrentUser();
     const items = [];
     questionBank.forEach((item, idx)=>{
         if(item.hidden === true) return;
+        if(studyMasteredOnly){
+            // 已会题库：只显示已标记的
+            if(masteredList.indexOf(item.q) === -1) return;
+        }else{
+            // 学习题库：只显示未标记的
+            if(masteredList.indexOf(item.q) !== -1) return;
+        }
         if(kw){
             const hay = (item.q + ' ' + item.a + ' ' + (item.e || '')).toLowerCase();
             if(hay.indexOf(kw) === -1) return;
@@ -4833,8 +4878,9 @@ function renderStudyList(keyword){
     });
     listEl.innerHTML = '';
     if(!items.length){
-        listEl.innerHTML = '<div class="study-empty">未找到匹配题目</div>';
-        countEl.textContent = '共 0 题';
+        listEl.innerHTML = '<div class="study-empty">' +
+            (studyMasteredOnly ? '暂无已会题目' : '未找到匹配题目') + '</div>';
+        countEl.textContent = studyMasteredOnly ? '已会 0 题' : '共 0 题';
         return;
     }
     items.forEach(({ item, idx })=>{
@@ -4844,7 +4890,6 @@ function renderStudyList(keyword){
         const explainHTML = (item.e && item.e.trim())
             ? `<div class="sc-block sc-explain"><span class="sc-label">解析：</span>${escapeHTML(item.e)}</div>`
             : '';
-                const masteredList = getMasteredListForCurrentUser();
         const isMastered = masteredList.indexOf(item.q) !== -1;
         if(isMastered) div.classList.add('mastered');
         div.innerHTML = `
@@ -4863,7 +4908,7 @@ function renderStudyList(keyword){
         });
         listEl.appendChild(div);
     });
-    countEl.textContent = `共 ${items.length} 题`;
+    countEl.textContent = studyMasteredOnly ? `已会 ${items.length} 题` : `共 ${items.length} 题`;
 }
 
 // ====================== DOM初始化 ======================
@@ -4980,6 +5025,16 @@ document.getElementById('drawerUserBtn').addEventListener('click', ()=>{
         }
     }, 300);
 });
+    document.getElementById('studyMasteredToggle').addEventListener('click', ()=>{
+        studyMasteredOnly = !studyMasteredOnly;
+        const btn = document.getElementById('studyMasteredToggle');
+        btn.classList.toggle('active', studyMasteredOnly);
+        btn.textContent = studyMasteredOnly ? '返回学习题库' : '前往已会题库';
+        renderStudyList(document.getElementById('studySearch').value || '');
+    });
+    document.getElementById('studySearch').addEventListener('input', (e)=>{
+        renderStudyList(e.target.value);
+    });
     document.getElementById('studySearch').addEventListener('input', (e)=>{
         renderStudyList(e.target.value);
     });
