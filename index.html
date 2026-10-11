@@ -4989,7 +4989,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         showCamStatus('正在启动摄像头…');
         try{
             const constraints = {
-                video: { facingMode: useFacing || camFacing, width: { ideal: 1280 }, height: { ideal: 720 } },
+                video: { facingMode: useFacing || camFacing, width: { ideal: 960 }, height: { ideal: 540 } },
                 audio: false
             };
             camStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -5036,28 +5036,87 @@ document.addEventListener('DOMContentLoaded', ()=>{
         startCamera(camFacing);
     });
 
-    // 抓拍并压缩到 800px，识别后填入输入框
-    function captureFrame(maxWidth = 800, quality = 0.7){
-        return new Promise((resolve, reject) => {
-            if(!camReady || camVideo.videoWidth === 0){
-                reject(new Error('摄像头未就绪'));
-                return;
-            }
-            const vw = camVideo.videoWidth;
-            const vh = camVideo.videoHeight;
-            let w = vw, h = vh;
-            if(w > maxWidth){ h = Math.round(h * maxWidth / w); w = maxWidth; }
-            hiddenCanvas.width = w;
-            hiddenCanvas.height = h;
-            const ctx = hiddenCanvas.getContext('2d');
-            if(camFacing === 'user'){
-                ctx.translate(w, 0);
-                ctx.scale(-1, 1);
-            }
-            ctx.drawImage(camVideo, 0, 0, w, h);
-            resolve(hiddenCanvas.toDataURL('image/jpeg', quality));
-        });
-    }
+    // 只裁剪虚线框内的画面，识别框内文字
+function captureFrame(maxWidth = 800, quality = 0.7){
+    return new Promise((resolve, reject) => {
+        if(!camReady || camVideo.videoWidth === 0){
+            reject(new Error('摄像头未就绪'));
+            return;
+        }
+
+        const vw = camVideo.videoWidth;
+        const vh = camVideo.videoHeight;
+
+        // 获取扫描框在屏幕上的实际位置和大小
+        const frameEl = document.querySelector('#cameraOverlay .cam-frame');
+        const videoWrapper = camVideo.parentElement;
+
+        if(!frameEl || !videoWrapper){
+            reject(new Error('扫描框未找到'));
+            return;
+        }
+
+        const frameRect = frameEl.getBoundingClientRect();
+        const wrapperRect = videoWrapper.getBoundingClientRect();
+
+        // 扫描框相对于视频容器的位置（像素）
+        const frameLeftInWrapper = frameRect.left - wrapperRect.left;
+        const frameTopInWrapper = frameRect.top - wrapperRect.top;
+        const frameSizeInWrapper = frameRect.width;
+
+        // 视频被 object-fit:cover 显示，需要映射到视频原始像素
+        const wrapperW = wrapperRect.width;
+        const wrapperH = wrapperRect.height;
+
+        const videoAspect = vw / vh;
+        const wrapperAspect = wrapperW / wrapperH;
+
+        let dispW, dispH; // 视频在容器内实际显示的尺寸
+        if(videoAspect > wrapperAspect){
+            // 视频更宽，上下满，左右裁
+            dispH = wrapperH;
+            dispW = wrapperH * videoAspect;
+        } else {
+            // 视频更高，左右满，上下裁
+            dispW = wrapperW;
+            dispH = wrapperW / videoAspect;
+        }
+
+        // 视频相对容器的偏移（cover 裁掉的部分）
+        const offsetX = (dispW - wrapperW) / 2;
+        const offsetY = (dispH - wrapperH) / 2;
+
+        // 显示尺寸 → 原始视频像素的比例
+        const scale = vw / dispW;
+
+        // 扫描框在原始视频像素里的区域
+        const srcX = (frameLeftInWrapper + offsetX) * scale;
+        const srcY = (frameTopInWrapper + offsetY) * scale;
+        const srcW = frameSizeInWrapper * scale;
+        const srcH = frameSizeInWrapper * scale;
+
+        // 输出尺寸（限制最大宽度）
+        let outW = srcW;
+        let outH = srcH;
+        if(outW > maxWidth){
+            outH = outH * maxWidth / outW;
+            outW = maxWidth;
+        }
+
+        hiddenCanvas.width = outW;
+        hiddenCanvas.height = outH;
+        const ctx = hiddenCanvas.getContext('2d');
+
+        // 从视频里精确裁剪扫描框区域
+        ctx.drawImage(
+            camVideo,
+            srcX, srcY, srcW, srcH,   // 源区域
+            0, 0, outW, outH          // 目标区域
+        );
+
+        resolve(hiddenCanvas.toDataURL('image/jpeg', quality));
+    });
+}
 
     camCapture.addEventListener('click', async ()=>{
         if(camRecognizing) return;
@@ -5070,8 +5129,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
         showCamStatus('正在抓拍…');
 
         try{
-            const dataUrl = await captureFrame(800, 0.7);
+            const dataUrl = await captureFrame(600, 0.6);
             showCamStatus('正在识别文字…');
+            const _t0 = performance.now();
 
             const formData = new FormData();
             formData.append('base64Image', dataUrl);
@@ -5111,6 +5171,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 camCapture.disabled = false;
                 return;
             }
+            const _t1 = performance.now();
+console.log('识别耗时:', Math.round(_t1 - _t0), 'ms');
 
             // 填入输入框（追加还是替换？这里选择直接填入，保持输入框原有语义）
             questionInput.value = text;
@@ -5118,7 +5180,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
             // 光标移到末尾
             questionInput.setSelectionRange(text.length, text.length);
 
-            showCamStatus('✅ 识别完成，已填入输入框');
+            showCamStatus('✅ 识别完成（' + ((_t1 - _t0)/1000).toFixed(1) + 's）');
             // 关闭相机层
             setTimeout(()=>{
                 stopCamera();
