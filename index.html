@@ -47,9 +47,9 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .no-result{background:#fffbeb;border-left:5px solid #f59e0b;border-radius:14px;padding:16px 18px;color:#92400e;font-size:13px;line-height:1.7;}
 .no-result b{color:#b45309;}
 .bottom-fixed{flex-shrink:0;background:#fff;border-top:1px solid #d0e0f0;box-shadow:0 -4px 16px rgba(30,64,175,0.06);}
-.toolbar{display:flex;justify-content:space-between;align-items:center;padding:8px 18px 4px;flex-wrap:wrap;gap:6px;}
+.toolbar{display:flex;justify-content:flex-start;align-items:center;padding:8px 18px 4px;flex-wrap:wrap;column-gap:8px;row-gap:6px;}
 .toolbar-left{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-.toolbar-right{display:flex;gap:6px;align-items:center;}
+.toolbar-right{display:flex;gap:6px;align-items:center;flex-shrink:0;}
 .toolbar button{font-size:13px;padding:7px 14px;border:1px solid #c8d9ec;border-radius:10px;background:#fff;color:#1e3a5f;cursor:pointer;transition:0.15s;font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.02);display:flex;align-items:center;gap:4px;white-space:nowrap;}
 .toolbar button:hover{background:#e8f2fe;border-color:#9bbde0;}
 .toolbar button:active{background:#d4e6fa;transform:scale(0.97);}
@@ -58,7 +58,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 .toolbar .icon-btn-sm{width:40px;height:40px;border-radius:50%;border:1px solid #c8d9ec;background:#f5faff;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:0.15s;padding:0;box-shadow:0 1px 4px rgba(0,0,0,0.03);}
 .toolbar .icon-btn-sm:hover{background:#e0eefe;border-color:#9bbde0;}
 .toolbar .icon-btn-sm:active{transform:scale(0.93);}
-#preciseToggleBtn{background:#f0f4fa;border-color:#c8d9ec;color:#6a8aad;transition:0.2s;font-size:13px;padding:7px 14px;}
+#preciseToggleBtn{background:#f0f4fa;border-color:#c8d9ec;color:#6a8aad;transition:0.2s;font-size:13px;padding:6px 10px;}
 #preciseToggleBtn.active{background:#dbeafe;border-color:#2563eb;color:#1d4ed8;box-shadow:0 0 0 2px rgba(59,130,246,0.25);font-weight:600;}
 .input-area{padding:6px 16px 14px;display:flex;align-items:center;gap:8px;}
 .input-area .input-wrap{flex:1;position:relative;min-width:0;}
@@ -340,6 +340,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
     .result-card .e-text{font-size:12px;padding:6px 10px;}
     .no-result{font-size:12px;padding:14px 16px;}
     .toolbar{padding:6px 12px 2px;gap:4px;}
+    .toolbar-right{flex-shrink:0;}
     .toolbar button{font-size:12px;padding:6px 12px;}
     .toolbar .icon-btn-sm{width:38px;height:38px;font-size:18px;}
     #preciseToggleBtn{font-size:12px;padding:6px 12px;}
@@ -681,6 +682,25 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
     .drawer-item-title{font-size:13px;}
     .drawer-item-desc{font-size:11px;}
 }
+
+/* ====================== 相机扫描层（新增） ====================== */
+.camera-overlay{position:fixed;inset:0;background:#000;z-index:2000;display:none;flex-direction:column;}
+.camera-overlay.active{display:flex;}
+.camera-overlay .cam-header{padding:12px 16px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;font-size:15px;font-weight:600;}
+.camera-overlay .cam-close{background:rgba(255,255,255,0.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.camera-overlay .cam-close:hover{background:rgba(255,255,255,0.35);}
+.camera-overlay .cam-body{flex:1;position:relative;overflow:hidden;background:#000;display:flex;align-items:center;justify-content:center;}
+.camera-overlay #camVideo{width:100%;height:100%;object-fit:cover;display:block;}
+.camera-overlay .cam-frame{position:absolute;width:80%;aspect-ratio:1/1;max-width:340px;border:2px dashed rgba(255,255,255,0.85);border-radius:20px;box-shadow:0 0 0 2000px rgba(0,0,0,0.35);pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%);}
+.camera-overlay .cam-hint{position:absolute;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.65);color:#cdddf5;padding:6px 18px;border-radius:40px;font-size:13px;white-space:nowrap;border:0.5px solid rgba(255,255,255,0.15);}
+.camera-overlay .cam-switch{position:absolute;top:12px;right:12px;background:rgba(30,41,64,0.8);border:0.5px solid rgba(255,255,255,0.15);color:#b6ceff;padding:6px 14px;border-radius:40px;font-size:12px;cursor:pointer;backdrop-filter:blur(8px);}
+.camera-overlay .cam-switch:active{background:#2563eb;color:#fff;}
+.camera-overlay .cam-footer{padding:14px 16px 20px;background:#111827;display:flex;gap:10px;justify-content:center;flex-shrink:0;}
+.camera-overlay .cam-footer button{flex:1;max-width:220px;padding:14px 16px;border-radius:50px;border:none;font-size:16px;font-weight:600;cursor:pointer;transition:0.15s;color:#fff;background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 4px 14px rgba(37,99,235,0.4);}
+.camera-overlay .cam-footer button:active{transform:scale(0.97);}
+.camera-overlay .cam-footer button:disabled{opacity:0.5;pointer-events:none;}
+.camera-overlay .cam-status{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;background:rgba(0,0,0,0.7);padding:14px 22px;border-radius:12px;font-size:14px;text-align:center;line-height:1.6;pointer-events:none;z-index:10;display:none;max-width:80%;}
+.camera-overlay .cam-status.show{display:block;}
 </style>
 </head>
 <body>
@@ -752,11 +772,12 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
         <div class="toolbar">
             <div class="toolbar-left">
                 <button class="icon-btn-sm" id="historyBtn" title="历史查询">🕒</button>
-                <button id="preciseToggleBtn" class="active" title="精确搜索">精确搜索</button>
+                <button class="icon-btn-sm" id="cameraBtn" title="拍照识字">📷</button>
+                <button id="preciseToggleBtn" class="active" title="精确搜索">精确</button>
             </div>
             <div class="toolbar-right">
-                <button class="btn-clear-chat" id="clearChatBtn">🗑 清空对话</button>
-                <button id="clearInputBtn">✖ 清空输入</button>
+                <button class="btn-clear-chat" id="clearChatBtn">🗑清空对话</button>
+                <button id="clearInputBtn">清空输入</button>
             </div>
         </div>
         <div class="input-area">
@@ -769,6 +790,25 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- 相机扫描层（新增） -->
+<div class="camera-overlay" id="cameraOverlay">
+    <div class="cam-header">
+        <span>📷 拍照识字</span>
+        <button class="cam-close" id="camClose">✕</button>
+    </div>
+    <div class="cam-body">
+        <video id="camVideo" autoplay playsinline muted></video>
+        <div class="cam-frame"></div>
+        <div class="cam-hint">将文字对准框内，点击“拍照识别”</div>
+        <button class="cam-switch" id="camSwitch">🔄 翻转</button>
+        <div class="cam-status" id="camStatus">正在启动摄像头…</div>
+    </div>
+    <div class="cam-footer">
+        <button id="camCapture" disabled>📸 拍照识别</button>
+    </div>
+</div>
+<canvas id="hiddenCanvas" style="display:none;"></canvas>
 
 <div class="revive-popup-overlay" id="revivePopup">
     <div class="revive-popup">
@@ -1194,7 +1234,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
     </div>
 </div>
 <script>
-const practiceEditData = {"updatedAt":1791606598891,"device":"pc","发现有人硫化氢中毒晕倒在有限空间内，施救者应":{"customQuestion":"发现有人硫化氢中毒晕倒在有限空间内，施救者应","customAnswer":"A","isChoice":true,"options":["A. 选项A","B. 选项B","C. 选项C","D. 选项D"],"correct":"A","orderSetting":"none","updatedAt":1790838567352,"customExplanation":""},"__practice_only__":[{"q":"厌氧池溶解氧一般控制在0.2 mg/L以下，其目的是","a":"B","e":"","isChoice":true,"options":["A. 反硝化反应顺利进行","B. 反硝化反应顺利进行","C. 提高活性污泥沉降性能","D. 促进污泥增长"],"correct":"B","hidden":false,"practiceDeleted":false,"__practiceOnly":true},{"q":"活性污泥法中的“曝气”主要目的是什么?","a":"B","e":"","isChoice":true,"options":["A. 增加污泥量","B. 提供氧气供微生物代谢","C. 去除水中的悬浮物","D. 降低水温"],"correct":"B","hidden":false,"practiceDeleted":false,"__practiceOnly":true},{"q":"在污染物指标中凯氏氮TKN是氨氮和（）的总和。","a":"C","e":"","isChoice":true,"options":["A. 无机氮","B. 总氮","C. 有机氮","D. 硝氮"],"correct":"C","hidden":false,"practiceDeleted":false,"__practiceOnly":true},{"q":"硫化氢浓度超过（）时，数秒内就可致人闪电型死亡","a":"A","e":"","isChoice":true,"options":["A. 1000mg/m3","B. 10mg/m3","C. 7PPm"],"correct":"A","hidden":false,"practiceDeleted":false,"__practiceOnly":true}],"二沉池巡检内容包括（）":{"customQuestion":"二沉池巡检内容包括</答案>减速机是否异响或漏油<答案\\></答案>走道板是否有障碍物<答案\\></答案>走道轮是否转动正常<答案\\></答案>出水是否均匀<答案\\></答案>出水悬浮物是否在合理范围之内<答案\\></答案>堰口出水是否均匀<答案\\></答案>查看已填<答案\\></答案>浮渣积累情况<答案\\></答案>排渣是否通畅<答案\\></答案>污泥回流情况<答案\\></答案>吸泥孔是否堵塞<答案\\>","customAnswer":"减速机是否异响或漏油｜走道板是否有障碍物｜走道轮是否转动正常｜出水是否均匀｜出水悬浮物是否在合理范围之内｜堰口出水是否均匀｜查看已填｜浮渣积累情况｜排渣是否通畅｜污泥回流情况｜吸泥孔是否堵塞","isChoice":true,"options":["A. 减速机是否异响或漏油","B. 走道板是否有障碍物","C. 走道轮是否转动正常","D. 出水是否均匀","E. 出水悬浮物是否在合理范围之内","F. 堰口出水是否均匀","G. 浮渣积累情况","H. 排渣是否通畅","I. 污泥回流情况","J. 吸泥孔是否堵塞"],"correct":"ABCDEFGHIJ","orderSetting":"all","updatedAt":1790835346408,"customExplanation":""},"以下哪种行为属于污水处理厂的安全操作?（）":{"customQuestion":"以下哪种行为属于污水处理厂的安全操作?</答案>正确佩戴绝缘手套<答案\\>","customAnswer":"正确佩戴绝缘手套","isChoice":true,"options":["A. 在高压设备旁吸烟","B. 正确佩戴绝缘手套","C. 随意触碰电气设备","D. 以上都不是"],"correct":"B","orderSetting":"all","updatedAt":1790835633501,"customExplanation":""},"水里的COD是指什么?（）":{"customQuestion":"水里的COD是指什么?</答案>水体中有机物和还原性无机物污染程度的综合指标<答案\\>","customAnswer":"水体中有机物和还原性无机物污染程度的综合指标","isChoice":true,"options":["A. 水体中溶解氧的含量","B. 水体中有机物和还原性无机物污染程度的综合指标","C. 水体中微生物分解有机物所消耗的溶解氧量","D. 水体中无机盐的含量"],"correct":"B","orderSetting":"all","updatedAt":1790835679253,"customExplanation":""},"发现污水厂内有人触电，以下哪种做法是正确的?（）":{"customQuestion":"发现污水厂内有人触电，以下哪种做法是正确的?</答案>切断电源<答案\\>","customAnswer":"切断电源","isChoice":true,"options":["A. 立即用手拉触电者","B. 切断电源","C. 继续工作","D. 等待别人处理"],"correct":"B","orderSetting":"all","updatedAt":1790835714099,"customExplanation":""},"污水处理厂发生化学品紧急泄漏时，首选处置措施是?":{"customQuestion":"污水处理厂发生化学品紧急泄漏时，首选处置措施是?</答案>封堵泄漏点<答案\\>","customAnswer":"封堵泄漏点","isChoice":true,"options":["A. 立即撤离","B. 封堵泄漏点","C. 报警","D. 以上都是"],"correct":"B","orderSetting":"all","updatedAt":1790835753381,"customExplanation":""},"皮肤或眼睛不慎溅入次氯酸钠或酸碱药液，第一时间应（）":{"customQuestion":"皮肤或眼睛不慎溅入次氯酸钠或酸碱药液，第一时间应</答案>立即用大量流动清水冲洗至少15分钟并就医<答案\\>","customAnswer":"立即用大量流动清水冲洗至少15分钟并就医","isChoice":true,"options":["A. 涂抹药膏","B. 用干布擦拭","C. 立即用大量流动清水冲洗至少15分钟，并就医","D. 等待观察"],"correct":"C","orderSetting":"all","updatedAt":1790835795598,"customExplanation":""},"污泥料仓发生“架桥”坍塌事故导致人员被埋，现场第一响应人首先应?":{"customQuestion":"污泥料仓发生“架桥”坍塌事故导致人员被埋，现场第一响应人首先应?</答案>停止进料、切断电源<答案\\>","customAnswer":"停止进料、切断电源","isChoice":true,"options":["A. 立即跳入仓内救人","B. 停止进料、切断电源","C. 拨打120","D. 开启仓底滑"],"correct":"B","orderSetting":"all","updatedAt":1790835886053,"customExplanation":""},"和下图相关的十大救命法则是?":{"customQuestion":"和下图相关的十大救命法则是?</答案>远离吊装作业和任何存在坠物风险的区域<答案\\>","customAnswer":"远离吊装作业和任何存在坠物风险的区域","isChoice":true,"options":["A. 不挡在车辆或者机概设备行驶的路径上","B. 远离吊装作业和任何存在坠物风险的区域","C. 直接下井作业，快速完成","D. 必须佩戴防毒面具即可"],"correct":"B","orderSetting":"all","updatedAt":1790838450436,"customExplanation":""},"污水厂调节池、格栅间等有限空间，进入前必须重点检测的有毒气体是（）":{"customQuestion":"污水厂调节池、格栅间等有限空间，进入前必须重点检测的有毒气体是</答案>硫化氢(H₂S)<答案\\>","customAnswer":"硫化氢(H₂S)","isChoice":true,"options":["A. 一氧化碳(CO)","B. 硫化氢(H₂S)","C. 氯气(Cl₂)","D. 二氧化碳(CO₂)"],"correct":"B","orderSetting":"all","updatedAt":1790838510958,"customExplanation":""},"污水处理厂中，污泥消化池的主要功能是?":{"customQuestion":"污水处理厂中，污泥消化池的主要功能是?</答案>减少污泥体积<答案\\>","customAnswer":"减少污泥体积","isChoice":true,"options":["A. 去除油脂","B. 减少污泥体积","C. 去除重金属","D. 增加污泥湿度"],"correct":"B","orderSetting":"all","updatedAt":1790838853584,"customExplanation":""},"避雷针及易燃易爆场所(如沼气柜)的防雷接地电阻应不大于（）":{"customQuestion":"避雷针及易燃易爆场所(如沼气柜)的防雷接地电阻应不大于</答案>4Ω<答案\\>","customAnswer":"4Ω","isChoice":true,"options":["A. 4Ω","B. 10Ω","C. 30Ω","D. 100Ω"],"correct":"A","orderSetting":"all","updatedAt":1790838905082,"customExplanation":""},"水泵的泵壳铭牌上简明列出了水泵在设计转速下运转，（）时的流量、扬程、轴功率及允许吸上真空高度或气蚀余量值。":{"customQuestion":"水泵的泵壳铭牌上简明列出了水泵在设计转速下运转，</答案>效率为最高<答案\\>时的流量、扬程、轴功率及允许吸上真空高度或气蚀余量值。","customAnswer":"效率为最高","isChoice":true,"options":["A. 转速为最高","B. 流量为最大","C. 扬程为最高","D. 效率为最高"],"correct":"D","orderSetting":"all","updatedAt":1790838989226,"customExplanation":""},"污水处理厂应急预案演练，专项或综合演练至少应（）组织一次":{"customQuestion":"污水处理厂应急预案演练，专项或综合演练至少应</答案>每半年<答案\\>组织一次","customAnswer":"每半年","isChoice":true,"options":["A. 每季度","B. 每半年","C. 每年","D. 每两年"],"correct":"B","orderSetting":"all","updatedAt":1790839029481,"customExplanation":""},"进入有限空间（如阀门井、污水井）作业，必须遵循的原则是（）":{"customQuestion":"进入有限空间（如阀门井、污水井）作业，必须遵循的原则是</答案>先通风、再检测、后作业<答案\\>","customAnswer":"先通风、再检测、后作业","isChoice":true,"options":["A. 边通风边作业","B. 先通风、再检测、后作业","C. 直接下井作业，快速完成","D. 必须佩戴防毒面具即可"],"correct":"B","orderSetting":"all","updatedAt":1790839089311,"customExplanation":"本题为选择题答案(填空题看另外一题)，单选题"},"污水中 SS 指的是（）":{"customQuestion":"污水中 SS 指的是</答案>悬浮固体<答案\\>","customAnswer":"悬浮固体","isChoice":true,"options":["A. 溶解性固体","B. 悬浮固体","C. 挥发性固体","D. 固定性固体"],"correct":"B","orderSetting":"all","updatedAt":1790839127571,"customExplanation":""},"有限空间作业时，气体检测应在作业前（）分钟内完成，作业中至少每（）分钟重复检测一次":{"customQuestion":"有限空间作业时，气体检测应在作业前</答案>30<答案\\>分钟内完成，作业中至少每</答案>30<答案\\>分钟重复检测一次","customAnswer":"30｜30","isChoice":true,"options":["A. 60;60","B. 30;30","C. 15;60","D. 45;45"],"correct":"B","orderSetting":"all","updatedAt":1790839252649,"customExplanation":""},"影响活性污泥法处理效果的因素包括":{"customQuestion":"影响活性污泥法处理效果的因素包括</答案>污泥负荷<答案\\></答案>污泥泥龄<答案\\></答案>溶解氧<答案\\></答案>营养物质<答案\\></答案>pH值<答案\\></答案>水温<答案\\></答案>有毒物质<答案\\></答案>污泥回流比<答案\\>","customAnswer":"污泥负荷｜污泥泥龄｜溶解氧｜营养物质｜pH值｜水温｜有毒物质｜污泥回流比","isChoice":true,"options":["A. 污泥负荷","B. 溶解氧","C. 营养物质","D. pH值","E. 水温","F. 有毒物质","G. 污泥回流比"],"correct":"ABCDEFG","orderSetting":"all","updatedAt":1790839397095,"customExplanation":""},"一般情况下，污水的可生化性取决于（）":{"customQuestion":"一般情况下，污水的可生化性取决于</答案>BOD5/COD的值<答案\\>","customAnswer":"BOD5/COD的值","isChoice":true,"options":["A. BOD5/COD的值","B. BOD5/TP的值","C. DO/BOD5的值","D. DO/COD的值"],"correct":"A","orderSetting":"all","updatedAt":1790839430996,"customExplanation":""},"有限空间作业审批表(作业票)有效期最长一般不超过（）":{"customQuestion":"有限空间作业审批表(作业票)有效期最长一般不超过</答案>8小时<答案\\>","customAnswer":"8小时","isChoice":true,"options":["A. 4小时","B. 8小时","C. 12小时","D. 24小时"],"correct":"B","orderSetting":"all","updatedAt":1790839496646,"customExplanation":"本题为选择题的答案"},"污水处理中，调节池的作用是（）":{"customQuestion":"污水处理中，调节池的作用是</答案>调节水量和水质<答案\\>","customAnswer":"调节水量和水质","isChoice":true,"options":["A. 调节水量和水质","B. 去除杂质","C. 进行生物处理","D. 消毒"],"correct":"A","orderSetting":"all","updatedAt":1790839533780,"customExplanation":""},"污水处理厂最常见的易燃易爆有毒气体是（）":{"customQuestion":"污水处理厂最常见的易燃易爆有毒气体是</答案>硫化氢<答案\\>","customAnswer":"硫化氢","isChoice":true,"options":["A. 氧气","B. 硫化氢","C. 二氧化碳","D. 氮气"],"correct":"B","orderSetting":"all","updatedAt":1790839563517,"customExplanation":""},"以下哪种物质是污水中的氮源（）":{"customQuestion":"以下哪种物质是污水中的氮源</答案>以上都是<答案\\>","customAnswer":"以上都是","isChoice":true,"options":["A. 氨氮","B. 硝酸盐","C. 亚硝酸盐","D. 以上都是"],"correct":"D","orderSetting":"all","updatedAt":1790839699715,"customExplanation":"本题为选择题答案"},"凡在高地面（）的地点进行的工作都应视作高处作业":{"customQuestion":"凡在高地面（）的地点进行的工作都应视作高处作业","customAnswer":"B","customExplanation":"本题为选择题的答案","isChoice":true,"options":["A. 1.5米以上","B. 2米以上","C. 3米以上","D. 2.5米以上"],"correct":"B","updatedAt":1790839978187},"厂区流量计共计有（）三种":{"customQuestion":"厂区流量计共计有</答案>电磁流量计<答案\\>三种</答案>超声波流量计<答案\\></答案>浮子流量计<答案\\>","customAnswer":"电磁流量计｜超声波流量计｜浮子流量计","isChoice":false,"options":null,"correct":null,"orderSetting":"all","updatedAt":1790842045033,"customExplanation":""},"公司内部活性炭主要用了（）三种":{"customQuestion":"公司内部活性炭主要用了</答案>粉末活性炭<答案\\>三种</答案>柱状活性炭<答案\\></答案>颗粒活性炭<答案\\>","customAnswer":"粉末活性炭｜柱状活性炭｜颗粒活性炭","isChoice":false,"options":null,"correct":null,"orderSetting":"all","updatedAt":1790842070850,"customExplanation":""}};
+const practiceEditData = {"updatedAt":1791736590727,"device":"pc","发现有人硫化氢中毒晕倒在有限空间内，施救者应":{"customQuestion":"发现有人硫化氢中毒晕倒在有限空间内，施救者应","customAnswer":"A","isChoice":true,"options":["A. 选项A","B. 选项B","C. 选项C","D. 选项D"],"correct":"A","orderSetting":"none","updatedAt":1790838567352,"customExplanation":""},"__practice_only__":[{"q":"厌氧池溶解氧一般控制在0.2 mg/L以下，其目的是","a":"B","e":"","isChoice":true,"options":["A. 反硝化反应顺利进行","B. 反硝化反应顺利进行","C. 提高活性污泥沉降性能","D. 促进污泥增长"],"correct":"B","hidden":false,"practiceDeleted":false,"__practiceOnly":true},{"q":"活性污泥法中的“曝气”主要目的是什么?","a":"B","e":"","isChoice":true,"options":["A. 增加污泥量","B. 提供氧气供微生物代谢","C. 去除水中的悬浮物","D. 降低水温"],"correct":"B","hidden":false,"practiceDeleted":false,"__practiceOnly":true},{"q":"在污染物指标中凯氏氮TKN是氨氮和（）的总和。","a":"C","e":"","isChoice":true,"options":["A. 无机氮","B. 总氮","C. 有机氮","D. 硝氮"],"correct":"C","hidden":false,"practiceDeleted":false,"__practiceOnly":true},{"q":"硫化氢浓度超过（）时，数秒内就可致人闪电型死亡","a":"A","e":"","isChoice":true,"options":["A. 1000mg/m3","B. 10mg/m3","C. 7PPm"],"correct":"A","hidden":false,"practiceDeleted":false,"__practiceOnly":true}],"二沉池巡检内容包括（）":{"customQuestion":"二沉池巡检内容包括</答案>减速机是否异响或漏油<答案\\></答案>走道板是否有障碍物<答案\\></答案>走道轮是否转动正常<答案\\></答案>出水是否均匀<答案\\></答案>出水悬浮物是否在合理范围之内<答案\\></答案>堰口出水是否均匀<答案\\></答案>查看已填<答案\\></答案>浮渣积累情况<答案\\></答案>排渣是否通畅<答案\\></答案>污泥回流情况<答案\\></答案>吸泥孔是否堵塞<答案\\>","customAnswer":"减速机是否异响或漏油｜走道板是否有障碍物｜走道轮是否转动正常｜出水是否均匀｜出水悬浮物是否在合理范围之内｜堰口出水是否均匀｜查看已填｜浮渣积累情况｜排渣是否通畅｜污泥回流情况｜吸泥孔是否堵塞","isChoice":true,"options":["A. 减速机是否异响或漏油","B. 走道板是否有障碍物","C. 走道轮是否转动正常","D. 出水是否均匀","E. 出水悬浮物是否在合理范围之内","F. 堰口出水是否均匀","G. 浮渣积累情况","H. 排渣是否通畅","I. 污泥回流情况","J. 吸泥孔是否堵塞"],"correct":"ABCDEFGHIJ","orderSetting":"all","updatedAt":1790835346408,"customExplanation":""},"以下哪种行为属于污水处理厂的安全操作?（）":{"customQuestion":"以下哪种行为属于污水处理厂的安全操作?</答案>正确佩戴绝缘手套<答案\\>","customAnswer":"正确佩戴绝缘手套","isChoice":true,"options":["A. 在高压设备旁吸烟","B. 正确佩戴绝缘手套","C. 随意触碰电气设备","D. 以上都不是"],"correct":"B","orderSetting":"all","updatedAt":1790835633501,"customExplanation":""},"水里的COD是指什么?（）":{"customQuestion":"水里的COD是指什么?</答案>水体中有机物和还原性无机物污染程度的综合指标<答案\\>","customAnswer":"水体中有机物和还原性无机物污染程度的综合指标","isChoice":true,"options":["A. 水体中溶解氧的含量","B. 水体中有机物和还原性无机物污染程度的综合指标","C. 水体中微生物分解有机物所消耗的溶解氧量","D. 水体中无机盐的含量"],"correct":"B","orderSetting":"all","updatedAt":1790835679253,"customExplanation":""},"发现污水厂内有人触电，以下哪种做法是正确的?（）":{"customQuestion":"发现污水厂内有人触电，以下哪种做法是正确的?</答案>切断电源<答案\\>","customAnswer":"切断电源","isChoice":true,"options":["A. 立即用手拉触电者","B. 切断电源","C. 继续工作","D. 等待别人处理"],"correct":"B","orderSetting":"all","updatedAt":1790835714099,"customExplanation":""},"污水处理厂发生化学品紧急泄漏时，首选处置措施是?":{"customQuestion":"污水处理厂发生化学品紧急泄漏时，首选处置措施是?</答案>封堵泄漏点<答案\\>","customAnswer":"封堵泄漏点","isChoice":true,"options":["A. 立即撤离","B. 封堵泄漏点","C. 报警","D. 以上都是"],"correct":"B","orderSetting":"all","updatedAt":1790835753381,"customExplanation":""},"皮肤或眼睛不慎溅入次氯酸钠或酸碱药液，第一时间应（）":{"customQuestion":"皮肤或眼睛不慎溅入次氯酸钠或酸碱药液，第一时间应</答案>立即用大量流动清水冲洗至少15分钟并就医<答案\\>","customAnswer":"立即用大量流动清水冲洗至少15分钟并就医","isChoice":true,"options":["A. 涂抹药膏","B. 用干布擦拭","C. 立即用大量流动清水冲洗至少15分钟，并就医","D. 等待观察"],"correct":"C","orderSetting":"all","updatedAt":1790835795598,"customExplanation":""},"污泥料仓发生“架桥”坍塌事故导致人员被埋，现场第一响应人首先应?":{"customQuestion":"污泥料仓发生“架桥”坍塌事故导致人员被埋，现场第一响应人首先应?</答案>停止进料、切断电源<答案\\>","customAnswer":"停止进料、切断电源","isChoice":true,"options":["A. 立即跳入仓内救人","B. 停止进料、切断电源","C. 拨打120","D. 开启仓底滑"],"correct":"B","orderSetting":"all","updatedAt":1790835886053,"customExplanation":""},"和下图相关的十大救命法则是?":{"customQuestion":"和下图相关的十大救命法则是?</答案>远离吊装作业和任何存在坠物风险的区域<答案\\>","customAnswer":"远离吊装作业和任何存在坠物风险的区域","isChoice":true,"options":["A. 不挡在车辆或者机概设备行驶的路径上","B. 远离吊装作业和任何存在坠物风险的区域","C. 直接下井作业，快速完成","D. 必须佩戴防毒面具即可"],"correct":"B","orderSetting":"all","updatedAt":1790838450436,"customExplanation":""},"污水厂调节池、格栅间等有限空间，进入前必须重点检测的有毒气体是（）":{"customQuestion":"污水厂调节池、格栅间等有限空间，进入前必须重点检测的有毒气体是</答案>硫化氢(H₂S)<答案\\>","customAnswer":"硫化氢(H₂S)","isChoice":true,"options":["A. 一氧化碳(CO)","B. 硫化氢(H₂S)","C. 氯气(Cl₂)","D. 二氧化碳(CO₂)"],"correct":"B","orderSetting":"all","updatedAt":1790838510958,"customExplanation":""},"污水处理厂中，污泥消化池的主要功能是?":{"customQuestion":"污水处理厂中，污泥消化池的主要功能是?</答案>减少污泥体积<答案\\>","customAnswer":"减少污泥体积","isChoice":true,"options":["A. 去除油脂","B. 减少污泥体积","C. 去除重金属","D. 增加污泥湿度"],"correct":"B","orderSetting":"all","updatedAt":1790838853584,"customExplanation":""},"避雷针及易燃易爆场所(如沼气柜)的防雷接地电阻应不大于（）":{"customQuestion":"避雷针及易燃易爆场所(如沼气柜)的防雷接地电阻应不大于</答案>4Ω<答案\\>","customAnswer":"4Ω","isChoice":true,"options":["A. 4Ω","B. 10Ω","C. 30Ω","D. 100Ω"],"correct":"A","orderSetting":"all","updatedAt":1790838905082,"customExplanation":""},"水泵的泵壳铭牌上简明列出了水泵在设计转速下运转，（）时的流量、扬程、轴功率及允许吸上真空高度或气蚀余量值。":{"customQuestion":"水泵的泵壳铭牌上简明列出了水泵在设计转速下运转，</答案>效率为最高<答案\\>时的流量、扬程、轴功率及允许吸上真空高度或气蚀余量值。","customAnswer":"效率为最高","isChoice":true,"options":["A. 转速为最高","B. 流量为最大","C. 扬程为最高","D. 效率为最高"],"correct":"D","orderSetting":"all","updatedAt":1790838989226,"customExplanation":""},"污水处理厂应急预案演练，专项或综合演练至少应（）组织一次":{"customQuestion":"污水处理厂应急预案演练，专项或综合演练至少应</答案>每半年<答案\\>组织一次","customAnswer":"每半年","isChoice":true,"options":["A. 每季度","B. 每半年","C. 每年","D. 每两年"],"correct":"B","orderSetting":"all","updatedAt":1790839029481,"customExplanation":""},"进入有限空间（如阀门井、污水井）作业，必须遵循的原则是（）":{"customQuestion":"进入有限空间（如阀门井、污水井）作业，必须遵循的原则是</答案>先通风、再检测、后作业<答案\\>","customAnswer":"先通风、再检测、后作业","isChoice":true,"options":["A. 边通风边作业","B. 先通风、再检测、后作业","C. 直接下井作业，快速完成","D. 必须佩戴防毒面具即可"],"correct":"B","orderSetting":"all","updatedAt":1790839089311,"customExplanation":"本题为选择题答案(填空题看另外一题)，单选题"},"污水中 SS 指的是（）":{"customQuestion":"污水中 SS 指的是</答案>悬浮固体<答案\\>","customAnswer":"悬浮固体","isChoice":true,"options":["A. 溶解性固体","B. 悬浮固体","C. 挥发性固体","D. 固定性固体"],"correct":"B","orderSetting":"all","updatedAt":1790839127571,"customExplanation":""},"有限空间作业时，气体检测应在作业前（）分钟内完成，作业中至少每（）分钟重复检测一次":{"customQuestion":"有限空间作业时，气体检测应在作业前</答案>30<答案\\>分钟内完成，作业中至少每</答案>30<答案\\>分钟重复检测一次","customAnswer":"30｜30","isChoice":true,"options":["A. 60;60","B. 30;30","C. 15;60","D. 45;45"],"correct":"B","orderSetting":"all","updatedAt":1790839252649,"customExplanation":""},"影响活性污泥法处理效果的因素包括":{"customQuestion":"影响活性污泥法处理效果的因素包括</答案>污泥负荷<答案\\></答案>污泥泥龄<答案\\></答案>溶解氧<答案\\></答案>营养物质<答案\\></答案>pH值<答案\\></答案>水温<答案\\></答案>有毒物质<答案\\></答案>污泥回流比<答案\\>","customAnswer":"污泥负荷｜污泥泥龄｜溶解氧｜营养物质｜pH值｜水温｜有毒物质｜污泥回流比","isChoice":true,"options":["A. 污泥负荷","B. 溶解氧","C. 营养物质","D. pH值","E. 水温","F. 有毒物质","G. 污泥回流比"],"correct":"ABCDEFG","orderSetting":"all","updatedAt":1790839397095,"customExplanation":""},"一般情况下，污水的可生化性取决于（）":{"customQuestion":"一般情况下，污水的可生化性取决于</答案>BOD5/COD的值<答案\\>","customAnswer":"BOD5/COD的值","isChoice":true,"options":["A. BOD5/COD的值","B. BOD5/TP的值","C. DO/BOD5的值","D. DO/COD的值"],"correct":"A","orderSetting":"all","updatedAt":1790839430996,"customExplanation":""},"有限空间作业审批表(作业票)有效期最长一般不超过（）":{"customQuestion":"有限空间作业审批表(作业票)有效期最长一般不超过</答案>8小时<答案\\>","customAnswer":"8小时","isChoice":true,"options":["A. 4小时","B. 8小时","C. 12小时","D. 24小时"],"correct":"B","orderSetting":"all","updatedAt":1790839496646,"customExplanation":"本题为选择题的答案"},"污水处理中，调节池的作用是（）":{"customQuestion":"污水处理中，调节池的作用是</答案>调节水量和水质<答案\\>","customAnswer":"调节水量和水质","isChoice":true,"options":["A. 调节水量和水质","B. 去除杂质","C. 进行生物处理","D. 消毒"],"correct":"A","orderSetting":"all","updatedAt":1790839533780,"customExplanation":""},"污水处理厂最常见的易燃易爆有毒气体是（）":{"customQuestion":"污水处理厂最常见的易燃易爆有毒气体是</答案>硫化氢<答案\\>","customAnswer":"硫化氢","isChoice":true,"options":["A. 氧气","B. 硫化氢","C. 二氧化碳","D. 氮气"],"correct":"B","orderSetting":"all","updatedAt":1790839563517,"customExplanation":""},"以下哪种物质是污水中的氮源（）":{"customQuestion":"以下哪种物质是污水中的氮源</答案>以上都是<答案\\>","customAnswer":"以上都是","isChoice":true,"options":["A. 氨氮","B. 硝酸盐","C. 亚硝酸盐","D. 以上都是"],"correct":"D","orderSetting":"all","updatedAt":1790839699715,"customExplanation":"本题为选择题答案"},"凡在高地面（）的地点进行的工作都应视作高处作业":{"customQuestion":"凡在高地面（）的地点进行的工作都应视作高处作业","customAnswer":"B","customExplanation":"本题为选择题的答案","isChoice":true,"options":["A. 1.5米以上","B. 2米以上","C. 3米以上","D. 2.5米以上"],"correct":"B","updatedAt":1790839978187},"厂区流量计共计有（）三种":{"customQuestion":"厂区流量计共计有</答案>电磁流量计<答案\\>三种</答案>超声波流量计<答案\\></答案>浮子流量计<答案\\>","customAnswer":"电磁流量计｜超声波流量计｜浮子流量计","isChoice":false,"options":null,"correct":null,"orderSetting":"all","updatedAt":1790842045033,"customExplanation":""},"公司内部活性炭主要用了（）三种":{"customQuestion":"公司内部活性炭主要用了</答案>粉末活性炭<答案\\>三种</答案>柱状活性炭<答案\\></答案>颗粒活性炭<答案\\>","customAnswer":"粉末活性炭｜柱状活性炭｜颗粒活性炭","isChoice":false,"options":null,"correct":null,"orderSetting":"all","updatedAt":1790842070850,"customExplanation":""}};
 
 const practiceCfg = {"threshold":75,"singleOptions":{},"multiOptions":{},"singleCorrect":{},"multiCorrect":{}};
 
@@ -1215,17 +1255,13 @@ const SYNC_FILE = 'sync-data.json';
 const SYNC_KEYS = ['ghConfig','reviveBackup','backups','history','bank','practiceCfg','practiceEdit','userMastered'];
 
 // ====================== 数据仓库配置（zk-data） ======================
-// 这 4 个值是用来读写 users.json 的，用户看不到
 const ZK_DATA_OWNER = 'qiuhua-cac';
 const ZK_DATA_REPO  = 'zk-data';
 const ZK_DATA_PATH  = 'users.json';
 const ZK_DATA_TOKEN = 'github_pat_11BJT3CJY0gKRXFmudFIDY_'+'Ee1YFxKL0o4LYmHHvyjSRSCUj7ca4Nz4YZOpfrHQdDsTDAXVLOPJ1yCRPez';
-// ====================== YesApi 配置（用户已会标记） ======================
 const YESAPI_BASE   = 'https://hn.api.yesapi.net/';
 const YESAPI_APP_KEY = '1FC09C038370C9B75E8478D16107DAF4';
 const YESAPI_MODEL   = 'user_mastered';
-// ====================================================================
-// ====================================================================
 
 function detectDevice(){
     const ua = navigator.userAgent || '';
@@ -1235,7 +1271,6 @@ function detectDevice(){
 const DEVICE = detectDevice();
 function nowTs(){ return Date.now(); }
 
-// ====================== 全局状态 ======================
 let questionBank = [];
 let isLoggedIn = false;
 let hasUnsavedChanges = false;
@@ -1264,11 +1299,9 @@ let pinHiddenPracticeMulti = false;
 
 let editingPracticeIdx = -1;
 
-// ====================== 用户数据（zk-data / users.json） ======================
 const USER_SESSION_KEY = 'zktest_user_session_v1';
 const USER_MASTERED_KEY = 'zktest_study_mastered_v1';
 
-// ---------- 读取 users.json ----------
 async function fetchUsersJson(){
     const apiBase = `https://api.github.com/repos/${ZK_DATA_OWNER}/${ZK_DATA_REPO}/contents/${ZK_DATA_PATH}`;
     try{
@@ -1305,7 +1338,6 @@ async function fetchUsersJson(){
     }
 }
 
-// ---------- 写入 users.json（带冲突重试） ----------
 async function pushUsersJson(usersObj, sha, commitMsg){
     const apiBase = `https://api.github.com/repos/${ZK_DATA_OWNER}/${ZK_DATA_REPO}/contents/${ZK_DATA_PATH}`;
     const clean = { users: usersObj };
@@ -1349,7 +1381,6 @@ async function pushUsersJson(usersObj, sha, commitMsg){
     return false;
 }
 
-// ---------- 本地保存 / 读取当前登录用户 ----------
 function saveUserSession(user){
     try{
         const obj = {
@@ -1373,7 +1404,6 @@ function clearUserSession(){
     try{ localStorage.removeItem(USER_SESSION_KEY); }catch(e){}
 }
 
-// ---------- 注册（含重名检查） ----------
 async function registerUser_api(username, password){
     if(!username || !password) return { ok:false, msg:'用户名和密码不能为空' };
     const data = await fetchUsersJson();
@@ -1392,7 +1422,6 @@ async function registerUser_api(username, password){
     return { ok:true, msg:'注册成功', user: data.users[username] };
 }
 
-// ---------- 登录校验 ----------
 async function loginUser_api(username, password){
     if(!username || !password) return { ok:false, msg:'用户名和密码不能为空' };
     const data = await fetchUsersJson();
@@ -1405,7 +1434,6 @@ async function loginUser_api(username, password){
     return { ok:true, msg:'登录成功', user: u };
 }
 
-// ---------- 已会标记：本地读写 ----------
 function loadMasteredMap(){
     try{
         const raw = localStorage.getItem(USER_MASTERED_KEY);
@@ -1417,9 +1445,6 @@ function saveMasteredMap(map){
     try{ localStorage.setItem(USER_MASTERED_KEY, JSON.stringify(map)); }catch(e){}
 }
 
-// ====================== YesApi：已会标记读写 ======================
-// 说明：每个用户一条记录，uuid = 用户名，ext_data = 已会列表 JSON
-// ---------- 简单字符串 hash（保证同一题目每次生成相同值） ----------
 function simpleHash(str){
     let h = 0;
     for(let i = 0; i < str.length; i++){
@@ -1429,7 +1454,6 @@ function simpleHash(str){
     return Math.abs(h).toString(36);
 }
 
-// ---------- 按 uuid 删除单条记录 ----------
 async function yesapiDeleteByUuid(uuid){
     if(!uuid) return false;
     const url = YESAPI_BASE + '?s=App.Table.FreeDelete';
@@ -1452,7 +1476,6 @@ async function yesapiDeleteByUuid(uuid){
     }
 }
 
-// ---------- 清理测试数据（只删 uuid 以 test1_ 开头的记录） ----------
 async function yesapiCleanTestData(){
     const url = YESAPI_BASE + '?s=App.Table.FreeQuery';
     const params = new URLSearchParams();
@@ -1477,7 +1500,6 @@ async function yesapiCleanTestData(){
     }
 }
 
-// ---------- 添加一条已会记录（一道题） ----------
 async function yesapiAddOneMastered(username, questionText){
     if(!username || !questionText) return false;
     const hash = simpleHash(questionText);
@@ -1509,7 +1531,6 @@ async function yesapiAddOneMastered(username, questionText){
     }
 }
 
-// ---------- 删除一条已会记录（一道题） ----------
 async function yesapiRemoveOneMastered(username, questionText){
     if(!username || !questionText) return false;
     const hash = simpleHash(questionText);
@@ -1517,7 +1538,6 @@ async function yesapiRemoveOneMastered(username, questionText){
     return await yesapiDeleteByUuid(recordUuid);
 }
 
-// ---------- 拉取某用户所有已会记录 ----------
 async function yesapiLoadMastered(username){
     if(!username) return null;
     const url = YESAPI_BASE + '?s=App.Table.FreeQuery';
@@ -1532,7 +1552,6 @@ async function yesapiLoadMastered(username){
         const json = await resp.json();
         if(!json || json.ret !== 200 || !json.data) return null;
         const list = json.data.list || [];
-        // 从每条记录的 mastered 字段取出题目原文
         const result = [];
         for(const row of list){
             if(row.mastered) result.push(row.mastered);
@@ -1543,9 +1562,7 @@ async function yesapiLoadMastered(username){
         return null;
     }
 }
-// ====================================================================
-// ====================================================================
-// ====================== 用户系统 UI 逻辑 ======================
+
 let currentUser = null;
 
 function refreshUserDrawerBtn(){
@@ -1596,14 +1613,11 @@ async function doUserLogin(){
     const p = loginPass.value.trim();
     if(!u || !p){ showToast('请输入用户名和密码'); return; }
     showToast('正在登录…');
-    // 首次用本地缓存兜底，立刻进入"已登录"状态
     currentUser = { username: u, password: p };
     saveUserSession(currentUser);
     refreshUserDrawerBtn();
-    // 后台请求云端校验
     const res = await loginUser_api(u, p);
     if(!res.ok){
-        // 校验失败，回滚登录状态
         currentUser = null;
         clearUserSession();
         refreshUserDrawerBtn();
@@ -1612,7 +1626,6 @@ async function doUserLogin(){
     }
     loginModal.classList.remove('active');
     showToast('✅ 登录成功，欢迎 ' + u);
-    // 后台拉取已会记录，不阻塞 UI
     loadMasteredFromCloud().then(()=>{
         if(typeof renderStudyList === 'function' && isStudyMode){
             renderStudyList(document.getElementById('studySearch').value || '');
@@ -1655,7 +1668,6 @@ async function tryRestoreUserSession(){
     if(!s || !s.username){ return; }
     currentUser = { username: s.username, password: s.password };
     refreshUserDrawerBtn();
-    // 恢复会话后，主动从 YesApi 拉一次最新已会数据
     loadMasteredFromCloud().then(()=>{
         if(typeof renderStudyList === 'function' && isStudyMode){
             renderStudyList(document.getElementById('studySearch').value || '');
@@ -1664,8 +1676,7 @@ async function tryRestoreUserSession(){
         console.warn('恢复会话后拉取已会数据失败', e);
     });
 }
-// ====================================================================
-// ====================== 练习状态保存 ======================
+
 function savePracticeState(){
     if(practiceFinished || practiceQuestions.length === 0) return;
     const state = {
@@ -1695,7 +1706,6 @@ function clearPracticeState(){
     try{ localStorage.removeItem(PRACTICE_STATE_KEY); }catch(e){}
 }
 
-// ====================== 练习编辑数据 ======================
 function loadPracticeEdit(){
     try{
         const raw = localStorage.getItem(PRACTICE_EDIT_KEY);
@@ -1722,7 +1732,6 @@ function savePracticeOnlyQuestions(list){
     savePracticeEdit(editData);
 }
 
-// ====================== 练习配置 ======================
 function loadPracticeCfg(){
     try{
         const raw = localStorage.getItem(PRACTICE_CFG_KEY);
@@ -1746,7 +1755,6 @@ function savePracticeCfg(cfg){
     if(typeof pushSyncData === 'function') pushSyncData(true);
 }
 
-// ====================== 复活备份管理 ======================
 function loadReviveBackup(){
     try{
         const raw = localStorage.getItem(REVIVE_KEY);
@@ -1768,7 +1776,6 @@ function saveReviveBackup(content, extra){
     return true;
 }
 
-// ====================== 页面完整性检测 ======================
 function checkPageIntegrity() {
     const coreFunctions = ['matchQuestions', 'getFullPageHTML', 'pushContentToGitHub', 'loadBank', 'renderResults'];
     for (let fn of coreFunctions) {
@@ -1809,7 +1816,6 @@ window.addEventListener('load', () => {
     }, 1200);
 });
 
-// ====================== 通用工具 ======================
 function showToast(msg){
     const toast = document.getElementById('toast');
     if(!toast) return;
@@ -1900,7 +1906,6 @@ function downloadTextFile(content, filename){
     }catch(e){ console.warn('下载失败', e); return false; }
 }
 
-// ====================== 历史查询 ======================
 function loadHistory(){
     try{
         const raw = localStorage.getItem(HISTORY_KEY);
@@ -1952,7 +1957,6 @@ function renderHistoryList(){
     });
 }
 
-// ====================== 加载/保存题库 ======================
 function loadBank(){
     try{
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -1985,7 +1989,6 @@ function persistBank(){
     if(typeof pushSyncData === 'function') pushSyncData(true);
 }
 
-// ====================== 备份管理 ======================
 function loadBackups(){
     try{
         const raw = localStorage.getItem(BACKUP_KEY);
@@ -2043,7 +2046,6 @@ function manualBackup(){
     renderBackups();
 }
 
-// ====================== GitHub 配置 ======================
 function loadGhCfg(){
     try{
         const raw = localStorage.getItem(GH_CFG_KEY);
@@ -2060,7 +2062,7 @@ function saveGhCfg(cfg){
 function isGhConfigured(cfg){
     return cfg && cfg.owner && cfg.repo && cfg.path && cfg.token;
 }
-// ====================== 生成完整页面代码 ======================
+
 async function getFullPageHTML(){
     try{
         let html;
@@ -2128,7 +2130,6 @@ async function getFullPageHTML(){
     }catch(e){ console.warn('获取页面HTML失败', e); return null; }
 }
 
-// ====================== 推送内容到 GitHub ======================
 async function pushContentToGitHub(content, message, silent){
     const cfg = loadGhCfg();
     if(!isGhConfigured(cfg)){
@@ -2175,7 +2176,6 @@ async function pushContentToGitHub(content, message, silent){
     }
 }
 
-// ====================== 云同步核心 ======================
 function loadLocalSync(){
     const out = {};
     const cfg = loadGhCfg();
@@ -2434,7 +2434,6 @@ async function syncFromCloud(){
     loadBank();
 }
 
-// ====================== 题库时间戳 ======================
 const BANK_TS_KEY = 'zktest_bank_ts_v1';
 function loadBankUpdatedAt(){
     const v = localStorage.getItem(BANK_TS_KEY);
@@ -2442,7 +2441,6 @@ function loadBankUpdatedAt(){
 }
 function saveBankUpdatedAt(ts){ localStorage.setItem(BANK_TS_KEY, String(ts || nowTs())); }
 
-// ====================== 同步完整页面 ======================
 async function syncFullPageToGitHub(silent = false){
 if(DEVICE === 'mobile'){ return false; }
     const cfg = loadGhCfg();
@@ -2470,7 +2468,6 @@ async function testGitHubConnection(silent){
     }catch(e){ if(!silent) showToast('连接异常：' + e.message); return false; }
 }
 
-// ====================== 模糊拼音相似度算法 ======================
 const PINYIN_MAP = {
     '糖':'tang','碳':'tan','炭':'tan','汤':'tang','烫':'tang',
     '罐':'guan','灌':'guan','贯':'guan','观':'guan','冠':'guan',
@@ -2584,7 +2581,6 @@ function matchQuestions(query, threshold){
     return results.slice(0, 15);
 }
 
-// ====================== 答案显示逻辑 ======================
 function formatAnswerHTML(ans){
     const raw = String(ans || '');
     const normalized = raw.replace(/[｜|‖]/g, '‖');
@@ -2623,7 +2619,6 @@ function renderResults(results, query){
     chatArea.scrollTop = 0;
 }
 
-// ====================== 预览组件 ======================
 function showPreviewModal(titleText, items, mode, htmlContent, readonly){
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay active';
@@ -2681,7 +2676,6 @@ function showPreviewModal(titleText, items, mode, htmlContent, readonly){
     return overlay;
 }
 
-// ====================== 复活弹窗 ======================
 function showRevivePopup(){
     const popup = document.getElementById('revivePopup');
     const metaEl = document.getElementById('revivePopupMeta');
@@ -2783,7 +2777,6 @@ function bindRevivePopup(){
     });
 }
 
-// ====================== 练习功能 ======================
 function startPractice(){
     if(window._practiceResumeMode === 'fresh'){
         clearPracticeState();
@@ -3710,7 +3703,6 @@ function resetPractice(){
     document.getElementById('practiceFooter').style.display = 'flex';
     document.getElementById('practiceTimer').classList.remove('warning');
 }
-// ====================== 练习编辑器 ======================
 function openPracticeEditor(idx){
     editingPracticeIdx = idx;
     const rawQ = questionBank[idx];
@@ -3897,7 +3889,6 @@ function getEditorOptions(containerId){
     return opts;
 }
 
-// ====================== 练习专属题 - 新增弹窗 ======================
 function openPracticeAddForm(type){
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay active';
@@ -4006,7 +3997,6 @@ function openPracticeAddForm(type){
     });
 }
 
-// ====================== 练习管理列表渲染 ======================
 function renderPracticeList(type, keyword){
     const cfg = loadPracticeCfg();
     let listEl, countEl, searchEl, pinCheck;
@@ -4247,7 +4237,6 @@ function getOptionsFromEditor(containerId){
     return opts;
 }
 
-// ====================== 练习预览（总题库） ======================
 function showPracticePreview(idx){
     const rawQ = questionBank[idx];
     if(!rawQ) return;
@@ -4321,7 +4310,6 @@ function showPracticePreview(idx){
     });
 }
 
-// ====================== 练习预览（练习专属题） ======================
 function showPracticeOnlyPreview(item){
     const isChoice = item.isChoice === true;
     const overlay = document.createElement('div');
@@ -4391,7 +4379,6 @@ function showPracticeOnlyPreview(item){
     });
 }
 
-// ====================== 练习测试（单题模拟真实答题） ======================
 let testQuestions = [];
 let testAnswers = [];
 let testSubmitted = [];
@@ -4704,7 +4691,7 @@ function closeTestMode(){
     document.getElementById('practiceFinishBtn').style.display = 'none';
     document.getElementById('practicePrevBtn').style.display = '';
 }
-// ====================== 已会标记（mastered） ======================
+
 function getMasteredListForCurrentUser(){
     if(!currentUser || !currentUser.username) return [];
     const map = loadMasteredMap();
@@ -4778,10 +4765,8 @@ async function onToggleMastered(questionText, btnEl){
         const searchVal = document.getElementById('studySearch').value || '';
         renderStudyList(searchVal);
     }
-    // 后台异步同步，不阻塞 UI
     syncMasteredToCloud().then(ok=>{
         if(!ok){
-            // 静默失败，不弹窗打断用户
             console.warn('后台同步失败');
         }
     });
@@ -4802,9 +4787,8 @@ async function loadMasteredFromCloud(){
     localMap[uname] = cloudList;
     saveMasteredMap(localMap);
 }
-// ====================== 学习模式 ======================
 let isStudyMode = false;
-let studyMasteredOnly = false;   // 是否只看已会题库
+let studyMasteredOnly = false;
 
 function enterStudyMode(){
     isStudyMode = true;
@@ -4864,10 +4848,8 @@ function renderStudyList(keyword){
     questionBank.forEach((item, idx)=>{
         if(item.hidden === true) return;
         if(studyMasteredOnly){
-            // 已会题库：只显示已标记的
             if(masteredList.indexOf(item.q) === -1) return;
         }else{
-            // 学习题库：只显示未标记的
             if(masteredList.indexOf(item.q) !== -1) return;
         }
         if(kw){
@@ -4911,7 +4893,6 @@ function renderStudyList(keyword){
     countEl.textContent = studyMasteredOnly ? `已会 ${items.length} 题` : `共 ${items.length} 题`;
 }
 
-// ====================== DOM初始化 ======================
 document.addEventListener('DOMContentLoaded', ()=>{
     window._practiceResumeMode = 'fresh';
     loadBank();
@@ -4968,7 +4949,204 @@ document.addEventListener('DOMContentLoaded', ()=>{
         chatArea.appendChild(empty);
         showToast('对话已清空');
     });
-        // ===== 设置与练习 - 帘子 =====
+
+    // ===== 相机按钮：拍照识字 =====
+    const cameraBtn = document.getElementById('cameraBtn');
+    const cameraOverlay = document.getElementById('cameraOverlay');
+    const camVideo = document.getElementById('camVideo');
+    const camClose = document.getElementById('camClose');
+    const camCapture = document.getElementById('camCapture');
+    const camSwitch = document.getElementById('camSwitch');
+    const camStatus = document.getElementById('camStatus');
+    const hiddenCanvas = document.getElementById('hiddenCanvas');
+
+    let camStream = null;
+    let camFacing = 'environment';
+    let camReady = false;
+    let camRecognizing = false;
+    const OCR_API_URL = 'https://api.ocr.space/parse/image';
+    const OCR_API_KEY = 'helloworld';
+    const OCR_LANGUAGE = 'chs';
+
+    function showCamStatus(msg){
+        if(!camStatus) return;
+        camStatus.textContent = msg;
+        camStatus.classList.add('show');
+    }
+    function hideCamStatus(){
+        if(!camStatus) return;
+        camStatus.classList.remove('show');
+    }
+
+    async function startCamera(useFacing){
+        if(camStream){
+            camStream.getTracks().forEach(t => t.stop());
+            camStream = null;
+        }
+        camVideo.srcObject = null;
+        camReady = false;
+        camCapture.disabled = true;
+        showCamStatus('正在启动摄像头…');
+        try{
+            const constraints = {
+                video: { facingMode: useFacing || camFacing, width: { ideal: 1280 }, height: { ideal: 720 } },
+                audio: false
+            };
+            camStream = await navigator.mediaDevices.getUserMedia(constraints);
+            camVideo.srcObject = camStream;
+            await new Promise(r => { camVideo.onloadedmetadata = () => r(); });
+            await camVideo.play();
+            camVideo.style.transform = (useFacing === 'user') ? 'scaleX(-1)' : 'scaleX(1)';
+            await new Promise(r => {
+                const check = () => {
+                    if(camVideo.videoWidth > 0){ camReady = true; r(); }
+                    else setTimeout(check, 100);
+                };
+                check();
+            });
+            hideCamStatus();
+            camCapture.disabled = false;
+        }catch(err){
+            console.error('摄像头启动失败:', err);
+            showCamStatus('❌ 无法启动摄像头：' + (err.message || '请检查权限'));
+        }
+    }
+
+    function stopCamera(){
+        if(camStream){
+            camStream.getTracks().forEach(t => t.stop());
+            camStream = null;
+        }
+        camVideo.srcObject = null;
+        camReady = false;
+    }
+
+    cameraBtn.addEventListener('click', ()=>{
+        cameraOverlay.classList.add('active');
+        startCamera(camFacing);
+    });
+
+    camClose.addEventListener('click', ()=>{
+        stopCamera();
+        cameraOverlay.classList.remove('active');
+    });
+
+    camSwitch.addEventListener('click', ()=>{
+        camFacing = (camFacing === 'environment') ? 'user' : 'environment';
+        startCamera(camFacing);
+    });
+
+    // 抓拍并压缩到 800px，识别后填入输入框
+    function captureFrame(maxWidth = 800, quality = 0.7){
+        return new Promise((resolve, reject) => {
+            if(!camReady || camVideo.videoWidth === 0){
+                reject(new Error('摄像头未就绪'));
+                return;
+            }
+            const vw = camVideo.videoWidth;
+            const vh = camVideo.videoHeight;
+            let w = vw, h = vh;
+            if(w > maxWidth){ h = Math.round(h * maxWidth / w); w = maxWidth; }
+            hiddenCanvas.width = w;
+            hiddenCanvas.height = h;
+            const ctx = hiddenCanvas.getContext('2d');
+            if(camFacing === 'user'){
+                ctx.translate(w, 0);
+                ctx.scale(-1, 1);
+            }
+            ctx.drawImage(camVideo, 0, 0, w, h);
+            resolve(hiddenCanvas.toDataURL('image/jpeg', quality));
+        });
+    }
+
+    camCapture.addEventListener('click', async ()=>{
+        if(camRecognizing) return;
+        if(!camReady){
+            showCamStatus('⚠️ 摄像头未准备好');
+            return;
+        }
+        camRecognizing = true;
+        camCapture.disabled = true;
+        showCamStatus('正在抓拍…');
+
+        try{
+            const dataUrl = await captureFrame(800, 0.7);
+            showCamStatus('正在识别文字…');
+
+            const formData = new FormData();
+            formData.append('base64Image', dataUrl);
+            formData.append('language', OCR_LANGUAGE);
+            formData.append('isOverlayRequired', 'false');
+            formData.append('OCREngine', '2');
+
+            const resp = await fetch(OCR_API_URL, {
+                method: 'POST',
+                headers: { 'apikey': OCR_API_KEY },
+                body: formData
+            });
+
+            if(!resp.ok) throw new Error('HTTP ' + resp.status);
+            const data = await resp.json();
+            console.log('OCR返回:', data);
+
+            if(data.IsErroredOnProcessing){
+                throw new Error(data.ErrorMessage || '识别失败');
+            }
+            if(!data.ParsedResults || data.ParsedResults.length === 0){
+                showCamStatus('⚠️ 未识别到文字，请对准后重试');
+                camRecognizing = false;
+                camCapture.disabled = false;
+                return;
+            }
+
+            let text = data.ParsedResults.map(r => r.ParsedText).join('\n').trim();
+            // 清理：去掉多余换行、空格，避免污染输入框
+            text = text.replace(/[\r\n]+/g, ' ').replace(/\s{2,}/g, ' ').trim();
+            // 去掉首尾可能的标点噪音
+            text = text.replace(/^[\s.,;:!?，。；：！？]+|[\s.,;:!?，。；：！？]+$/g, '');
+
+            if(!text){
+                showCamStatus('⚠️ 未识别到有效文字');
+                camRecognizing = false;
+                camCapture.disabled = false;
+                return;
+            }
+
+            // 填入输入框（追加还是替换？这里选择直接填入，保持输入框原有语义）
+            questionInput.value = text;
+            questionInput.focus();
+            // 光标移到末尾
+            questionInput.setSelectionRange(text.length, text.length);
+
+            showCamStatus('✅ 识别完成，已填入输入框');
+            // 关闭相机层
+            setTimeout(()=>{
+                stopCamera();
+                cameraOverlay.classList.remove('active');
+                camRecognizing = false;
+                camCapture.disabled = false;
+            }, 600);
+
+        }catch(err){
+            console.error('识别失败:', err);
+            let msg = err.message || String(err);
+            if(msg.includes('Failed to fetch') || msg.includes('NetworkError')){
+                msg = '网络错误，请检查网络后重试';
+            }
+            showCamStatus('❌ ' + msg);
+            camRecognizing = false;
+            camCapture.disabled = false;
+        }
+    });
+
+    // 相机层关闭时清空状态
+    cameraOverlay.addEventListener('transitionend', ()=>{
+        if(!cameraOverlay.classList.contains('active')){
+            hideCamStatus();
+        }
+    });
+
+    // ===== 设置与练习 - 帘子 =====
     const drawer = document.getElementById('drawer');
     const drawerOverlay = document.getElementById('drawerOverlay');
 
@@ -5200,12 +5378,10 @@ document.getElementById('drawerUserBtn').addEventListener('click', ()=>{
     loginClose.addEventListener('click', ()=> loginModal.classList.remove('active'));
     loginCancel.addEventListener('click', ()=> loginModal.classList.remove('active'));
     loginSubmit.addEventListener('click', async ()=>{
-    // 优先走新的用户系统
     const loginUser = document.getElementById('loginUser');
     const loginPass = document.getElementById('loginPass');
     const u = loginUser.value.trim();
     const p = loginPass.value.trim();
-    // 老的 A/A 兜底
     if(u === 'A' && p === 'A'){
         isLoggedIn = true;
         document.getElementById('loginModal').classList.remove('active');
@@ -5215,7 +5391,6 @@ document.getElementById('drawerUserBtn').addEventListener('click', ()=>{
         setTimeout(openBank, 200);
         return;
     }
-    // 其余走新用户系统
     await doUserLogin();
 });
 document.getElementById('loginGoRegister').addEventListener('click', ()=>{
