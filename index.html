@@ -1275,6 +1275,7 @@ let questionBank = [];
 let isLoggedIn = false;
 let hasUnsavedChanges = false;
 let preciseSearchEnabled = true;
+let PINYIN_TABLE = null;
 
 let practiceQuestions = [];
 let practiceAnswers = [];
@@ -1803,6 +1804,11 @@ function checkPageIntegrity() {
 }
 
 window.addEventListener('load', () => {
+// 异步加载拼音表
+fetch('https://qiuhua-cac.github.io/zdsm/pinyin-table.json', { cache: 'force-cache' })
+    .then(r => r.json())
+    .then(data => { PINYIN_TABLE = data; console.log('✅ 拼音表已加载，共', Object.keys(data).length, '字'); })
+    .catch(e => console.warn('❌ 拼音表加载失败', e));
     setTimeout(async () => {
         try{ await syncFromCloud(); }catch(e){ console.warn(e); }
         setTimeout(() => {
@@ -2494,11 +2500,24 @@ const PINYIN_MAP = {
     '清':'qing','青':'qing','轻':'qing','氢':'qing',
     '药':'yao','要':'yao','摇':'yao','遥':'yao'
 };
+// 模糊音归一化：忽略翘舌后鼻、声母混淆
+function normalizePinyin(py){
+    if(!py) return '';
+    let s = py.toLowerCase();
+    s = s.replace(/zh/g,'z').replace(/ch/g,'c').replace(/sh/g,'s');
+    s = s.replace(/ang/g,'an').replace(/eng/g,'en').replace(/ing/g,'in');
+    s = s.replace(/^l/,'n').replace(/^h/,'f').replace(/^r/,'l');
+    s = s.replace(/v/g,'u');
+    return s;
+}
+
 function toPinyinStr(str){
+    const table = PINYIN_TABLE || PINYIN_MAP || {};
     let out = '';
     for(let ch of str){
-        const py = PINYIN_MAP[ch];
-        out += py ? py : ch;
+        const py = table[ch];
+        if(py) out += normalizePinyin(py);
+        else out += ch;
     }
     return out;
 }
@@ -2533,50 +2552,104 @@ function answerSimilarity(studentAns, correctAns){
 }
 function similarity(query, text){
     if(!query) return 0;
-    const qRaw = query.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;；:：!！""'']/g,'');
-    const tRaw = text.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;；:：!！""'']/g,'');
+    const qRaw = query.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;;；:：!！""'']/g,'');
+    const tRaw = text.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;;；:：!！""'']/g,'');
     if(!qRaw || !tRaw) return 0;
-    if(tRaw.indexOf(qRaw) !== -1) return 1.0;
-    if(qRaw.indexOf(tRaw) !== -1 && tRaw.length >= 3) return 0.95;
+
+    // ========== 拼音优先匹配 ==========
     const qPinyin = toPinyinStr(qRaw);
     const tPinyin = toPinyinStr(tRaw);
-    if(tPinyin.indexOf(qPinyin) !== -1) return 0.92;
-    if(qPinyin.indexOf(tPinyin) !== -1 && tPinyin.length >= 2) return 0.88;
-    const maxLen = Math.max(qPinyin.length, tPinyin.length);
-    const dist = levenshtein(qPinyin, tPinyin);
+
+    if(qPinyin === tPinyin && qPinyin.length >= 2) return 1.0;
+    if(tPinyin.indexOf(qPinyin) !== -1 && qPinyin.length >= 2) return 0.97;
+    if(qPinyin.indexOf(tPinyin) !== -1 && tPinyin.length >= 3) return 0.95;
+
+    const pMaxLen = Math.max(qPinyin.length, tPinyin.length);
+    const pDist = levenshtein(qPinyin, tPinyin);
+    const pScore = pMaxLen > 0 ? 1 - (pDist / pMaxLen) : 0;
+
+    // ========== 汉字级别兜底 ==========
+    if(tRaw.indexOf(qRaw) !== -1) return 1.0;
+    if(qRaw.indexOf(tRaw) !== -1 && tRaw.length >= 3) return 0.95;
+
+    const maxLen = Math.max(qRaw.length, tRaw.length);
+    const dist = levenshtein(qRaw, tRaw);
     const editScore = maxLen > 0 ? 1 - (dist / maxLen) : 0;
+
     let hit = 0;
     for(let i=0;i<qRaw.length-1;i++){
         const bigram = qRaw.substr(i,2);
         if(tRaw.indexOf(bigram) !== -1) hit++;
     }
     const bigramScore = qRaw.length>1 ? hit/(qRaw.length-1) : 0;
+
     let charHit = 0;
     const uniqueChars = [...new Set(qRaw.split(''))];
     uniqueChars.forEach(ch=>{ if(tRaw.indexOf(ch) !== -1) charHit++; });
     const charScore = uniqueChars.length ? charHit/uniqueChars.length : 0;
-    const finalScore = Math.max(editScore * 0.85, bigramScore * 0.7, charScore * 0.5);
+
+    const finalScore = Math.max(
+        pScore * 0.95,
+        editScore * 0.85,
+        bigramScore * 0.7,
+        charScore * 0.5
+    );
     return Math.min(finalScore, 0.99);
 }
 function matchQuestions(query, threshold){
     const isPrecise = preciseSearchEnabled;
-    const defaultThreshold = isPrecise ? 0.50 : 0.25;
-    const th = (typeof threshold === 'number') ? threshold : defaultThreshold;
     const results = [];
+
+    // 把查询词归一化 + 转拼音
+    const qClean = query.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;;；:：!！""'']/g,'');
+    const qPinyin = toPinyinStr(qClean);
+    const qLen = qPinyin.length;
+
+    if(qLen === 0){
+        return [];
+    }
+
     questionBank.forEach((item, idx)=>{
         if(item.hidden === true) return;
-        let score = similarity(query, item.q);
+
         if(isPrecise){
-            const q = query.toLowerCase();
-            if(q.includes('池')){
-                const base = q.replace('池','');
-                if(base.length > 0 && item.q.toLowerCase().includes(base + '池')) {
-                    score = Math.max(score, 0.9);
+            // ============ 精确模式：拼音连续窗口匹配，阈值 0.90 ============
+            const tClean = item.q.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;;；:：!！""'']/g,'');
+            const tPinyin = toPinyinStr(tClean);
+
+            // 题库拼音比查询还短 → 不可能匹配
+            if(tPinyin.length < qLen) return;
+
+            // 滑动窗口：窗口长度 = 查询拼音长度，逐步滑动
+            let bestScore = 0;
+            let bestPos = -1;
+            const maxStart = tPinyin.length - qLen;
+
+            for(let start = 0; start <= maxStart; start++){
+                const window = tPinyin.substr(start, qLen);
+                const dist = levenshtein(window, qPinyin);
+                const score = 1 - dist / qLen;
+                if(score > bestScore){
+                    bestScore = score;
+                    bestPos = start;
                 }
+                if(bestScore >= 0.999) break;
             }
+
+            // 阈值 0.90，低于这个直接过滤
+            if(bestScore >= 0.90){
+                results.push({ item, score: bestScore, idx, matchPos: bestPos, matchLen: qLen });
+            }
+
+        }else{
+            // ============ 模糊模式：保持原来的逻辑 ============
+            const defaultThreshold = 0.25;
+            const th = (typeof threshold === 'number') ? threshold : defaultThreshold;
+            const score = similarity(query, item.q);
+            if(score >= th) results.push({ item, score, idx });
         }
-        if(score >= th) results.push({ item, score, idx });
     });
+
     results.sort((a,b)=> b.score - a.score);
     return results.slice(0, 15);
 }
