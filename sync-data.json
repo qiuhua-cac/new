@@ -4,7 +4,7 @@
     "repo": "new",
     "path": "index.html",
     "token": "",
-    "updatedAt": 1791771703124,
+    "updatedAt": 1791773474665,
     "device": "pc"
   },
   "reviveBackup": {
@@ -5481,7 +5481,9 @@
     "device": "pc"
   },
   "history": {
-    "list": [],
+    "list": [
+      "神武"
+    ],
     "updatedAt": 0,
     "device": "pc"
   },
