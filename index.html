@@ -2522,18 +2522,30 @@ function toPinyinStr(str){
     return out;
 }
 function levenshtein(a, b){
+    // 增加空/空串保护，防止卡死
+    if(!a && !b) return 0;
+    if(!a) return b.length;
+    if(!b) return a.length;
     const m = a.length, n = b.length;
-    const dp = Array.from({length: m+1}, ()=> new Array(n+1).fill(0));
-    for(let i=0;i<=m;i++) dp[i][0] = i;
-    for(let j=0;j<=n;j++) dp[0][j] = j;
-    for(let i=1;i<=m;i++){
-        for(let j=1;j<=n;j++){
-            const cost = a[i-1] === b[j-1] ? 0 : 1;
+    // 防止超大字符串卡死，截断长度
+    const MAX_LEN = 120;
+    const aTrunc = a.slice(0,MAX_LEN);
+    const bTrunc = b.slice(0,MAX_LEN);
+    const mt = aTrunc.length;
+    const nt = bTrunc.length;
+
+    const dp = Array.from({length: mt+1}, ()=> new Array(nt+1).fill(0));
+    for(let i=0;i<=mt;i++) dp[i][0] = i;
+    for(let j=0;j<=nt;j++) dp[0][j] = j;
+    for(let i=1;i<=mt;i++){
+        for(let j=1;j<=nt;j++){
+            const cost = aTrunc[i-1] === bTrunc[j-1] ? 0 : 1;
             dp[i][j] = Math.min(dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1]+cost);
         }
     }
-    return dp[m][n];
+    return dp[mt][nt];
 }
+
 function answerSimilarity(studentAns, correctAns){
     if(!studentAns && !correctAns) return 1;
     if(!studentAns || !correctAns) return 0;
@@ -2596,53 +2608,77 @@ function similarity(query, text){
     );
     return Math.min(finalScore, 0.99);
 }
+// OCR 文本清洗：去掉题号、选项、标点，提取核心句
+function cleanOCRText(text){
+    if(!text) return '';
+    let s = text;
+    // 1. 去 emoji（含 ❤️ 这类变体选择符）
+    s = s.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu, '');
+    // 2. 去常见系统提示词
+    const junk = [
+        '回答正确','回答错误','提交答案','下一题','上一题','查看总分','重新练习',
+        '练习模式','得分','满分','答题','继续答题','退出练习','开始练习',
+        '你的答案','正确答案','解析','知识点','参考答案'
+    ];
+    junk.forEach(w => { s = s.split(w).join(''); });
+    // 3. 去孤立字母/数字（题号如 1/20、*1. 等）
+    s = s.replace(/\b\d+\s*\/\s*\d+\b/g, ' ');
+    s = s.replace(/[*·•]\s*\d+[.、)]/g, ' ');
+    // 4. 去零散括号碎片
+    s = s.replace(/[\[\]【】<>《》〈〉()（）]/g, ' ');
+    // 5. 去连续符号
+    s = s.replace(/[·•▲▼◆■□●○★☆→←↑↓]+/g, ' ');
+    // 5.5 去开头/结尾的连续 3 个以上大写字母（OCR 碎片如 BLUI）
+s = s.replace(/^[A-Z]{3,}/, '');
+s = s.replace(/[A-Z]{3,}$/, '');
+// 5.7 从第一个选项标记处截断
+const optMatch = s.match(/[\s【\[(（]?[A-Da-d]\s*[.．、)）:：]/);
+if(optMatch && optMatch.index > 0){
+    s = s.substring(0, optMatch.index);
+}
+// 6. 合并空白
+s = s.replace(/\s+/g, '').trim();
+return s;
+}
 function matchQuestions(query, threshold){
     const isPrecise = preciseSearchEnabled;
     const results = [];
 
-    // 把查询词归一化 + 转拼音
+    // 查询词转拼音
     const qClean = query.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;;；:：!！""'']/g,'');
     const qPinyin = toPinyinStr(qClean);
     const qLen = qPinyin.length;
 
-    if(qLen === 0){
-        return [];
-    }
+    if(qLen === 0) return [];
 
     questionBank.forEach((item, idx)=>{
         if(item.hidden === true) return;
 
         if(isPrecise){
-            // ============ 精确模式：拼音连续窗口匹配，阈值 0.90 ============
+            // ============ 精确模式：在题目拼音里滑动找查询的最优匹配 ============
             const tClean = item.q.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;;；:：!！""'']/g,'');
             const tPinyin = toPinyinStr(tClean);
 
-            // 题库拼音比查询还短 → 不可能匹配
             if(tPinyin.length < qLen) return;
 
-            // 滑动窗口：窗口长度 = 查询拼音长度，逐步滑动
+            // 滑动窗口：窗口长度 = 查询拼音长度
             let bestScore = 0;
-            let bestPos = -1;
             const maxStart = tPinyin.length - qLen;
 
             for(let start = 0; start <= maxStart; start++){
                 const window = tPinyin.substr(start, qLen);
                 const dist = levenshtein(window, qPinyin);
                 const score = 1 - dist / qLen;
-                if(score > bestScore){
-                    bestScore = score;
-                    bestPos = start;
-                }
+                if(score > bestScore) bestScore = score;
                 if(bestScore >= 0.999) break;
             }
 
-            // 阈值 0.90，低于这个直接过滤
-            if(bestScore >= 0.90){
-                results.push({ item, score: bestScore, idx, matchPos: bestPos, matchLen: qLen });
+            if(bestScore >= 0.85){
+                results.push({ item, score: bestScore, idx });
             }
 
         }else{
-            // ============ 模糊模式：保持原来的逻辑 ============
+            // ============ 模糊模式 ============
             const defaultThreshold = 0.25;
             const th = (typeof threshold === 'number') ? threshold : defaultThreshold;
             const score = similarity(query, item.q);
@@ -2653,7 +2689,47 @@ function matchQuestions(query, threshold){
     results.sort((a,b)=> b.score - a.score);
     return results.slice(0, 15);
 }
-
+// OCR 预搜索：拿清洗后的文字，在题库里找最匹配的题
+// 返回 { item, q, score } 或 null
+function preSearchByOCR(cleanedText){
+    if(!cleanedText || cleanedText.length < 4) return null;
+    const qClean = cleanedText.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;;；:：!！""'']/g,'');
+    const qPinyin = toPinyinStr(qClean);
+    if(qPinyin.length < 6) return null;
+    let bestItem = null;
+    let bestScore = 0;
+    questionBank.forEach((item, idx)=>{
+        if(item.hidden === true) return;
+        const tClean = item.q.toLowerCase().replace(/[\s（）()【】\[\]？?，,。.、;;；:：!！""'']/g,'');
+        const tPinyin = toPinyinStr(tClean);
+        if(tPinyin.length < 4) return;
+        // 用题库整段拼音，去 OCR 拼音里滑窗找最匹配的一段
+        let segBest = 0;
+        const winLen = tPinyin.length;
+        if(qPinyin.length < winLen) return;
+        const maxStart = qPinyin.length - winLen;
+        for(let start = 0; start <= maxStart; start++){
+            const window = qPinyin.substr(start, winLen);
+            const dist = levenshtein(window, tPinyin);
+            const score = 1 - dist / winLen;
+            if(score > segBest) segBest = score;
+            if(segBest >= 0.99) break;
+        }
+        if(segBest > bestScore){
+            bestScore = segBest;
+            bestItem = item;
+        }
+    });
+    if(bestScore >= 0.80 && bestItem){
+        let finalQ = bestItem.q;
+        if(finalQ.includes('｜') || finalQ.includes('|')){
+            finalQ = finalQ.split(/[｜|]/)[0].trim();
+        }
+        finalQ = finalQ.replace(/答案.*$/, '').trim();
+        return { item: bestItem, q: finalQ, score: bestScore };
+    }
+    return null;
+}
 function formatAnswerHTML(ans){
     const raw = String(ans || '');
     const normalized = raw.replace(/[｜|‖]/g, '‖');
@@ -5248,6 +5324,16 @@ function captureFrame(maxWidth = 800, quality = 0.7){
 console.log('识别耗时:', Math.round(_t1 - _t0), 'ms');
 
             // 填入输入框（追加还是替换？这里选择直接填入，保持输入框原有语义）
+            // ============ OCR 文本清洗：提取核心句 ============
+text = cleanOCRText(text);
+// ============ 预搜索：拿清洗后的文字去题库里找最匹配的题 ============
+const preMatch = preSearchByOCR(text);
+if(preMatch){
+    text = preMatch.q;
+    console.log('✅ OCR 预搜索命中：', text, '相似度：', preMatch.score.toFixed(2));
+} else {
+    console.log('⚠️ OCR 预搜索未命中，使用清洗后文字：', text);
+}
             questionInput.value = text;
             questionInput.focus();
             // 光标移到末尾
