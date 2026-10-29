@@ -4,7 +4,7 @@
     "repo": "new",
     "path": "index.html",
     "token": "",
-    "updatedAt": 1793293342738,
+    "updatedAt": 1793293762481,
     "device": "pc"
   },
   "reviveBackup": {
@@ -17,7 +17,7 @@
   "backups": {
     "list": [
       {
-        "time": "2026/10/30 00:44:51",
+        "time": "2026/10/30 01:03:14",
         "data": [
           {
             "q": "凡在高地面（）的地点进行的工作都应视作高处作业",
@@ -1828,6 +1828,13 @@
           {
             "q": "危废管理全过程管理括",
             "a": "产生｜收集｜储存｜转移｜运输｜利用｜处置",
+            "e": "",
+            "hidden": false,
+            "isChoice": false
+          },
+          {
+            "q": "测试A",
+            "a": "测试B",
             "e": "",
             "hidden": false,
             "isChoice": false
@@ -5477,20 +5484,20 @@
         "name": "C"
       }
     ],
-    "updatedAt": 1793293342821,
+    "updatedAt": 1793293394385,
     "device": "pc"
   },
   "history": {
     "list": [
       "测试",
+      "测试A",
       "硝化过程",
       "硝化过程需要消耗",
       "总氮",
       "纳管标准",
       "SVI",
       "svl",
-      "pac",
-      "化学需氧量"
+      "pac"
     ],
     "updatedAt": 0,
     "device": "pc"
@@ -7309,9 +7316,16 @@
         "e": "",
         "hidden": false,
         "isChoice": false
+      },
+      {
+        "q": "测试A",
+        "a": "测试B",
+        "e": "",
+        "hidden": false,
+        "isChoice": false
       }
     ],
-    "updatedAt": 1793292291301,
+    "updatedAt": 1793293394451,
     "device": "pc"
   },
   "practiceCfg": {
@@ -7320,11 +7334,11 @@
     "multiOptions": {},
     "singleCorrect": {},
     "multiCorrect": {},
-    "updatedAt": 1793293342844,
+    "updatedAt": 1793293394454,
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1793293342846,
+    "updatedAt": 1793293394455,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
