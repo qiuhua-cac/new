@@ -1353,9 +1353,8 @@ async function doSilentBackup(force = false) {
 
 function startSilentBackupEngine() {
     if (_silentBackupTimer) clearInterval(_silentBackupTimer);
-    setTimeout(() => doSilentBackup(), 10000);
-    
-    // 👇 下面这两行就是罪魁祸首（自动定时备份），直接删掉或注释掉！
+    // 🚀 彻底禁用定时器，只有点击“保存并上传”才会推送
+    // setTimeout(() => doSilentBackup(), 10000);
     // _silentBackupTimer = setInterval(() => {
     //     doSilentBackup();
     // }, 120000); 
@@ -5898,7 +5897,7 @@ document.getElementById('loginGoRegister').addEventListener('click', ()=>{
         }
         bankModal.classList.remove('active');
     });
-               document.getElementById('bankSaveUploadBtn').addEventListener('click', async () => {
+           document.getElementById('bankSaveUploadBtn').addEventListener('click', async () => {
         if(!hasUnsavedChanges){ showToast('没有需要保存的修改'); return; }
         
         const ok = await askConfirm('确认保存并上传到 SQL 数据库？（输入确认代码）');
@@ -5907,7 +5906,7 @@ document.getElementById('loginGoRegister').addEventListener('click', ()=>{
         try{
             showToast('正在保存到 SQL 数据库…');
             
-            // 1. 瞬间触发保存，存入 SQL（这一步是同步发请求，极快）
+            // 1. 瞬间触发保存，存入 SQL
             backupCurrentBank(); 
             persistBank(); 
             saveBankUpdatedAt(nowTs());
@@ -5917,19 +5916,17 @@ document.getElementById('loginGoRegister').addEventListener('click', ()=>{
             savePracticeCfg(cfg);
             savePracticeEdit(loadPracticeEdit());
 
-            // 2. 🚀 关键修改：开启“发射后不管”的 Git 后台静默推送
-            // 我们加一个 setTimeout(0)，把它踢出当前执行队列，绝不阻塞页面刷新
-            setTimeout(() => {
-                console.log('🔄 启动后台静默备份至 Git (不阻塞页面刷新)');
-                doSilentBackup(true); 
-            }, 0);
+            // 2. 🚀 发射后不管：向 Git 发出推送信号，不管它死不死
+            console.log('🔄 正在向 Git 发起后台推送（不影响刷新）...');
+            // 直接调用，不写 await。由于是网络请求，一旦发出，后续的网页刷新不会切断这个请求
+            doSilentBackup(true); 
 
-            // 3. 只要 0.5 秒，给 SQL 请求留一点点网络时间，然后立刻刷新！
+            // 3. 等 0.4 秒（给 SQL 请求留够网络时间），立刻刷新网页！
             setTimeout(()=>{ 
                 hasUnsavedChanges = false;
                 showToast('✅ SQL 保存成功，正在刷新…');
                 location.reload(); 
-            }, 500); 
+            }, 400); 
             
         }catch(e){ 
             console.warn(e); 
