@@ -1349,17 +1349,22 @@ async function doSilentBackup(force = false) {
 function startSilentBackupEngine() {
     if (_silentBackupTimer) clearInterval(_silentBackupTimer);
     setTimeout(() => doSilentBackup(), 10000);
-    _silentBackupTimer = setInterval(() => {
-        doSilentBackup();
-    }, 120000); 
+    
+    // 👇 下面这两行就是罪魁祸首（自动定时备份），直接删掉或注释掉！
+    // _silentBackupTimer = setInterval(() => {
+    //     doSilentBackup();
+    // }, 120000); 
 }
 
 window.addEventListener('beforeunload', (e) => {
+    // 👇 把里面的逻辑全部注释掉
+    /*
     if (_silentBackupRunning) return; 
     const currentHash = getStringHash(JSON.stringify(questionBank));
     if (currentHash !== _lastPushedHash) {
         doSilentBackup(true);
     }
+    */
 });
 // ==================== 后台顽固备份引擎结束 ====================
 
