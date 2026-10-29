@@ -1244,8 +1244,6 @@ try { localStorage.removeItem('zktest_bank_v1'); } catch(e){}
 (function() {
     window._SQL_CACHE = {};
     
-        function sendToServer(key, data) {
-        // 🚀 核心防线：拦截移动端测试工具产生的垃圾 key
             function sendToServer(key, data) {
         // 🚀 白名单机制：只放行我们真正的业务数据
         const allowedKeys = [
