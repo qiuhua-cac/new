@@ -1236,67 +1236,53 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 <script>
 
 // ==================== 拦截器开始 ====================
+const API_BASE = 'https://81.71.33.133:3000'; // ⚠️ 务必换成你自己的腾讯云公网IP
+
 (function() {
-    // 创建一个全局的内存缓存，用来保存数据库里的数据
     window._SQL_CACHE = {};
     
-    // 1. 拦截“读取”操作
+    function sendToServer(key, data) {
+        fetch(API_BASE + '/api/save-data', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ [key]: data })
+        }).catch(e => console.warn('⚠️ SQL 同步失败，已保留本地缓存', e));
+    }
+
     const originalGetItem = localStorage.getItem;
     localStorage.getItem = function(key) {
-        // 如果数据库缓存里有这个数据，直接返回
         if (key in window._SQL_CACHE) {
             return typeof window._SQL_CACHE[key] === 'string' 
                    ? window._SQL_CACHE[key] 
                    : JSON.stringify(window._SQL_CACHE[key]);
         }
-        // 如果缓存没有，就查浏览器本地（用于你第一次打开时的旧数据过渡）
         return originalGetItem.call(localStorage, key);
     };
 
-    // 2. 拦截“保存”操作
     const originalSetItem = localStorage.setItem;
     localStorage.setItem = function(key, value) {
-        // 先把数据存进内存缓存
         try {
             window._SQL_CACHE[key] = JSON.parse(value);
         } catch (e) {
             window._SQL_CACHE[key] = value;
         }
-        
-        // 🚀 核心：偷偷把数据发给你的 Node.js 服务器，存进 MySQL
-            fetch('http://81.71.33.133:3000/api/save-data', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ [key]: window._SQL_CACHE[key] })
-        }).catch(err => console.warn('同步到 SQL 失败:', err));
-        
-        // 浏览器本地也存一份（双保险）
+        sendToServer(key, window._SQL_CACHE[key]);
         originalSetItem.call(localStorage, key, value);
-    };
-    
-    // 3. 拦截“删除”操作
-    localStorage.removeItem = function(key) {
-        delete window._SQL_CACHE[key];
-        fetch('/api/save-data', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ [key]: null })
-        });
     };
 })();
 
-// 4. 页面加载时，先去服务器把数据库里的数据拉回来
 async function initSQLData() {
     try {
-        const resp = await fetch('http://81.71.33.133:3000/api/get-all-data');
+        const resp = await fetch(API_BASE + '/api/get-all-data');
         const json = await resp.json();
-        if (json.success) {
-            // 把从数据库拿到的数据，装进我们的内存缓存
+        if (json.success && Object.keys(json.data).length > 0) {
             window._SQL_CACHE = json.data;
-            console.log('✅ 成功从 MySQL 数据库加载全部配置和题库');
+            console.log('✅ 成功从 MySQL 数据库加载最新题库');
+        } else {
+            console.warn('⚠️ 数据库为空或读取失败，降级使用本地/默认缓存');
         }
     } catch (e) {
-        console.error('❌ 读取数据库失败，将使用浏览器本地缓存', e);
+        console.warn('❌ SQL 连接失败，使用本地缓存', e);
     }
 }
 // ==================== 拦截器结束 ====================
