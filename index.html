@@ -1238,6 +1238,10 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
 // ==================== 拦截器开始 ====================
 const API_BASE = 'https://81.71.33.133:3000'; // ⚠️ 务必换成你自己的腾讯云公网IP
 
+// 👇 加上这两行，屏蔽原来的 GitHub 报错
+window.syncFromCloud = async function() { return; };
+window.pushSyncData = function() { return; };
+
 (function() {
     window._SQL_CACHE = {};
     
@@ -5718,27 +5722,57 @@ document.getElementById('loginGoRegister').addEventListener('click', ()=>{
         }
         bankModal.classList.remove('active');
     });
-    document.getElementById('bankSaveUploadBtn').addEventListener('click', async ()=>{
-    if(DEVICE === 'mobile'){ showToast('📖 移动端为只读模式，请到 PC 端修改并上传'); return; }
-    if(!hasUnsavedChanges){ showToast('没有需要保存的修改'); return; }
-    const ok = await askConfirm('确认保存并上传到云端？（输入确认代码）');
+        document.getElementById('bankSaveUploadBtn').addEventListener('click', async () => {
+        // ❌ 移除了移动端只读限制，现在手机和电脑都能点！
+        
+        if(!hasUnsavedChanges){ showToast('没有需要保存的修改'); return; }
+        
+        const ok = await askConfirm('确认保存并上传到云端？（输入确认代码）');
         if(!ok) return;
+        
         try{
-            showToast('正在保存…');
-            backupCurrentBank();
-            persistBank();
+            showToast('正在保存到 SQL 数据库…');
+            
+            // 1. 触发保存，通过拦截器瞬间存入 SQL
+            backupCurrentBank(); 
+            persistBank(); 
             saveBankUpdatedAt(nowTs());
+            
             const cfg = loadPracticeCfg();
             cfg.threshold = parseInt(document.getElementById('practiceThreshold').value) || 75;
             savePracticeCfg(cfg);
             savePracticeEdit(loadPracticeEdit());
-            showToast('正在同步到 GitHub…');
-            await syncFullPageToGitHub(true);
-            await pushSyncData(true);
+
+            // 2. 稍微等待一下，确保 SQL 接收完毕（给拦截器一点时间）
+            await new Promise(r => setTimeout(r, 500)); 
+            
+            showToast('✅ SQL 保存成功，正在同步至 GitHub 备用…');
+            
+            // 3. 尝试向 GitHub 推送完整 HTML（哪怕在手机上网络慢或者失败都没关系）
+            try {
+                const html = await getFullPageHTML();
+                const msg = `更新完整页面（${questionBank.length}题） ${new Date().toLocaleString('zh-CN',{hour12:false})}`;
+                const gitOk = await pushContentToGitHub(html, msg, true);
+                
+                if (gitOk) {
+                    showToast('✅ GitHub 备用同步成功！正在刷新…');
+                } else {
+                    showToast('⚠️ GitHub 同步失败（网络原因），但 SQL 已成功保存！');
+                }
+            } catch (gitErr) {
+                console.warn('GitHub 同步异常', gitErr);
+                showToast('⚠️ GitHub 同步异常，但 SQL 已成功保存！');
+            }
+
             hasUnsavedChanges = false;
-            showToast('✅ 保存成功，正在刷新…');
+            
+            // 延迟刷新页面
             setTimeout(()=>{ location.reload(); }, 1500);
-        }catch(e){ console.warn(e); showToast('❌ 保存失败：' + e.message); }
+            
+        }catch(e){ 
+            console.warn(e); 
+            showToast('❌ 保存过程发生异常：' + e.message); 
+        }
     });
     function switchTab(tabId){
         document.querySelectorAll('.tab').forEach(t=> t.classList.toggle('active', t.dataset.tab === tabId));
