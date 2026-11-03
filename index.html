@@ -1405,9 +1405,6 @@ const ZK_DATA_OWNER = 'qiuhua-cac';
 const ZK_DATA_REPO  = 'zk-data';
 const ZK_DATA_PATH  = 'users.json';
 const ZK_DATA_TOKEN = 'github_pat_11BJT3CJY0gKRXFmudFIDY_'+'Ee1YFxKL0o4LYmHHvyjSRSCUj7ca4Nz4YZOpfrHQdDsTDAXVLOPJ1yCRPez';
-const YESAPI_BASE   = 'https://hn.api.yesapi.net/';
-const YESAPI_APP_KEY = '1FC09C038370C9B75E8478D16107DAF4';
-const YESAPI_MODEL   = 'user_mastered';
 
 function detectDevice(){
     const ua = navigator.userAgent || '';
@@ -1592,6 +1589,72 @@ function saveMasteredMap(map){
     try{ localStorage.setItem(USER_MASTERED_KEY, JSON.stringify(map)); }catch(e){}
 }
 
+// ==================== SQL 已会标记读写 ====================
+// SQL 中 zktest_study_mastered_v1 存储格式: { "username": ["题目1","题目2", ...], ... }
+
+async function sqlFetchMasteredMap(){
+    try{
+        const resp = await fetch(API_BASE + '/api/get-all-data?t=' + Date.now(), { cache: 'no-store' });
+        if(!resp.ok) return null;
+        const json = await resp.json();
+        if(!json || !json.success) return null;
+        const raw = json.data && json.data[USER_MASTERED_KEY];
+        if(!raw) return {};
+        if(typeof raw === 'string'){
+            try{ return JSON.parse(raw) || {}; }catch(e){ return {}; }
+        }
+        return raw || {};
+    }catch(e){
+        console.warn('sqlFetchMasteredMap 失败', e);
+        return null;
+    }
+}
+
+async function sqlSaveMasteredMap(map){
+    try{
+        const resp = await fetch(API_BASE + '/api/save-data', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ [USER_MASTERED_KEY]: map })
+        });
+        if(!resp.ok) return false;
+        const json = await resp.json().catch(()=>null);
+        return !!(json && json.success !== false);
+    }catch(e){
+        console.warn('sqlSaveMasteredMap 失败', e);
+        return false;
+    }
+}
+
+async function sqlUpdateUserMastered(username, list){
+    if(!username) return false;
+    for(let attempt = 0; attempt < 3; attempt++){
+        const remote = await sqlFetchMasteredMap();
+        if(remote === null){
+            await new Promise(r => setTimeout(r, 300 * (attempt + 1)));
+            continue;
+        }
+        remote[username] = Array.isArray(list) ? list : [];
+        const ok = await sqlSaveMasteredMap(remote);
+        if(ok){
+            const localMap = loadMasteredMap();
+            localMap[username] = remote[username];
+            saveMasteredMap(localMap);
+            return true;
+        }
+        await new Promise(r => setTimeout(r, 300 * (attempt + 1)));
+    }
+    return false;
+}
+
+async function sqlLoadUserMastered(username){
+    if(!username) return null;
+    const remote = await sqlFetchMasteredMap();
+    if(remote === null) return null;
+    const list = remote[username];
+    return Array.isArray(list) ? list : [];
+}
+
 function simpleHash(str){
     let h = 0;
     for(let i = 0; i < str.length; i++){
@@ -1599,115 +1662,6 @@ function simpleHash(str){
         h = h & h;
     }
     return Math.abs(h).toString(36);
-}
-
-async function yesapiDeleteByUuid(uuid){
-    if(!uuid) return false;
-    const url = YESAPI_BASE + '?s=App.Table.FreeDelete';
-    const body = new URLSearchParams();
-    body.append('app_key', YESAPI_APP_KEY);
-    body.append('model_name', YESAPI_MODEL);
-    body.append('where', JSON.stringify([["uuid","=",uuid]]));
-    try{
-        const resp = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-            body: body.toString()
-        });
-        if(!resp.ok) return false;
-        const json = await resp.json();
-        return json && json.ret === 200;
-    }catch(e){
-        console.warn('yesapiDeleteByUuid 异常', e);
-        return false;
-    }
-}
-
-async function yesapiCleanTestData(){
-    const url = YESAPI_BASE + '?s=App.Table.FreeQuery';
-    const params = new URLSearchParams();
-    params.append('app_key', YESAPI_APP_KEY);
-    params.append('model_name', YESAPI_MODEL);
-    params.append('where', JSON.stringify([["uuid","LIKE","test1_%"]]));
-    params.append('perpage', '100');
-    try{
-        const resp = await fetch(url + '&' + params.toString(), { method: 'GET', cache: 'no-store' });
-        if(!resp.ok) return false;
-        const json = await resp.json();
-        if(!json || json.ret !== 200 || !json.data || !json.data.list) return false;
-        const list = json.data.list;
-        console.log('准备清理', list.length, '条测试数据');
-        for(const row of list){
-            await yesapiDeleteByUuid(row.uuid);
-        }
-        return true;
-    }catch(e){
-        console.warn('清理测试数据失败', e);
-        return false;
-    }
-}
-
-async function yesapiAddOneMastered(username, questionText){
-    if(!username || !questionText) return false;
-    const hash = simpleHash(questionText);
-    const recordUuid = username + '_' + hash;
-    const url = YESAPI_BASE + '?s=App.Table.CheckCreateOrUpdate';
-    const dataObj = {
-        uuid: recordUuid,
-        mastered: questionText
-    };
-    const body = new URLSearchParams();
-    body.append('app_key', YESAPI_APP_KEY);
-    body.append('model_name', YESAPI_MODEL);
-    body.append('check_field', 'uuid');
-    body.append('data', JSON.stringify(dataObj));
-    try{
-        const resp = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-            body: body.toString()
-        });
-        if(!resp.ok){ console.warn('yesapiAddOne HTTP', resp.status); return false; }
-        const json = await resp.json();
-        if(json && json.ret === 200 && json.data && json.data.err_code === 0) return true;
-        console.warn('yesapiAddOne 业务失败', json);
-        return false;
-    }catch(e){
-        console.warn('yesapiAddOne 异常', e);
-        return false;
-    }
-}
-
-async function yesapiRemoveOneMastered(username, questionText){
-    if(!username || !questionText) return false;
-    const hash = simpleHash(questionText);
-    const recordUuid = username + '_' + hash;
-    return await yesapiDeleteByUuid(recordUuid);
-}
-
-async function yesapiLoadMastered(username){
-    if(!username) return null;
-    const url = YESAPI_BASE + '?s=App.Table.FreeQuery';
-    const params = new URLSearchParams();
-    params.append('app_key', YESAPI_APP_KEY);
-    params.append('model_name', YESAPI_MODEL);
-    params.append('where', JSON.stringify([["uuid","LIKE",username + '_%']]));
-    params.append('perpage', '200');
-    try{
-        const resp = await fetch(url + '&' + params.toString(), { method: 'GET', cache: 'no-store' });
-        if(!resp.ok){ console.warn('yesapiLoad HTTP', resp.status); return null; }
-        const json = await resp.json();
-        if(!json || json.ret !== 200 || !json.data) return null;
-        const list = json.data.list || [];
-        const result = [];
-        for(const row of list){
-            if(row.mastered) result.push(row.mastered);
-        }
-        return result;
-    }catch(e){
-        console.warn('yesapiLoad 异常', e);
-        return null;
-    }
 }
 
 let currentUser = null;
@@ -5072,36 +5026,7 @@ async function syncMasteredToCloud(){
     if(!currentUser || !currentUser.username) return false;
     const uname = currentUser.username;
     const localList = getMasteredListForCurrentUser();
-    const cloudList = await yesapiLoadMastered(uname);
-    if(cloudList === null) return false;
-    const cloudSet = new Set(cloudList);
-    const localSet = new Set(localList);
-    let ok = true;
-    for(const q of localList){
-        if(!cloudSet.has(q)){
-            const r = await yesapiAddOneMastered(uname, q);
-            if(!r) ok = false;
-        }
-    }
-    for(const q of cloudList){
-        if(!localSet.has(q)){
-            const r = await yesapiRemoveOneMastered(uname, q);
-            if(!r) ok = false;
-        }
-    }
-    (async ()=>{
-        for(let attempt = 0; attempt < 3; attempt++){
-            try{
-                const data = await fetchUsersJson();
-                if(!data || !data.users[uname]) return;
-                data.users[uname].mastered = localList;
-                data.users[uname].lastLogin = nowTs();
-                const r = await pushUsersJson(data.users, data._sha, `更新 ${uname} 已会标记`);
-                if(r) return;
-            }catch(e){}
-            await new Promise(r => setTimeout(r, 500 + attempt * 500));
-        }
-    })();
+    const ok = await sqlUpdateUserMastered(uname, localList);
     return ok;
 }
 
@@ -5130,6 +5055,7 @@ async function onToggleMastered(questionText, btnEl){
     syncMasteredToCloud().then(ok=>{
         if(!ok){
             console.warn('后台同步失败');
+            showToast('⚠️ 已会标记本地已保存，云端同步失败，请稍后重试');
         }
     });
 }
@@ -5137,13 +5063,10 @@ async function onToggleMastered(questionText, btnEl){
 async function loadMasteredFromCloud(){
     if(!currentUser || !currentUser.username) return;
     const uname = currentUser.username;
-    let cloudList = await yesapiLoadMastered(uname);
+    const cloudList = await sqlLoadUserMastered(uname);
     if(cloudList === null){
-        console.warn('YesApi 拉取失败，回退 GitHub');
-        const data = await fetchUsersJson();
-        if(!data || !data.users[uname]) return;
-        const u = data.users[uname];
-        cloudList = Array.isArray(u.mastered) ? u.mastered : [];
+        console.warn('SQL 拉取已会标记失败，保留本地');
+        return;
     }
     const localMap = loadMasteredMap();
     localMap[uname] = cloudList;
