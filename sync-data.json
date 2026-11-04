@@ -5500,7 +5500,7 @@
       {
         "q": "凡在高地面（）的地点进行的工作都应视作高处作业",
         "a": "2米及以上",
-        "e": "本题为选择题的答案",
+        "e": "本题为选择题的答案q",
         "hidden": false,
         "isChoice": true
       },
@@ -7320,11 +7320,11 @@
     "multiOptions": {},
     "singleCorrect": {},
     "multiCorrect": {},
-    "updatedAt": 1793720771353,
+    "updatedAt": 0,
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1793772154066,
+    "updatedAt": 1793828686455,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -7745,20 +7745,6 @@
       "updatedAt": 1790839699715,
       "customExplanation": "本题为选择题答案"
     },
-    "凡在高地面（）的地点进行的工作都应视作高处作业": {
-      "customQuestion": "凡在高地面（）的地点进行的工作都应视作高处作业",
-      "customAnswer": "B",
-      "customExplanation": "本题为选择题的答案",
-      "isChoice": true,
-      "options": [
-        "A. 1.5米以上",
-        "B. 2米以上",
-        "C. 3米以上",
-        "D. 2.5米以上"
-      ],
-      "correct": "B",
-      "updatedAt": 1790839978187
-    },
     "厂区流量计共计有（）三种": {
       "customQuestion": "厂区流量计共计有</答案>电磁流量计<答案\\>三种</答案>超声波流量计<答案\\></答案>浮子流量计<答案\\>",
       "customAnswer": "电磁流量计｜超声波流量计｜浮子流量计",
@@ -7778,10 +7764,6 @@
       "orderSetting": "all",
       "updatedAt": 1790842070850,
       "customExplanation": ""
-    },
-    "粉末活性炭主要用于": {
-      "practiceHidden": false,
-      "updatedAt": 1793772154066
     }
   },
   "userMastered": {
