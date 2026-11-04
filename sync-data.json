@@ -7324,7 +7324,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1793772139097,
+    "updatedAt": 1793772154066,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -7780,8 +7780,8 @@
       "customExplanation": ""
     },
     "粉末活性炭主要用于": {
-      "practiceHidden": true,
-      "updatedAt": 1793772139096
+      "practiceHidden": false,
+      "updatedAt": 1793772154066
     }
   },
   "userMastered": {
