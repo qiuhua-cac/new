@@ -5482,15 +5482,7 @@
   },
   "history": {
     "list": [
-      "氨氮的",
-      "危废管理",
-      "水泵的流量",
-      "次氯酸钠与酸性",
-      "厌氧区溶解氧",
-      "二沉池巡检",
-      "突然有一股",
-      "反硝化过程",
-      "臭氧的"
+      "古风机房"
     ],
     "updatedAt": 0,
     "device": "pc"
@@ -5500,7 +5492,7 @@
       {
         "q": "凡在高地面（）的地点进行的工作都应视作高处作业",
         "a": "2米及以上",
-        "e": "本题为选择题的答案q",
+        "e": "本题为选择题的答案",
         "hidden": false,
         "isChoice": true
       },
@@ -7324,7 +7316,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1793828686455,
+    "updatedAt": 1793845617952,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -7764,6 +7756,17 @@
       "orderSetting": "all",
       "updatedAt": 1790842070850,
       "customExplanation": ""
+    },
+    "粉末活性炭主要用于": {
+      "customQuestion": "1粉末活性炭主要用于</答案>去除COD<答案\\>",
+      "customAnswer": "去除COD",
+      "isChoice": false,
+      "options": null,
+      "correct": null,
+      "orderSetting": "all",
+      "thresholdEnabled": false,
+      "threshold": null,
+      "updatedAt": 1793845617951
     }
   },
   "userMastered": {
