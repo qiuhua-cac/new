@@ -7316,7 +7316,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1793845688552,
+    "updatedAt": 1793845718582,
     "device": "pc",
     "发现有人硫化氢中毒晕倒在有限空间内，施救者应": {
       "customQuestion": "发现有人硫化氢中毒晕倒在有限空间内，施救者应",
@@ -7758,7 +7758,7 @@
       "customExplanation": ""
     },
     "粉末活性炭主要用于": {
-      "customQuestion": "1粉末活性炭主要用于</答案>去除COD<答案\\>",
+      "customQuestion": "12粉末活性炭主要用于</答案>去除COD<答案\\>",
       "customAnswer": "去除COD",
       "isChoice": false,
       "options": null,
@@ -7766,8 +7766,7 @@
       "orderSetting": "all",
       "thresholdEnabled": false,
       "threshold": null,
-      "updatedAt": 1793845688552,
-      "customExplanation": ""
+      "updatedAt": 1793845718582
     }
   },
   "userMastered": {
