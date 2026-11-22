@@ -2384,105 +2384,139 @@ function getSyncPath(cfg){
 }
 let _pushSyncRunning = false;
 let _pushSyncPending = false;
+function fetchWithTimeout(url, options = {}, ms = 10000){
+    const controller = new AbortController();
+    const timer = setTimeout(()=>controller.abort(), ms);
+    return fetch(url, Object.assign({}, options, { signal: controller.signal }))
+        .finally(()=>clearTimeout(timer));
+}
+
+// ---------- 拉取 sync-data：优先 AtomGit，失败回退 GitHub ----------
+async function pullSyncFromAtomGit(){
+    const cfg = loadAtomGitCfg();
+    if(!isAtomGitConfigured(cfg)) return null;
+    const syncPath = getSyncPath(cfg);
+    const apiBase = `https://api.atomgit.com/api/v5/repos/${cfg.owner}/${cfg.repo}/contents/${syncPath}`;
+    try{
+        const resp = await fetchWithTimeout(apiBase, { method:'GET', headers:{ 'Authorization':`Bearer ${cfg.token}`, 'Accept':'application/json' }, cache:'no-store' });
+        if(!resp.ok) return null;
+        const data = await resp.json();
+        if(!data.content && data.download_url){
+            const raw = await fetchWithTimeout(data.download_url, { cache:'no-store' });
+            if(!raw.ok) return null;
+            return JSON.parse(await raw.text());
+        }
+        return JSON.parse(base64ToUtf8(data.content));
+    }catch(e){ console.warn('AtomGit 拉取 sync-data 失败', e.message); return null; }
+}
+async function pullSyncFromGitHub(){
+    const cfg = loadGhCfg();
+    if(!isGhConfigured(cfg)) return null;
+    const syncPath = getSyncPath(cfg);
+    const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${syncPath}`;
+    for(let attempt = 0; attempt < 3; attempt++){
+        try{
+            const resp = await fetchWithTimeout(apiBase, { method:'GET', headers:{ 'Authorization':`token ${cfg.token}`, 'Accept':'application/vnd.github.v3+json' }, cache:'no-store' });
+            if(!resp.ok){
+                console.warn(`GitHub pullSyncData 第 ${attempt+1} 次状态码异常:`, resp.status);
+                if(resp.status === 404 || resp.status === 403 || resp.status === 401) return null;
+                if(attempt < 2) await new Promise(r => setTimeout(r, 800 * (attempt + 1)));
+                continue;
+            }
+            const data = await resp.json();
+            if(!data.content && data.download_url){
+                const rawResp = await fetchWithTimeout(data.download_url, { cache:'no-store' });
+                if(!rawResp.ok) throw new Error('raw fetch failed: ' + rawResp.status);
+                return JSON.parse(await rawResp.text());
+            }
+            return JSON.parse(base64ToUtf8(data.content));
+        }catch(e){
+            console.warn(`GitHub pullSyncData 第 ${attempt+1} 次失败:`, e.message);
+            if(attempt < 2) await new Promise(r => setTimeout(r, 800 * (attempt + 1)));
+        }
+    }
+    return null;
+}
+async function pullSyncData(){
+    const remote = await pullSyncFromAtomGit();
+    if(remote) return remote;
+    return await pullSyncFromGitHub();
+}
+
+// ---------- 推送 sync-data：主 AtomGit，兜底 GitHub ----------
+async function pushSyncToAtomGit(contentB64){
+    const cfg = loadAtomGitCfg();
+    if(!isAtomGitConfigured(cfg)) return false;
+    const syncPath = getSyncPath(cfg);
+    const apiBase = `https://api.atomgit.com/api/v5/repos/${cfg.owner}/${cfg.repo}/contents/${syncPath}`;
+    let sha = null, exists = false;
+    try{
+        const g = await fetchWithTimeout(apiBase, { method:'GET', headers:{ 'Authorization':`Bearer ${cfg.token}`, 'Accept':'application/json' } });
+        if(g.ok){ const d = await g.json(); sha = d.sha; exists = true; }
+        else if(g.status !== 404){ return false; }
+        const body = {
+            message: `sync-data ${new Date().toLocaleString('zh-CN',{hour12:false})} [${DEVICE}]`,
+            content: contentB64,
+            branch: 'main'
+        };
+        if(exists && sha) body.sha = sha;
+        const method = exists ? 'PUT' : 'POST';
+        const r = await fetchWithTimeout(apiBase, {
+            method,
+            headers:{ 'Authorization':`Bearer ${cfg.token}`, 'Accept':'application/json', 'Content-Type':'application/json' },
+            body: JSON.stringify(body)
+        });
+        return r.ok || r.status === 201;
+    }catch(e){ console.warn('AtomGit sync-data 推送失败', e.message); return false; }
+}
+async function pushSyncToGitHub(contentB64){
+    const cfg = loadGhCfg();
+    if(!isGhConfigured(cfg)) return false;
+    const syncPath = getSyncPath(cfg);
+    const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${syncPath}`;
+    for(let attempt = 0; attempt < 3; attempt++){
+        let sha = null;
+        const getResp = await fetchWithTimeout(apiBase + '?t=' + Date.now(), { method:'GET', headers:{ 'Authorization':`token ${cfg.token}`, 'Accept':'application/vnd.github.v3+json' } });
+        if(getResp.ok){ sha = (await getResp.json()).sha; }
+        const body = {
+            message: `sync-data ${new Date().toLocaleString('zh-CN',{hour12:false})} [${DEVICE}]`,
+            content: contentB64,
+            branch: 'main'
+        };
+        if(sha) body.sha = sha;
+        const putResp = await fetchWithTimeout(apiBase, {
+            method:'PUT',
+            headers:{ 'Authorization':`token ${cfg.token}`, 'Accept':'application/vnd.github.v3+json', 'Content-Type':'application/json' },
+            body: JSON.stringify(body)
+        });
+        if(putResp.ok) return true;
+        if(putResp.status === 409){ await new Promise(r => setTimeout(r, 100 + attempt * 100)); continue; }
+        if(putResp.status >= 500 || putResp.status === 429){ await new Promise(r => setTimeout(r, 800 * (attempt + 1))); continue; }
+        console.warn('GitHub pushSyncData 失败', await putResp.text());
+        return false;
+    }
+    return false;
+}
 async function pushSyncData(silent = true){
 if(DEVICE === 'mobile'){ return false; }
     if(_pushSyncRunning){ _pushSyncPending = true; return true; }
     _pushSyncRunning = true;
     try{
-        const cfg = loadGhCfg();
-        if(!isGhConfigured(cfg)) return false;
-        const syncPath = getSyncPath(cfg);
-        const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${syncPath}`;
         const sync = loadLocalSync();
         const content = JSON.stringify(sync, null, 2);
         const contentB64 = utf8ToBase64(content);
-        for(let attempt = 0; attempt < 6; attempt++){
-            let sha = null;
-            const getResp = await fetch(apiBase + '?t=' + Date.now(), {
-                method:'GET',
-                headers:{ 'Authorization':`token ${cfg.token}`, 'Accept':'application/vnd.github.v3+json' }
-            });
-            if(getResp.ok){ sha = (await getResp.json()).sha; }
-            const body = {
-                message: `sync-data ${new Date().toLocaleString('zh-CN',{hour12:false})} [${DEVICE}]`,
-                content: contentB64,
-                branch: 'main'
-            };
-            if(sha) body.sha = sha;
-            const putResp = await fetch(apiBase, {
-                method:'PUT',
-                headers:{
-                    'Authorization':`token ${cfg.token}`,
-                    'Accept':'application/vnd.github.v3+json',
-                    'Content-Type':'application/json'
-                },
-                body: JSON.stringify(body)
-            });
-            if(putResp.ok){
-                if(!silent) showToast('✅ 云端配置已同步');
-                return true;
-            }
-                       if(putResp.status === 409){
-                await new Promise(r => setTimeout(r, 100 + attempt * 100));
-                continue;
-            }
-            if(putResp.status >= 500 || putResp.status === 429){
-                await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
-                continue;
-            }
-            console.warn('pushSyncData 失败', await putResp.text());
-            return false;
+        let ok = await pushSyncToAtomGit(contentB64);
+        // GitHub 兜底：后台异步推送，不阻塞主流程、不等结果
+        if(isGhConfigured(loadGhCfg())){
+            Promise.resolve().then(()=>{ pushSyncToGitHub(contentB64); });
         }
-        return false;
+        if(!silent && ok) showToast('✅ 云端配置已同步');
+        return ok;
     }catch(e){ console.warn('pushSyncData 异常', e); return false; }
     finally{
         _pushSyncRunning = false;
-        if(_pushSyncPending){
-            _pushSyncPending = false;
-            setTimeout(()=>{ pushSyncData(true); }, 50);
-        }
+        if(_pushSyncPending){ _pushSyncPending = false; setTimeout(()=>{ pushSyncData(true); }, 50); }
     }
-}
-async function pullSyncData(){
-    const cfg = loadGhCfg();
-    if(!isGhConfigured(cfg)) return null;
-    const syncPath = getSyncPath(cfg);
-    const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${syncPath}`;
-
-    for(let attempt = 0; attempt < 6; attempt++){
-        try{
-            const resp = await fetch(apiBase, {
-                method:'GET',
-                headers:{ 'Authorization':`token ${cfg.token}`, 'Accept':'application/vnd.github.v3+json' },
-                cache: 'no-store'
-            });
-            if(!resp.ok){
-                console.warn(`pullSyncData 第 ${attempt+1} 次状态码异常:`, resp.status);
-                if(resp.status === 404 || resp.status === 403 || resp.status === 401) return null;
-                if(attempt < 5) await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
-                continue;
-            }
-            const data = await resp.json();
-
-            if(!data.content && data.download_url){
-                console.log('文件 > 1MB，走 download_url 下载');
-                const rawResp = await fetch(data.download_url, { cache: 'no-store' });
-                if(!rawResp.ok) throw new Error('raw fetch failed: ' + rawResp.status);
-                const text = await rawResp.text();
-                return JSON.parse(text);
-            }
-
-            const text = base64ToUtf8(data.content);
-            return JSON.parse(text);
-        }catch(e){
-            console.warn(`pullSyncData 第 ${attempt+1} 次失败:`, e.message);
-            if(attempt < 5){
-                await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
-            }
-        }
-    }
-    console.error('pullSyncData 重试 6 次都失败');
-    return null;
 }
 async function syncFromCloud(){
     const remote = await pullSyncData();
@@ -2559,11 +2593,11 @@ if(DEVICE === 'mobile'){ return false; }
     const atomOk = await pushContentToAtomGit(html, msg, silent);
     if(!atomOk && !silent) showToast('⚠️ AtomGit 主仓库同步失败，将尝试 GitHub 兜底备份');
 
-    // GitHub 作为兜底备份（保留原有逻辑）
+    // GitHub 兜底：后台异步推送，不阻塞主流程、不等结果
     const ghCfg = loadGhCfg();
     if(isGhConfigured(ghCfg)){
-        await pushContentToGitHub(html, msg, true);
-        if(!silent && atomOk) showToast('✅ AtomGit 成功，GitHub 已完成兜底备份');
+        Promise.resolve().then(()=>{ pushContentToGitHub(html, msg, true); });
+        if(!silent && atomOk) showToast('✅ AtomGit 成功，GitHub 后台兜底备份中');
     }else{
         if(!silent && atomOk) showToast('✅ AtomGit 主仓库成功，GitHub 未配置，跳过兜底备份');
     }
@@ -3024,10 +3058,9 @@ function bindRevivePopup(){
         const rmsg = `💊 复活备份恢复 ${new Date().toLocaleString('zh-CN',{hour12:false})}`;
         try{
             let success = await pushContentToAtomGit(backup.content, rmsg, true);
+            // GitHub 兜底：后台异步推送，不阻塞
             if(isGhConfigured(ghCfg)){
-                await pushContentToGitHub(backup.content, rmsg, true);
-            }else if(!success){
-                success = await pushContentToGitHub(backup.content, rmsg, false);
+                Promise.resolve().then(()=>{ pushContentToGitHub(backup.content, rmsg, true); });
             }
             if(success){
                 showToast('✅ 复活备份已推送，正在刷新…');
@@ -5791,12 +5824,16 @@ document.getElementById('loginGoRegister').addEventListener('click', ()=>{
             cfg.threshold = parseInt(document.getElementById('practiceThreshold').value) || 75;
             savePracticeCfg(cfg);
             savePracticeEdit(loadPracticeEdit());
-            showToast('正在同步到 GitHub…');
-            await syncFullPageToGitHub(true);
-            await pushSyncData(true);
-            hasUnsavedChanges = false;
-            showToast('✅ 保存成功，正在刷新…');
-            setTimeout(()=>{ location.reload(); }, 1500);
+            showToast('正在同步到 AtomGit 主仓库…');
+            const pageOk = await syncFullPageToGitHub(true);
+            const dataOk = await pushSyncData(true);
+            if(pageOk && dataOk){
+                hasUnsavedChanges = false;
+                showToast('✅ 保存成功，正在刷新…');
+                setTimeout(()=>{ location.reload(); }, 1500);
+            }else{
+                showToast('❌ 主仓库(AtomGit)推送失败，请检查网络或令牌后重试');
+            }
         }catch(e){ console.warn(e); showToast('❌ 保存失败：' + e.message); }
     });
     function switchTab(tabId){
@@ -6593,10 +6630,9 @@ const editChoiceWrap = document.getElementById('editChoiceWrap');
         showToast('正在推送复活备份…');
         const rmsg = `💊 复活备份恢复 ${new Date().toLocaleString('zh-CN',{hour12:false})}`;
         let success = await pushContentToAtomGit(backup.content, rmsg, true);
+        // GitHub 兜底：后台异步推送，不阻塞
         if(isGhConfigured(ghCfg)){
-            await pushContentToGitHub(backup.content, rmsg, true);
-        }else if(!success){
-            success = await pushContentToGitHub(backup.content, rmsg, false);
+            Promise.resolve().then(()=>{ pushContentToGitHub(backup.content, rmsg, true); });
         }
         if(success){ showToast('✅ 复活备份已推送'); }
     });
