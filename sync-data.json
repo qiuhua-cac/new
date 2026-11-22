@@ -5512,11 +5512,21 @@
         "name": "C"
       }
     ],
-    "updatedAt": 1795365541736,
+    "updatedAt": 1795358346278,
     "device": "pc"
   },
   "history": {
-    "list": [],
+    "list": [
+      "一级",
+      "测试",
+      "测试A",
+      "硝化过程",
+      "硝化过程需要消耗",
+      "总氮",
+      "纳管标准",
+      "SVI",
+      "svl"
+    ],
     "updatedAt": 0,
     "device": "pc"
   },
@@ -7384,7 +7394,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1795365541740,
+    "updatedAt": 1795358346281,
     "device": "pc",
     "__practice_only__": [
       {
