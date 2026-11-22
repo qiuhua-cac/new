@@ -4,7 +4,7 @@
     "repo": "new",
     "path": "index.html",
     "token": "",
-    "updatedAt": 1795343303727,
+    "updatedAt": 1795343308881,
     "device": "pc"
   },
   "reviveBackup": {
@@ -7309,13 +7309,6 @@
         "e": "",
         "hidden": false,
         "isChoice": false
-      },
-      {
-        "q": "测试",
-        "a": "测试",
-        "e": "",
-        "hidden": false,
-        "isChoice": false
       }
     ],
     "updatedAt": 1795343229758,
@@ -7327,7 +7320,7 @@
     "multiOptions": {},
     "singleCorrect": {},
     "multiCorrect": {},
-    "updatedAt": 1795343303751,
+    "updatedAt": 0,
     "device": "pc"
   },
   "practiceEdit": {
@@ -7785,10 +7778,7 @@
     }
   },
   "userMastered": {
-    "map": {
-      "test1": []
-    },
-    "updatedAt": 1795343331116,
+    "updatedAt": 0,
     "device": "pc"
   }
 }
