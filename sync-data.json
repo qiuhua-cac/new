@@ -4,7 +4,7 @@
     "repo": "new",
     "path": "index.html",
     "token": "",
-    "updatedAt": 1795343509247,
+    "updatedAt": 1795344281198,
     "device": "pc"
   },
   "reviveBackup": {
@@ -7320,7 +7320,7 @@
     "multiOptions": {},
     "singleCorrect": {},
     "multiCorrect": {},
-    "updatedAt": 1795343509283,
+    "updatedAt": 0,
     "device": "pc"
   },
   "practiceEdit": {
@@ -7778,10 +7778,7 @@
     }
   },
   "userMastered": {
-    "map": {
-      "test1": []
-    },
-    "updatedAt": 1795343516176,
+    "updatedAt": 0,
     "device": "pc"
   }
 }
