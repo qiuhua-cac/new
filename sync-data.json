@@ -4,7 +4,7 @@
     "repo": "new",
     "path": "index.html",
     "token": "",
-    "updatedAt": 1795354178627,
+    "updatedAt": 1795354279717,
     "device": "pc"
   },
   "reviveBackup": {
@@ -17,7 +17,7 @@
   "backups": {
     "list": [
       {
-        "time": "2026/11/22 19:24:03",
+        "time": "2026/11/22 21:30:09",
         "data": [
           {
             "q": "凡在高地面（）的地点进行的工作都应视作高处作业",
@@ -1836,6 +1836,13 @@
             "q": "一级处理主要通过（）方法去除污水中的悬浮物",
             "a": "物理｜沉淀｜物理沉淀",
             "e": "任意答案即可",
+            "hidden": false,
+            "isChoice": false
+          },
+          {
+            "q": "测试",
+            "a": "1",
+            "e": "",
             "hidden": false,
             "isChoice": false
           }
@@ -5491,7 +5498,7 @@
         "name": "C"
       }
     ],
-    "updatedAt": 1795354178734,
+    "updatedAt": 1795354209375,
     "device": "pc"
   },
   "history": {
@@ -7339,7 +7346,7 @@
         "isChoice": false
       }
     ],
-    "updatedAt": 1795347179859,
+    "updatedAt": 1795354209379,
     "device": "pc"
   },
   "practiceCfg": {
@@ -7352,7 +7359,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1795354178739,
+    "updatedAt": 1795354209379,
     "device": "pc",
     "__practice_only__": [
       {
