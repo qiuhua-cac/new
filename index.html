@@ -1324,27 +1324,24 @@ const USER_SESSION_KEY = 'zktest_user_session_v1';
 const USER_MASTERED_KEY = 'zktest_study_mastered_v1';
 
 async function fetchUsersJson(){
-    const apiBase = `https://api.github.com/repos/${ZK_DATA_OWNER}/${ZK_DATA_REPO}/contents/${ZK_DATA_PATH}`;
+    const cfg = loadAtomGitCfg();
+    if(!isAtomGitConfigured(cfg)) return null;
+    const apiBase = `https://api.atomgit.com/api/v5/repos/${cfg.owner}/${cfg.repo}/contents/${ZK_DATA_PATH}`;
     try{
-        const resp = await fetch(apiBase + '?t=' + Date.now(), {
+        const resp = await fetchWithTimeout(apiBase + '?t=' + Date.now(), {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${ZK_DATA_TOKEN}`,
-                'Accept': 'application/vnd.github.v3+json'
-            },
+            headers: { 'Authorization': `Bearer ${cfg.token}`, 'Accept': 'application/json' },
             cache: 'no-store'
         });
         if(!resp.ok){
-            if(resp.status === 404){
-                return { users: {}, _sha: null };
-            }
+            if(resp.status === 404) return { users: {}, _sha: null };
             console.warn('fetchUsersJson 失败', resp.status);
             return null;
         }
         const data = await resp.json();
         let text = '';
         if(!data.content && data.download_url){
-            const rawResp = await fetch(data.download_url, { cache: 'no-store' });
+            const rawResp = await fetchWithTimeout(data.download_url, { cache: 'no-store' });
             text = await rawResp.text();
         }else{
             text = base64ToUtf8(data.content);
@@ -1360,11 +1357,14 @@ async function fetchUsersJson(){
 }
 
 async function pushUsersJson(usersObj, sha, commitMsg){
-    const apiBase = `https://api.github.com/repos/${ZK_DATA_OWNER}/${ZK_DATA_REPO}/contents/${ZK_DATA_PATH}`;
+    const cfg = loadAtomGitCfg();
+    if(!isAtomGitConfigured(cfg)) return false;
+    const apiBase = `https://api.atomgit.com/api/v5/repos/${cfg.owner}/${cfg.repo}/contents/${ZK_DATA_PATH}`;
     const clean = { users: usersObj };
     const content = JSON.stringify(clean, null, 2);
     const contentB64 = utf8ToBase64(content);
-    for(let attempt = 0; attempt < 5; attempt++){
+    let exists = !!sha;
+    for(let attempt = 0; attempt < 3; attempt++){
         const body = {
             message: commitMsg || `users.json ${new Date().toLocaleString('zh-CN',{hour12:false})}`,
             content: contentB64,
@@ -1372,25 +1372,22 @@ async function pushUsersJson(usersObj, sha, commitMsg){
         };
         if(sha) body.sha = sha;
         try{
-            const putResp = await fetch(apiBase, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${ZK_DATA_TOKEN}`,
-                    'Accept': 'application/vnd.github.v3+json',
-                    'Content-Type': 'application/json'
-                },
+            if(!sha){
+                const g = await fetchWithTimeout(apiBase, { method:'GET', headers:{ 'Authorization':`Bearer ${cfg.token}`, 'Accept':'application/json' } });
+                if(g.ok){ const d = await g.json(); sha = d.sha; exists = true; }
+                else if(g.status !== 404){ return false; }
+            }
+            const method = exists ? 'PUT' : 'POST';
+            const putResp = await fetchWithTimeout(apiBase, {
+                method,
+                headers: { 'Authorization':`Bearer ${cfg.token}`, 'Accept':'application/json', 'Content-Type':'application/json' },
                 body: JSON.stringify(body)
             });
-            if(putResp.ok){
-                return true;
-            }
+            if(putResp.ok || putResp.status === 201) return true;
             if(putResp.status === 409){
                 await new Promise(r => setTimeout(r, 200 + attempt * 200));
                 const latest = await fetchUsersJson();
-                if(latest && latest._sha){
-                    sha = latest._sha;
-                    continue;
-                }
+                if(latest && latest._sha){ sha = latest._sha; continue; }
             }
             console.warn('pushUsersJson 失败', putResp.status, await putResp.text());
             return false;
@@ -1561,25 +1558,13 @@ async function yesapiRemoveOneMastered(username, questionText){
 
 async function yesapiLoadMastered(username){
     if(!username) return null;
-    const url = YESAPI_BASE + '?s=App.Table.FreeQuery';
-    const params = new URLSearchParams();
-    params.append('app_key', YESAPI_APP_KEY);
-    params.append('model_name', YESAPI_MODEL);
-    params.append('where', JSON.stringify([["uuid","LIKE",username + '_%']]));
-    params.append('perpage', '200');
     try{
-        const resp = await fetch(url + '&' + params.toString(), { method: 'GET', cache: 'no-store' });
-        if(!resp.ok){ console.warn('yesapiLoad HTTP', resp.status); return null; }
-        const json = await resp.json();
-        if(!json || json.ret !== 200 || !json.data) return null;
-        const list = json.data.list || [];
-        const result = [];
-        for(const row of list){
-            if(row.mastered) result.push(row.mastered);
-        }
-        return result;
+        const data = await fetchUsersJson();
+        if(!data || !data.users[username]) return [];
+        const u = data.users[username];
+        return Array.isArray(u.mastered) ? u.mastered : [];
     }catch(e){
-        console.warn('yesapiLoad 异常', e);
+        console.warn('LoadMastered 异常', e);
         return null;
     }
 }
@@ -1793,7 +1778,7 @@ function saveReviveBackup(content, extra){
     if(extra){ Object.assign(obj, extra); obj.updatedAt = nowTs(); obj.device = DEVICE; }
     try{ localStorage.setItem(REVIVE_KEY, JSON.stringify(obj)); }
     catch(e){ console.warn('复活备份保存失败', e); return false; }
-    if(typeof pushSyncData === 'function') pushSyncData(true);
+    if(typeof pushSyncData === 'function') pushSyncData(true, true);
     return true;
 }
 
@@ -2497,12 +2482,14 @@ async function pushSyncToGitHub(contentB64){
     }
     return false;
 }
-async function pushSyncData(silent = true){
+async function pushSyncData(silent = true, includeRevive = false){
 if(DEVICE === 'mobile'){ return false; }
     if(_pushSyncRunning){ _pushSyncPending = true; return true; }
     _pushSyncRunning = true;
     try{
         const sync = loadLocalSync();
+        // 平时保存不带复活备份（体积大），仅复活备份变更时单独带上
+        if(!includeRevive) delete sync.reviveBackup;
         const content = JSON.stringify(sync, null, 2);
         const contentB64 = utf8ToBase64(content);
         let ok = await pushSyncToAtomGit(contentB64);
@@ -2588,20 +2575,14 @@ if(DEVICE === 'mobile'){ return false; }
     const html = await getFullPageHTML();
     if(!html){ if(!silent) showToast('生成页面代码失败'); return false; }
     const msg = `更新完整页面（${questionBank.length}题） ${new Date().toLocaleString('zh-CN',{hour12:false})}`;
-
-    // 优先同步到 AtomGit（主仓库）
-    const atomOk = await pushContentToAtomGit(html, msg, silent);
-    if(!atomOk && !silent) showToast('⚠️ AtomGit 主仓库同步失败，将尝试 GitHub 兜底备份');
-
-    // GitHub 兜底：后台异步推送，不阻塞主流程、不等结果
-    const ghCfg = loadGhCfg();
-    if(isGhConfigured(ghCfg)){
-        Promise.resolve().then(()=>{ pushContentToGitHub(html, msg, true); });
-        if(!silent && atomOk) showToast('✅ AtomGit 成功，GitHub 后台兜底备份中');
-    }else{
-        if(!silent && atomOk) showToast('✅ AtomGit 主仓库成功，GitHub 未配置，跳过兜底备份');
-    }
-    return atomOk;
+    // 完整页面 HTML 体积大，后台异步推送，不阻塞保存主流程
+    Promise.resolve().then(()=>{
+        pushContentToAtomGit(html, msg, true);
+        if(isGhConfigured(loadGhCfg())){
+            Promise.resolve().then(()=>{ pushContentToGitHub(html, msg, true); });
+        }
+    });
+    return true;
 }
 async function testGitHubConnection(silent){
     const cfg = loadGhCfg();
@@ -5005,37 +4986,16 @@ async function syncMasteredToCloud(){
     if(!currentUser || !currentUser.username) return false;
     const uname = currentUser.username;
     const localList = getMasteredListForCurrentUser();
-    const cloudList = await yesapiLoadMastered(uname);
-    if(cloudList === null) return false;
-    const cloudSet = new Set(cloudList);
-    const localSet = new Set(localList);
-    let ok = true;
-    for(const q of localList){
-        if(!cloudSet.has(q)){
-            const r = await yesapiAddOneMastered(uname, q);
-            if(!r) ok = false;
-        }
+    try{
+        const data = await fetchUsersJson();
+        if(!data || !data.users[uname]) return false;
+        data.users[uname].mastered = localList;
+        data.users[uname].lastLogin = nowTs();
+        return await pushUsersJson(data.users, data._sha, `更新 ${uname} 已会标记`);
+    }catch(e){
+        console.warn('syncMasteredToCloud 异常', e);
+        return false;
     }
-    for(const q of cloudList){
-        if(!localSet.has(q)){
-            const r = await yesapiRemoveOneMastered(uname, q);
-            if(!r) ok = false;
-        }
-    }
-    (async ()=>{
-        for(let attempt = 0; attempt < 3; attempt++){
-            try{
-                const data = await fetchUsersJson();
-                if(!data || !data.users[uname]) return;
-                data.users[uname].mastered = localList;
-                data.users[uname].lastLogin = nowTs();
-                const r = await pushUsersJson(data.users, data._sha, `更新 ${uname} 已会标记`);
-                if(r) return;
-            }catch(e){}
-            await new Promise(r => setTimeout(r, 500 + attempt * 500));
-        }
-    })();
-    return ok;
 }
 
 async function onToggleMastered(questionText, btnEl){
@@ -5070,16 +5030,10 @@ async function onToggleMastered(questionText, btnEl){
 async function loadMasteredFromCloud(){
     if(!currentUser || !currentUser.username) return;
     const uname = currentUser.username;
-    let cloudList = await yesapiLoadMastered(uname);
-    if(cloudList === null){
-        console.warn('YesApi 拉取失败，回退 GitHub');
-        const data = await fetchUsersJson();
-        if(!data || !data.users[uname]) return;
-        const u = data.users[uname];
-        cloudList = Array.isArray(u.mastered) ? u.mastered : [];
-    }
+    const cloudList = await yesapiLoadMastered(uname);
+    const list = Array.isArray(cloudList) ? cloudList : [];
     const localMap = loadMasteredMap();
-    localMap[uname] = cloudList;
+    localMap[uname] = list;
     saveMasteredMap(localMap);
 }
 let isStudyMode = false;
