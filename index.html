@@ -1298,7 +1298,7 @@ const GH_TOKEN = GH_PARTS.join('');
 const GH_OWNER = 'qiuhua-cac';
 const GH_REPO  = 'new';
 const GH_PATH  = 'index.html';
-const GH_IS_LOCAL = location.protocol === 'http:' && (location.hostname === '127.0.0.1' || location.hostname === 'localhost');
+// GitHub 兜底已放开为全环境后台静默推送，不再按本地/线上环境拦截
 const GH_MAX_RETRY = 3;
 
 function detectDevice(){
@@ -1421,9 +1421,8 @@ async function pushUsersJson(usersObj, sha, commitMsg){
     return false;
 }
 
-// GitHub users.json 后台冷备：仅本地环境启用，最多重试 3 次，失败仅告警不阻塞主流程
+// GitHub users.json 后台冷备：全环境静默备份，最多重试 3 次，失败仅告警不阻塞主流程
 async function pushUsersJsonToGithub(usersObj, commitMsg){
-    if(!GH_IS_LOCAL) return false;
     const cfg = loadGhCfg();
     if(!isGhConfigured(cfg)) return false;
     const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${AT_USERS_PATH}`;
@@ -2281,7 +2280,6 @@ async function getFullPageHTML(){
 }
 
 async function pushContentToGitHub(content, message, silent){
-    if(!GH_IS_LOCAL) return false;
     const cfg = loadGhCfg();
     if(!isGhConfigured(cfg)){
         if(!silent) showToast('请先完整配置 GitHub 信息');
@@ -2511,7 +2509,6 @@ async function pushSyncToAtomGit(contentB64){
     }catch(e){ console.warn('AtomGit sync-data 推送失败', e.message); return false; }
 }
 async function pushSyncToGitHub(contentB64){
-    if(!GH_IS_LOCAL) return false;
     const cfg = loadGhCfg();
     if(!isGhConfigured(cfg)) return false;
     const syncPath = getSyncPath(cfg);
@@ -2642,7 +2639,6 @@ if(DEVICE === 'mobile'){ return false; }
     return true;
 }
 async function testGitHubConnection(silent){
-    if(!GH_IS_LOCAL){ if(!silent) showToast('GitHub 兜底仅本地环境启用'); return false; }
     const cfg = loadGhCfg();
     if(!isGhConfigured(cfg)){ if(!silent) showToast('请先完整填写并保存配置'); return false; }
     const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
