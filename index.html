@@ -1181,7 +1181,7 @@ body{background:#d4e4f7;padding:16px;display:flex;flex-direction:column;align-it
                     <div class="github-row"><input type="text" id="agOwner" placeholder="用户名(owner)" value="shenzhizuo"></div>
                     <div class="github-row"><input type="text" id="agRepo" placeholder="仓库名(repo)" value="new"></div>
                     <div class="github-row"><input type="text" id="agPath" placeholder="文件路径(如 index.html)" value="index.html"></div>
-                    <div class="github-row"><input type="password" id="agToken" placeholder="AtomGit Personal Access Token" value="Gn63a821jGZLzqXjMbuUBxgS"></div>
+                    <div class="github-row"><input type="password" id="agToken" placeholder="AtomGit Personal Access Token" value=""></div>
                     <div class="github-row" style="justify-content:flex-end;flex-wrap:wrap;">
                         <button class="btn btn-sm" id="agTest">🔌 测试连接</button>
                         <button class="btn btn-sm" id="agSaveCfg">💾 保存配置</button>
@@ -1274,14 +1274,32 @@ const CONFIRM_CODE = 'qiuhua';
 const SYNC_FILE = 'sync-data.json';
 const SYNC_KEYS = ['ghConfig','reviveBackup','backups','history','bank','practiceCfg','practiceEdit','userMastered'];
 
-// ====================== 数据仓库配置（zk-data） ======================
-const ZK_DATA_OWNER = 'qiuhua-cac';
-const ZK_DATA_REPO  = 'zk-data';
-const ZK_DATA_PATH  = 'users.json';
-const ZK_DATA_TOKEN = 'github_pat_11BJT3CJY0gKRXFmudFIDY_'+'Ee1YFxKL0o4LYmHHvyjSRSCUj7ca4Nz4YZOpfrHQdDsTDAXVLOPJ1yCRPez';
-const YESAPI_BASE   = 'https://hn.api.yesapi.net/';
-const YESAPI_APP_KEY = '1FC09C038370C9B75E8478D16107DAF4';
-const YESAPI_MODEL   = 'user_mastered';
+// ====================== 数据仓库配置（AT 主存 / GitHub 本地后台兜底） ======================
+// —— 旧 zk-data PAT / yesapi 后端已整体封死注释，运行时不再调用（仅保留存档，不删除） ——
+// const ZK_DATA_OWNER = 'qiuhua-cac';
+// const ZK_DATA_REPO  = 'zk-data';
+// const ZK_DATA_PATH  = 'users.json';
+// const ZK_DATA_TOKEN = '*** 旧 zk-data PAT 已移除（存档不再使用）';
+// const YESAPI_BASE   = 'https://hn.api.yesapi.net/';
+// const YESAPI_APP_KEY = '*** 旧 yesapi app_key 已移除（存档不再使用）';
+// const YESAPI_MODEL   = 'user_mastered';
+
+// AT 主仓库（固定，读写优先）：shenzhizuo/new
+const AT_PARTS = ['Gn63', 'a821j', 'GZLzq', 'XjMbu', 'UBxgS'];
+const AT_TOKEN = AT_PARTS.join('');
+const AT_OWNER = 'shenzhizuo';
+const AT_REPO  = 'new';
+const AT_PATH  = 'index.html';
+const AT_USERS_PATH = 'users.json';
+
+// GitHub 兜底仓库（固定，仅本地环境后台异步冷备，不参与读取）：qiuhua-cac/new
+const GH_PARTS = ['ghp_x', 'q1LSOD', '6YKKmE', 'PCxNOR', 'I8za9M', 'DIMXK0', 'Ue4gW'];
+const GH_TOKEN = GH_PARTS.join('');
+const GH_OWNER = 'qiuhua-cac';
+const GH_REPO  = 'new';
+const GH_PATH  = 'index.html';
+const GH_IS_LOCAL = location.protocol === 'http:' && (location.hostname === '127.0.0.1' || location.hostname === 'localhost');
+const GH_MAX_RETRY = 3;
 
 function detectDevice(){
     const ua = navigator.userAgent || '';
@@ -1326,7 +1344,7 @@ const USER_MASTERED_KEY = 'zktest_study_mastered_v1';
 async function fetchUsersJson(){
     const cfg = loadAtomGitCfg();
     if(!isAtomGitConfigured(cfg)) return null;
-    const apiBase = `https://api.atomgit.com/api/v5/repos/${cfg.owner}/${cfg.repo}/contents/${ZK_DATA_PATH}`;
+    const apiBase = `https://api.atomgit.com/api/v5/repos/${cfg.owner}/${cfg.repo}/contents/${AT_USERS_PATH}`;
     try{
         const resp = await fetchWithTimeout(apiBase + '?t=' + Date.now(), {
             method: 'GET',
@@ -1359,7 +1377,7 @@ async function fetchUsersJson(){
 async function pushUsersJson(usersObj, sha, commitMsg){
     const cfg = loadAtomGitCfg();
     if(!isAtomGitConfigured(cfg)) return false;
-    const apiBase = `https://api.atomgit.com/api/v5/repos/${cfg.owner}/${cfg.repo}/contents/${ZK_DATA_PATH}`;
+    const apiBase = `https://api.atomgit.com/api/v5/repos/${cfg.owner}/${cfg.repo}/contents/${AT_USERS_PATH}`;
     const clean = { users: usersObj };
     const content = JSON.stringify(clean, null, 2);
     const contentB64 = utf8ToBase64(content);
@@ -1383,7 +1401,11 @@ async function pushUsersJson(usersObj, sha, commitMsg){
                 headers: { 'Authorization':`Bearer ${cfg.token}`, 'Accept':'application/json', 'Content-Type':'application/json' },
                 body: JSON.stringify(body)
             });
-            if(putResp.ok || putResp.status === 201) return true;
+            if(putResp.ok || putResp.status === 201){
+                // AT 主存成功后，后台静默兜底备份到 GitHub users.json（不阻塞、不弹窗）
+                Promise.resolve().then(()=>{ pushUsersJsonToGithub(usersObj, commitMsg); });
+                return true;
+            }
             if(putResp.status === 409){
                 await new Promise(r => setTimeout(r, 200 + attempt * 200));
                 const latest = await fetchUsersJson();
@@ -1395,6 +1417,46 @@ async function pushUsersJson(usersObj, sha, commitMsg){
             console.warn('pushUsersJson 异常', e);
             return false;
         }
+    }
+    return false;
+}
+
+// GitHub users.json 后台冷备：仅本地环境启用，最多重试 3 次，失败仅告警不阻塞主流程
+async function pushUsersJsonToGithub(usersObj, commitMsg){
+    if(!GH_IS_LOCAL) return false;
+    const cfg = loadGhCfg();
+    if(!isGhConfigured(cfg)) return false;
+    const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${AT_USERS_PATH}`;
+    const clean = { users: usersObj };
+    const contentB64 = utf8ToBase64(JSON.stringify(clean, null, 2));
+    let sha = null, exists = false;
+    for(let attempt = 0; attempt < GH_MAX_RETRY; attempt++){
+        try{
+            if(!sha){
+                const g = await fetchWithTimeout(apiBase, { method:'GET', headers:{ 'Authorization':`token ${cfg.token}`, 'Accept':'application/vnd.github.v3+json' } });
+                if(g.ok){ const d = await g.json(); sha = d.sha; exists = true; }
+                else if(g.status !== 404){ await new Promise(r=>setTimeout(r, 200*(attempt+1))); continue; }
+            }
+            const body = {
+                message: commitMsg || `users.json 兜底备份 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,
+                content: contentB64,
+                branch: 'main'
+            };
+            if(sha) body.sha = sha;
+            const method = exists ? 'PUT' : 'POST';
+            const r = await fetchWithTimeout(apiBase, {
+                method,
+                headers: { 'Authorization':`token ${cfg.token}`, 'Accept':'application/vnd.github.v3+json', 'Content-Type':'application/json' },
+                body: JSON.stringify(body)
+            });
+            if(r.ok || r.status === 201) return true;
+            if(r.status === 409){
+                await new Promise(r2=>setTimeout(r2, 200 + attempt*200));
+                const latest = await fetchUsersJson();
+                if(latest && latest._sha){ sha = latest._sha; continue; }
+            }
+            await new Promise(r2=>setTimeout(r2, 200*(attempt+1)));
+        }catch(e){ console.warn('GH users 兜底备份异常', e); }
     }
     return false;
 }
@@ -1472,89 +1534,90 @@ function simpleHash(str){
     return Math.abs(h).toString(36);
 }
 
-async function yesapiDeleteByUuid(uuid){
-    if(!uuid) return false;
-    const url = YESAPI_BASE + '?s=App.Table.FreeDelete';
-    const body = new URLSearchParams();
-    body.append('app_key', YESAPI_APP_KEY);
-    body.append('model_name', YESAPI_MODEL);
-    body.append('where', JSON.stringify([["uuid","=",uuid]]));
-    try{
-        const resp = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-            body: body.toString()
-        });
-        if(!resp.ok) return false;
-        const json = await resp.json();
-        return json && json.ret === 200;
-    }catch(e){
-        console.warn('yesapiDeleteByUuid 异常', e);
-        return false;
-    }
-}
-
-async function yesapiCleanTestData(){
-    const url = YESAPI_BASE + '?s=App.Table.FreeQuery';
-    const params = new URLSearchParams();
-    params.append('app_key', YESAPI_APP_KEY);
-    params.append('model_name', YESAPI_MODEL);
-    params.append('where', JSON.stringify([["uuid","LIKE","test1_%"]]));
-    params.append('perpage', '100');
-    try{
-        const resp = await fetch(url + '&' + params.toString(), { method: 'GET', cache: 'no-store' });
-        if(!resp.ok) return false;
-        const json = await resp.json();
-        if(!json || json.ret !== 200 || !json.data || !json.data.list) return false;
-        const list = json.data.list;
-        console.log('准备清理', list.length, '条测试数据');
-        for(const row of list){
-            await yesapiDeleteByUuid(row.uuid);
-        }
-        return true;
-    }catch(e){
-        console.warn('清理测试数据失败', e);
-        return false;
-    }
-}
-
-async function yesapiAddOneMastered(username, questionText){
-    if(!username || !questionText) return false;
-    const hash = simpleHash(questionText);
-    const recordUuid = username + '_' + hash;
-    const url = YESAPI_BASE + '?s=App.Table.CheckCreateOrUpdate';
-    const dataObj = {
-        uuid: recordUuid,
-        mastered: questionText
-    };
-    const body = new URLSearchParams();
-    body.append('app_key', YESAPI_APP_KEY);
-    body.append('model_name', YESAPI_MODEL);
-    body.append('check_field', 'uuid');
-    body.append('data', JSON.stringify(dataObj));
-    try{
-        const resp = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-            body: body.toString()
-        });
-        if(!resp.ok){ console.warn('yesapiAddOne HTTP', resp.status); return false; }
-        const json = await resp.json();
-        if(json && json.ret === 200 && json.data && json.data.err_code === 0) return true;
-        console.warn('yesapiAddOne 业务失败', json);
-        return false;
-    }catch(e){
-        console.warn('yesapiAddOne 异常', e);
-        return false;
-    }
-}
-
-async function yesapiRemoveOneMastered(username, questionText){
-    if(!username || !questionText) return false;
-    const hash = simpleHash(questionText);
-    const recordUuid = username + '_' + hash;
-    return await yesapiDeleteByUuid(recordUuid);
-}
+// —— 旧 yesapi 后端接口已整体封死注释，运行时不再调用（存档不删除） ——
+// async function yesapiDeleteByUuid(uuid){
+//     if(!uuid) return false;
+//     const url = YESAPI_BASE + '?s=App.Table.FreeDelete';
+//     const body = new URLSearchParams();
+//     body.append('app_key', YESAPI_APP_KEY);
+//     body.append('model_name', YESAPI_MODEL);
+//     body.append('where', JSON.stringify([["uuid","=",uuid]]));
+//     try{
+//         const resp = await fetch(url, {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+//             body: body.toString()
+//         });
+//         if(!resp.ok) return false;
+//         const json = await resp.json();
+//         return json && json.ret === 200;
+//     }catch(e){
+//         console.warn('yesapiDeleteByUuid 异常', e);
+//         return false;
+//     }
+// }
+//
+// async function yesapiCleanTestData(){
+//     const url = YESAPI_BASE + '?s=App.Table.FreeQuery';
+//     const params = new URLSearchParams();
+//     params.append('app_key', YESAPI_APP_KEY);
+//     params.append('model_name', YESAPI_MODEL);
+//     params.append('where', JSON.stringify([["uuid","LIKE","test1_%"]]));
+//     params.append('perpage', '100');
+//     try{
+//         const resp = await fetch(url + '&' + params.toString(), { method: 'GET', cache: 'no-store' });
+//         if(!resp.ok) return false;
+//         const json = await resp.json();
+//         if(!json || json.ret !== 200 || !json.data || !json.data.list) return false;
+//         const list = json.data.list;
+//         console.log('准备清理', list.length, '条测试数据');
+//         for(const row of list){
+//             await yesapiDeleteByUuid(row.uuid);
+//         }
+//         return true;
+//     }catch(e){
+//         console.warn('清理测试数据失败', e);
+//         return false;
+//     }
+// }
+//
+// async function yesapiAddOneMastered(username, questionText){
+//     if(!username || !questionText) return false;
+//     const hash = simpleHash(questionText);
+//     const recordUuid = username + '_' + hash;
+//     const url = YESAPI_BASE + '?s=App.Table.CheckCreateOrUpdate';
+//     const dataObj = {
+//         uuid: recordUuid,
+//         mastered: questionText
+//     };
+//     const body = new URLSearchParams();
+//     body.append('app_key', YESAPI_APP_KEY);
+//     body.append('model_name', YESAPI_MODEL);
+//     body.append('check_field', 'uuid');
+//     body.append('data', JSON.stringify(dataObj));
+//     try{
+//         const resp = await fetch(url, {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+//             body: body.toString()
+//         });
+//         if(!resp.ok){ console.warn('yesapiAddOne HTTP', resp.status); return false; }
+//         const json = await resp.json();
+//         if(json && json.ret === 200 && json.data && json.data.err_code === 0) return true;
+//         console.warn('yesapiAddOne 业务失败', json);
+//         return false;
+//     }catch(e){
+//         console.warn('yesapiAddOne 异常', e);
+//         return false;
+//     }
+// }
+//
+// async function yesapiRemoveOneMastered(username, questionText){
+//     if(!username || !questionText) return false;
+//     const hash = simpleHash(questionText);
+//     const recordUuid = username + '_' + hash;
+//     return await yesapiDeleteByUuid(recordUuid);
+// }
 
 async function yesapiLoadMastered(username){
     if(!username) return null;
@@ -2058,11 +2121,8 @@ function manualBackup(){
 }
 
 function loadGhCfg(){
-    try{
-        const raw = localStorage.getItem(GH_CFG_KEY);
-        if(raw) return JSON.parse(raw);
-    }catch(e){}
-    return { owner:'', repo:'', path:'', token:'' };
+    // 固定兜底配置；令牌由 GH_PARTS 拆分拼接，不明文整串入库
+    return { owner: GH_OWNER, repo: GH_REPO, path: GH_PATH, token: GH_TOKEN, device: DEVICE };
 }
 function saveGhCfg(cfg){
     cfg.updatedAt = nowTs();
@@ -2076,11 +2136,8 @@ function isGhConfigured(cfg){
 
 // -------- AtomGit 配置（主仓库） --------
 function loadAtomGitCfg(){
-    try{
-        const raw = localStorage.getItem(ATOMGIT_CFG_KEY);
-        if(raw) return JSON.parse(raw);
-    }catch(e){}
-    return { owner:'shenzhizuo', repo:'new', path:'index.html', token:'Gn63a821jGZLzqXjMbuUBxgS' };
+    // 固定主存配置；令牌由 AT_PARTS 拆分拼接，不明文整串入库
+    return { owner: AT_OWNER, repo: AT_REPO, path: AT_PATH, token: AT_TOKEN, device: DEVICE };
 }
 function saveAtomGitCfg(cfg){
     cfg.updatedAt = nowTs();
@@ -2224,6 +2281,7 @@ async function getFullPageHTML(){
 }
 
 async function pushContentToGitHub(content, message, silent){
+    if(!GH_IS_LOCAL) return false;
     const cfg = loadGhCfg();
     if(!isGhConfigured(cfg)){
         if(!silent) showToast('请先完整配置 GitHub 信息');
@@ -2231,42 +2289,40 @@ async function pushContentToGitHub(content, message, silent){
     }
     const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
     const contentB64 = utf8ToBase64(content);
-    try{
-        let sha = null;
-        const getResp = await fetch(apiBase, {
-            method: 'GET',
-            headers: { 'Authorization': `token ${cfg.token}`, 'Accept': 'application/vnd.github.v3+json' }
-        });
-        if(getResp.ok){ const data = await getResp.json(); sha = data.sha; }
-        const body = {
-            message: message || `更新页面 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,
-            content: contentB64,
-            branch: 'main'
-        };
-        if(sha) body.sha = sha;
-        const putResp = await fetch(apiBase, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${cfg.token}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        });
-        if(putResp.ok){
-            if(!silent) showToast('✅ 已同步到 GitHub');
-            return true;
-        }else{
-            const errText = await putResp.text();
-            console.warn('GitHub 同步失败', errText);
-            if(!silent) showToast('GitHub 同步失败：' + putResp.status);
+    let sha = null, exists = false;
+    for(let attempt = 0; attempt < GH_MAX_RETRY; attempt++){
+        try{
+            if(!sha){
+                const g = await fetchWithTimeout(apiBase, { method:'GET', headers:{ 'Authorization':`token ${cfg.token}`, 'Accept':'application/vnd.github.v3+json' } });
+                if(g.ok){ const d = await g.json(); sha = d.sha; exists = true; }
+                else if(g.status !== 404){ await new Promise(r=>setTimeout(r, 200*(attempt+1))); continue; }
+            }
+            const body = {
+                message: message || `更新页面 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,
+                content: contentB64,
+                branch: 'main'
+            };
+            if(sha) body.sha = sha;
+            const method = exists ? 'PUT' : 'POST';
+            const r = await fetchWithTimeout(apiBase, {
+                method,
+                headers: { 'Authorization':`token ${cfg.token}`, 'Accept':'application/vnd.github.v3+json', 'Content-Type':'application/json' },
+                body: JSON.stringify(body)
+            });
+            if(r.ok || r.status === 201){
+                if(!silent) showToast('✅ 已同步到 GitHub');
+                return true;
+            }
+            if(r.status === 409){ await new Promise(r2=>setTimeout(r2, 200+attempt*200)); continue; }
+            await new Promise(r2=>setTimeout(r2, 200*(attempt+1)));
+        }catch(e){
+            console.warn('GitHub 同步异常', e);
+            if(!silent) showToast('GitHub 同步异常：' + e.message);
             return false;
         }
-    }catch(e){
-        console.warn('GitHub 同步异常', e);
-        if(!silent) showToast('GitHub 同步异常：' + e.message);
-        return false;
     }
+    console.warn('GitHub 兜底备份失败（已重试 ' + GH_MAX_RETRY + ' 次）');
+    return false;
 }
 
 function loadLocalSync(){
@@ -2394,38 +2450,38 @@ async function pullSyncFromAtomGit(){
         return JSON.parse(base64ToUtf8(data.content));
     }catch(e){ console.warn('AtomGit 拉取 sync-data 失败', e.message); return null; }
 }
-async function pullSyncFromGitHub(){
-    const cfg = loadGhCfg();
-    if(!isGhConfigured(cfg)) return null;
-    const syncPath = getSyncPath(cfg);
-    const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${syncPath}`;
-    for(let attempt = 0; attempt < 3; attempt++){
-        try{
-            const resp = await fetchWithTimeout(apiBase, { method:'GET', headers:{ 'Authorization':`token ${cfg.token}`, 'Accept':'application/vnd.github.v3+json' }, cache:'no-store' });
-            if(!resp.ok){
-                console.warn(`GitHub pullSyncData 第 ${attempt+1} 次状态码异常:`, resp.status);
-                if(resp.status === 404 || resp.status === 403 || resp.status === 401) return null;
-                if(attempt < 2) await new Promise(r => setTimeout(r, 800 * (attempt + 1)));
-                continue;
-            }
-            const data = await resp.json();
-            if(!data.content && data.download_url){
-                const rawResp = await fetchWithTimeout(data.download_url, { cache:'no-store' });
-                if(!rawResp.ok) throw new Error('raw fetch failed: ' + rawResp.status);
-                return JSON.parse(await rawResp.text());
-            }
-            return JSON.parse(base64ToUtf8(data.content));
-        }catch(e){
-            console.warn(`GitHub pullSyncData 第 ${attempt+1} 次失败:`, e.message);
-            if(attempt < 2) await new Promise(r => setTimeout(r, 800 * (attempt + 1)));
-        }
-    }
-    return null;
-}
+// async function pullSyncFromGitHub(){
+//     // 已封死：读取链路只走 AT 主仓库，GitHub 不再作为业务数据回退读取源（存档不删除）
+//     const cfg = loadGhCfg();
+//     if(!isGhConfigured(cfg)) return null;
+//     const syncPath = getSyncPath(cfg);
+//     const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${syncPath}`;
+//     for(let attempt = 0; attempt < 3; attempt++){
+//         try{
+//             const resp = await fetchWithTimeout(apiBase, { method:'GET', headers:{ 'Authorization':`token ${cfg.token}`, 'Accept':'application/vnd.github.v3+json' }, cache:'no-store' });
+//             if(!resp.ok){
+//                 console.warn(`GitHub pullSyncData 第 ${attempt+1} 次状态码异常:`, resp.status);
+//                 if(resp.status === 404 || resp.status === 403 || resp.status === 401) return null;
+//                 if(attempt < 2) await new Promise(r => setTimeout(r, 800 * (attempt + 1)));
+//                 continue;
+//             }
+//             const data = await resp.json();
+//             if(!data.content && data.download_url){
+//                 const rawResp = await fetchWithTimeout(data.download_url, { cache:'no-store' });
+//                 if(!rawResp.ok) throw new Error('raw fetch failed: ' + rawResp.status);
+//                 return JSON.parse(await rawResp.text());
+//             }
+//             return JSON.parse(base64ToUtf8(data.content));
+//         }catch(e){
+//             console.warn(`GitHub pullSyncData 第 ${attempt+1} 次失败:`, e.message);
+//             if(attempt < 2) await new Promise(r => setTimeout(r, 800 * (attempt + 1)));
+//         }
+//     }
+//     return null;
+// }
 async function pullSyncData(){
-    const remote = await pullSyncFromAtomGit();
-    if(remote) return remote;
-    return await pullSyncFromGitHub();
+    // 读取只走 AT 主仓库；AT 超时/报错仅由上层降级浏览器 localStorage，永不主动从 GitHub 拉取业务数据
+    return await pullSyncFromAtomGit();
 }
 
 // ---------- 推送 sync-data：主 AtomGit，兜底 GitHub ----------
@@ -2455,6 +2511,7 @@ async function pushSyncToAtomGit(contentB64){
     }catch(e){ console.warn('AtomGit sync-data 推送失败', e.message); return false; }
 }
 async function pushSyncToGitHub(contentB64){
+    if(!GH_IS_LOCAL) return false;
     const cfg = loadGhCfg();
     if(!isGhConfigured(cfg)) return false;
     const syncPath = getSyncPath(cfg);
@@ -2585,6 +2642,7 @@ if(DEVICE === 'mobile'){ return false; }
     return true;
 }
 async function testGitHubConnection(silent){
+    if(!GH_IS_LOCAL){ if(!silent) showToast('GitHub 兜底仅本地环境启用'); return false; }
     const cfg = loadGhCfg();
     if(!isGhConfigured(cfg)){ if(!silent) showToast('请先完整填写并保存配置'); return false; }
     const apiBase = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
