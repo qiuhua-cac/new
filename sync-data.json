@@ -5495,7 +5495,10 @@
     "device": "pc"
   },
   "history": {
-    "list": [],
+    "list": [
+      "二级",
+      "一级"
+    ],
     "updatedAt": 0,
     "device": "pc"
   },
