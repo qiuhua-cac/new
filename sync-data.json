@@ -5512,21 +5512,11 @@
         "name": "C"
       }
     ],
-    "updatedAt": 1795516349316,
+    "updatedAt": 1795517991142,
     "device": "pc"
   },
   "history": {
-    "list": [
-      "缺氧池",
-      "缺氧池作用",
-      "巡检过程",
-      "活性污泥法中",
-      "曝气主要目的",
-      "污泥发黑",
-      "潜水泵",
-      "三级安全教育",
-      "高密度沉淀"
-    ],
+    "list": [],
     "updatedAt": 0,
     "device": "pc"
   },
@@ -7394,7 +7384,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1795516349322,
+    "updatedAt": 1795517991151,
     "device": "pc",
     "__practice_only__": [
       {
