@@ -5491,8 +5491,8 @@
         "name": "C"
       }
     ],
-    "updatedAt": 1795519477812,
-    "device": "pc"
+    "updatedAt": 1795519945919,
+    "device": "mobile"
   },
   "history": {
     "list": [
@@ -7011,7 +7011,7 @@
       },
       {
         "q": "污泥龄过短会导致？",
-        "a": "硝化细菌流失｜硝化过程异常",
+        "a": "硝化细菌流失，硝化过程异常",
         "e": "",
         "hidden": false,
         "isChoice": false
@@ -7332,8 +7332,43 @@
         "isChoice": false
       },
       {
-        "q": "测试",
-        "a": "1",
+        "q": "污泥发生膨胀时，SV30和SVI都会明显（）",
+        "a": "增大",
+        "e": "",
+        "hidden": false,
+        "isChoice": false
+      },
+      {
+        "q": "安全标志中，红色表示（），禁止人们做某事。",
+        "a": "禁止",
+        "e": "",
+        "hidden": false,
+        "isChoice": false
+      },
+      {
+        "q": "沉砂池的主要作用是去除污水中比重较大的（）颗粒",
+        "a": "无机｜砂粒｜泥砂",
+        "e": "任意答案即可",
+        "hidden": false,
+        "isChoice": false
+      },
+      {
+        "q": "常用的污水消毒方法包括氯消毒、紫外线消毒和（）消毒等",
+        "a": "臭氧",
+        "e": "",
+        "hidden": false,
+        "isChoice": false
+      },
+      {
+        "q": "二级处理（生物处理）主要利用（）降解污水中的有机污染物",
+        "a": "微生物｜活性污泥",
+        "e": "任意一个即可",
+        "hidden": false,
+        "isChoice": false
+      },
+      {
+        "q": "NaOH的中文名称是（）",
+        "a": "氢氧化钠",
         "e": "",
         "hidden": false,
         "isChoice": false
@@ -7352,7 +7387,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1795519477818,
+    "updatedAt": 1795519926420,
     "device": "pc",
     "__practice_only__": [
       {
