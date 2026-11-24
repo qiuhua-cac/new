@@ -5491,8 +5491,8 @@
         "name": "C"
       }
     ],
-    "updatedAt": 1795520059168,
-    "device": "mobile"
+    "updatedAt": 1795520102879,
+    "device": "pc"
   },
   "history": {
     "list": [
@@ -7387,7 +7387,7 @@
     "device": "pc"
   },
   "practiceEdit": {
-    "updatedAt": 1795520006464,
+    "updatedAt": 1795520102884,
     "device": "pc",
     "__practice_only__": [
       {
