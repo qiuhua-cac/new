@@ -6013,10 +6013,10 @@ document.getElementById('loginGoRegister').addEventListener('click', ()=>{
         el.value = text;
     }
     document.getElementById('editSplitBtn').addEventListener('click', ()=>_splitAnswerBar('editA'));
-    document.getElementById('editAnyBtn').addEventListener('click', ()=>_fillExplanation('editE', '任意答案即可'));
+    document.getElementById('editAnyBtn').addEventListener('click', ()=>_fillExplanation('editE', '任意答案'));
     document.getElementById('editChoiceBtn').addEventListener('click', ()=>_fillExplanation('editE', '本题为选择题的答案'));
     document.getElementById('addSplitBtn').addEventListener('click', ()=>_splitAnswerBar('addA'));
-    document.getElementById('addAnyBtn').addEventListener('click', ()=>_fillExplanation('addE', '任意答案即可'));
+    document.getElementById('addAnyBtn').addEventListener('click', ()=>_fillExplanation('addE', '任意答案'));
     document.getElementById('addChoiceBtn').addEventListener('click', ()=>_fillExplanation('addE', '本题为选择题的答案'));
     bankClose.addEventListener('click', ()=>{
         if(hasUnsavedChanges){
